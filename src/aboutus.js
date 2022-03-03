@@ -3,6 +3,7 @@ import "./about-us.css";
 import logo from './image/logo.jpeg';
 
 
+
 class AboutUs extends React.Component {
     render() {
         return (
