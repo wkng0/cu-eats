@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>CU EATS - Login</title>
+        <link rel="icon" type="image/x-icon" href="favicon.png">
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&family=Fira+Mono:wght@700&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+        <script src="proj.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+
+    <body class="body bg-light">
+        <article>
+            <header class="navbar navbar-expand-sm nav-bg navbar-dark shadow ps-2 pe-2 sticky-top">
+                <a class="navbar-brand" href="index.html">
+                    <img src="logo_yellow.png" width="auto" height="30" alt=""><strong class="brand"> CU EATS</strong>
+                </a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span> Menu
+                </button>
+                <div class="collapse navbar-collapse" style="text-align: right" id="navbarCollapse">
+                    <ul class="navbar-nav ms-auto" style="text-align:center">
+                        <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+                        <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">
+                            <i class="bi bi-basket-fill icon"></i>
+                            <b class="collapse" id="navbarCollapse">&ensp;Shopping Cart</b>
+                        </button>
+                    </ul>
+                </div>
+            </header>
+
+            <div id="login-email" class="login-container">
+                <section class="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style="border-color: #5D4E99 !important;"> 
+                    <h2>Enter you email</h2>
+                    <h6 class="text-muted">We'll check whether your account already exists :)</h6>
+                    <br>
+                    <form class="text-secondary">
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="user-email" placeholder="e.g. name@example.com" required>
+                        </div>
+                        <br>
+                        <button type="button" id="email-continue" class="btn  text-white" style="background-color: #5D4E99" onclick="checkEmail()">Continue</button>
+                    </form>
+                </section>
+            </div>
+
+            <div id="login-password" class="login-container" style="display: none">
+                <section class="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style="border-color: #5D4E99 !important;"> 
+                    <h2>Great to see you again!</h2>
+                    <h5 id="exist-email">name@example.com</h5>
+                    <br>
+                    <form class="text-secondary">
+                        <div class="mb-3">
+                            <label for="new-comment" class="form-label">Enter you password to log in</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="user-pw" placeholder="password" required>
+                                <button type="button" class="btn btn-secondary" onclick="viewPassword()">
+                                    <i class="bi bi-eye-slash-fill icon"></i>
+                                    <i class="bi bi-eye-fill icon" style="display: none"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="button" class="btn text-white" style="background-color: #5D4E99" onclick="login()" disabled>Log in</button>
+                        <small class="float-end"><a style="color: #F4CB86" href="reset.html">Forgot your password?</a></small>
+                    </form>
+                </section>
+            </div>
+
+            <div id="login-register" class="login-container" style="display: none">
+                <section class="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style="border-color: #5D4E99 !important;"> 
+                    <h2>Let's get started!</h2>
+                    <h6 class="text-muted">Create a new account</h6>
+                    <br>
+                    <form class="form-floating text-secondary">
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="new-user-email" placeholder="email" required>
+                            <label for="floatingPassword">Email</label>
+                        </div>
+                        <div class="input-group">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="user-fn" placeholder="firstname" required>
+                                <label for="floatingPassword">First Name</label>
+                            </div>
+                            <div>&ensp;</div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="user-ln" placeholder="lastname" required>
+                                <label for="floatingPassword">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="form-floating col-11">
+                                <input type="password" class="form-control" id="user-pw-1" placeholder="password" required>
+                                <label for="floatingPassword">Password</label>
+                            </div>
+                            <button type="button" onclick="viewPassword('user-pw-1','first-close','first-open')" class="btn col-1">
+                                <i id="first-close" class="bi bi-eye-slash-fill icon" style="display: block"></i>
+                                <i id="first-open" class="bi bi-eye-fill icon" style="display: none"></i>
+                            </button>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="form-floating col-11">
+                                <input type="password" class="form-control" id="user-pw-2" placeholder="re-enter" required>
+                                <label for="floatingPassword">Re-enter Password</label>
+                            </div>
+                            <button type="button" onclick="viewPassword('user-pw-2','second-close','second-open')" class="btn col-1">
+                                <i id="second-close" class="bi bi-eye-slash-fill icon" style="display: block"></i>
+                                <i id="second-open" class="bi bi-eye-fill icon" style="display: none"></i>
+                            </button>
+                        </div>
+                        <br>
+                        <button type="button" class="btn text-white" style="background-color: #5D4E99" onclick="register()" >Register</button>
+                        <br><br>
+                        <p><a style="color: #F4CB86" href="contact.html">Join us as a restaurant? Welcome and contact us!</a></p>
+                    </form>
+                </section>
+            </div>
+
+            <footer class="text-md-center text-light bg-secondary p-2 mt-sm-3 fixed-bottom" style="font-size:10px">
+                © 2022 CSCI 3100 Group D2
+            </footer>
+
+        </article>
+
+
+    </body>
+</html>

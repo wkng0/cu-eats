@@ -1,0 +1,29 @@
+.body {
+    font-family: 'Baloo 2', cursive;
+    font-size: 18px;
+}
+
+.brand {
+    color: #F4CB86;
+    font-family: 'Fira Mono', monospace;
+}
+
+.nav-link{
+    color: #F4CB86 !important;
+}
+
+.nav-bg {
+    background-color: #5D4E99;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height:80vh;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+}
