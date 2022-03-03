@@ -7,7 +7,7 @@
 .header{
     min-height: 100vh;
     width: 100%;
-    background-image: linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url("./CUHK.jpeg");
+    background-image: linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url("./image/CUHK.jpeg");
     /* background-color: #5d4e99; */
     background-position: center;
     background-size: cover;

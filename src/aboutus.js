@@ -1,5 +1,6 @@
 import React from 'react';
 import "./about-us.css";
+import logo from './image/logo.jpeg';
 
 
 class AboutUs extends React.Component {
@@ -7,7 +8,7 @@ class AboutUs extends React.Component {
         return (
             <section className="header">
                 <nav>
-                    <a href="about-us.html"><img src="./logo.jpeg" width="100" height="100"></img></a>
+                    <a href="about-us.html"><img src={logo} width="100" height="100"></img></a>
                     <div className ="nav-links">
                         <ul>
                             <li><a href="">HOME</a></li>
