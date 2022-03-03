@@ -10,7 +10,7 @@ const app = express();
 
 const PORT = process.env.PORT || 4747;
 const DB_URI = "mongodb://localhost:27017/"
-const DB = "userDB" // save user name and corresponding password
+const DB = "userDB" // save user email and corresponding password
 
 connect(DB_URI + DB, {
     useUnifiedTopology: true,
@@ -25,8 +25,8 @@ const db = connection;
 // Create user schema
 let UserSchema = new Schema(
     {
-        username: String,
-        pw: String  
+        email: String,
+        password: String  
     },
     { collection: "user"}
 );
