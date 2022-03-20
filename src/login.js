@@ -1,9 +1,6 @@
 import React from 'react'
-import logo_yellow from './image/logo_yellow.png'
 import './login.css';
 import  ReactDOM from 'react-dom';
-import {Comment} from './comment';
-import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
 
 class LoginPage extends React.Component{  
     render(){
