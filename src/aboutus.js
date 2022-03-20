@@ -1,15 +1,8 @@
 import React from 'react';
 import "./about-us.css";
 import logo from './image/logo.jpeg';
-import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
-import { LoginPage, Login } from './login';
-import  ReactDOM from 'react-dom';
-
 
 class AboutUs extends React.Component {
-    renderLoginPage(){
-        ReactDOM.render(<LoginPage/>, document.getElementById('root'));
-    }
     render() {
         return (
             <>

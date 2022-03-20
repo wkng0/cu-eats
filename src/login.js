@@ -2,47 +2,25 @@ import React from 'react'
 import logo_yellow from './image/logo_yellow.png'
 import './login.css';
 import  ReactDOM from 'react-dom';
-
-
-class NavBar extends React.Component{
-
-}
+import {Comment} from './comment';
+import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
 
 class LoginPage extends React.Component{  
     render(){
         return(
-            <article>
-                <header className="navbar navbar-expand-sm nav-bg navbar-dark shadow ps-2 pe-2 sticky-top">
-                    <a className="navbar-brand" href="index.html">
-                        <img src={logo_yellow} width="auto" height="30" alt=""></img><strong className="brand"> CU EATS</strong>
-                    </a>
-                    <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span className="navbar-toggler-icon"></span> Menu
-                    </button>
-                    <div className="collapse navbar-collapse" style={{textAlign: 'right'}} id="navbarCollapse">
-                        <ul className="navbar-nav ms-auto" style={{textAlign: 'center'}}>
-                            <li className="nav-item"><a className="nav-link" href="about.html">About Us</a></li>
-                            <li className="nav-item"><a className="nav-link" href="menu.html">Menu</a></li>
-                            <button className="btn btn-outline-warning my-2 my-sm-0" type="submit">
-                                <i className="bi bi-basket-fill icon"></i>
-                                <b className="collapse" id="navbarCollapse">&ensp;Shopping Cart</b>
-                            </button>
-                        </ul>
-                    </div>
-                </header>
+   
+            <div className="body">
+                
                 <div id="Component">
                     <CheckEmail />   
-                </div>
-               
-                <footer className="text-md-center text-light bg-secondary p-2 mt-sm-3 fixed-bottom" style={{fontSize:"10px"}}>
-                    © 2022 CSCI 3100 Group D2
-                </footer>
-            </article>
+                </div>            
+                
+            </div>
+    
         );
     }
 
 }
-
 
 
 class CheckEmail extends React.Component{
@@ -64,7 +42,7 @@ class CheckEmail extends React.Component{
                 //document.getElementById('login-password').style.display = "block";
                 //document.getElementById('exist-email').innerText = email.value;
             // }else{
-            ReactDOM.render(<Register email={this.state.email}/>,document.getElementById('Component'))
+            ReactDOM.render(<LoginWithPassword email={this.state.email}/>,document.getElementById('Component'))
             // }
             //ReactDOM.render(<LoginWithPassword email={this.state.email}/>,document.getElementById('Component'));
         
@@ -127,7 +105,7 @@ class LoginWithPassword extends React.Component{
     
     }
     login(){
-
+        
     }
     render(){
         return(
@@ -148,8 +126,10 @@ class LoginWithPassword extends React.Component{
                             </div>
                         </div>
                         <br/>
-                        <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick="{login}" disabled>Log in</button>
+                    
+                        <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick={this.login} >Log in</button>
                         <small className="float-end"><a style={{color: "#F4CB86"}} href="reset.html">Forgot your password?</a></small>
+                
                     </form>
                 </section>
             </div>
@@ -166,16 +146,18 @@ class Register extends React.Component{
             pw2:'', 
             fname:'' ,
             lname:'',
-            iconA:"none",
-            iconB:"block",
-            iconC:"none",
-            iconD:"block"
+            iconA:"block",
+            iconB:"none",
+            iconC:"block",
+            iconD:"none"
         };
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangeFname = this.handleChangeFname.bind(this);
         this.handleChangeLname = this.handleChangeLname.bind(this);
         this.handleChangePw1 = this.handleChangePw1.bind(this);
         this.handleChangePw2 = this.handleChangePw2.bind(this);
+        this.viewPassword1=this.viewPassword1.bind(this);
+        this.viewPassword2=this.viewPassword2.bind(this);
         this.register=this.register.bind(this);
     }
     handleChangeEmail(event){
@@ -194,38 +176,40 @@ class Register extends React.Component{
         this.setState({pw2: event.target.value})
     }
     viewPassword1(){
-        let passwordInput = document.getElementById('user-pw');
+        let passwordInput = document.getElementById('user-pw-1');
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
             passwordInput.setAttribute('aria-label',
               'Hide password.');
               console.log("hi");
-              this.setState({iconA:"block",iconB:"none"});
+              this.setState({iconA:"none",iconB:"block"});
             
           } else {
             passwordInput.type = 'password';
             passwordInput.setAttribute('aria-label',
               'Show password as plain text. ' +
               'Warning: this will display your password on the screen.');
-            this.setState({iconA:"none",iconB:"block"});
+            this.setState({iconA:"block",iconB:"none"});
           }
-    
+
+      
     }
+    
     viewPassword2(){
-        let passwordInput = document.getElementById('user-pw');
+        let passwordInput = document.getElementById('user-pw-2');
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
             passwordInput.setAttribute('aria-label',
               'Hide password.');
               console.log("hi");
-              this.setState({iconA:"block",iconB:"none"});
+              this.setState({iconC:"none",iconD:"block"});
             
           } else {
             passwordInput.type = 'password';
             passwordInput.setAttribute('aria-label',
               'Show password as plain text. ' +
               'Warning: this will display your password on the screen.');
-            this.setState({iconA:"none",iconB:"block"});
+            this.setState({iconC:"block",iconD:"none"});
           }
     
     }
@@ -256,53 +240,53 @@ class Register extends React.Component{
     render(){
         return(
             <div id="login-register" className="login-container" >
-                    <section className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
-                        <h2>Let&apos;s get started!</h2>
-                        <h6 className="text-muted">Create a new account</h6>
-                        <br/>
-                        <form className="form-floating text-secondary">
+                <section className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
+                    <h2>Let&apos;s get started!</h2>
+                    <h6 className="text-muted">Create a new account</h6>
+                    <br/>
+                    <form className="form-floating text-secondary">
+                        <div className="form-floating mb-3">
+                            <input className="form-control" id="new-user-email" value={this.state.email} onChange={this.handleChangeEmail} placeholder="email" required></input>
+                            <label for="floatingPassword">Email</label>
+                        </div>
+                        <div className="input-group">
                             <div className="form-floating mb-3">
-                                <input className="form-control" id="new-user-email" value={this.state.email} onChange={this.handleChangeEmail} placeholder="email" required></input>
-                                <label for="floatingPassword">Email</label>
+                                <input className="form-control" id="user-fn" value={this.state.fname} onChange={this.handleChangeFname} placeholder="firstname" required></input>
+                                <label for="floatingPassword">First Name</label>
                             </div>
-                            <div className="input-group">
-                                <div className="form-floating mb-3">
-                                    <input className="form-control" id="user-fn" value={this.state.fname} onChange={this.handleChangeFname} placeholder="firstname" required></input>
-                                    <label for="floatingPassword">First Name</label>
-                                </div>
-                                <div>&ensp;</div>
-                                <div className="form-floating mb-3">
-                                    <input className="form-control" id="user-ln" value={this.state.lname} onChange={this.handleChangeLname} placeholder="lastname" required></input>
-                                    <label for="floatingPassword">Last Name</label>
-                                </div>
+                            <div>&ensp;</div>
+                            <div className="form-floating mb-3">
+                                <input className="form-control" id="user-ln" value={this.state.lname} onChange={this.handleChangeLname} placeholder="lastname" required></input>
+                                <label for="floatingPassword">Last Name</label>
                             </div>
-                            <div className="input-group mb-3">
-                                <div className="form-floating col-11">
-                                    <input type="password" className="form-control" id="user-pw-1" value={this.state.pw1} onChange={this.handleChangePw1} placeholder="password" required></input>
-                                    <label for="floatingPassword">Password</label>
-                                </div>
-                                <button type="button" onClick="{viewPassword('user-pw-1','first-close','first-open')}" className="btn col-1">
-                                    <i id="first-close" className="bi bi-eye-slash-fill icon" style={{display: "block"}}></i>
-                                    <i id="first-open" className="bi bi-eye-fill icon" style={{display: "none"}}></i>
-                                </button>
+                        </div>
+                        <div className="input-group mb-3">
+                            <div className="form-floating col-11">
+                                <input type="password" className="form-control" id="user-pw-1" value={this.state.pw1} onChange={this.handleChangePw1} placeholder="password" required></input>
+                                <label for="floatingPassword">Password</label>
                             </div>
-                            <div className="input-group mb-3">
-                                <div className="form-floating col-11">
-                                    <input type="password" className="form-control" id="user-pw-2"value={this.state.pw2} onChange={this.handleChangePw2} placeholder="re-enter" required></input>
-                                    <label for="floatingPassword">Re-enter Password</label>
-                                </div>
-                                <button type="button" onClick="{viewPassword('user-pw-2','second-close','second-open')}" className="btn col-1">
-                                    <i id="second-close" className="bi bi-eye-slash-fill icon" style={{display: this.state.iconA}}></i>
-                                    <i id="second-open" className="bi bi-eye-fill icon" style={{display: this.state.iconB}}></i>
-                                </button>
+                            <button type="button" onClick={this.viewPassword1} className="btn col-1">
+                                <i id="first-close" className="bi bi-eye-slash-fill icon" style={{display: this.state.iconA}}></i>
+                                <i id="first-open" className="bi bi-eye-fill icon" style={{display: this.state.iconB}}></i>
+                            </button>
+                        </div>
+                        <div className="input-group mb-3">
+                            <div className="form-floating col-11">
+                                <input type="password" className="form-control" id="user-pw-2" value={this.state.pw2} onChange={this.handleChangePw2} placeholder="re-enter" required></input>
+                                <label for="floatingPassword">Re-enter Password</label>
                             </div>
-                            <br/>
-                            <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick="{register}" >Register</button>
-                            <br/><br/>
-                            <p><a style={{color: "#F4CB86"}} href="contact.html">Join us as a restaurant? Welcome and contact us!</a></p>
-                        </form>
-                    </section>
-                </div>
+                            <button type="button" onClick={this.viewPassword2} className="btn col-1">
+                                <i id="second-close" className="bi bi-eye-slash-fill icon" style={{display: this.state.iconC}}></i>
+                                <i id="second-open" className="bi bi-eye-fill icon" style={{display: this.state.iconD}}></i>
+                            </button>
+                        </div>
+                        <br/>
+                        <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick="{register}" >Register</button>
+                        <br/><br/>
+                        <p><a style={{color: "#F4CB86"}} href="contact.html">Join us as a restaurant? Welcome and contact us!</a></p>
+                    </form>
+                </section>
+            </div>
         );
     }
 }
