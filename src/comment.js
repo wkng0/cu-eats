@@ -42,15 +42,16 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 import './comment.json'
 
-import axios from 'axios';
-
-const data = [
-    {userid:"Ken",title:"yummy",image:"https://www.2book.co/file/image/venue/efe937780e95574250dabe07151bdc23/horiz/1234902316.jpg",description:"very good!",type:"0",date:"20/3/2022"},
-    {userid:"AlsoKen",title:"bad",image:"https://www.2book.co/file/image/venue/efe937780e95574250dabe07151bdc23/horiz/1234902316.jpg",description:"very good!",type:"0",date:"20/3/2022"},
-];
+let data = [];
 
 
-
+let canteenChoice="SC";
+fetch('http://localhost:7000/dbComment/get'+canteenChoice)
+.then(res=>res.json())
+.then(db=>{
+    data=db;
+    console.log(data);
+})
 
 
 
@@ -58,8 +59,17 @@ function TabPanel(){
 
     const [value, setValue] = React.useState(0);
     const handleChange=(event,newValue)=>{
+        
+        let canteenChoice="SC";
+        fetch('http://localhost:7000/dbComment/get'+canteenChoice)
+        .then(res=>res.json())
+        .then(db=>{
+            data=db;
+            console.log(data);
+        })
         setValue(newValue);
     };
+    
 
     return(
         <>
@@ -72,8 +82,7 @@ function TabPanel(){
                         <Tab label="Rating" value={1}/>
                     </Tabs>
                 </Box>
-                {data.map((file,i)=><TabContent key={i} i={i} value={value} index={0}/>)}
-             
+                {data.map((file,i)=><TabContent key={i} i={i} value={value} />)}
             </Container>
     
         </>
@@ -84,10 +93,13 @@ class TabContent extends React.Component{
     constructor(props){
         super(props)
     }
+    
+
     render(){
         let i=this.props.i;
+        console.log(this.props.value!==data[i].type);
         return(
-            <div role="tabpanel" style={{marginTop:"1rem"}} hidden={this.props.value!==this.props.index}>
+            <div role="tabpanel" style={{marginTop:"1rem"}} hidden={this.props.value!==data[i].type}>
                 {this.props.value===this.props.index &&(
                 
                     <Card sx={{ minWidth: 275 }}>
@@ -140,6 +152,7 @@ class TabContent extends React.Component{
 }
 
 class CanteenDrawer extends React.Component{
+
     render(){
         return(
             <div style={{zIndex: -10}}>            
@@ -243,17 +256,32 @@ function AddComment(){
 
 
 class Comment extends React.Component{
+    constructor(){
+        super();
+    }
+    fetchComment=()=>{
+        let canteenChoice="SC";
+        fetch('http://localhost:7000/dbComment/get'+canteenChoice)
+        .then(res=>res.json())
+        .then(db=>{
+            data=db;
+            console.log(data);
+        })
+    }
+    componentDidMount=()=>{
+        this.fetchComment();
+    }
     render(){
         return(
-            <>
-           
-                <CanteenDrawer/>
-                <AddComment/>
-                <TabPanel/>
-                
-           
-            </>
+        <>
             
+            <CanteenDrawer/>
+            <AddComment/>
+            <TabPanel/>
+            
+        
+        </>
+        
         )
     }
 }
