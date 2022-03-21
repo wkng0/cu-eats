@@ -43,15 +43,17 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import './comment.json'
 
 let data = [];
-
-
 let canteenChoice="SC";
-fetch('http://localhost:7000/dbComment/get'+canteenChoice)
-.then(res=>res.json())
-.then(db=>{
-    data=db;
-    console.log(data);
-})
+
+async function reloadComment(canteenChoice){
+    fetch('http://localhost:7000/dbComment/get'+canteenChoice)
+    .then(res=>res.json())
+    .then(db=>{
+        data=db;
+        console.log(data);
+    })
+
+}
 
 
 
@@ -60,13 +62,7 @@ function TabPanel(){
     const [value, setValue] = React.useState(0);
     const handleChange=(event,newValue)=>{
         
-        let canteenChoice="SC";
-        fetch('http://localhost:7000/dbComment/get'+canteenChoice)
-        .then(res=>res.json())
-        .then(db=>{
-            data=db;
-            console.log(data);
-        })
+        reloadComment(canteenChoice);
         setValue(newValue);
     };
     
@@ -100,7 +96,7 @@ class TabContent extends React.Component{
         console.log(this.props.value!==data[i].type);
         return(
             <div role="tabpanel" style={{marginTop:"1rem"}} hidden={this.props.value!==data[i].type}>
-                {this.props.value===this.props.index &&(
+                {this.props.value===data[i].type &&(
                 
                     <Card sx={{ minWidth: 275 }}>
                         <CardHeader
@@ -259,17 +255,9 @@ class Comment extends React.Component{
     constructor(){
         super();
     }
-    fetchComment=()=>{
-        let canteenChoice="SC";
-        fetch('http://localhost:7000/dbComment/get'+canteenChoice)
-        .then(res=>res.json())
-        .then(db=>{
-            data=db;
-            console.log(data);
-        })
-    }
+    
     componentDidMount=()=>{
-        this.fetchComment();
+        reloadComment(canteenChoice);
     }
     render(){
         return(
