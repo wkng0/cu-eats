@@ -68,7 +68,7 @@ export default function FixedBottomNavigation() {
                 <BottomNavigationAction label="Home" icon={<HomeIcon />} value="/" to="/" />
                 <BottomNavigationAction label="Order" icon={<StoreIcon />} value="/order"/>
                 <BottomNavigationAction label="Comment" icon={<CommentIcon  />} value="/comment" to="/comment" component={Link} />
-                <BottomNavigationAction label="Profile" icon={<AccountCircleIcon />} value="/profile" />
+                <BottomNavigationAction label="Profile" icon={<AccountCircleIcon />} value="/profile" to="/profile" component={Link} />
                 
                 <BottomNavigationAction label="Login"  value="/login" to="/login" component={Link}/>
                 <BottomNavigationAction label="AboutUs"  value="/about" to="/about" component={Link}/>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Select from 'react-select'
+import Select from 'react-select';
 import { 
     Box, 
     Tab, 

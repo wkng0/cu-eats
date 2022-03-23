@@ -1,7 +1,8 @@
 import React from 'react';
 import { AboutUs } from './aboutus';
 import { LoginPage } from './login';
-import { Comment } from './comment';
+import { Comment} from './comment';
+import { Profile, Account, Address} from './profile';
 
 import './login.css';
 import {NavBar,FixedBottomNavigation,Footer} from './component'
@@ -17,6 +18,9 @@ function App() {
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/comment" element={<Comment />} />
           <Route path="/about" element={<AboutUs/>}/>
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/profile/account" element={<Account/>} />
+          <Route path="/profile/address" element={<Address/>} />
           <Route path="*" element={<NoMatch/>} />
         </Routes>
         <FixedBottomNavigation/>
