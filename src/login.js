@@ -75,7 +75,7 @@ class CheckEmail extends React.Component{
 class LoginWithPassword extends React.Component{
     constructor(props){
         super(props);
-        this.state={email: props.email, password:'', iconA:"none", iconB:"block"};
+        this.state={email: props.email, password:'', iconA:"block", iconB:"none"};
         this.handleChange = this.handleChange.bind(this);
         this.viewPassword=this.viewPassword.bind(this);
         this.login=this.login.bind(this);
@@ -90,14 +90,14 @@ class LoginWithPassword extends React.Component{
             passwordInput.setAttribute('aria-label',
               'Hide password.');
               console.log("hi");
-              this.setState({iconA:"block",iconB:"none"});
+              this.setState({iconA:"none",iconB:"block"});
             
           } else {
             passwordInput.type = 'password';
             passwordInput.setAttribute('aria-label',
               'Show password as plain text. ' +
               'Warning: this will display your password on the screen.');
-            this.setState({iconA:"none",iconB:"block"});
+            this.setState({iconA:"block",iconB:"none"});
           }
     
     }
