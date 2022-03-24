@@ -3,7 +3,10 @@ import { AboutUs } from './aboutus';
 import { LoginPage } from './login';
 import { Comment} from './comment';
 import { Profile, Account, Address} from './profile';
-import { HomePage} from './HomePage'
+import {HomePage}  from './HomePage';
+import UCCanteen from './UCcanteen';
+import NACanteen from './NAcanteen';
+import ShawCanteen from './ShawCanteen';
 
 import './login.css';
 import {NavBar} from './component'
@@ -22,6 +25,9 @@ function App() {
           <Route path="/profile" element={<Profile/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
+          <Route path="/UCcanteen" element={<UCCanteen/>} />
+          <Route path="/NAcanteen" element={<NACanteen/>} />
+          <Route path="/Shawcanteen" element={<ShawCanteen/>} />
           <Route path="*" element={<NoMatch/>} />
         </Routes>
       </BrowserRouter>
