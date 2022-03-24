@@ -73,7 +73,7 @@ function NavBar() {
 
     return (
 
-    <AppBar position="sticky" style={{ background: '#5D4E99', color: '#F4CB86'}}>
+    <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
         <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
@@ -99,7 +99,7 @@ function NavBar() {
                             transformOrigin={{ vertical: 'top', horizontal: 'left',}}
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
-                            sx={{mt: '15px', display: { xs: 'block', md: 'none'}, zIndex: 'tooltip'}}
+                            sx={{mt: '15px', display: { xs: 'block', md: 'none'}, zIndex: '99999 !important'}}
                         >
                         {pages.map((page, index) => (
                             <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={pagesRoute[index]} style={{color: '#5D4E99'}}>
@@ -139,7 +139,7 @@ function NavBar() {
                         </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{mt: '45px', zIndex: 'tooltip'}}
+                            sx={{mt: '45px', zIndex: '99999 !important'}}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{ vertical: 'top', horizontal: 'right',}}
