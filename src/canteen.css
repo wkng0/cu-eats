@@ -1,0 +1,65 @@
+.Shawheader{
+    min-height: 60vh; 
+    width: 100%;
+    background-image: linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url("./CanteenImage/Shawfront.jpg");
+    background-color: #5d4e99;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+} 
+
+.NAheader{
+  min-height: 60vh; 
+  width: 100%;
+  background-image: linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url("./CanteenImage/NAfront.png");
+  background-color: #5d4e99;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+.UCheader{
+  min-height: 60vh; 
+  width: 100%;
+  background-image: linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url("./CanteenImage/UCfront.png");
+  background-color: #5d4e99;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+} 
+
+
+/* .text-box{
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+
+  /* -----salad ----- */
+/* .Salad{
+  width: 80%;
+  margin: auto;;
+  text-align: center;
+  padding-top: 100px;
+}   */
+
+
+
+.flex-container{
+  display: flex !important;
+}
+
+.btn{
+  background-color: #5d4e99 !important;
+  color: white;
+}
+
+select{
+  box-shadow: none !important;
+  border-color: black !important;
+  
+}

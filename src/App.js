@@ -4,9 +4,13 @@ import { LoginPage } from './login';
 import { Comment} from './comment';
 import { Profile, Account, Address} from './profile';
 import { Cart } from './cart'
+import {HomePage}  from './HomePage';
+import UCCanteen from './UCcanteen';
+import NACanteen from './NAcanteen';
+import ShawCanteen from './ShawCanteen';
 
 import './login.css';
-import {NavBar,FixedBottomNavigation,Footer} from './component'
+import {NavBar} from './component'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 
@@ -18,14 +22,16 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/comment" element={<Comment />} />
-          <Route path="/about" element={<AboutUs/>}/>
+          <Route path="/about" element={<HomePage/>}/>
           <Route path="/profile" element={<Profile/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
           <Route path="/shoppingCart" element={<Cart/>} />
+          <Route path="/UCcanteen" element={<UCCanteen/>} />
+          <Route path="/NAcanteen" element={<NACanteen/>} />
+          <Route path="/Shawcanteen" element={<ShawCanteen/>} />
           <Route path="*" element={<NoMatch/>} />
         </Routes>
-        <FixedBottomNavigation/>
       </BrowserRouter>
       
     </div>
