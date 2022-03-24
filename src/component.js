@@ -196,7 +196,7 @@ class Footer extends React.Component{
     }
 }
 
-export default function FixedBottomNavigation() {
+/*export default function FixedBottomNavigation() {
      
     const [value, setValue] = React.useState(0);
     const handleChange = (event, newValue) => {
@@ -222,8 +222,8 @@ export default function FixedBottomNavigation() {
         </Paper>
         </div>
     );
-}
+}*/
 
 
   
-export {NavBar, Footer, FixedBottomNavigation};
+export {NavBar, Footer};
