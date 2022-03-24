@@ -1,5 +1,24 @@
 import React from 'react';
 import './canteen.css';
+import Shawmenu from './Shawmeun';
+
+function ShowShawDishes({Shawmenu}) {
+
+
+    return(
+        <>
+        <div style={{margin: '70px'}} className='shadow-lg p-3 mb-5 bg-white rounded'>
+
+            <div>
+                <h1>{Shawmenu.name}</h1>
+                <img src={Shawmenu.image} className="img-fluid" style={{height: '200px' , width: '200px'}}/>
+            </div>
+
+        </div>
+        </> 
+    );
+}
+
 
 function ShawCanteen() {
     return(
@@ -17,20 +36,17 @@ function ShawCanteen() {
         </section>
 
         {/* <!-- ----- restaurant ------ --> */}
-        <section class="Salad">
-            <h1>Salad We Offer</h1>
-            <p>Lorem ipsum sit amet, consectetur adipiscine eilt.</p>
-
-            <div class="row-1">
-                <div class="Salad-col">
-                    <h3>Salad</h3>
-                    <p>The College Staff and Student Canteens are located on the G/F of the Cheung Chuk Shan Amenities Building. 
-                        The total floor area is about 570 square metres and it can serve up to 360 people.  
-                        The College canteens are now operated by Joyful Inn Limited.  
-                    </p>
-                </div>
-            </div> 
-        </section>
+        <div>
+            <div className="row">
+                {Shawmenu.map(Shawmenu =>{
+                    return(
+                        <div>
+                            <ShowShawDishes Shawmenu={Shawmenu}/>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
         </>
     )
 }
