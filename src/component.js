@@ -26,27 +26,31 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+
 
 const pages = ['Home', 'About Us', 'Menu', 'Comment'];
 const pagesRoute = ['/', '/about', '/menu', '/comment'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const settingsRoute = ['/profile', '/profile/account', '/dashboard', '/logout'];
 
-const NavBar = () => {
+var userMenuStatus = -1;
+var NavMenuStatus = -1;
+
+function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    let userMenuStatus = -1;
-    let NavMenuStatus = -1;
+    
 
     const handleOpenNavMenu = (event) => {
-        console.log("before: ", NavMenuStatus);
         if (NavMenuStatus == -1)
         {
             setAnchorElNav(event.currentTarget);
             NavMenuStatus = 1;
         }
         else handleCloseNavMenu();
-        console.log("after: ", NavMenuStatus);
     };
     const handleOpenUserMenu = (event) => {
         if (userMenuStatus == -1)
@@ -55,7 +59,6 @@ const NavBar = () => {
             userMenuStatus = 1;
         }
         else handleCloseUserMenu();
-        
     };
 
     const handleCloseNavMenu = () => {
@@ -100,7 +103,7 @@ const NavBar = () => {
                         >
                         {pages.map((page, index) => (
                             <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={pagesRoute[index]} style={{color: '#5D4E99'}}>
-                                {page}
+                                <a href={pagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</a>
                             </MenuItem>
                         ))}
                         </Menu>
@@ -157,6 +160,92 @@ const NavBar = () => {
     </AppBar>
   );
 };
+
+
+/*
+function NavBar() {
+  const [auth, setAuth] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleChange = (event) => {
+    setAuth(event.target.checked);
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={auth}
+              onChange={handleChange}
+              aria-label="login switch"
+            />
+          }
+          label={auth ? 'Logout' : 'Login'}
+        />
+      </FormGroup>
+      <AppBar position="static"  style={{ background: '#5D4E99', color: '#F4CB86'}}>
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Photos
+          </Typography>
+          {auth && (
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircleIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+              </Menu>
+            </div>
+          )}
+        </Toolbar>
+      </AppBar>
+    </Box>
+  );
+}
+*/
+
 
 
 /*
