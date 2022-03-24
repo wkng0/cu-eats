@@ -1,19 +1,21 @@
-[
-    {
-        "id": "0001",
-        "description": null,
-        "image": "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/E31BC698-45DF-45D8-B71D-75DE43352FF9/Derivates/965A0B6C-2DF2-43FD-A8C7-3419F8305738.jpg",
-        "price": 15,
-        "title": "Lemon Tart",
-        "amount": 2
-    },
-    
-    {
-        "id": "0002",
-        "description": "No onion",
-        "image": "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/E31BC698-45DF-45D8-B71D-75DE43352FF9/Derivates/965A0B6C-2DF2-43FD-A8C7-3419F8305738.jpg",
-        "price": 15,
-        "title": "Chicken Rice",
-        "amount": 2
-    }
-]
+{
+    "cartItems": [
+        {
+            "id": "0001",
+            "description": null,
+            "image": "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/E31BC698-45DF-45D8-B71D-75DE43352FF9/Derivates/965A0B6C-2DF2-43FD-A8C7-3419F8305738.jpg",
+            "price": 15.0,
+            "title": "Lemon Tart",
+            "amount": 3
+        },
+        
+        {
+            "id": "0002",
+            "description": "No onion",
+            "image": null,
+            "price": 36.0,
+            "title": "Chicken Rice",
+            "amount": 1
+        }
+    ]
+}
