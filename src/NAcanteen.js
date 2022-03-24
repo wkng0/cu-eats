@@ -37,7 +37,7 @@ function ShowNADishes({NAmenu}) {
 
                 <div className='flex-container'>
                     <div className='m-1 w-100'>
-                        <h1 className='mt-1'>Price: {NAmenu.prices[0][varient]*(quantity-1)}Rs/-</h1>
+                        <h1 className='mt-1'>Price: ${NAmenu.prices[0][varient]*(quantity-1)}</h1>
                     </div>
 
                     <div className='m-1 w-100'>
