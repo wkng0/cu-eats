@@ -7,8 +7,6 @@ import Toast from "./HomePageimages/Toast.jpg";
 import NA from "./HomePageimages/NAcan.jpg";
 import UC from "./HomePageimages/UCcan.jpg";
 import Shaw from "./HomePageimages/Shawcan.jpg";
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-
 
 // class HomePage extends React.Component {
 //   render() {
@@ -179,4 +177,4 @@ function HomePage() {
 // }
 
 
-export default HomePage;
+export {HomePage};

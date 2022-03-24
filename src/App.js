@@ -3,10 +3,10 @@ import { AboutUs } from './aboutus';
 import { LoginPage } from './login';
 import { Comment} from './comment';
 import { Profile, Account, Address} from './profile';
-//import {HomePage} from './HomePage'
+import { HomePage} from './HomePage'
 
 import './login.css';
-import {NavBar,FixedBottomNavigation,Footer} from './component'
+import {NavBar} from './component'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 
@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/comment" element={<Comment />} />
-          <Route path="/about" element={<AboutUs/>}/>
+          <Route path="/about" element={<HomePage/>}/>
           <Route path="/profile" element={<Profile/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
