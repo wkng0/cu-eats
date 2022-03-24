@@ -19,12 +19,22 @@ const Props = {
 };
 */
 
+function addToCart(qty, e) {
+  console.log("add:", qty);
+  return qty+1;
+}
+
+function reduceFromCart(qty, e) {
+  console.log("reduce:", qty);
+  return qty-1;
+}
 
 
 const CartItem = ({ item }) => {
   return (    
     <div>
-      <TableRow >
+      <Table>
+      <TableRow>
         {item.image && <TableCell rowSpan={2} sx={{pr: 0}}><img src={item.image} alt={item.title} width='100' height='100'/></TableCell> }
         <TableCell colSpan={2} sx={{borderBottom: "none", pb: 0, pl: item.image? 1 : 3}}>
           <h4 style={{color: '#5D4E99'}}>{item.title}</h4>
@@ -39,7 +49,7 @@ const CartItem = ({ item }) => {
           <div className='container'>
             <Button 
               size="small" 
-              //onClick={(e) => item.amount -= 1}
+              onClick={(e) => item.amount = reduceFromCart(item.amount, e)}
               sx={{bgcolor: '#F4CB86', color: '#5D4E99', ':hover': {bgcolor:'#ffe082'}}}
             >
               -
@@ -47,7 +57,7 @@ const CartItem = ({ item }) => {
             <Button disabled sx={{':disabled':{color: 'black'}}}>{item.amount}</Button>
             <Button 
               size="small" 
-              //onClick={(e) => item.amount += 1}
+              onClick={(e) => item.amount = addToCart(item.amount, e)}
               sx={{bgcolor: '#F4CB86', color: '#5D4E99', ':hover': {bgcolor:'#ffe082'}}}
             >
               +
@@ -55,6 +65,7 @@ const CartItem = ({ item }) => {
           </div>
         </TableCell>
       </TableRow>
+      </Table>
     </div>
   );
 };
@@ -66,15 +77,6 @@ class Cart  extends React.Component{
         total: 0,
     };
 }
-/*
-var Props = {
-  cartItems: CartItemType[];
-  addToCart: (clickedItem: CartItemType) => void;
-  removeFromCart: (id: number) => void;
-};
-
-const Cart = ({ cartItems, addToCart, removeFromCart }: Props) => {
-*/
 
   addTotal(item, e){ 
     this.setState({total: this.state.total + item.price * item.amount});
@@ -86,22 +88,32 @@ const Cart = ({ cartItems, addToCart, removeFromCart }: Props) => {
         <h2 className='text-center'>Shopping Cart</h2>
         {cartItems.cartItems.length === 0 ? <p>No items in cart.</p> : null}
        
-          <Table style={{ tableLayout: "auto" }} aria-label="spanning table" padding='normal'>
+          <Table style={{ width: '80%', margin: 'auto' }} aria-label="spanning table" padding='normal'>
             {cartItems.cartItems.map((item) => (
               <TableRow >
               <CartItem
                 key={item.id}
                 item={item}
-                //addToCart={addToCart}
-                //removeFromCart={removeFromCart}
               />
               
               </TableRow>
             ))}
             <TableRow >
-              <h2>Total: ${this.state.total.toFixed(1)}</h2>
+              <TableCell>
+                <h2>Total: ${this.state.total.toFixed(1)}</h2>
+              </TableCell>
             </TableRow>
           </Table>
+          <br></br>
+          <div style={{ width: '80%', margin: 'auto', textAlign: 'right'}}>
+            <Button 
+              size="large" 
+              href="/checkout"
+              sx={{bgcolor: '#5D4E99', color: '#F4CB86', ':hover': {bgcolor:'#5e35b1', color: '#F4CB86'}}}
+            >
+              Proceed to Checkout
+            </Button>
+          </div>
       </div>
     );
   }
