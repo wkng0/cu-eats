@@ -95,7 +95,7 @@ class Cart  extends React.Component{
                 key={item.id}
                 item={item}
               />
-              
+              {(e) => this.addTotal(item, e)}
               </TableRow>
             ))}
             <TableRow >
