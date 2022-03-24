@@ -3,6 +3,7 @@ import { AboutUs } from './aboutus';
 import { LoginPage } from './login';
 import { Comment} from './comment';
 import { Profile, Account, Address} from './profile';
+import { Cart } from './cart'
 
 import './login.css';
 import {NavBar,FixedBottomNavigation,Footer} from './component'
@@ -21,6 +22,7 @@ function App() {
           <Route path="/profile" element={<Profile/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
+          <Route path="/shoppingCart" element={<Cart/>} />
           <Route path="*" element={<NoMatch/>} />
         </Routes>
         <FixedBottomNavigation/>
