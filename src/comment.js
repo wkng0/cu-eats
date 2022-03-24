@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React  from 'react';
 import Select from 'react-select';
 import { 
     Box, 
@@ -14,15 +14,13 @@ import {
     DialogTitle,
     Paper,
     Fab,
-    FormControl,
+
     Avatar,
     Grid,
     Button, 
     Typography,
     TextField,
-    Pagination,
-    Toolbar,
-    Divider,
+
     FormHelperText,
     List,
     ListItem,
@@ -31,14 +29,13 @@ import {
     IconButton,
     DialogContent,
     DialogActions, 
-    DialogContentText,
+
     Input,
     FormLabel,
     RadioGroup,
     FormControlLabel,
     Radio,
-    InputLabel,
-    MenuItem
+
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -49,7 +46,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
-import './comment.json'
 import zIndex from '@mui/material/styles/zIndex';
 
 let data = [];
