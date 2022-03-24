@@ -20,6 +20,14 @@ function ShowUCDishes({UCmenu}) {
                 
             </div>
 
+            <div className='w-100 m-1'>
+                    <p>Varients</p>
+                        <select className='form-control' value={varient} onChange={(e)=> {setvarient(e.target.value)}}>
+                            {UCmenu.varients.map(varient=>{
+                                return <option value={varient}>{varient}</option>
+                            })} 
+                        </select>
+                </div>
 
             <div className='w-100 m-1'>
                     <p>Quality</p>
@@ -32,7 +40,7 @@ function ShowUCDishes({UCmenu}) {
 
                 <div className='flex-container'>
                     <div className='m-1 w-100'>
-                        <h1 className='mt-1'>Price: ${UCmenu.prices*(quantity-1)}</h1>
+                        <h1 className='mt-1'>Price: ${UCmenu.prices[0][varient]*(quantity-1)}</h1>
                     </div>
 
                     <div className='m-1 w-100'>
