@@ -29,7 +29,7 @@
 } 
 
 
-.text-box{
+/* .text-box{
     color: #fff;
     position: absolute;
     top: 50%;
@@ -40,9 +40,26 @@
 
 
   /* -----salad ----- */
-.Salad{
+/* .Salad{
   width: 80%;
   margin: auto;;
   text-align: center;
   padding-top: 100px;
-} 
+}   */
+
+
+
+.flex-container{
+  display: flex !important;
+}
+
+.btn{
+  background-color: #5d4e99 !important;
+  color: white;
+}
+
+select{
+  box-shadow: none !important;
+  border-color: black !important;
+  
+}
