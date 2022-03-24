@@ -7,6 +7,8 @@ import Toast from "./HomePageimages/Toast.jpg";
 import NA from "./HomePageimages/NAcan.jpg";
 import UC from "./HomePageimages/UCcan.jpg";
 import Shaw from "./HomePageimages/Shawcan.jpg";
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+
 
 // class HomePage extends React.Component {
 //   render() {
@@ -22,7 +24,7 @@ function HomePage() {
                     <ul>
                         <li><a href="/">HOME</a></li>
                         <li><a href="">ABOUT US</a></li>
-                        <li><a href="/canteen">Canteens</a></li>  
+                        {/* <li><a href="/canteen">Canteens</a></li>   */}
                         <i class="fa-solid fa-cart-shopping"/>
                         <li><a href="">Shopping Cart</a></li>             
                     </ul>
@@ -39,35 +41,51 @@ function HomePage() {
         </section>
 
         {/* <!-- ----- restaurant ------ --> */}
-        <section class="restaurant">
+        {/* <section class="restaurant">
             <h1>Restaurant We Offer</h1>
             <p>Lorem ipsum sit amet, consectetur adipiscine eilt.</p>
 
             <div class="row-1">
 
                 <a className="UCcanLink" href={"/UCCanteen"}>
+
                     <div class="restaurant-col">
-                        <h3>UC Can</h3>
-                        <p>The College Staff and Student Canteens are located on the G/F of the Cheung Chuk Shan Amenities Building. 
-                            The total floor area is about 570 square metres and it can serve up to 360 people.  
-                            The College canteens are now operated by Joyful Inn Limited.  
-                        </p>
-                    </div>
-                </a>
+                        <h1 class="text-left">UC Can</h1> */}
+                        {/* <div class="row text-left"> */}
+                            {/* <div class="col-md-3">
+                                <img src={UC} className="img-fluid" style={{height: '200px' , width: '200px'}}/>
+                            </div>
+
+                            <div class="col-md-9 text-left">
+                                <p>The College Staff and Student Canteens are located on the G/F of the Cheung Chuk Shan Amenities Building. 
+                                    The total floor area is about 570 square metres and it can serve up to 360 people.  
+                                    The College canteens are now operated by Joyful Inn Limited.  
+                                </p>
+                            </div> */}
+                        {/* </div> */}
+                    {/* </div>
+                </a> */}
                 
-                <a className="NAcanLink" href={"/NACanteen"}>
+                {/* <a className="NAcanLink" href={"/NACanteen"}>
                     <div class="restaurant-col">
-                        <h3>NA Can</h3>
-                        <p>New Asia Canteen is operated by a local innovative catering service company, Fortune River Catering Ltd., 
-                            which is established by a group of New Asia and CUHK alumni, 
-                            with an aim to provide high quality food and dining environment for students and staff of New Asia College and the University.  
-                        </p>
+                        <h1 class="text-left">NA Can</h1>
+                        <div class="col-md-3">
+                            <img src={NA} className="img-fluid" style={{height: '200px' , width: '200px'}}/>
+                        </div>
+
+                        <div class="col-md-11 text-left">
+                            <p>New Asia Canteen is operated by a local innovative catering service company, Fortune River Catering Ltd., 
+                                which is established by a group of New Asia and CUHK alumni, 
+                                with an aim to provide high quality food and dining environment for students and staff of New Asia College and the University.  
+                            </p>
+                        </div>
                     </div>
                 </a>
 
                 <a className="ShawcanLink" href={"/ShawCanteen"}>
                     <div class="restaurant-col">
                         <h3>Shaw Can</h3>
+                        <img src={Shaw} className="img-fluid" style={{height: '200px' , width: '200px'}}/>
                         <p>SeeYou@Shaw是一個結合良朋好友和優質餐飲，並使你足以自豪的理想社群。
 
                             SeeYou@Shaw也是一個建基於友情的品牌。
@@ -77,12 +95,58 @@ function HomePage() {
                     </div>
                 </a>
             </div> 
-               
+                */}
 
                 
     
-        </section>
+        {/* </section> */}
 
+        <section class="Location">
+            <h1>Restaurant We Offer</h1>
+            <p></p>
+
+            <div class="row">
+           
+                <div class="location-col">
+                <a className="NAcanLink" href={"/NACanteen"}>
+                    <img src={NA}/>
+                    <h3>NA can</h3>
+                    <p> 地址:新亞樂群館梁雄姬樓地下  <br/>
+                        電話訂位: 沒有電話號提供 <br/>
+                        價錢每人: 50以下 <br/>
+                        人氣指數: 15</p>
+                </a>
+                </div>
+            
+
+                <div class="location-col">
+                    <a className="UCcanLink" href={"/UCCanteen"}>
+                    <img src={UC}/>
+                    <h3>UC can</h3>
+                    <p> Opening Hours:     
+                        Monday to Saturday:          11:00am – 8:45pm <br/>
+                        Sunday and Public Holidays:  Closed <br/>
+                        <br/>
+                        Last order for dine-in service: 5:30pm    
+                        <br/>                    
+                        Take-away and delivery service (over HK$30) will continue after 6:00pm.   <br/> 
+                        <br/>                     
+                        Order Hotline for On-campus Delivery: Whatsapp 9094 1558</p>
+                    </a>
+                </div>
+
+                <div class="location-col">
+                <a className="ShawcanLink" href={"/ShawCanteen"}>
+                    <img src={Shaw}/>
+                    <h3>Shaw can</h3>
+                    <p> 
+                        營業時間 : 上午11時至下午2時30分 (星期一至五)<br/>
+                        備註:SeeYou@Shaw 風味小館的膳食服務維持暫停 <br/>
+                        如有查詢或其他服務安排，請與餐廳聯絡，電話 2267 0618。</p>
+                </a>
+                </div>
+            </div>
+        </section>
 
        
 
@@ -116,46 +180,6 @@ function HomePage() {
             </div>
         </section>
         
-        
-        {/* <!-- ------Location----- --> */}
-        <section class="Location">
-            <h1>Our Canteens' Location</h1>
-            <p></p>
-
-            <div class="row">
-                <div class="location-col">
-                    <img src={NA}/>
-                    <h3>NA can</h3>
-                    <p> 地址:新亞樂群館梁雄姬樓地下  <br/>
-                        電話訂位: 沒有電話號提供 <br/>
-                        價錢每人: 50以下 <br/>
-                        人氣指數: 15</p>
-                </div>
-
-                <div class="location-col">
-                    <img src={UC}/>
-                    <h3>UC can</h3>
-                    <p> Opening Hours:     
-                        Monday to Saturday:          11:00am – 8:45pm <br/>
-                        Sunday and Public Holidays:  Closed <br/>
-                        <br/>
-                        Last order for dine-in service: 5:30pm    
-                        <br/>                    
-                        Take-away and delivery service (over HK$30) will continue after 6:00pm.   <br/> 
-                        <br/>                     
-                        Order Hotline for On-campus Delivery: Whatsapp 9094 1558</p>
-                </div>
-
-                <div class="location-col">
-                    <img src={Shaw}/>
-                    <h3>Shaw can</h3>
-                    <p> 
-                        營業時間 : 上午11時至下午2時30分 (星期一至五)<br/>
-                        備註:SeeYou@Shaw 風味小館的膳食服務維持暫停 <br/>
-                        如有查詢或其他服務安排，請與餐廳聯絡，電話 2267 0618。</p>
-                </div>
-            </div>
-        </section>
 
 
 
@@ -177,4 +201,4 @@ function HomePage() {
 // }
 
 
-export {HomePage};
+export default HomePage;
