@@ -3,6 +3,7 @@ import { AboutUs } from './aboutus';
 import { LoginPage } from './login';
 import { Comment} from './comment';
 import { Profile, Account, Address} from './profile';
+//import {HomePage} from './HomePage'
 
 import './login.css';
 import {NavBar,FixedBottomNavigation,Footer} from './component'
@@ -23,7 +24,6 @@ function App() {
           <Route path="/profile/address" element={<Address/>} />
           <Route path="*" element={<NoMatch/>} />
         </Routes>
-        <FixedBottomNavigation/>
       </BrowserRouter>
       
     </div>
