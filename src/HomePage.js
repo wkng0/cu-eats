@@ -18,17 +18,20 @@ function HomePage() {
 
         <section class="header">
             <nav>
+                {/*
                 <a href="about-us.html"><img src={logo} width="100" height="100" alt= 'logo'></img></a>
                 <div class ="nav-links" id="navLinks">
                     <i class="fa fa-times" onclick="hideMenu()"></i>
                     <ul>
                         <li><a href="/">HOME</a></li>
                         <li><a href="">ABOUT US</a></li>
-                        {/* <li><a href="/canteen">Canteens</a></li>   */}
+                        <li><a href="/canteen">Canteens</a></li>   
+                        
                         <i class="fa-solid fa-cart-shopping"/>
                         <li><a href="">Shopping Cart</a></li>             
                     </ul>
                 </div>
+                */}
                 <i class="fa fa-bars" onclick="showMenu()"></i>
             </nav>
             
@@ -201,4 +204,4 @@ function HomePage() {
 // }
 
 
-export default {HomePage};
+export {HomePage};
