@@ -31,8 +31,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 
 
-const pages = ['Home', 'About Us', 'Menu', 'Comment'];
-const pagesRoute = ['/', '/about', '/menu', '/comment'];
+const pages = ['Home', 'Menu', 'Comment'];
+const pagesRoute = ['/', '/menu', '/comment'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const settingsRoute = ['/profile', '/profile/account', '/dashboard', '/logout'];
 
