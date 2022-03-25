@@ -1,6 +1,5 @@
 
 import * as React from 'react';
-import { Cart } from './cart'
 import {Link} from 'react-router-dom';
 
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -38,20 +37,18 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const settingsRoute = ['/profile', '/profile/account', '/dashboard', '/logout'];
 
 var userMenuStatus = -1;
-var navMenuStatus = -1;
-var cartStatus = -1;
+var NavMenuStatus = -1;
 
 function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [anchorElCart, setAnchorElCart] = React.useState(null);
     
 
     const handleOpenNavMenu = (event) => {
-        if (navMenuStatus == -1)
+        if (NavMenuStatus == -1)
         {
             setAnchorElNav(event.currentTarget);
-            navMenuStatus = 1;
+            NavMenuStatus = 1;
         }
         else handleCloseNavMenu();
     };
@@ -63,27 +60,16 @@ function NavBar() {
         }
         else handleCloseUserMenu();
     };
-    const handleOpenCart = (event) => {
-      if (userMenuStatus == -1)
-      {
-          setAnchorElCart(event.currentTarget);
-          cartStatus = 1;
-      }
-      else handleCloseUserMenu();
-  };
-  
+
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-        navMenuStatus = -1;
+        NavMenuStatus = -1;
     };
+
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
         userMenuStatus = -1;
     };
-    const handleCloseCart = () => {
-      setAnchorElCart(null);
-      cartStatus = -1;
-  };
 
     return (
 
@@ -140,35 +126,10 @@ function NavBar() {
 
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Shopping Cart">
-                        <Button onClick={handleOpenCart} variant="outlined" color="inherit" sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}>
+                        <Button variant="outlined" color="inherit" sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}} href="/shoppingCart">
                             <ShoppingCartIcon />
                         </Button>
                         </Tooltip>
-                        
-                        <Menu 
-                            id="menu-appbar" 
-                            anchorEl={anchorElCart} 
-                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left',}}
-                            keepMounted
-                            transformOrigin={{ vertical: 'top', horizontal: 'left',}}
-                            open={Boolean(anchorElCart)}
-                            onClose={handleCloseCart}
-                            sx={{mt: '30px', zIndex: '99999 !important'}}
-                        >
-                          <div style={{color: '#5D4E99', width: '100%'}}>
-                            <Cart style={{ width: '80%', margin: 'auto' }}/>
-                          </div>
-                          <div style={{ width: '80%', margin: 'auto', textAlign: 'right'}}>
-                              <Button 
-                                size="large" 
-                                href="/checkout"
-                                sx={{bgcolor: '#5D4E99', color: '#F4CB86', ':hover': {bgcolor:'#5e35b1', color: '#F4CB86'}}}
-                              >
-                                Proceed to Checkout
-                              </Button>
-                            </div>
-                        </Menu>
-                      
                     </Box>
 
                     <Box sx={{ flexGrow: 0, pl:3}}>
