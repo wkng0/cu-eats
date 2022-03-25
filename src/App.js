@@ -1,9 +1,17 @@
 import React from 'react';
+<<<<<<< HEAD
+=======
+import { AboutUs } from './aboutus';
+>>>>>>> parent of 66b762b (Add shopping cart files)
 import { LoginPage } from './login';
 import { Comment, ContentPreview} from './comment';
 import { Profile, Account, Address} from './profile';
 import { Cart } from './cart'
+<<<<<<< HEAD
 import { HomePage }  from './HomePage';
+=======
+import {HomePage}  from './HomePage';
+>>>>>>> parent of 66b762b (Add shopping cart files)
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
