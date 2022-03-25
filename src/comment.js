@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, { useState, useEffect }  from 'react';
 import Select from 'react-select';
 import { 
     Box, 
@@ -14,18 +14,21 @@ import {
     DialogTitle,
     Paper,
     Fab,
-
+    Rating,
     Avatar,
     Grid,
     Button, 
     Typography,
     TextField,
-
+    Drawer,
+    Toolbar,
+    Divider,
     FormHelperText,
     List,
     ListItem,
     ListItemText,
     ListItemButton,
+    ListItemIcon,
     IconButton,
     DialogContent,
     DialogActions, 
@@ -45,8 +48,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-
+import {useParams} from 'react-router-dom'
 import zIndex from '@mui/material/styles/zIndex';
+import { render } from '@testing-library/react';
 
 let data = [];
 
@@ -65,21 +69,30 @@ class TabPanel extends React.Component{
     };
  
     render(){
-        let tab=this.state.value;
-        //console.log(tab);
+
         return(
             <>
-                <Container maxWidth="sm" >
-                    
+                <Container maxWidth="sm"  >  
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={this.state.value} onChange={this.handleChange}>
+                            <Typography variant="h5" sx={{lineHeight:2, marginRight:"10px"}}>
+                                {canteenList[canteenID.indexOf(this.props.canteen)]}
+                            </Typography>
                             <Tab label="All" value={-1}/> 
                             <Tab label="Chit-Chat" value={0} />
                             <Tab label="Rating" value={1}/>
                         </Tabs>
                     </Box>
                     
-                    {data.map((file,i)=><TabContent key={i} i={i} value={this.state.value} />)}
+                   
+                    {data.map((file,i)=>
+                        <div role="tabpanel" style={{marginTop:"1rem"}} >
+                            {(this.state.value==data[i].type || this.state.value=="-1") &&(
+                                <TabContent key={i} i={i} canteen={this.props.canteen}/>
+                            )}
+                        </div>
+                    
+                    )}
                    
                 </Container>
                 
@@ -94,63 +107,69 @@ class TabContent extends React.Component{
     constructor(props){
         super(props)
     }
-    
+    handleShare=()=>{
+        navigator.clipboard.writeText("http://localhost:3000/comment/"+this.props.canteen+"/"+data[this.props.i]._id);
+    }
     render(){
         let i=this.props.i;
 
         return(
-            <div role="tabpanel" style={{marginTop:"1rem"}} hidden={(this.props.value!=data[i].type &&this.props.value!=-1)}>
-                {(this.props.value==data[i].type || this.props.value=="-1") &&(
-                
-                    <Card sx={{borderRadius:3}}>
-                        <CardHeader
-                            avatar={
-                            <Avatar sx={{ bgcolor: red[500] }}>
-                                {data[i].userid[0]}
-                            </Avatar>
-                            }
-                            action={
-                            <IconButton aria-label="settings">
-                                <MoreVertIcon />
-                            </IconButton>
-                            }
-                            title={data[i].userid}
-                            subheader={data[i].date}
-                        />
-                        <CardContent>
-                            <Typography variant="h5" component="div" sx={{mb:1}}>
-                                {data[i].title}
-                            </Typography>
-                            <CardMedia
-                                component="img"
-                                height="auto"
-                                image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
-                                alt="green iguana"
-                                sx={{mb:2}}
-                            />
-                            <Typography sx={{ mb: 1.5 }} >
-                                {data[i].description}
-                            </Typography>
             
-                        </CardContent>
+                <Card sx={{borderRadius:3}}>
+                    <CardHeader
+                        avatar={
+                        <Avatar sx={{ bgcolor: red[500] }}>
+                            {data[i].userid[0]}
+                        </Avatar>
+                        }
+                        action={
+                        <IconButton aria-label="settings">
+                            <MoreVertIcon />
+                        </IconButton>
+                        }
+                        title={data[i].userid}
+                        subheader={data[i].date}
                         
-                        <CardActions>
-                            <IconButton aria-label="add to favorites">
-                                <ThumbUpIcon />
-                            </IconButton>
-                            <IconButton aria-label="share">
-                                <ShareIcon />
-                            </IconButton>
-                        </CardActions>
-                    </Card>
+                    />
+                    <CardContent sx={{p:0, px:2, py:0}}>
+                        <CardMedia
+                            component="img"
+                            height="auto"
+                            image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
+                            sx={{mb:2, borderRadius: 2 }}
+                        />
+                        <Typography variant="h5" component="div" sx={{mb:1}}>
+                            {data[i].title}
+                        </Typography>
+                        <Typography variant="p" component="div">
+                            {data[i].description}
+                        </Typography>
+                        <Typography component="div" >
+                            <Rating name="read-only-rating" hidden={data[i].rating==-1} value={data[i].rating} readOnly />
+                        </Typography>
+                    
+        
+                    </CardContent>
+                    
+                    <CardActions>
+                        <IconButton aria-label="add to favorites">
+                            <ThumbUpIcon />
+                        </IconButton>
+                        <IconButton aria-label="share" onClick={this.handleShare}>
+                            <ShareIcon />
+                        </IconButton>
+                    </CardActions>
+                </Card>
                 
-                )}
-            </div>
+           
 
         );
      }
 }
 
+const canteenList=["SeeYou@Shaw","Joyful Inn","Now &,"]
+const canteenID=["SC","UC","NA"]
+/*
 class SideBar extends React.Component{
     constructor(){
         super();
@@ -182,27 +201,15 @@ class SideBar extends React.Component{
                     <Grid item xs={2} sm={2}>
                         <Paper  elevation={2} rounded="true" sx={{position:"fixed",zIndex:0 ,borderRadius:3}}>
                             <List>
+                                {canteenList.map((data, index) => (
                                 <ListItem >
-                                    <ListItemButton onClick={this.handleClick} value="SC" selected={this.state.canteen=="SC"}>
+                                    <ListItemButton onClick={this.handleClick} value={canteenID[index]} selected={this.state.canteen==canteenID[index]}>
                                         <ListItemText>
-                                            SeeYou@Shaw
+                                            {canteenList[index]}
                                         </ListItemText>
                                     </ListItemButton>
                                 </ListItem>
-                                <ListItem >
-                                    <ListItemButton onClick={this.handleClick} value="UC" selected={this.state.canteen=="UC"}>
-                                        <ListItemText>
-                                            Joyful Inn
-                                        </ListItemText>
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem >
-                                    <ListItemButton onClick={this.handleClick} value="NA" selected={this.state.canteen=="NA"}>
-                                        <ListItemText>
-                                            Now ,
-                                        </ListItemText>
-                                    </ListItemButton>
-                                </ListItem>
+                            ))}
                             </List>
                         </Paper>
                     </Grid>
@@ -216,7 +223,111 @@ class SideBar extends React.Component{
         
 
     }
-}
+}*/
+
+function ResponsiveDrawer(props) {
+    const { window } = props;
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [canteen, setCanteen]=React.useState("SC")
+  
+    const handleDrawerToggle = () => {
+      setMobileOpen(!mobileOpen);
+    };
+    const handleClick=(e)=>{
+
+        let canteenChoice=e.currentTarget.getAttribute('value');
+        //console.log(canteenChoice);
+        fetch('http://localhost:7000/dbComment/get/'+canteenChoice)
+        .then(res=>res.json())
+        .then(db=>{
+            data=db;
+            //console.log(data);
+            //console.log("send to " +canteenChoice);
+            setCanteen(canteenChoice)
+        })
+        
+    }
+  
+    const drawer = (
+      <div>
+        <Toolbar />
+        <Divider />
+        <List>
+        {canteenList.map((data, index) => 
+        (
+            <ListItem >
+                <ListItemButton onClick={handleClick} value={canteenID[index]} selected={canteen==canteenID[index]}>
+                    <ListItemText>
+                        {canteenList[index]}
+                    </ListItemText>
+                </ListItemButton>
+            </ListItem>
+        ))}
+        </List>
+        
+     
+       
+      </div>
+    );
+  
+    const container = window !== undefined ? () => window().document.body : undefined;
+    const drawerWidth=200;
+    return ( 
+        <Container>
+        <Box sx={{ display: 'flex' }}>        
+            <Box
+            component="nav"
+            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },p:0 }}            
+            >
+            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+            <Drawer
+                container={container}
+                variant="temporary"
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+                ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+                }}
+                sx={{
+                display: { xs: 'block', sm: 'none' },
+                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth,  left:"unset"},
+                left:"unset",
+                zIndex:0,
+        
+                }}
+    
+            >
+                {drawer}
+            </Drawer>
+            <Drawer
+                variant="permanent"
+                sx={{
+                display: { xs: 'none', sm: 'block' },
+                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth,left:"unset" },
+                left:"unset",
+                zIndex:0,
+              
+                }}
+                open
+                
+            >
+                {drawer}
+            </Drawer>
+
+            </Box>
+            <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, maxWidth: { sm: "750px" } ,padding:0,paddingBottom:5 }}
+      >
+                <TabPanel value={0} canteen={canteen}/>
+            </Box>
+        </Box>
+        </Container>
+      
+       
+       
+    );
+  }
 
 function AddComment(){
     const [open, setOpen]=React.useState(false);
@@ -229,20 +340,28 @@ function AddComment(){
     const [helperTextAEmpty, setHelperTextAEmpty]=React.useState("");
     const [helperTextBEmpty, setHelperTextBEmpty]=React.useState("");
     const [helperTextCEmpty, setHelperTextCEmpty]=React.useState("");
+    const [helperTextDEmpty, setHelperTextDEmpty]=React.useState("");
     const [canteen, setCanteen]=React.useState("");
     const [selectedFile, setSelectedFile]=React.useState("");
     const [canteenEmpty, setCanteenEmpty]=React.useState(false);
     const [fileEmpty, setFileEmpty]=React.useState(true);
+    const [ratingEmpty, setRatingEmpty]=React.useState(false);
     const [newFileName, setNewFileName]=React.useState("");
+    const [rating, setRating]=React.useState(-1);
     const handleClick=()=>{
         setOpen(true);
         
     }
     const handlePublish=(e)=>{
-        if(titleEmpty==true||descEmpty==true||type==-1){
+        if(titleEmpty==true||descEmpty==true||type==-1||(type==1)&&(rating==-1)){
             if(type==-1){
                 setLocationEmpty(true);
                 setHelperTextCEmpty("Please choose an option");
+            }else if(type==1){
+                if(rating==-1){
+                    setRatingEmpty(true);
+                    setHelperTextDEmpty("Please give rating")
+                }
             }
             if(title==""){
                 setTitleEmpty(true);
@@ -261,7 +380,8 @@ function AddComment(){
                     "title":title,
                     "image": newFileName,
                     "description":description,
-                    "type":type
+                    "type":type,
+                    "rating": rating
                 }),
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -349,15 +469,25 @@ function AddComment(){
         });
         
     }
+    const handleRating=(event,newValue)=>{
+        setRating(newValue);
+        if(newValue==-1){
+            setRatingEmpty(true);
+            setHelperTextDEmpty("Please give a rating")
+        }else{
+            setRatingEmpty(false);
+            setHelperTextDEmpty("")
+        }
+    }
     const options = [
         { value: 'SC', label: 'SeeYou@Shaw' },
         { value: 'UC', label: 'Joyful Inn' },
-        { value: 'NA', label: 'Now ,' }
+        { value: 'NA', label: 'Now &,' }
       ]
       
     return(
         <div>
-            <Fab color="secondary" sx={{position: 'fixed', bottom: 80 ,right:32,}} onClick={handleClick}>
+            <Fab color="secondary" sx={{position: 'fixed', bottom: 32 ,right:32,}} onClick={handleClick}>
                 <AddIcon />
             </Fab>
             <Dialog component={"div"} width="md"height="md" open={open} onClose={handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>
@@ -405,6 +535,18 @@ function AddComment(){
 
                     </RadioGroup>
                     <FormHelperText error={locationEmpty}>{helperTextCEmpty}</FormHelperText>
+
+                    <FormLabel error={locationEmpty} hidden={type!=1}>Rating</FormLabel>
+                    <br hidden={type!=1}/>
+                    <Rating
+                        name="canteen-rating"
+                        value={rating}
+                        onChange={(event, newValue) => {
+                            setRating(newValue);
+                        }}
+                        hidden={type!=1}
+                    />
+                    <FormHelperText error={ratingEmpty} hidden={type!=1}>{helperTextDEmpty}</FormHelperText>
              
                     <FormLabel error={canteenEmpty}>Canteen</FormLabel>    
                     <Select 
@@ -469,12 +611,47 @@ class Comment extends React.Component{
         
         return(
             <>
-                <SideBar />
+                <ResponsiveDrawer />
                 <AddComment />
             </>
+                
+  
         
         )
     }
 }
 
-export {Comment};
+function ContentPreview(){
+    const [target,setTarget]=useState();
+    let param=useParams();
+    useEffect(()=>{
+        fetch('http://localhost:7000/dbComment/get/'+param.canteen)
+        .then(res=>res.json())
+        .then(db=>{
+            data=db;
+            let target;
+            for (let x in data){
+                if(data[x]._id==param.id){
+                    setTarget(x);
+                    break;
+                }
+            }
+            console.log(target);
+            
+        })
+    })
+    if(target===undefined){
+        return<>please wait</>
+    }
+    
+
+    return(
+        <Container maxWidth="sm" >
+             <TabContent key={target} i={target} canteen={param.canteen}/>
+        </Container> 
+    );
+  
+
+}
+
+export {Comment,ContentPreview};

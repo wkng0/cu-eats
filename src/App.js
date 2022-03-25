@@ -1,17 +1,18 @@
 import React from 'react';
 import { AboutUs } from './aboutus';
 import { LoginPage } from './login';
-import { Comment} from './comment';
+import { Comment, ContentPreview} from './comment';
 import { Profile, Account, Address} from './profile';
 import { Cart } from './cart'
-import {HomePage}  from './HomePage';
+import HomePage  from './HomePage';
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
 
 import './login.css';
 import {NavBar} from './component'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, useParams} from 'react-router-dom';
+import { TabContent } from 'react-bootstrap';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<HomePage/>}/>
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/comment" element={<Comment />} />
+          <Route path="/comment/:canteen/:id" element={<ContentPreview />} />
           <Route path="/profile" element={<Profile/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
