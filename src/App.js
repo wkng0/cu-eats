@@ -20,9 +20,9 @@ function App() {
       <NavBar/>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<HomePage/>}/>
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/comment" element={<Comment />} />
-          <Route path="/about" element={<HomePage/>}/>
           <Route path="/profile" element={<Profile/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
