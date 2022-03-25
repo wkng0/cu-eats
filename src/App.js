@@ -4,7 +4,7 @@ import { LoginPage } from './login';
 import { Comment, ContentPreview} from './comment';
 import { Profile, Account, Address} from './profile';
 import { Cart } from './cart'
-import HomePage  from './HomePage';
+import { HomePage }  from './HomePage';
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
