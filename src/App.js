@@ -1,5 +1,4 @@
 import React from 'react';
-import { AboutUs } from './aboutus';
 import { LoginPage } from './login';
 import { Comment, ContentPreview} from './comment';
 import { Profile, Account, Address} from './profile';
