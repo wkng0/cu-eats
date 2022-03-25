@@ -16,7 +16,7 @@ function HomePage() {
     return (
       <> 
 
-        <section class="header">
+        <section className="header">
             <nav>
                 {/*
                 <a href="about-us.html"><img src={logo} width="100" height="100" alt= 'logo'></img></a>
@@ -32,10 +32,10 @@ function HomePage() {
                     </ul>
                 </div>
                 */}
-                <i class="fa fa-bars" onclick="showMenu()"></i>
+                <i className="fa fa-bars" onClick="{showMenu()}"></i>
             </nav>
             
-            <div class="text-box">
+            <div className="text-box">
                 <h1>CUHK's Food Delivery System</h1>
                 <p>We are delicate to provide to best food delivery system you, espiecally in this diffcult time</p>
                 <a href="" class="hero-btn">Visit Us To Know More</a>
@@ -104,13 +104,13 @@ function HomePage() {
     
         {/* </section> */}
 
-        <section class="Location">
+        <section className="Location">
             <h1>Restaurant We Offer</h1>
             <p></p>
 
-            <div class="row">
+            <div className="row">
            
-                <div class="location-col">
+                <div className="location-col">
                 <a className="NAcanLink" href={"/NACanteen"}>
                     <img src={NA}/>
                     <h3>NA can</h3>
@@ -122,7 +122,7 @@ function HomePage() {
                 </div>
             
 
-                <div class="location-col">
+                <div className="location-col">
                     <a className="UCcanLink" href={"/UCCanteen"}>
                     <img src={UC}/>
                     <h3>UC can</h3>
@@ -138,7 +138,7 @@ function HomePage() {
                     </a>
                 </div>
 
-                <div class="location-col">
+                <div className="location-col">
                 <a className="ShawcanLink" href={"/ShawCanteen"}>
                     <img src={Shaw}/>
                     <h3>Shaw can</h3>
@@ -155,28 +155,28 @@ function HomePage() {
 
 
         {/* <!-- -----Dishes----- --> */}
-        <section class="Dishes">
+        <section className="Dishes">
             <h1>Popular Dishes</h1>
             <p>CUHK has a lot popular food dishes that becomes memory to students</p>
 
-            <div class="row">
-                <div class="dishes-col">
+            <div className="row">
+                <div className="dishes-col">
                     <img src={lemonPie}/>
-                    <div class="layer">
+                    <div className="layer">
                         <h3>Med can: Lemon Pie</h3>
                     </div>
                 </div>
 
-                <div class="dishes-col">
+                <div className="dishes-col">
                     <img src={RedBean}/>
-                    <div class="layer">
+                    <div className="layer">
                         <h3>NA can: Red Bean Icy Drink</h3>
                     </div>
                 </div>
 
-                <div class="dishes-col">
+                <div className="dishes-col">
                     <img src={Toast}/>
-                    <div class="layer">
+                    <div className="layer">
                         <h3>蘭苑Orchid Lodge: Super Thick French toast</h3>
                     </div>
                 </div>
