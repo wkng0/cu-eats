@@ -1,21 +1,11 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './image/logo.jpeg';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DoneIcon from '@mui/icons-material/Done';
-// import Link from '@mui/material/Link';
-// import Box from '@mui/material/Box';
-// import TextField from '@mui/material/TextField';
 import PhoneIcon from '@mui/icons-material/Phone';
-// import { useFormControl } from '@mui/material/FormControl';
-// import InputLabel from '@mui/material/InputLabel';
-// import MenuItem from '@mui/material/MenuItem';
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
-// import FormHelperText from '@mui/material/FormHelperText';
-// import NativeSelect from '@mui/material/NativeSelect';
 import{
   Link,
   Box,
@@ -33,8 +23,16 @@ import{
 
 class Profile extends React.Component{
     //get user name email and address
+    constructor(props){
+      super(props);
+      this.state={login: true};
+    }
     render(){
+      const login = this.state.login;
         return(
+          <div>
+          { login?
+          (
             <div>
                 <div class="container fluid">
                     <div class="card">
@@ -49,18 +47,25 @@ class Profile extends React.Component{
                 <div className="container-lg">
                     <div class="d-flex justify-content-between align-items-center mt-4 px-4">
                             <div class="stats">
-                                <Link href="/profile/address" class="btn btn-lg"> <MyLocationIcon fontSize="large" sx={{color: '#5D4E99'}}/> <a >My Addreess</a></Link>
+                                <Button href="/profile/address" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}> <MyLocationIcon fontSize="large" sx={{color: "#F4CB86"}}/> My Addreess</Button>
                             </div>
                             <div class="stats">
-                                <Link  href="/profile/account" class="btn btn-lg"><ManageAccountsIcon fontSize="large" sx={{color: '#5D4E99'}}/>My Account ( phone password username )++change</Link>
+                                <Button  href="/profile/account" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}><ManageAccountsIcon fontSize="large" sx={{color:  "#F4CB86"}}/>My Account ( phone password username )++change</Button>
                             </div>
                             <div class="stats">
-                                <Link  href="/"class="btn btn-lg"><ReceiptLongIcon fontSize="large" sx={{color: '#5D4E99'}}/>Shopping Record</Link> 
+                                <Button  href="/" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}><ReceiptLongIcon fontSize="large" sx={{color:  "#F4CB86"}}/>Shopping Record</Button> 
                             </div>
                     </div>
                 </div>
-                <SignOut/>
+                <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} onClick={()=>this.setState({login: false})}>Sign out</Button>
             </div>
+            )
+            :(<div class="container fluid">
+              Login to see more? 
+              <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} href="./login">Login</Button>
+            </div>)
+          }
+          </div>
         )
     }
 }
@@ -80,7 +85,7 @@ class Address extends React.Component{
                     <div class="form">
                         Add your new address!
                         <textarea style={{width:' 100%'}}></textarea>
-                        <Button variant="outlined" sx={{color: '#5D4E99' }} >Submit</Button>
+                        <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86" }} >Submit</Button>
                     </div>
             </div>
             </>
@@ -89,20 +94,25 @@ class Address extends React.Component{
     }
 }
 
-class Account extends React.Component{
-  render(){
+function Account(){
+   const [show, setShow] = useState(false);
     return(
       <>
-      <Link href="/profile"><ArrowBackIcon/></Link>
-      <IconButton sx={{headerAlign: 'right'}}><DoneIcon/></IconButton>
+      <Link href="/profile" sx={{color: '#5D4E99'}}><ArrowBackIcon/></Link>
+      <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={()=> updateInfo()}><DoneIcon/></IconButton>
       <Info/>
       <ChooseGender/>
       <ChooseCollege/>
       <ChooseFaculty/>
-      <Button variant="outlined" sx={{color: '#5D4E99', m: 8 }} >Change Password</Button>
+      <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} onClick={() => setShow(prev => !prev)}>Change Password</Button>
+      {show &&  <ChangePw/>}
       </>
-    )
-  }
+    );
+}
+
+function updateInfo(){
+  //update all
+  window.alert("changes saved");
 }
 
 class Info extends React.Component{
@@ -272,20 +282,42 @@ function ChooseFaculty() {
   );
 }
 
-
-
-
-
-class SignOut extends React.Component{
-    out(){
-        return 1;
-    }
-    render(){
-        return(
-            <>
-            <Button variant="outlined" sx={{color: '#5D4E99', m: 8, zIndex: 'tooltip' }} >Sign out</Button>
-            </>
-        )
-    }
+class ChangePw extends React.Component{
+  render(){
+    return(
+      <>
+      <TextField
+          id="standard-password-input"
+          label="Current Password"
+          type="password"
+          autoComplete="current-password"
+          variant="standard"
+          sx={{m:3}}
+        />
+         <br></br>
+        <TextField
+          id="standard-password-input"
+          label="New Password"
+          type="password"
+          autoComplete="current-password"
+          variant="standard"
+          sx={{m:3}}
+        />
+         <br></br>
+        <TextField
+          id="standard-password-input"
+          label="Enter again"
+          type="password"
+          autoComplete="current-password"
+          variant="standard"
+          sx={{m:3}}
+        />
+        <br></br>
+        <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 3 }}>Confirm</Button>
+      </>
+    )
+  }
 }
-export {Profile, Account, Address};
+
+
+export { Profile, Account, Address};

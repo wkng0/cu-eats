@@ -35,13 +35,34 @@ class CheckEmail extends React.Component{
         if(regex.test(this.state.email)==false || this.state.email==""){
             console.log("false email!");
         }else{
-            // if(True){
-                //document.getElementById('login-password').style.display = "block";
-                //document.getElementById('exist-email').innerText = email.value;
-            // }else{
-            ReactDOM.render(<LoginWithPassword email={this.state.email}/>,document.getElementById('Component'))
-            // }
-            //ReactDOM.render(<LoginWithPassword email={this.state.email}/>,document.getElementById('Component'));
+            fetch('http://localhost:7000/dbAccount/exist/'+this.state.email)
+            .then((res)=>{
+                res.json();
+                // console.log(res);
+                // if (res==true){
+                //     this.setState({pass: true});
+                // }else{
+                //     this.setState({pass: false});
+                // }
+            })
+            .then(db=>{
+                console.log(db);
+                let data = [];
+                data = db;
+                console.log(data);
+                if (db==="true"){
+                    this.setState({pass: true});
+                }else{
+                    this.setState({pass: false});
+                }
+            })
+            .catch((err)=>{console.log(err)})
+
+            if(this.state.pass == true){
+                ReactDOM.render(<LoginWithPassword email={this.state.email}/>,document.getElementById('Component'));
+            }else{
+                ReactDOM.render(<Register email={this.state.email}/>)
+            }
         
         }
     }

@@ -241,7 +241,7 @@ function ResponsiveDrawer(props) {
         .then(res=>res.json())
         .then(db=>{
             data=db;
-            //console.log(data);
+            console.log(data);
             //console.log("send to " +canteenChoice);
             setCanteen(canteenChoice)
         })
