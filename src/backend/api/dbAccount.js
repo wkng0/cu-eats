@@ -51,8 +51,10 @@ async function veriAcc(res){
     const collection = db.collection("Info");
     let result = await collection.countDocuments({"email":user_email});
     if(result == 0){
-        res.send('{"email":false}');
-    }else{res.send('{"email":true}');}
+        res.json({"email":"false"});
+    }else{
+        res.json({"email":"true"});
+    }
 };
 
 async function fetchAccount(res){

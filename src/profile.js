@@ -72,16 +72,22 @@ class Profile extends React.Component{
 
 class Address extends React.Component{
     //get address
-
+    constructor(){
+      super();
+      this.state = {count: 1};
+    }
+    componentDidMount(){
+      return
+    }
     render(){
         return(
             <>
             <Link href="/profile"><ArrowBackIcon/></Link>
             <div class="container fluid">
-                    <div class="card" id="addrs">
+                    {/* <div class="card" id="addrs">
                         <h4>Address index</h4>
                         <p>first address</p>
-                    </div>
+                    </div> */}
                     <div class="form">
                         Add your new address!
                         <textarea style={{width:' 100%'}}></textarea>
