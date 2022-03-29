@@ -36,6 +36,11 @@ router.post("/post/:id",function(req,res){
     .finally(() => client.close());
 });
 
+router.post("/report",function(req,res){
+    submitReport(req,res);
+
+})
+
 
 router.post("/photo/post",upload.single("file"),function(req,res){
     let data={
@@ -52,7 +57,18 @@ router.get("/photo/get/:id",function(req,res){
 
 
 
-
+async function submitReport(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Report");
+    const insertResult = await collection.insertOne({ 
+        postid: req.body['postid'],
+        reason: req.body['reason'],
+        canteen:req.body['canteen'],
+    });
+    res.send("Report submitted")
+}
 
 async function postComment(req,res){
     await client.connect();

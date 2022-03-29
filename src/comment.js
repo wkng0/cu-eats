@@ -1,6 +1,7 @@
 import React, { useState, useEffect }  from 'react';
 import Select from 'react-select';
 import { 
+    AppBar,
     Box, 
     Tab, 
     Tabs, 
@@ -29,6 +30,7 @@ import {
     ListItemText,
     ListItemButton,
     ListItemIcon,
+    SwipeableDrawer,
     IconButton,
     DialogContent,
     DialogActions, 
@@ -49,8 +51,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import {useParams} from 'react-router-dom'
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import FlagIcon from '@mui/icons-material/Flag';
 import zIndex from '@mui/material/styles/zIndex';
 import { render } from '@testing-library/react';
+import { TurnedIn } from '@mui/icons-material';
 
 let data = [];
 
@@ -73,7 +78,7 @@ class TabPanel extends React.Component{
         return(
             <>
                 <Container maxWidth="sm"  >  
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
                         <Tabs value={this.state.value} onChange={this.handleChange}>
                             <Typography variant="h5" sx={{lineHeight:2, marginRight:"10px"}}>
                                 {canteenList[canteenID.indexOf(this.props.canteen)]}
@@ -106,60 +111,160 @@ class TabPanel extends React.Component{
 class TabContent extends React.Component{
     constructor(props){
         super(props)
+        this.state={
+            open:false,
+            option:"",
+            optionEmpty:false,
+            helperText:""
+        }
     }
     handleShare=()=>{
         navigator.clipboard.writeText("http://localhost:3000/comment/"+this.props.canteen+"/"+data[this.props.i]._id);
     }
+    handleLike=()=>{
+
+    }
+    handleReport=()=>{
+        console.log(data[this.props.i]._id);
+        fetch("http://localhost:7000/dbComment/report", {
+            method: 'POST', 
+            body: new URLSearchParams({
+                "postid":data[this.props.i]._id,
+                "reason": this.state.option,
+                "canteen": this.props.canteen
+            }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+            
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .then(() => {
+            this.setState({open:false});
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+    handleClose=()=>{
+        this.setState({open:false})
+    }
+    handleOption=(option)=>{
+        this.setState({option:option.value});
+        if(option.value==""){
+            this.setState({
+                optionEmpty:true,
+                helperText:"Please choose an option"
+            })
+        }else{
+            this.setState({
+                optionEmpty:false,
+                helperText:""
+            })
+        }
+    }
+    handleOpenForm=()=>{
+        this.setState({
+            open:true
+        })
+    }
+    
+
     render(){
+        const options = [
+            { value: 'Sexual content', label: 'Sexual content' },
+            { value: 'Violent or repulsive content', label: 'Violent or repulsive content' },
+            { value: 'Hateful or abusive content', label: 'Hateful or abusive content' },
+            { value: 'Harassment or bullying', label: 'Harassment or bullying' },
+            { value: 'Harmful or dangerous acts', label: 'Harmful or dangerous acts' },
+            { value: 'Spam or misleading', label: 'Spam or misleading' },
+            { value: 'None of these are my issues', label: 'None of these are my issues' }
+
+        ]
         let i=this.props.i;
+        let postTime=data[i].datetime.substring(0,10)+" "+data[i].datetime.substring(11,16);
 
         return(
             
-                <Card sx={{borderRadius:3}}>
-                    <CardHeader
-                        avatar={
-                        <Avatar sx={{ bgcolor: red[500] }}>
-                            {data[i].userid[0]}
-                        </Avatar>
-                        }
-                        action={
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                        </IconButton>
-                        }
-                        title={data[i].userid}
-                        subheader={data[i].date}
-                        
+            <Card sx={{borderRadius:3}}>
+                <CardHeader
+                    avatar={
+                    <Avatar sx={{ bgcolor: red[500] }}>
+                        {data[i].userid[0]}
+                    </Avatar>
+                    }
+                    action={<>
+                   
+                    <IconButton aria-label="settings" onClick={this.handleOpenForm}>
+                        <FlagIcon />
+                    </IconButton>
+                    <Dialog component={"div"} width="md"height="md" open={this.state.open} onClose={this.handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>
+                        <Paper>
+                            <DialogTitle >
+                            Report
+                            </DialogTitle> 
+                            <DialogContent>
+                                
+                                <FormLabel error={this.state.optionEmpty}>What's the problem?</FormLabel>    
+                                <Select 
+                                    options={options} 
+                                    sx={{zIndex:99999}}
+                                    onChange={this.handleOption}
+                                    //ref
+                                    menuPortalTarget={document.body} 
+                                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                />
+                                <FormHelperText error={this.state.optionEmpty}>{this.state.helperText}</FormHelperText>
+
+                            </DialogContent>
+                            <DialogActions>
+                                
+                                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={this.handleClose}>
+                                    Cancel
+                                </Button>
+                                <Button variant="contained" endIcon={<PublishIcon />} onClick={this.handleReport}>
+                                    Publish
+                                </Button>
+                            </DialogActions>
+                        </Paper>
+                    </Dialog> </>
+                    }
+                    title={data[i].userid}
+                    subheader={postTime}
+                    
+                />
+    
+                <CardContent sx={{p:0, px:2, py:0}}>
+                    <CardMedia
+                        component="img"
+                        height="auto"
+                        image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
+                        sx={{mb:2, borderRadius: 2 }}
                     />
-                    <CardContent sx={{p:0, px:2, py:0}}>
-                        <CardMedia
-                            component="img"
-                            height="auto"
-                            image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
-                            sx={{mb:2, borderRadius: 2 }}
-                        />
-                        <Typography variant="h5" component="div" sx={{mb:1}}>
-                            {data[i].title}
-                        </Typography>
-                        <Typography variant="p" component="div">
-                            {data[i].description}
-                        </Typography>
-                        <Typography component="div" >
-                            <Rating name="read-only-rating" hidden={data[i].rating==-1} value={data[i].rating} readOnly />
-                        </Typography>
-                    
-        
-                    </CardContent>
-                    
-                    <CardActions>
-                        <IconButton aria-label="add to favorites">
-                            <ThumbUpIcon />
-                        </IconButton>
-                        <IconButton aria-label="share" onClick={this.handleShare}>
-                            <ShareIcon />
-                        </IconButton>
-                    </CardActions>
-                </Card>
+                    <Typography variant="h5" component="div" sx={{mb:1}}>
+                        {data[i].title}
+                    </Typography>
+                    <Typography variant="p" component="div">
+                        {data[i].description}
+                    </Typography>
+                    <Typography component="div" >
+                        <Rating name="read-only-rating" hidden={data[i].rating==-1} value={data[i].rating} readOnly />
+                    </Typography>
+                
+
+                </CardContent>
+                
+                <CardActions>
+                    <IconButton aria-label="add to favorites">
+                        <ThumbUpIcon />
+                    </IconButton>
+                    <IconButton aria-label="share" onClick={this.handleShare}>
+                        <ShareIcon />
+                    </IconButton>
+                </CardActions>
+            </Card>
                 
            
 
@@ -169,70 +274,26 @@ class TabContent extends React.Component{
 
 const canteenList=["SeeYou@Shaw","Joyful Inn","Now &,"]
 const canteenID=["SC","UC","NA"]
-/*
-class SideBar extends React.Component{
-    constructor(){
-        super();
-        this.state={
-            canteen:"SC",
-        };
-    }
-    handleClick=(e)=>{
-
-        let canteenChoice=e.currentTarget.getAttribute('value');
-        //console.log(canteenChoice);
-        fetch('http://localhost:7000/dbComment/get/'+canteenChoice)
-        .then(res=>res.json())
-        .then(db=>{
-            data=db;
-            //console.log(data);
-            //console.log("send to " +canteenChoice);
-            this.setState({
-                canteen:canteenChoice,
-            });
-        })
-        
-    }
-    
-    render(){
-        return(
-            <div style={{zIndex: "-99999 !important"}}>
-                <Grid container margin={"auto"} maxWidth={"md"}  justifyContent="center">
-                    <Grid item xs={2} sm={2}>
-                        <Paper  elevation={2} rounded="true" sx={{position:"fixed",zIndex:0 ,borderRadius:3}}>
-                            <List>
-                                {canteenList.map((data, index) => (
-                                <ListItem >
-                                    <ListItemButton onClick={this.handleClick} value={canteenID[index]} selected={this.state.canteen==canteenID[index]}>
-                                        <ListItemText>
-                                            {canteenList[index]}
-                                        </ListItemText>
-                                    </ListItemButton>
-                                </ListItem>
-                            ))}
-                            </List>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={10} sm={10} zIndex={0}>
-                        <TabPanel value={0} canteen={this.state.canteen}/>
-                    </Grid>
-                </Grid>
-                
-            </div>
-        );
-        
-
-    }
-}*/
 
 function ResponsiveDrawer(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [canteen, setCanteen]=React.useState("SC")
-  
-    const handleDrawerToggle = () => {
-      setMobileOpen(!mobileOpen);
+    const [state, setState] = React.useState(false);
+
+    
+    const toggleDrawer = (open) => (event) => {
+        if (
+          event &&
+          event.type === 'keydown' &&
+          (event.key === 'Tab' || event.key === 'Shift')
+        ) {
+          return;
+        }
+    
+        setState(open);
     };
+
     const handleClick=(e)=>{
 
         let canteenChoice=e.currentTarget.getAttribute('value');
@@ -269,8 +330,20 @@ function ResponsiveDrawer(props) {
        
       </div>
     );
+    const appBar= (
+        <div>
+            <Toolbar>
+                <IconButton onClick={toggleDrawer(true)} color="inherit" aria-label="open drawer">
+                    <StorefrontIcon />
+                </IconButton>
+                
+                <Box sx={{ flexGrow: 1 }} />
+               
+            </Toolbar>
+        </div>
+    );
   
-    const container = window !== undefined ? () => window().document.body : undefined;
+    
     const drawerWidth=200;
     return ( 
         <Container>
@@ -280,25 +353,19 @@ function ResponsiveDrawer(props) {
             sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },p:0 }}            
             >
             {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-            <Drawer
-                container={container}
-                variant="temporary"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-                ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-                }}
-                sx={{
-                display: { xs: 'block', sm: 'none' },
-                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth,  left:"unset"},
-                left:"unset",
-                zIndex:0,
-        
-                }}
-    
-            >
-                {drawer}
-            </Drawer>
+            <AppBar 
+                position="fixed" 
+                color="primary" 
+                sx={{ 
+                    top: 'auto', 
+                    bottom: 0,
+                    display:{xs:'block', sm:'none'},
+                    backgroundColor:"#5D4E99"
+
+                }}>
+                {appBar}
+            </AppBar>
+            
             <Drawer
                 variant="permanent"
                 sx={{
@@ -306,13 +373,23 @@ function ResponsiveDrawer(props) {
                 '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth,left:"unset" },
                 left:"unset",
                 zIndex:0,
-              
                 }}
-                open
-                
+                open      
             >
                 {drawer}
             </Drawer>
+
+            <SwipeableDrawer
+                anchor='left'
+                open={state}
+                onClose={toggleDrawer(false)}
+                onOpen={toggleDrawer(true)}
+                sx={{
+                    zIndex:10000
+                }}
+            >
+                {drawer}
+            </SwipeableDrawer>
 
             </Box>
             <Box
@@ -487,7 +564,7 @@ function AddComment(){
       
     return(
         <div>
-            <Fab color="secondary" sx={{position: 'fixed', bottom: 32 ,right:32,}} onClick={handleClick}>
+            <Fab color="secondary" sx={{position: 'fixed', bottom: 32 ,right:32,zIndex:10000}} onClick={handleClick}>
                 <AddIcon />
             </Fab>
             <Dialog component={"div"} width="md"height="md" open={open} onClose={handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>
