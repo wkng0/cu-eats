@@ -6,6 +6,7 @@ import { LoginPage } from './login';
 import { Comment, ContentPreview} from './comment';
 import { Profile, Account, Address} from './profile';
 import { Cart } from './cart'
+import { Checkout } from './checkout'
 import { HomePage }  from './HomePage';
 
 import UCCanteen from './UCcanteen';
@@ -29,6 +30,7 @@ function App() {
           <Route path="/comment" element={<Comment />} />
           <Route path="/comment/:canteen/:id" element={<ContentPreview />} />
           <Route path="/profile" element={<Profile/>} />
+          <Route path="/checkout" element={<Checkout/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
           <Route path="/shoppingCart" element={<Cart/>} />
