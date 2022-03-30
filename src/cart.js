@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 //import { CartItemType } from "../Menu";
 import cartItems from "./cart.json";
 import Table from '@mui/material/Table';
