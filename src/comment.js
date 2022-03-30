@@ -95,10 +95,13 @@ class TabPanel extends React.Component{
                             {(this.state.value==data[i].type || this.state.value=="-1") &&(
                                 <TabContent key={i} i={i} canteen={this.props.canteen}/>
                             )}
+                            
                         </div>
                     
                     )}
-                   
+                    <Typography variant="h5">
+                        You have scrolled to the bottom :)
+                    </Typography>
                 </Container>
                 
         
@@ -724,7 +727,7 @@ function ContentPreview(){
 
     return(
         <Container maxWidth="sm" >
-             <TabContent key={target} i={target} canteen={param.canteen}/>
+            <TabContent key={target} i={target} canteen={param.canteen}/>
         </Container> 
     );
   
