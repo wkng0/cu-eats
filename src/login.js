@@ -283,6 +283,9 @@ class Register extends React.Component{
             pw2:'', 
             fname:'' ,
             lname:'',
+            username:'',
+            unique: false,
+            phone: '',
             iconA:"block",
             iconB:"none",
             iconC:"block",
@@ -291,8 +294,10 @@ class Register extends React.Component{
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangeFname = this.handleChangeFname.bind(this);
         this.handleChangeLname = this.handleChangeLname.bind(this);
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
         this.handleChangePw1 = this.handleChangePw1.bind(this);
         this.handleChangePw2 = this.handleChangePw2.bind(this);
+        this.handleChangePhone = this.handleChangePhone.bind(this);
         this.viewPassword1=this.viewPassword1.bind(this);
         this.viewPassword2=this.viewPassword2.bind(this);
         this.register=this.register.bind(this);
@@ -306,11 +311,17 @@ class Register extends React.Component{
     handleChangeLname(event){
         this.setState({lname: event.target.value})
     }
+    handleChangeUsername(event){
+        this.setState({username: event.target.value})
+    }
     handleChangePw1(event){
         this.setState({pw1: event.target.value})
     }
     handleChangePw2(event){
         this.setState({pw2: event.target.value})
+    }
+    handleChangePhone(event){
+        this.setState({phone: event.target.value})
     }
     viewPassword1(){
         let passwordInput = document.getElementById('user-pw-1');
@@ -350,6 +361,33 @@ class Register extends React.Component{
           }
     
     }
+
+    async checkUsename(){
+        return fetch('http://localhost:7000/dbAccount/userName/'+this.state.username) //check if the username unique
+        .then(res=>res.json())
+        .then(data=>{
+            console.log("user name?????",data.unique);
+            if(data.unique=="false"){
+                this.setState({unique: false});
+                // error = true;
+                window.alert("Username already exists. Please change your username");
+            }
+            if(data.unique=="true"){
+                this.setState({unique: true});
+            }})
+            .then(res=>{
+                console.log("success to post");
+                // window.location.assign("/");
+            })
+            .then(()=> {console.log();
+            window.location.assign("/");})
+            .catch((err)=>{
+                console.log(err);
+                // error = true;
+            });
+    }
+
+
     register(){
         let regex = new RegExp('[a-z0-9]+@+[a-z0-9]+.cuhk.edu.hk');
 
@@ -359,20 +397,53 @@ class Register extends React.Component{
             console.log("email problem");
             check = false;
         }
-        if(this.state.fname=="" || this.state.lname=="" ||this.state.pw1=="" || this.state.pw2==""){
+        if(this.state.fname=="" || this.state.lname=="" || this.state.username=="" ||this.state.pw1=="" || this.state.pw2==""){
             console.log("something empty");
             check = false;
         }
         if(this.state.pw1!=this.state.pw2){
             console.log("different password");
+            window.alert("Different passwords. Please check again");
             check = false;
         }
+
         if(check ==true){
-            //go to next page
-            console.log(true)
+
+            // let error = true;
+            
+            this.checkUsename()
+            .then(()=>{
+                console.log("after checking ge unique",this.state.unique);
+                if(this.state.unique== true){
+                    fetch('http://localhost:7000/dbAccount/createAccount', { //saving to database
+                        method: 'POST', 
+                        body: new URLSearchParams({
+                            "email":this.state.email,
+                            "password":this.state.pw2,
+                            "user_name": this.state.username,
+                            "phone": this.state.phone,
+                            "first_name":this.state.fname,
+                            "last_name":this.state.lname,
+                            "faculty": this.state.faculty,
+                            "college": this.state.college,
+                            "gender": this.state.gender,
+                        })  
+                    })
+                    .then(res=>{
+                        console.log("success to post");
+                    })
+                    .then(()=> {console.log();
+                    window.location.assign("/");})
+                    .catch((err)=>{
+                        console.log(err);
+                    });
+                }
+            })
+
+         
             return;
         }
-        console.log(false)
+        // console.log(false)
     }
 
     render(){
@@ -385,23 +456,31 @@ class Register extends React.Component{
                     <form className="form-floating text-secondary">
                         <div className="form-floating mb-3">
                             <input className="form-control" id="new-user-email" value={this.state.email} onChange={this.handleChangeEmail} placeholder="email" required></input>
-                            <label for="floatingPassword">Email</label>
+                            <label for="floatingPassword">Email*</label>
                         </div>
                         <div className="input-group">
                             <div className="form-floating mb-3">
                                 <input className="form-control" id="user-fn" value={this.state.fname} onChange={this.handleChangeFname} placeholder="firstname" required></input>
-                                <label for="floatingPassword">First Name</label>
+                                <label for="floatingPassword">First Name*</label>
                             </div>
                             <div>&ensp;</div>
                             <div className="form-floating mb-3">
                                 <input className="form-control" id="user-ln" value={this.state.lname} onChange={this.handleChangeLname} placeholder="lastname" required></input>
-                                <label for="floatingPassword">Last Name</label>
+                                <label for="floatingPassword">Last Name*</label>
                             </div>
                         </div>
+                            <div className="form-floating mb-3">
+                                <input className="form-control" id="user-un" value={this.state.phone} onChange={this.handleChangePhone} placeholder="phone" required></input>
+                                <label for="floatingPassword">Phone*</label>
+                            </div>
+                            <div className="form-floating mb-3">
+                                <input className="form-control" id="user-un" value={this.state.username} onChange={this.handleChangeUsername} placeholder="username" required></input>
+                                <label for="floatingPassword">Username*</label>
+                            </div>
                         <div className="input-group mb-3">
                             <div className="form-floating col-11">
                                 <input type="password" className="form-control" id="user-pw-1" value={this.state.pw1} onChange={this.handleChangePw1} placeholder="password" required></input>
-                                <label for="floatingPassword">Password</label>
+                                <label for="floatingPassword">Password*</label>
                             </div>
                             <button type="button" onClick={this.viewPassword1} className="btn col-1">
                                 <i id="first-close" className="bi bi-eye-slash-fill icon" style={{display: this.state.iconA}}></i>
@@ -411,7 +490,7 @@ class Register extends React.Component{
                         <div className="input-group mb-3">
                             <div className="form-floating col-11">
                                 <input type="password" className="form-control" id="user-pw-2" value={this.state.pw2} onChange={this.handleChangePw2} placeholder="re-enter" required></input>
-                                <label for="floatingPassword">Re-enter Password</label>
+                                <label for="floatingPassword">Re-enter Password*</label>
                             </div>
                             <button type="button" onClick={this.viewPassword2} className="btn col-1">
                                 <i id="second-close" className="bi bi-eye-slash-fill icon" style={{display: this.state.iconC}}></i>
@@ -489,8 +568,9 @@ class Register extends React.Component{
                             </Box>
 
                         <br/>
-                        <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick="{register}" >Register</button>
+                        <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick={this.register} >Register</button>
                         <br/><br/>
+                        <p><a style={{color: "#F4CB86"}} href="contact.html">*: Required field</a></p>
                         <p><a style={{color: "#F4CB86"}} href="contact.html">Join us as a restaurant? Welcome and contact us!</a></p>
                     </form>
                 </section>

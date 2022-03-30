@@ -23,51 +23,93 @@ import{
 
 class Profile extends React.Component{
     //get user name email and address
-    constructor(props){
-      super(props);
-      this.state={login: true};
-    }
+    constructor(){
+      super();
+      this.state={
+      login: true,
+      username:'',
+      point:-1,
+      email:'329@today.cuhk.edu.hk',
+  };}
+
+  componentDidMount(){
+    fetch('http://localhost:7000/dbAccount/get/'+this.state.email)
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data[0]);
+      this.setState({email: data[0].email});
+      this.setState({username: data[0].username});
+      this.setState({point: data[0].point});
+      // this.setState({email: data[0].email});
+    })
+    .catch((err)=>{console.log(err)});
+  }
+
     render(){
-      const login = this.state.login;
-        return(
-          <div>
-          { login?
-          (
-            <div>
-                <div class="container fluid">
-                    <div class="card">
-                        <div class="user text-center">
-                        </div>
-                        <div class="mt-5 text-center">
-                            <h1 class="mb-0" style={{color: "#F4CB86"}}>User Name</h1> <span class="text-muted d-block mb-2" style={{color: "#F4CB86"}} >email</span>  <h2 class="mb-0" style={{color: '#5D4E99'}}>Points: 100</h2>
-                        </div>
-                        <></>
-                    </div>
-                </div>
-                <div className="container-lg">
-                    <div class="d-flex justify-content-between align-items-center mt-4 px-4">
-                            <div class="stats">
-                                <Button href="/profile/address" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}> <MyLocationIcon fontSize="large" sx={{color: "#F4CB86"}}/> My Addreess</Button>
-                            </div>
-                            <div class="stats">
-                                <Button  href="/profile/account" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}><ManageAccountsIcon fontSize="large" sx={{color:  "#F4CB86"}}/>My Account ( phone password username )++change</Button>
-                            </div>
-                            <div class="stats">
-                                <Button  href="/" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}><ReceiptLongIcon fontSize="large" sx={{color:  "#F4CB86"}}/>Shopping Record</Button> 
-                            </div>
-                    </div>
-                </div>
-                <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} onClick={()=>this.setState({login: false})}>Sign out</Button>
-            </div>
-            )
-            :(<div class="container fluid">
-              Login to see more? 
-              <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} href="./login">Login</Button>
-            </div>)
-          }
-          </div>
-        )
+      return(
+        <ProfileHeader username={this.state.username} point={20} email={"helloworld@cuhk.edu.hk"} />
+      )
     }
+}
+
+class ProfileHeader extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+    login: true,
+    username:this.props.username,
+    point: this.props.point,
+    email:this.props.email
+    }
+}
+
+  render(){
+    const login = this.state.login;
+      return(
+        <div>
+        { login?
+        (
+          <div>
+              <div class="container fluid">
+                  <div class="card">
+                      <div class="user text-center">
+                      </div>
+                      <div class="mt-5 text-center">
+                          <h1 class="mb-0" style={{color: "#F4CB86"}}>
+                            {/* {this.props.username} */} name
+                            </h1> <span class="text-muted d-block mb-2" style={{color: "#F4CB86"}} >
+                              {/* {this.props.email} */} email 
+                              </span>  <h2 class="mb-0" style={{color: '#5D4E99'}}>Points: 
+                              {/* {this.props.point} */} point
+                              </h2>
+                      </div>
+                      <></>
+                  </div>
+              </div>
+              <div className="container-lg">
+                  <div class="d-flex justify-content-between align-items-center mt-4 px-4">
+                          <div class="stats">
+                              <Button href="/profile/address" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}> <MyLocationIcon fontSize="large" sx={{color: "#F4CB86"}}/> My Addreess</Button>
+                          </div>
+                          <div class="stats">
+                              <Button  href="/profile/account" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}><ManageAccountsIcon fontSize="large" sx={{color:  "#F4CB86"}}/>My Account ( phone password username )++change</Button>
+                          </div>
+                          <div class="stats">
+                              <Button  href="/" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}><ReceiptLongIcon fontSize="large" sx={{color:  "#F4CB86"}}/>Shopping Record</Button> 
+                          </div>
+                  </div>
+              </div>
+              <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} onClick={()=>this.setState({login: false})}>Sign out</Button>
+          </div>
+          )
+          :(<div class="container fluid">
+            Login to see more? 
+            <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} href="./login">Login</Button>
+          </div>)
+        }
+        </div>
+      )
+  }
 }
 
 class Address extends React.Component{
@@ -122,6 +164,9 @@ function updateInfo(){
 }
 
 class Info extends React.Component{
+  constructor(props){
+    super(props);
+  }
 
     render(){
         return(
@@ -137,15 +182,15 @@ class Info extends React.Component{
         <TextField
           required
           id="standard-required"
-          label="User name"
-          defaultValue="user_name"
+          label="Username"
+          // defaultValue="username"
           variant="standard"
         />
         <TextField
           required
           id="standard-required"
           label="Phone"
-          defaultValue="user_phone"
+          // defaultValue="user_phone"
           variant="standard"
         />
         {/* <TextField
@@ -165,7 +210,7 @@ class Info extends React.Component{
         <TextField
           id="standard-read-only-input"
           label="Read Only Your email"
-          defaultValue="user_email"
+          defaultValue={this.props.email}
           InputProps={{
             readOnly: true,
           }}
