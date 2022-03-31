@@ -90,12 +90,13 @@ function Checkout() {
                 </Grid>
                 <Grid container sx ={{color: '#707070'}}>
                     <Grid item xs={1} />
-                    <Grid item xs={11}>{item.description && <pre>   - {item.description}</pre>}</Grid>
+                    <Grid item xs={11}><pre>{item.description && '   - '}{item.description}</pre></Grid>
                 </Grid>
                 </>
             ))}
             <br/><Divider /><br/>
             <Box>
+
                 <h4 style ={{color: '#5D4E99'}}>Personal Information</h4>
                 <br/>
                 <Grid container>
