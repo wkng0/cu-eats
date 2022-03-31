@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import Radio, { RadioProps }  from '@mui/material/Radio';
+import Radio, { RadioProps } from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
@@ -41,11 +41,7 @@ const CutlerySwitch = styled(Switch)(({ theme }) => ({
 
 function RadioIcon(props) {
     return (
-      <Radio
-        size="small" 
-        sx={{color: '#5D4E99', '&.Mui-checked': {color:'#5D4E99'}}}
-        {...props}
-      />
+      <Radio size="small"  sx={{color: '#5D4E99', '&.Mui-checked': {color:'#5D4E99'}}} {...props}/>
 );}
 
 
@@ -101,7 +97,7 @@ function Checkout() {
                 <br/>
                 <Grid container>
                     <Grid item xs={6}>
-                        <TextField fullWidth 
+                        <TextField fullWidth required
                             label="Name"
                             id="fullWidth"
                             color="secondary"
@@ -111,7 +107,7 @@ function Checkout() {
                     </Grid>
                     <Grid item xs={1}/>
                     <Grid item xs={5}>
-                        <TextField fullWidth 
+                        <TextField fullWidth required
                             label="Phone"
                             id="fullWidth"
                             color="secondary"
@@ -121,7 +117,7 @@ function Checkout() {
                     </Grid>
                 </Grid>
                 <br/>
-                <TextField fullWidth 
+                <TextField fullWidth required
                     label="Email"
                     id="fullWidth"
                     color="secondary"
@@ -163,11 +159,13 @@ function Checkout() {
             </Grid>
             <TextField fullWidth 
                     label="Use Points"
+                    autoComplete="off"
                     id="fullWidth"
                     variant="standard"
                     value={pointUse}
                     sx={{mt:1}}
                     color="secondary"
+                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                     onChange={handleChangePoint}
             />
             <b style={{fontSize: 12, color:'#5D4E99'}}>Get ${discount.toFixed(1)} off</b>
@@ -193,9 +191,10 @@ function Checkout() {
         <br/>
         <div style={{margin: 'auto', textAlign: 'right'}}>
             <Button 
-              size="large" 
-              href="/receipt"
-              sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+                size="large" 
+                href="/receipt"
+                sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+                //disabled={!formIsValid()}
             >
               Submit Order
             </Button>
