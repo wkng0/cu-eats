@@ -51,15 +51,47 @@ function Checkout() {
     const [email, setEmail] = React.useState('chriswong@gmail.com');
     const [pointUse, setPoint] = React.useState(null);
     const [discount, setdiscount] = React.useState(0);
+    const [address, setAddress] = React.useState('AddressA');
+    const [cutlery, setCutlery] = React.useState(true);
     const handleChangeName = (event) => {setName(event.target.value);};
     const handleChangePhone = (event) => {setPhone(event.target.value);};
     const handleChangeEmail = (event) => {setEmail(event.target.value);};
     const handleChangePoint = (event) => {setPoint(event.target.value);};
+    const handleAddress = (event) => {setAddress(event.target.value);};
+    const handleCutlery = (event) => {setCutlery(!cutlery);};
+    const handleReceipt = (event) => {
+        fetch("http://localhost:7000/dbReceipt/user", {
+            method: 'POST', 
+            body: new URLSearchParams({
+                "receiptId": receiptID,
+                "userID": userID,
+                "name": name,
+                "email": email,
+                "phone": phone,
+                "address": address,
+                "cutlery": cutlery,
+                "items": Cart,
+                "subtotal": total,
+                "discount": discount,
+                "total": total-discount,
+                "pointEarn": ~~(total/50)*5
+            }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
     React.useEffect(()=>{setdiscount(pointUse/10);},[pointUse])
-    
+    let receiptID = 'r001';
+    let userID = 'user001';
     let total = 0;
     let point = 310;
-    console.log("width:", window.innerWidth);
     return (
         <>
         <div style={{width:'80%', margin:'auto'}}>
@@ -131,9 +163,10 @@ function Checkout() {
                 <FormControl>
                     <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="female"
+                        defaultValue="AddressA"
                         name="radio-buttons-group"
                         color="secondary"
+                        onChange={handleAddress}
                     >
                         <FormControlLabel value="AddressA" control={<RadioIcon/>} label="Address A" />
                         <FormControlLabel value="AddressB" control={<RadioIcon/>} label="Address B" />
@@ -182,9 +215,10 @@ function Checkout() {
                 </Grid>
                 <Grid item xs={1} sx={{textAlign:'right'}}>
                     <FormControlLabel
-                    control={<CutlerySwitch defaultChecked />}
-                    label=''
+                        control={<CutlerySwitch  defaultChecked  onChange={handleCutlery}/>}
+                        label=''
                     />
+                    {console.log("need:", cutlery)}
                 </Grid>
             </Grid>
         </FormGroup>
@@ -192,7 +226,8 @@ function Checkout() {
         <div style={{margin: 'auto', textAlign: 'right'}}>
             <Button 
                 size="large" 
-                href="/receipt"
+                //href="/receipt"
+                onClick={handleReceipt}
                 sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
                 //disabled={!formIsValid()}
             >
