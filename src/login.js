@@ -286,6 +286,9 @@ class Register extends React.Component{
             username:'',
             unique: false,
             phone: '',
+            gender:'',
+            faculty:'',
+            college:'',
             iconA:"block",
             iconB:"none",
             iconC:"block",
@@ -298,6 +301,9 @@ class Register extends React.Component{
         this.handleChangePw1 = this.handleChangePw1.bind(this);
         this.handleChangePw2 = this.handleChangePw2.bind(this);
         this.handleChangePhone = this.handleChangePhone.bind(this);
+        this.handleChangeGender = this.handleChangeGender.bind(this);
+        this.handleChangeFaculty = this.handleChangeFaculty.bind(this);
+        this.handleChangeCollege = this.handleChangeCollege.bind(this);
         this.viewPassword1=this.viewPassword1.bind(this);
         this.viewPassword2=this.viewPassword2.bind(this);
         this.register=this.register.bind(this);
@@ -322,6 +328,15 @@ class Register extends React.Component{
     }
     handleChangePhone(event){
         this.setState({phone: event.target.value})
+    }
+    handleChangeGender(event){
+        this.setState({gender: event.target.value})
+    }
+    handleChangeFaculty(event){
+        this.setState({faculty: event.target.value})
+    }
+    handleChangeCollege(event){
+        this.setState({college: event.target.value})
     }
     viewPassword1(){
         let passwordInput = document.getElementById('user-pw-1');
@@ -503,16 +518,12 @@ class Register extends React.Component{
                                 Gender
                                 </InputLabel>
                                 <NativeSelect
-                                defaultValue={30}
-                                inputProps={{
-                                    name: 'age',
-                                    id: 'uncontrolled-native',
-                                }}
+                                onChange={this.handleChangeGender}
                                 >
-                                <option>None</option>
-                                <option>Female</option>
-                                <option>Male</option>
-                                <option>Others</option>
+                                <option value="None">None</option>
+                                <option value="F">Female</option>
+                                <option value="M">Male</option>
+                                <option value="O">Others</option>
                                 </NativeSelect>
                             </FormControl>
                             </Box>
@@ -522,22 +533,18 @@ class Register extends React.Component{
                                 College
                                 </InputLabel>
                                 <NativeSelect
-                                defaultValue={30}
-                                inputProps={{
-                                    name: 'age',
-                                    id: 'uncontrolled-native',
-                                }}
+                                onChange={this.handleChangeCollege}
                                 >
-                                <option>None</option>
-                                <option>CC</option>
-                                <option>CW</option>
-                                <option>MS</option>
-                                <option>NA</option>
-                                <option>SHAW</option>
-                                <option>WS</option>
-                                <option>WYS</option>
-                                <option>SH</option>
-                                <option>UC</option>
+                                <option value="None">None</option>
+                                <option value="CC">CC</option>
+                                <option value="CW">CW</option>
+                                <option value="MS">MS</option>
+                                <option value="NA">NA</option>
+                                <option value="SH">SH</option>
+                                <option value="SHAW">SHAW</option>
+                                <option value="UC">UC</option>
+                                <option value="WS">WS</option>
+                                <option value="WYS">WYS</option>
                                 </NativeSelect>
                             </FormControl>
                             </Box>
@@ -547,22 +554,18 @@ class Register extends React.Component{
                                 Faculty
                                 </InputLabel>
                                 <NativeSelect
-                                defaultValue={30}
-                                inputProps={{
-                                    name: 'age',
-                                    id: 'uncontrolled-native',
-                                }}
+                                onChange={this.handleChangeFaculty}
                                 >
-                                <option>None</option>
-                                <option>Arts</option>
-                                <option>Business Administration</option>
-                                <option>Education</option>
-                                <option>Engineering</option>
-                                <option>Law</option>
-                                <option>Medicine</option>
-                                <option>Science</option>
-                                <option>Social Science</option>
-                                <option>Others</option>
+                                <option value="None">None</option>
+                                <option value="Arts">Arts</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Education">Education</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Law">Law</option>
+                                <option value="Medicine">Medicine</option>
+                                <option value="Science">Science</option>
+                                <option value="Social Science">Social Science</option>
+                                <option value="">Others</option>
                                 </NativeSelect>
                             </FormControl>
                             </Box>

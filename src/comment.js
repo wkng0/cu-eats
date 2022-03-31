@@ -677,12 +677,12 @@ class Comment extends React.Component{
             
         }
     }
-    componentDidMount(){
+     DidMount(){
         fetch('http://localhost:7000/dbComment/get/'+"SC")
         .then(res=>res.json())
         .then(db=>{
             data=db;
-            //console.log(data);
+            console.log(data);
             this.setState({})
         })
     }

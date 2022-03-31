@@ -52,6 +52,14 @@ router.get("/get/:email",function(req,res){
     .finally(() => client.close());
 });
 
+router.post("/updateAccount/:email",function(req,res){
+    user_email = req.params.email;
+    updateAcc(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(()=>client.close());
+})
+
 async function veriUserName(res){
     await client.connect();
     console.log('Connected successfully to server');
@@ -88,7 +96,6 @@ async function fetchAccount(res){
     
 };
 
-
 async function addUser(req,res){
     await client.connect();
     console.log('Connected successfully to server');
@@ -105,9 +112,32 @@ async function addUser(req,res){
         college:req.body['college'],
         faculty:req.body['faculty'],
         gender: req.body['gender'],
+        pic: "",
     });
     return "comment posted";
 };
 
+async function updateAcc(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    const insertResult = await  collection.updateOne(
+        {"email":user_email},
+        {
+            $set:
+            {
+            user_name:req.body['user_name'],
+            first_name: req.body['first_name'],
+            last_name: req.body['last_name'],
+            phone: req.body['phone'],
+            college:req.body['college'],
+            faculty:req.body['faculty'],
+            gender: req.body['gender']}
+            
+        }
+    );
+    return "";
+}
 
 export default router;
