@@ -10,7 +10,7 @@ import { Checkout } from './checkout'
 import { HomePage }  from './HomePage';
 
 import UCCanteen from './UCcanteen';
-import NACanteen from './newNewCanteen';
+import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
 
 
