@@ -2,13 +2,8 @@ import express from "express"
 import { MongoClient } from "mongodb";
 import bodyParser from "body-parser";
 import multer from "multer";
-import path from 'path'
-import {
-    sendCode,
-    verifyCode,
-    verifyToken,
-    verifyBoth,
-}from "email-verification-code";
+import path from 'path';
+import nodemailer from 'nodemailer'
 const __dirname=path.resolve();
 const router = express.Router();
 
@@ -19,6 +14,14 @@ const dbName="Account";
 const space=""
 let user_email = "";
 let user_name = "";
+
+let transporter=nodemailer.createTransport({
+    service: 'gmail',
+    auth:{
+        user: 'csci3100.group.d2@gmail.com',
+        pass: "qwerty12!A"
+    }
+})
 
 router.use(bodyParser.urlencoded({extended: false}));
 
@@ -137,6 +140,7 @@ async function addUser(req,res){
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Info");
+    let token=Math.random().toString(36).substr(2);
     const insertResult = await collection.insertOne({ 
         email: req.body['email'],
         password: req.body['password'],
@@ -149,32 +153,24 @@ async function addUser(req,res){
         faculty:req.body['faculty'],
         gender: req.body['gender'],
         pic: "",
+        token:token,
+        verify:0
     });
-    const data = {
-        smtpInfo: {
-            host: "smtp.gmail.com",
-            port: 587,
-            user: "csci3100.group.d2@gmail.com",
-            pass: "qwerty12!A",
-        },
-        company: {
-            name: "CUEats",
-            email: "csci3100.group.d2@gmail.com",
-        },
-        mailInfo: {
-            emailReceiver: req.body['email'],
-            subject: "Code Confirmation",
-            text(code, token) {
-                return `The Confirmation Code is: ${code} or click in this link: www.test.com/?token=${token}`;
-            },
-            html(code, token) {
-                return `<p>The Confirmation Code is: ${code} or click in this link: www.test.com/?token=${token}</p>`;
-            },
-        },
-    };
-    res.send(req.body['email'])
-    sendCode(data);
-    return "comment posted";
+    let mailOptions={
+        from: "CUEats",
+        to: req.body['email'],
+        subject:"Code Confirmation",
+        text:`Click this link to verify your account http://localhost:7000/verify?token=${token}`
+    }
+    transporter.sendMail(mailOptions,function(error,info){
+        if(error){
+            console.log(error);
+        }else{
+            console.log("Email sent: "+ info.response);
+        }
+    });
+    res.send("Email sent: "+ info.response);
+
 };
 
 async function updateAcc(req,res){

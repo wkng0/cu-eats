@@ -6,6 +6,7 @@ import account from "./api/dbAccount.js"
 import menu from "./api/dbMenu.js"
 import canteenInfo from "./api/dbcanteenInfo.js"
 import receipt from "./api/dbReceipt.js"
+import verify from "./api/verify.js"
 
 const app = express();
 const port = process.env.PORT || 7000;
@@ -20,6 +21,7 @@ app.use("/dbComment",comment);
 app.use("/dbMenu", menu);
 app.use("/dbcanteenInfo", canteenInfo);
 app.use("/dbReceipt",receipt);
+app.use("/verify",verify);
 app.use("*", (req, res) => res.status(404).json({ error: "not found"}));
 
 app.listen(port, () => {
