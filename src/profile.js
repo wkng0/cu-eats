@@ -600,7 +600,7 @@ const updateInfo = ()=>{
         />
         <TextField
           id="standard-read-only-input"
-          label="Read Only Your email"
+          label="email"
           defaultValue={email}
           InputProps={{
             readOnly: true,
@@ -787,12 +787,8 @@ function FormDialog(props) {
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       transformOrigin={{ vertical: "top", horizontal: "center" }}
       sx={{zIndex: '99999 !important'}}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
