@@ -41,6 +41,7 @@ async function submitOrder(req,res){
         point: req.body['pointEarn']
     });
     res.send("Order submitted")
+    console.log('Submitted successfully to server');
 }
 
 export default router;
