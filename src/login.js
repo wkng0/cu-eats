@@ -444,14 +444,15 @@ class Register extends React.Component{
                             "gender": this.state.gender,
                         })  
                     })
-                    .then(res=>{
-                        console.log("success to post");
+                    
+                    .then(()=> {
+                        console.log();
+                        window.location.assign("/");
                     })
-                    .then(()=> {console.log();
-                    window.location.assign("/");})
                     .catch((err)=>{
                         console.log(err);
                     });
+                
                 }
             })
 

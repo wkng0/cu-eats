@@ -3,6 +3,12 @@ import { MongoClient } from "mongodb";
 import bodyParser from "body-parser";
 import multer from "multer";
 import path from 'path'
+import {
+    sendCode,
+    verifyCode,
+    verifyToken,
+    verifyBoth,
+}from "email-verification-code";
 const __dirname=path.resolve();
 const router = express.Router();
 
@@ -144,6 +150,30 @@ async function addUser(req,res){
         gender: req.body['gender'],
         pic: "",
     });
+    const data = {
+        smtpInfo: {
+            host: "smtp.gmail.com",
+            port: 587,
+            user: "csci3100.group.d2@gmail.com",
+            pass: "qwerty12!A",
+        },
+        company: {
+            name: "CUEats",
+            email: "csci3100.group.d2@gmail.com",
+        },
+        mailInfo: {
+            emailReceiver: req.body['email'],
+            subject: "Code Confirmation",
+            text(code, token) {
+                return `The Confirmation Code is: ${code} or click in this link: www.test.com/?token=${token}`;
+            },
+            html(code, token) {
+                return `<p>The Confirmation Code is: ${code} or click in this link: www.test.com/?token=${token}</p>`;
+            },
+        },
+    };
+    res.send(req.body['email'])
+    sendCode(data);
     return "comment posted";
 };
 
