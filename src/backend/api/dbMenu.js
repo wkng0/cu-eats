@@ -13,15 +13,19 @@ router.use(bodyParser.urlencoded({extended: false}));
 
 const dbName="Menu";
 
+let canteenname = "";
+
 router.get("/", function(req, res) {
     res.send("API is working properly");
 });
 
-router.get("/getMenu", function(req, res) {
+router.get("/getMenu/:canteenname", function(req, res) {
+    canteenname = req.params.canteenname;
     fetchMenu(res)
     .then(console.log)
     .catch(console.error)
     .finally(() => client.close());
+
 });
 
 
@@ -29,11 +33,11 @@ async function fetchMenu(res){
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
-    const collection = db.collection("NaMenu");
+    const collection = db.collection(canteenname);
     let MenuList = await collection.find({}).toArray();
     //console.log('Found documents =>', commentList);
     res.send(MenuList);
-    return "NA Menu fetched";
+    return "Menu fetched";
 };
 
 
