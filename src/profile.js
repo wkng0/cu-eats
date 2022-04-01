@@ -6,6 +6,8 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DoneIcon from '@mui/icons-material/Done';
 import PhoneIcon from '@mui/icons-material/Phone';
+import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
 import{
   Link,
   Box,
@@ -18,6 +20,7 @@ import{
   DialogTitle,
   TextField,
   InputLabel,
+  Input,
   FormControl,
   Select,
   FormHelperText,
@@ -26,6 +29,7 @@ import{
   IconButton,
   Avatar,
 } from '@mui/material';
+import { TryOutlined } from '@mui/icons-material';
 
 let userInfo = [];
 
@@ -99,6 +103,7 @@ function Profile(){
   const[username,setUsername] = useState('');
   const[email,setEmail] = useState('0.0@link.cuhk.edu.hk');
   const[point,setPoint] = useState(-1);
+  const[pic, setPic] = useState('');
 
   useEffect(()=>{
     fetch('http://localhost:7000/dbAccount/get/'+email)
@@ -107,6 +112,7 @@ function Profile(){
         console.log(data[0]);
         setUsername(data[0].user_name);
         setPoint(data[0].point);
+        setPic(data[0].pic);
     })
 })
 
@@ -116,9 +122,10 @@ function Profile(){
     )
   }
   return(
-    <ProfileHeader username={username} point={point} email={email} />
+    <ProfileHeader username={username} point={point} email={email} pic={pic}/>
   )
 }
+
 
 class ProfileHeader extends React.Component{
   constructor(props){
@@ -127,8 +134,51 @@ class ProfileHeader extends React.Component{
     login: true,
     username:this.props.username,
     point: this.props.point,
-    email:this.props.email
+    email:this.props.email,
+    pic: this.props.pic,
+    edit: true,
     }
+    this.changeIcon = this.changeIcon.bind(this);
+    this.updateIcon = this.updateIcon.bind(this);
+}
+
+updateIcon(){
+  console.log("pic",this.state.pic);
+    this.setState({edit: true});
+    fetch('http://localhost:7000/dbAccount/changePic/'+this.props.email, {
+      method: 'POST', 
+      body: new URLSearchParams({
+          "pic": this.state.pic,
+      })  
+    })
+    .then(data=>console.log(data))
+    .then(()=>{
+      window.location.reload();
+      return;
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+}
+
+changeIcon(event){
+    var formData = new FormData();
+    formData.append('file', event.target.files[0]);
+    this.setState({edit: false});
+    fetch('http://localhost:7000/dbAccount/photo/post', {
+        method: 'POST', 
+        body: formData
+    })
+    .then(response =>  response.json())
+    .then(data => {
+      console.log(data.filename);
+       this.setState({pic: data.filename});
+       return;
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
 }
 
   render(){
@@ -143,6 +193,39 @@ class ProfileHeader extends React.Component{
                       <div class="user text-center">
                       </div>
                       <div class="mt-5 text-center">
+                      
+                        {this.state.edit? 
+                        <>
+                        <label htmlFor="icon-button-file" >
+                        <Avatar 
+                        src={'http://localhost:7000/dbAccount/photo/get/'+this.props.pic}
+                        style={{
+                          margin: "2px",
+                          width: "200px",
+                          height: "200px",
+                        }} 
+                      />
+                           <Input accept="image/*" id="icon-button-file" name="photo" type="file" sx={{display:"none"}} onChange={this.changeIcon}/>
+                           <IconButton color="primary" aria-label="upload picture" component="span">
+                          <EditIcon/>
+                          </IconButton>
+                          </label></>
+                          :<>
+                          <div >
+                              <Avatar 
+                            src={'http://localhost:7000/dbAccount/photo/get/'+this.state.pic}
+                            style={{
+                              margin: "2px",
+                              width: "200px",
+                              height: "200px",
+                            }} 
+                          />
+                          <IconButton style={{color: '#5D4E99'}} onClick={this.updateIcon}>
+                            <CheckIcon/>
+                            </IconButton>
+                            </div></>}
+                      
+                      
                           <h1 class="mb-0" style={{color: "#F4CB86"}}>
                             {this.props.username}
                             </h1> <span class="text-muted d-block mb-2" style={{color: "#F4CB86"}} >
@@ -161,7 +244,7 @@ class ProfileHeader extends React.Component{
                               <MyLocationIcon fontSize="large" sx={{color: "#F4CB86"}}/> My Addreess</Button>
                           </div>
                           <div class="stats">
-                              <Button  variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}>
+                              <Button  href="/profile/account" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}>
                                 <ManageAccountsIcon fontSize="large" sx={{color:  "#F4CB86"}}/>
                                 {/* <Link to="/profile/account" state={{username: this.props.username, point:this.props.point, email: this.props.email,
         fname: this.props.fname, lname:this.props.lname, phone:this.props.phone, gender: this.props.gender, faculty:this.props.faculty, college:this.props.college,
@@ -586,31 +669,124 @@ const updateInfo = ()=>{
           </NativeSelect>
       </FormControl>
       </Box>
-     <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} onClick={() => setShow(prev => !prev)}>Change Password</Button>
-     {show &&  <ChangePw/>}
+     {/* <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} onClick={() => setShow(prev => !prev)}>Change Password</Button>
+     {show &&  <FormDialog email={email}/>} */}
+     <FormDialog email={email}/>
      </>
    );}
 }
 
 
 
-function FormDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
+function FormDialog(props) {
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [oldpw, setOld] = useState('');
+  const [pw1, setPw1] = useState('');
+  const [pw2, setPw2] = useState('');
+  const [submitValid, setSubmit] = useState(false);
+  const [veri, setVeri] = useState(false);
+  const [pw, setPw] = useState('');
+  const handleClickOpen = (event) => {
     setOpen(true);
+    setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setAnchorEl(null);
   };
+
+  const handleChangeOld = (event) => {
+    setOld(event.target.value)
+  };
+
+  const handleChangeNew = (event) => {
+    setPw1(event.target.value)
+  };
+
+  const handleChangeNewTwo = (event) => {
+    setPw2(event.target.value)
+  };
+
+  const handleUpdate = () => {
+    // fetch('http://localhost:7000/dbAccount/get/'+ props.email)
+    //     .then(res=>res.json())
+    //     .then(data=>{
+    //         console.log(data[0].password);
+    //         if(data[0].password == oldpw){
+    //             console.log("password is true");
+                
+    //         }
+    //     })
+    //     .catch(err=>console.log(err))
+    if (pw1!=pw2){
+      window.alert("password and confirm password does not match.");
+      return;
+    }
+    if(veri==false){
+      window.alert("wrong password, please enter again.");
+      return;
+    }else{
+      fetch('http://localhost:7000/dbAccount/updatePw/'+ props.email, { 
+      method: 'POST', 
+      body: new URLSearchParams({
+          "password": pw2
+      })  
+    })
+    .then(()=>{
+              // setOpen(false);
+              // setAnchorEl(null);
+              setOld("");
+              setPw1("");
+              setPw2("");
+              return;
+    })
+    .catch(err=>console.log(err))
+    window.alert("Changes saved");
+    setOpen(false);
+    setAnchorEl(null);
+    // return;
+      }
+    
+    };
+
+  useEffect(()=>{
+    if(oldpw!="" && pw1!="" && pw2!=""){
+      setSubmit(true);
+    }else{
+      setSubmit(false);
+    }
+    if(oldpw==""){
+      fetch('http://localhost:7000/dbAccount/get/'+ props.email)
+        .then(res=>res.json())
+        .then(data=>{
+          setPw(data[0].password);
+        })
+        .catch(err=>console.log(err))
+    }else{
+      if(oldpw==pw){
+        setVeri(true);
+      }else{
+        setVeri(false);
+      }
+    }
+  });
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} 
+      aria-owns={open ? 'simple-open' : null} aria-haspopup="true" onClick={handleClickOpen}>Change Password</Button>
+      <Dialog 
+      id='simple-open'
+      open={open} 
+      onClose={handleClose}
+      PaperProps={{sx:{position: "fixed", top:10}}}
+      anchorEl={anchorEl}
+      getContentAnchorEl={null}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      transformOrigin={{ vertical: "top", horizontal: "center" }}
+      sx={{zIndex: '99999 !important'}}>
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -624,11 +800,33 @@ function FormDialog() {
             type="password"
             fullWidth
             variant="standard"
+            value={oldpw}
+            onChange={handleChangeOld}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            label="New Password"
+            type="password"
+            fullWidth
+            variant="standard"
+            value={pw1}
+            onChange={handleChangeNew}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Confirm New Password"
+            type="password"
+            fullWidth
+            variant="standard"
+            value={pw2}
+            onChange={handleChangeNewTwo}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleClose} >Cancel</Button>
+          <Button onClick={handleUpdate} disabled={!submitValid}>Save</Button>
         </DialogActions>
       </Dialog>
     </div>

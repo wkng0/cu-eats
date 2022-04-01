@@ -6,6 +6,7 @@ import path from 'path'
 const __dirname=path.resolve();
 const router = express.Router();
 
+const upload=multer({dest:"profile/photo/"})
 const url="mongodb+srv://admin:admin_d2@groupd2.d3lwk.mongodb.net/sample_users?retryWrites=true&w=majority";
 const client=new MongoClient(url);
 const dbName="Account";
@@ -57,8 +58,37 @@ router.post("/updateAccount/:email",function(req,res){
     updateAcc(req,res)
     .then(console.log)
     .catch(console.error)
-    .finally(()=>client.close());
+    .finally(() => client.close());
 })
+
+router.post("/updatePw/:email",function(req,res){
+    user_email = req.params.email;
+    updatePw(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
+router.post("/changePic/:email",function(req,res){
+    user_email = req.params.email;
+    changePic(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
+router.post("/photo/post",upload.single("file"),function(req,res){
+    let data={
+        "filename":req.file.filename,
+        "filetype":req.file.mimetype
+    }
+    res.send(data)
+});
+
+router.get("/photo/get/:id",function(req,res){
+    console.log(__dirname)
+    res.sendFile(__dirname+"/profile/photo/"+req.params.id)
+});
 
 async function veriUserName(res){
     await client.connect();
@@ -137,7 +167,40 @@ async function updateAcc(req,res){
             
         }
     );
-    return "";
+    return insertResult;
 }
+
+async function updatePw(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    const insertResult = await collection.updateOne(
+        {"email":user_email},
+        {
+            $set:
+            {
+            password: req.body['password']}
+        }
+    );
+    return insertResult;
+}
+
+async function changePic(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    const insertResult = await collection.updateOne(
+        {"email":user_email},
+        {
+            $set:
+            {
+            pic: req.body['pic']}
+        }
+    );
+    return insertResult;
+}
+
 
 export default router;
