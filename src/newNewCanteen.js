@@ -86,8 +86,9 @@ function NACanteen() {
 
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/getMenu").then((response) => {
-            setListOfMenu(response.data) 
+        Axios.get("http://localhost:7000/dbMenu/getMenu").then((response) => {
+            setListOfMenu(response.data)
+ 
         });
     }, []);
 
