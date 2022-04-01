@@ -3,7 +3,7 @@ import {useEffect} from "react";
 import './canteen.css';
 // import NAmenu from './NAmenu';
 // import Select from 'react-select';
-import Axios from "axios"; 
+// import Axios from "axios"; 
 
 
 // function ShowNADishes({NAmenu}) {
@@ -77,19 +77,28 @@ function NACanteen() {
 
     const [listOfMenu, setListOfMenu] = useState([]);
     const [name] = useState("");
-    // const [varients] = useState("");
     const [varients] = useState([]);
     const [prices] = useState([]);
-    // const [username] = useState("");
-    const [image] = useState("");            
+    const [username] = useState("");
 
 
-    // make api call 
-    useEffect(() => {
-        Axios.get("http://localhost:7000/getMenu").then((response) => {
-            setListOfMenu(response.data) 
-        });
-    }, []);
+
+    useEffect(()=>{
+        fetch('http://localhost:7000/dbMenu/getMenu')
+        .then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+            setListOfMenu(data);
+    })
+    })
+
+
+    // // make api call 
+    // useEffect(() => {
+    //     Axios.get("http://localhost:3001/getMenu").then((response) => {
+    //         setListOfMenu(response.data) 
+    //     });
+    // }, []);
 
 
 
