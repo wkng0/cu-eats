@@ -10,8 +10,9 @@ import { Checkout } from './checkout'
 import { HomePage }  from './HomePage';
 
 import UCCanteen from './UCcanteen';
-import NACanteen from './NAcanteen';
+import NACanteen from './newNewCanteen';
 import ShawCanteen from './ShawCanteen';
+
 
 import './login.css';
 import {NavBar} from './component'
