@@ -61,17 +61,17 @@ function NACanteen() {
                                     </div>
 
                                     <div className='w-100 m-1'>
-                                        <p>Quality</p>
+                                        <p>Quantity</p>
                                         <select className='form-control' value={quantity} onChange={(e)=>{setquantity(e.target.value)}}>
                                             {[...Array(10).keys()].map((x, i)=> {
-                                                return <option value={i+1}>{i}</option>
+                                                return <option value={i+1}>{i+1}</option>
                                             })}
                                         </select>
                                     </div>
 
                                     <div className='flex-container'>
                                         <div className='m-1 w-100'>
-                                            <h1 className='mt-1'>Price: ${NAmenu.prices[0][varient]*(quantity-1)}</h1>
+                                            <h1 className='mt-1'>Price: ${NAmenu.prices[0][varient]*(quantity)}</h1>
                                         </div>
 
                                         <div className='m-1 w-100'>
