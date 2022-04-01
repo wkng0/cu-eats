@@ -77,11 +77,9 @@ function NACanteen() {
 
     const [listOfMenu, setListOfMenu] = useState([]);
     const [name] = useState("");
-    // const [varients] = useState("");
     const [varients] = useState([]);
     const [prices] = useState([]);
-    // const [username] = useState("");
-    const [image] = useState("");            
+    const [username] = useState("");
 
 
     // make api call 
@@ -91,7 +89,6 @@ function NACanteen() {
  
         });
     }, []);
-
 
 
     return(
