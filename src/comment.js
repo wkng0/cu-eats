@@ -64,9 +64,8 @@ class TabPanel extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            value:0,
+            value:-1,
         }
-        
     }
     
     handleChange=(event,newValue)=>{  
@@ -91,9 +90,9 @@ class TabPanel extends React.Component{
                     
                    
                     {data.map((file,i)=>
-                        <div role="tabpanel" style={{marginTop:"1rem"}} >
+                        <div role="tabpanel" style={{marginTop:"1rem"}} key={i}>
                             {(this.state.value==data[i].type || this.state.value=="-1") &&(
-                                <TabContent key={i} i={i} canteen={this.props.canteen}/>
+                                <TabContent  i={i} canteen={this.props.canteen}/>
                             )}
                             
                         </div>
@@ -396,10 +395,10 @@ function ResponsiveDrawer(props) {
 
             </Box>
             <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, maxWidth: { sm: "750px" } ,padding:0,paddingBottom:5 }}
-      >
-                <TabPanel value={0} canteen={canteen}/>
+                component="main"
+                sx={{ flexGrow: 1, p: 3, maxWidth: { sm: "750px" } ,padding:0,paddingBottom:5 }}
+            >
+                <TabPanel canteen={canteen}/>
             </Box>
         </Box>
         </Container>
@@ -670,35 +669,27 @@ function AddComment(){
 
 
 
-class Comment extends React.Component{
-    constructor(){
-        super();
-        this.state={
-            
-        }
-    }
-     DidMount(){
+
+function Comment(){
+    const [loadFinish, setLoadFinish]=useState();
+    useEffect(()=>{
         fetch('http://localhost:7000/dbComment/get/'+"SC")
         .then(res=>res.json())
         .then(db=>{
             data=db;
             console.log(data);
-            this.setState({})
+            setLoadFinish(true)
         })
+    })
+    if(loadFinish==false){
+        return<>please wait</>
     }
-    
-    render(){
-        
-        return(
-            <>
-                <ResponsiveDrawer />
-                <AddComment />
-            </>
-                
-  
-        
-        )
-    }
+    return(
+        <>
+            <ResponsiveDrawer />
+            <AddComment />
+        </>
+    )
 }
 
 function ContentPreview(){
@@ -720,7 +711,7 @@ function ContentPreview(){
             
         })
     })
-    if(target===undefined){
+    if(target==undefined){
         return<>please wait</>
     }
     
