@@ -3,7 +3,7 @@ import React from 'react';
 
 
 import { LoginPage } from './login';
-import { Comment, ContentPreview} from './comment';
+import { UserComment, ContentPreview, AdminComment} from './comment';
 import { Profile, Account, Address} from './profile';
 import { Cart } from './cart'
 import { Checkout } from './checkout'
@@ -17,7 +17,7 @@ import ShawCanteen from './ShawCanteen';
 import './login.css';
 import {NavBar} from './component'
 import { BrowserRouter, Route, Routes, useLocation, useParams} from 'react-router-dom';
-import { TabContent } from 'react-bootstrap';
+
 
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/login" element={<LoginPage/>} />
-          <Route path="/comment" element={<Comment />} />
+          <Route path="/comment" element={<UserComment />} />
           <Route path="/comment/:canteen/:id" element={<ContentPreview />} />
           <Route path="/profile" element={<Profile/>} />
           <Route path="/checkout" element={<Checkout/>} />
@@ -38,6 +38,14 @@ function App() {
           <Route path="/UCcanteen" element={<UCCanteen/>} />
           <Route path="/NAcanteen" element={<NACanteen/>} />
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
+
+          <Route path="/admin/comment/" element={<AdminComment/>}/>
+          
+          
+          
+          
+          
+          
           <Route path="*" element={<NoMatch/>} />
         </Routes>
       </BrowserRouter>
