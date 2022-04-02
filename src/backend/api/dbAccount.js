@@ -228,5 +228,59 @@ async function changePic(req,res){
     return insertResult;
 }
 
+// for address
+router.get("/getAddress/:email",function(req,res){
+    user_email=req.params.email;
+    fetchAddress(res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
 
+router.post("/addAddress/:email",function(req,res){
+    user_email = req.params.email;
+    addAddress(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
+async function fetchAddress(res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Address");
+    let result = await collection.find({"email":user_email}).toArray();
+    let address = [];
+    for(let i = 0; i < result.length; i++){
+        if(result[i].room!=""){
+            address[i] = result[i].room 
+            if(result[i].building!=""){
+            address[i] += "," + result[i].building
+        }
+        }else if(result[i].building!=""){
+            address[i] = result[i].building
+        }
+        if(result[i].college != "None" || result[i].college != "None"){
+            address[i] += "," + result[i].college
+        }
+    }
+    res.send(address);
+    return "address";
+    
+};
+
+async function addAddress(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Address");
+    const insertResult = await collection.insertOne({ 
+        email: req.body['email'],
+        room: req.body['room'],
+        building: req.body['building'],
+        college: req.body['college'],
+    });
+    return"insertResult";
+};
 export default router;

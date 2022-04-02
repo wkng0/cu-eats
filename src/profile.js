@@ -33,72 +33,6 @@ import { TryOutlined } from '@mui/icons-material';
 
 let userInfo = [];
 
-// class Profile extends React.Component{
-//     //get user name email and address
-//     constructor(){
-//       super();
-//       this.state={
-//       login: true,
-//       username:'',
-//       point:-1,
-//       email:'csci3100.d2@group.cuhk.edu.hk',
-//       fname:'',
-//       lname:'',
-//       phone:'',
-//       college:'',
-//       faculty:'',
-//       gender:'',
-//       pic:'',
-//       fetchFinish: false,
-//   };}
-
-//    async getInfo(){
-//      return fetch('http://localhost:7000/dbAccount/get/'+this.state.email)
-//      .then(res=>res.json())
-//      .then(data=>{
-//        console.log(data[0]);
-//       //  this.setState({email: data[0].email});
-//        this.setState({username: data[0].user_name});
-//       //  console.log(this.state.user_name);
-//        this.setState({point: data[0].point});
-//        userInfo = data[0];
-//        console.log(userInfo);
-//       //  this.setState({fname: data[0].fname});
-//       //  this.setState({lname: data[0].lname});
-//       //  this.setState({phone: data[0].phone});
-//       //  this.setState({faculty: data[0].faculty});
-//       //  this.setState({gender: data[0].gender});
-//       //  this.setState({college: data[0].college});
-//       //  this.setState({pic: data[0].pic})
-//        // this.setState({email: data[0].email});
-//      })
-//      .catch((err)=>{console.log(err)});
-//    }
-
-//   componentWillMount(){
-//     this.getInfo()
-//     .then(()=>{
-//       console.log("un",this.state.username);
-//       console.log("pt",this.state.point);
-//       this.setState({fetchFinish: true})
-//     })
-//     .catch(err=>{
-//       console.log(err);
-//       this.setState({fetchFinish: false});
-//     })
-//   }
-
-//     render(){
-//       if (this.state.fetchFinish===true){
-//       return(
-//         <ProfileHeader username={this.state.username} point={this.state.point} email={this.state.email} 
-//         fname={this.state.fname} lname={this.state.lname} phone={this.state.phone} gender={this.state.gender}
-//         faculty={this.state.faculty} college={this.state.college} pic={this.state.pic}/>
-//       )
-//     }
-//   }
-// }
-
 function Profile(){
   const[username,setUsername] = useState('');
   const[email,setEmail] = useState('0.0@link.cuhk.edu.hk');
@@ -271,159 +205,484 @@ changeIcon(event){
   }
 }
 
-class Address extends React.Component{
-    //get address
-    constructor(){
-      super();
-      this.state = {count: 1};
-    }
-    componentDidMount(){
-      return
-    }
-    render(){
-        return(
-            <>
-            <Link href="/profile"><ArrowBackIcon/></Link>
-            <div class="container fluid">
-                    {/* <div class="card" id="addrs">
-                        <h4>Address index</h4>
-                        <p>first address</p>
-                    </div> */}
-                    <div class="form">
-                        Add your new address!
-                        <textarea style={{width:' 100%'}}></textarea>
-                        <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86" }} >Submit</Button>
-                    </div>
-            </div>
-            </>
+function Address(){
+  const [email,setEmail] = useState('0.0@link.cuhk.edu.hk');
+  const [fetchFinish, setFetch] = useState(false);
+  const [savedAddress,setAddress] = useState([]);
 
-        )
+  useEffect(()=>{
+    fetch('http://localhost:7000/dbAccount/getAddress/'+email)
+    .then(res=>res.json())
+    .then(res=>setAddress(res))
+    // .then(()=>console.log(savedAddress))
+    .then(()=>setFetch(true))
+    .catch(err=>{console.log(err);
+    setFetch(false);
+  })
+  })
+
+  if(fetchFinish == false){
+    return(
+      <h1>loading</h1>
+    )
+  }
+  if(fetchFinish == true){
+    return(
+      <>
+      <Link href="/profile"><ArrowBackIcon/></Link>
+      {savedAddress.map((address, index)=>(
+        <>
+        <h5>Address {index}</h5>
+        <p key={address}>{address}</p>
+        <br></br>
+        </>
+      ))}
+      <AddNewAddress email={email}/>
+      </>
+    )
     }
 }
-// class Account extends React.Component{
-//   constructor(){
-//     super();
-//     this.state={
-//     login: true,
-//     username:'',
-//     point:-1,
-//     email:'csci3100.d2@group.cuhk.edu.hk',
-//     fname:'',
-//     lname:'',
-//     phone:'',
-//     college:'',
-//     faculty:'',
-//     gender:'',
-//     pic:'',
-//     fetchFinish: true,
-//     show: false,
-// };}
 
-//   async getInfo(){
-//     return fetch('http://localhost:7000/dbAccount/get/'+this.state.email)
-//     .then(res=>res.json())
-//     .then(data=>{
-//       console.log(data[0]);
-//       // setUsername(data[0].user_name);
-//       // console.log(this.state.user_name);
-//       this.setState({username: data[0].user_name});
-//       this.setState({fname: data[0].first_name});
-//       this.setState({lname: data[0].last_name});
-//       this.setState({phone: data[0].phone});
-//       console.log("undefined???",data[0].college);
+function AddNewAddress(props){
+  const college =["None","CC","CW","MS","NA","SH","SHAW","UC","WS","WYS","Others"];
+  const building=["None","AB1 Academic Building No.1","AMEW Art Museum East Wing","ARC Lee Shau Kee Architecture Building","BMS Basic Medical Sciences Building",
+"CCCC Chung Chi College Chapel","CCT Chung Chi College Theology Building","CK TSE C.K. Tse Room (C.C. Library)","CKB Chen Kou Bun Building",
+"CML Ch'ien Mu Library",
+"CWC C.W. Chu College",
+"CYT Cheng Yu Tung Building",
+"ELB Esther Lee Building",
+"ERB William M.W. Mong Engineering Building",
+"FYB Wong Foo Yuan Building",
+"HCA Pi Chiu Building",
+"HCF Sir Philip Haddon-Cave Sports Field",
+"HTB Ho Tim Building",
+"HTC Haddon-Cave Tennis Court # 6, 7",
+"HYS Hui Yeung Shing Building",
+"IBSB Lo Kwee-Seong Integrated Biomedical Sciences Building",
+"ICS Institute of Chinese Studies",
+"KHB Fung King Hey Building",
+"KKB Leung Kau Kui Building",
+"KSB Kwok Sports Building",
+"LDS Li Dak Sum Building",
+"LHC Y.C. Liang Hall",
+"LHCH Lee Hysan Concert Hall",
+"LKC Li Koon Chun Hall",
+"LN Lingnan Stadium, Chung Chi College",
+"LPN LT Lai Chan Pui Ngong Lecture Theatre",
+"LSB Lady Shaw Building",
+"LSK Lee Shau Kee Building",
+"LWC Li Wai Chun Building",
+"MCO Morningside College Seminar Room",
+"MMW Mong Man Wai Building",
+"NAA Cheng Ming Building, New Asia College",
+"NAG New Asia College Gymnasium",
+"NAH Humanities Building, New Asia College",
+"NATT New Asia College Table Tennis Room",
+"PGH3 MPH Multi-purpose Hall, Jockey Club Postgraduate Hall 3",
+"PSC MPH Multi-purpose Hall, Pommerenke Student Centre",
+"RRS Sir Run Run Shaw Hall",
+"SB Sino Building",
+"SC Science Centre",
+"SCE Science Centre East Block",
+"SCSH Multi-purpose Sports Hall, Shaw College",
+"SCTT Table Tennis Room, Shaw College",
+"SHB Ho Sin-Hang Engineering Building",
+"SP Swimming Pool",
+"SWC LT Lecture Theatre, Shaw College",
+"SWH Swire Hall, Fung King Hey Building",
+"TC Tennis Court # 3, 4, 5",
+"TYW LT T.Y. Wong Hall, Ho Sin-Hang Engineering Building",
+"UC TT Table Tennis Room, United College",
+"UCA Tsang Shiu Tim Building, United College",
+"UCC T.C. Cheng Building, United College",
+"UCG The Thomas H.C. Cheung Gymnasium of United College",
+"UG University Gymnasium",
+"USC TT University Sports Centre, Table Tennis Room",
+"WLS Wen Lan Tang, Shaw College",
+"WMY Wu Ho Man Yuen Building",
+"WS1 Lee W.S. College South Block",
+"WYST Wu Yee Sun College Theatre",
+"YCT President Chi-tung Yung Memorial Building",
+"YIA Yasumoto International Academic Park"]
 
-//       this.setState({college: data[0].college});
-//       this.setState({faculty: data[0].faculty});
-//       this.setState({gender: data[0].gender});
-//       // userInfo = data[0];
-//       // console.log(userInfo);
-//     })
-//     .catch((err)=>{console.log(err)});
-//   }
+const ccHall = ["Hua Lien Tang",
+  "Lee Shu Pui Hall",
+  "Madam S. H. Ho Hall",
+  "Ming Hua Tang",
+  "Pentecostal Mission Hall Complex (High Block)"	,
+  "Pentecostal Mission Hall Complex (Low Block)",
+  "Theology Building",
+  "Wen Chih Tang",
+  "Wen Lin Tang",
+  "Ying Lin Tang"];
+const naHall = ["Chih Hsing Hall","Xuesi Hall","Grace Tien Hall","Daisy Li Hall"];
+const ucHall = ["Adam Schall Residence","Bethlehem Hall","Chan Chun Ha Hostel","Hang Seng Hall"];
+const shawHall = ["Kuo Mou Hall","Studnet Hostel II high block","Studnet Hostel II low block"];
+const otherHall = ["iHouse block 1","iHouse block 2","iHouse block 3","iHouse block 4","iHouse block 5","Postgraduate Hall 1","Postgraduate Hall 2","Postgraduate Hall 3","Postgraduate Hall 4","Postgraduate Hall 5","Postgraduate Hall 6"]
 
-// componentWillMount(){
-//    this.getInfo()
-//    .then(()=>{
-//      console.log("fn",this.state.fname);
-//      console.log("ln",this.state.lname);
-//      this.setState({fetchFinish: true});
-//    })
-//    .catch(err=>{
-//      console.log(err);
-//      this.setState({fetchFinish: false});
-//    })
-//  }
-//  render(){
-//    if (this.state.fetchFinish == true){
-//     return(
-//       <>
-//       <Link href="/profile" sx={{color: '#5D4E99'}}><ArrowBackIcon/></Link>
-//       <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={()=> updateInfo()}><DoneIcon/></IconButton>
-//       <Info username={this.state.username} point={this.state.point} email={this.state.email}
-//       fname={this.state.fname} lname={this.state.lname} phone={this.state.phone} gender={this.state.gender}
-//       faculty={this.state.faculty} college={this.state.college}/>
-//       <ChooseGender gender={this.state.gender}/>
-//       <ChooseCollege college={this.state.college}/>
-//       <ChooseFaculty faculty={this.state.faculty}/>
-//       <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} onClick={() => this.setstate({show: true})}>Change Password</Button>
-//       {this.state.show &&  <ChangePw/>}
-//       </>
-//     );}}
-// }
+const [chooseCol, setCol] = useState('');
+const [chooseBlg, setBlg] = useState('');
+const [room,setRoom] = useState('');
 
-// function Account(props){
-//    const [show, setShow] = useState(false);
-//    const [username, setUsername] = useState('');
-//    const[point, setPoint] = useState(-1);
-//    const [email, setEmail] = useState('csci3100.d2@group.cuhk.edu.hk');
-//    const [fname, setFname] = useState('');
-//    const [lname, setLname] = useState('');
-//    const [phone, setPhone] = useState('');
-//    const [college, setCollege] = useState('');
-//    const [faculty, setFaculty] = useState('');
-//    const [gender, setGender] = useState('');
-//    const [fetchFinish, setFetch] = useState(false);
+  const handleChangeRoom = (event)=>{
+    setRoom(event.target.value);
+    console.log(event.target.value);
+  }
 
-//    useEffect(()=>{
-//     fetch('http://localhost:7000/dbAccount/get/'+email)
-//     .then(res=>res.json())
-//     .then(data=>{
-//         setUsername(data[0].user_name);
-//         setPoint(data[0].point);
-//         setFname(data[0].first_name);
-//         setLname(data[0].last_name);
-//         setPhone(data[0].phone);
-//         if(data[0].college != undefined){
-//           setCollege(data[0].college);
-//         }
-//         if(data[0].faculty != undefined){
-//           setFaculty(data[0].faculty);
-//         }
-//         if(data[0].gender != undefined){
-//           setGender(data[0].gender);
-//         }
-//         setFetch(true);
-//     })
-// })
-//    if(fetchFinish == false){
-//      return(
-//        <h1>loading</h1>
-//      )
-//    }
-//    if (fetchFinish == true){
-//     return(
-//       <>
-//       <Link href="/profile" sx={{color: '#5D4E99'}}><ArrowBackIcon/></Link>
-//       <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={()=> updateInfo()}><DoneIcon/></IconButton>
-//       <Info username={username} point={point} email={email} fname={fname} lname={lname} phone={phone}/>
-//       <ChooseGender gender={gender}/>
-//       <ChooseCollege college={college}/>
-//       <ChooseFaculty faculty={faculty}/>
-//       <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} onClick={() => setShow(prev => !prev)}>Change Password</Button>
-//       {show &&  <ChangePw/>}
-//       </>
-//     );}
-// }
+  const handleChangeCollege=(event)=>{
+    setCol(event.target.value);
+    console.log(event.target.value);
+  }
+
+  const handleChangeBuilding=(event)=>{
+    setBlg(event.target.value);
+    console.log(event.target.value);
+  }
+
+  const handleNewAddress=(event)=>{
+    fetch('http://localhost:7000/dbAccount/addAddress/'+props.email, { 
+      method: 'POST', 
+      body: new URLSearchParams({
+         "email": props.email,
+         "room": room,
+         "building": chooseBlg,
+         "college": chooseCol,
+      })  
+
+    })
+    .then(()=>console.log())
+    .catch(err=>console.log(err))
+  }
+
+  if(chooseCol=="None"||chooseCol == ""){
+    return(
+      <>
+        <h5>Add new address</h5>
+         <Box sx={{ m: 5 ,display: 'inline'}}>
+        <TextField
+          id="standard-required"
+          label="Room"
+          variant="standard"
+          onChange={handleChangeRoom}
+        />
+        </Box>
+        <Box sx={{ m: 5  ,display: 'inline'}}>
+      <FormControl >
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          Building
+        </InputLabel>
+        <NativeSelect
+        onChange={handleChangeBuilding}
+        >
+          {building.map((blg,index)=>(<option value={blg} key={blg}>{blg}</option>))}
+        </NativeSelect>
+      </FormControl>
+        </Box>
+        
+         <Box sx={{ m: 5 ,display: 'inline'}}>
+      <FormControl sx={{width:500}}>
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          College (select if you are inside a college hostel,non college hostel please select Others)
+        </InputLabel>
+        <NativeSelect
+        onChange={handleChangeCollege}
+        >
+          {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+        </NativeSelect>
+      </FormControl>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+        </Box>
+        </>
+    )
+  }else if(chooseCol=="CC"){
+    return(
+    <>
+      <h5>Add new address</h5>
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        CC Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {ccHall.map((col,index)=>(<option value={ccHall[index]}>{ccHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College (select if you are inside a college hostel,non college hostel please select Others)
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else if(chooseCol=="NA"){
+    return(
+      <>
+      <h5>Add new address</h5>
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        NA Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {naHall.map((col,index)=>(<option value={naHall[index]}>{naHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College (select if you are inside a college hostel,non college hostel please select Others)
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else if(chooseCol=="UC"){
+    return(
+      <>
+      <h5>Add new address</h5>
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        UC Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {ucHall.map((col,index)=>(<option value={ucHall[index]}>{ucHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College (select if you are inside a college hostel,non college hostel please select Others)
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else if(chooseCol=="SHAW"){  
+    return(
+      <>
+      <h5>Add new address</h5>
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        SHAW Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {shawHall.map((col,index)=>(<option value={shawHall[index]}>{shawHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College (select if you are inside a college hostel,non college hostel please select Others)
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else if(chooseCol=="Others"){
+    return(
+      <>
+      <h5>Add new address</h5>
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {otherHall.map((col,index)=>(<option value={otherHall[index]}>{otherHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College (select if you are inside a college hostel,non college hostel please select Others)
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else{
+    return(
+    <>
+    <h5>Add new address</h5>
+     <Box sx={{ m: 5 ,display: 'inline'}}>
+    <TextField
+      id="standard-required"
+      label="Room"
+      variant="standard"
+      onChange={handleChangeRoom}
+    />
+    </Box>
+     <Box sx={{ m: 5 ,display: 'inline'}}>
+  <FormControl sx={{width:500}}>
+    <InputLabel variant="standard" htmlFor="uncontrolled-native">
+      College (select if you are inside a college hostel,non college hostel please select Others)
+    </InputLabel>
+    <NativeSelect
+    onChange={handleChangeCollege}
+    >
+      {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+    </NativeSelect>
+  </FormControl>
+    </Box>
+    <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <CheckIcon/>
+      save
+    </IconButton>
+    </>)
+  }
+    // return(
+    //     <>
+    //     <h5>Add new address</h5>
+    //      <Box sx={{ m: 5 ,display: 'inline'}}>
+    //     <TextField
+    //       id="standard-required"
+    //       label="Room"
+    //       variant="standard"
+    //       onChange={handleChangeRoom}
+    //     />
+    //     </Box>
+    //     <Box sx={{ m: 5  ,display: 'inline'}}>
+    //   <FormControl >
+    //     <InputLabel variant="standard" htmlFor="uncontrolled-native">
+    //       Building
+    //     </InputLabel>
+    //     <NativeSelect
+    //     onChange={handleChangeBuilding}
+    //     >
+    //       {building.map((blg,index)=>(<option value={blg} key={blg}>{blg}</option>))}
+    //     </NativeSelect>
+    //   </FormControl>
+    //     </Box>
+        
+    //      <Box sx={{ m: 5 ,display: 'inline'}}>
+    //   <FormControl sx={{width:500}}>
+    //     <InputLabel variant="standard" htmlFor="uncontrolled-native">
+    //       College (select if you are inside a college hostel,non college hostel please select Others)
+    //     </InputLabel>
+    //     <NativeSelect
+    //     onChange={handleChangeCollege}
+    //     >
+    //       {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+    //     </NativeSelect>
+    //   </FormControl>
+    //     </Box>
+    //     </>
+
+    // )
+    
+}
 
 function Account(props){
   const [show, setShow] = useState(false);
