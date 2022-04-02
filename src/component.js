@@ -126,7 +126,7 @@ function NavBar() {
 
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Shopping Cart">
-                        <Button variant="outlined" color="inherit" sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}} href="/shoppingCart">
+                        <Button variant="outlined" color="inherit" sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}} href="/ShoppingCart">
                             <ShoppingCartIcon />
                         </Button>
                         </Tooltip>

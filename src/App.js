@@ -19,6 +19,8 @@ import {NavBar} from './component'
 import { BrowserRouter, Route, Routes, useLocation, useParams} from 'react-router-dom';
 
 
+import { ShoppingCart } from './shoppingCart/sc-context';
+
 
 function App() {
   return (
@@ -34,7 +36,7 @@ function App() {
           <Route path="/checkout" element={<Checkout/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
-          <Route path="/shoppingCart" element={<Cart/>} />
+          <Route path="/ShoppingCart" element={<ShoppingCart/>} />
           <Route path="/UCcanteen" element={<UCCanteen/>} />
           <Route path="/NAcanteen" element={<NACanteen/>} />
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
@@ -47,13 +49,14 @@ function App() {
           
           
           <Route path="*" element={<NoMatch/>} />
+          
         </Routes>
       </BrowserRouter>
       
     </div>
   );
 }
-
+/* <Route path="/shoppingCart" element={<Cart/>} /> */
 function NoMatch() {
   let location = useLocation();
   return (
