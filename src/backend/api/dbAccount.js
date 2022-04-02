@@ -156,9 +156,14 @@ async function addUser(req,res){
         token:token,
         verify:0
     });
+    let emailSender={
+        name: "CUEats",
+        address: "csci3100.group.d2@gmail.com"
+    }
     let mailOptions={
-        from: "CUEats",
+        from: emailSender,
         to: req.body['email'],
+        
         subject:"Code Confirmation",
         text:`Click this link to verify your account http://localhost:7000/verify?token=${token}`
     }

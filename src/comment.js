@@ -1,7 +1,7 @@
 import React, { useState, useEffect }  from 'react';
 import Select from 'react-select';
 import { 
-    AppBar,
+    Alert,
     Box, 
     Tab, 
     Tabs, 
@@ -11,13 +11,13 @@ import {
     CardActions, 
     CardContent,
     CardHeader,
+    Checkbox,
     Dialog,
     DialogTitle,
     Paper,
     Fab,
     Rating,
     Avatar,
-    Grid,
     Button, 
     Typography,
     TextField,
@@ -27,9 +27,9 @@ import {
     FormHelperText,
     List,
     ListItem,
+    ListItemAvatar,
     ListItemText,
     ListItemButton,
-    ListItemIcon,
     SwipeableDrawer,
     IconButton,
     DialogContent,
@@ -46,13 +46,13 @@ import AddIcon from '@mui/icons-material/Add';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ShareIcon from '@mui/icons-material/Share';
 import {red}from '@mui/material/colors';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import {useParams} from 'react-router-dom'
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import FlagIcon from '@mui/icons-material/Flag';
+import MenuIcon from '@mui/icons-material/Menu';
 import zIndex from '@mui/material/styles/zIndex';
 import { render } from '@testing-library/react';
 import { TurnedIn } from '@mui/icons-material';
@@ -244,6 +244,7 @@ class TabContent extends React.Component{
                         height="auto"
                         image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
                         sx={{mb:2, borderRadius: 2 }}
+                        hidden={data[i].image==""}
                     />
                     <Typography variant="h5" component="div" sx={{mb:1}}>
                         {data[i].title}
@@ -252,7 +253,7 @@ class TabContent extends React.Component{
                         {data[i].description}
                     </Typography>
                     <Typography component="div" >
-                        <Rating name="read-only-rating" hidden={data[i].rating==-1} value={data[i].rating} readOnly />
+                        <Rating name="read-only-rating" hidden={data[i].rating==null} value={data[i].rating} readOnly />
                     </Typography>
                 
 
@@ -273,9 +274,10 @@ class TabContent extends React.Component{
         );
      }
 }
-
-const canteenList=["SeeYou@Shaw","Joyful Inn","Now &,"]
-const canteenID=["SC","UC","NA"]
+let canteenInfo=[];
+const canteenList=[];
+const canteenID=[];
+const drawerWidth=240;
 
 function ResponsiveDrawer(props) {
     const { window } = props;
@@ -310,6 +312,9 @@ function ResponsiveDrawer(props) {
         })
         
     }
+    const handleOpenMenu=()=>{
+
+    }
   
     const drawer = (
       <div>
@@ -318,8 +323,13 @@ function ResponsiveDrawer(props) {
         <List>
         {canteenList.map((data, index) => 
         (
-            <ListItem >
+            <ListItem key={index}>
                 <ListItemButton onClick={handleClick} value={canteenID[index]} selected={canteen==canteenID[index]}>
+                    <ListItemAvatar>
+                        <Avatar
+                            src={canteenInfo[index]["avater"]}
+                        />
+                    </ListItemAvatar>
                     <ListItemText>
                         {canteenList[index]}
                     </ListItemText>
@@ -332,42 +342,30 @@ function ResponsiveDrawer(props) {
        
       </div>
     );
-    const appBar= (
-        <div>
-            <Toolbar>
-                <IconButton onClick={toggleDrawer(true)} color="inherit" aria-label="open drawer">
-                    <StorefrontIcon />
-                </IconButton>
-                
-                <Box sx={{ flexGrow: 1 }} />
-               
-            </Toolbar>
-        </div>
-    );
   
     
-    const drawerWidth=200;
     return ( 
-        <Container>
+        <Container >
         <Box sx={{ display: 'flex' }}>        
             <Box
             component="nav"
             sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },p:0 }}            
             >
             {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-            <AppBar 
-                position="fixed" 
-                color="primary" 
-                sx={{ 
-                    top: 'auto', 
-                    bottom: 0,
+          
+            <Fab 
+                color="secondary" 
+                sx={{
+                    position: 'fixed', 
+                    bottom: 32 ,
+                    left:32,
+                    zIndex:10000,
                     display:{xs:'block', sm:'none'},
-                    backgroundColor:"#5D4E99"
-
-                }}>
-                {appBar}
-            </AppBar>
-            
+                }} 
+                onClick={toggleDrawer(true)}>
+                <StorefrontIcon />
+  
+            </Fab>
             <Drawer
                 variant="permanent"
                 sx={{
@@ -406,7 +404,7 @@ function ResponsiveDrawer(props) {
        
        
     );
-  }
+}
 
 function AddComment(){
     const [open, setOpen]=React.useState(false);
@@ -426,18 +424,18 @@ function AddComment(){
     const [fileEmpty, setFileEmpty]=React.useState(true);
     const [ratingEmpty, setRatingEmpty]=React.useState(false);
     const [newFileName, setNewFileName]=React.useState("");
-    const [rating, setRating]=React.useState(-1);
+    const [rating, setRating]=React.useState(null);
     const handleClick=()=>{
         setOpen(true);
         
     }
     const handlePublish=(e)=>{
-        if(titleEmpty==true||descEmpty==true||type==-1||(type==1)&&(rating==-1)){
+        if(titleEmpty==true||descEmpty==true||type==-1||(type==1)&&(rating==null)){
             if(type==-1){
                 setLocationEmpty(true);
                 setHelperTextCEmpty("Please choose an option");
             }else if(type==1){
-                if(rating==-1){
+                if(rating==null){
                     setRatingEmpty(true);
                     setHelperTextDEmpty("Please give rating")
                 }
@@ -670,7 +668,7 @@ function AddComment(){
 
 
 
-function Comment(){
+function UserComment(){
     const [loadFinish, setLoadFinish]=useState();
     useEffect(()=>{
         fetch('http://localhost:7000/dbComment/get/'+"SC")
@@ -678,7 +676,18 @@ function Comment(){
         .then(db=>{
             data=db;
             console.log(data);
-            setLoadFinish(true)
+        }).then(()=>{
+            fetch('http://localhost:7000/dbcanteenInfo/getCanteenInfo')
+            .then(res=>res.json())
+            .then(db=>{
+                canteenInfo=db;
+                console.log(canteenInfo);
+                for(let i=0;i<canteenInfo.length;i++){
+                    canteenList[i]=canteenInfo[i]["canteen_name"];
+                    canteenID[i]=canteenInfo[i]["value"];
+                }
+                setLoadFinish(true);
+            })
         })
     })
     if(loadFinish==false){
@@ -691,6 +700,239 @@ function Comment(){
         </>
     )
 }
+
+
+function AdminCommentDrawer() {
+    const [canteen, setCanteen]=React.useState("Report")
+
+    const handleClick=(e)=>{
+
+        let canteen=e.currentTarget.getAttribute('value');
+        //console.log(canteenChoice);
+        fetch('http://localhost:7000/dbComment/get/'+canteen)
+        .then(res=>res.json())
+        .then(db=>{
+            data=db;
+            console.log(data); 
+            setCanteen(canteen)
+            //console.log(canteenID);
+            //console.log(canteenList);
+        })       
+    }
+   
+
+    const drawer = (
+      <div>
+        <Toolbar />
+        <Divider />
+        <List>
+            <ListItem >
+                <ListItemButton onClick={handleClick} value="Report" selected={canteen=="Report"}>
+                    <ListItemText>
+                        Reported issue
+                    </ListItemText>
+                </ListItemButton>
+            </ListItem>
+            <Divider />
+        {canteenList.map((data, index) => 
+        (
+            <ListItem key={index}>
+                <ListItemButton onClick={handleClick} value={canteenID[index]} selected={canteen==canteenID[index]}>
+                    <ListItemAvatar>
+                        <Avatar
+                            src={canteenInfo[index]["avater"]}
+                        />
+                    </ListItemAvatar>
+                    <ListItemText>
+                        {canteenList[index]}
+                    </ListItemText>
+                </ListItemButton>
+            </ListItem>
+        ))}
+        </List>
+        
+     
+       
+      </div>
+    );
+  
+
+    return ( 
+        <Container >
+        <Box sx={{ display: 'flex' }}>        
+            <Box
+            component="nav"
+            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },p:0 }}            
+            >
+            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+          
+        
+            <Drawer
+                variant="permanent"
+                sx={{
+                display: { xs: 'none', sm: 'block' },
+                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth,left:"unset" },
+                left:"unset",
+                zIndex:0,
+                }}
+                open      
+            >
+                {drawer}
+            </Drawer>
+
+            </Box>
+            <Box
+                component="main"
+                sx={{ flexGrow: 1, p: 3, maxWidth: { sm: "750px" } ,padding:0,paddingBottom:5 }}
+            >
+                <CommentList canteen={canteen} empty={[]}/>
+            </Box>
+        </Box>
+        </Container>
+    );
+}
+
+function CommentList(props){
+    const [checked, setChecked] = React.useState([]);
+    const handleToggle = (value) => () => {
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+    
+        if (currentIndex === -1) {
+            newChecked.push(value);
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+    
+        setChecked(newChecked);
+    };
+    const removeComment=()=>{
+        fetch('http://localhost:7000/dbComment/delete/comment', {
+            body: JSON.stringify({id:checked}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method:"DELETE"
+        })
+        .then(response => console.log(response))
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        window.location.reload();
+    }
+    const ignoreReport=()=>{
+        fetch('http://localhost:7000/dbComment/delete/report/', {
+            body: JSON.stringify({id:checked}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method:"DELETE"
+        })
+        .then(response => console.log(response))
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        window.location.reload();
+    }
+
+    return(
+        <>
+            <Box >
+                <Alert severity="info" hidden={checked.length==0?true:false} sx={{ml:2, mb:2}}>
+                    You have selected {checked.length} comment(s).
+                </Alert>
+                
+                <Button 
+                    disabled={checked.length==0||props.canteen!="Report"?true:false} 
+                    variant="contained" 
+                    sx={{ml:2}} 
+                    onClick={ignoreReport}
+                    color="success"
+                >
+                    Ignore
+                </Button>
+                <Button 
+                    disabled={checked.length==0?true:false} 
+                    variant="contained" 
+                    sx={{ml:2}} 
+                    onClick={removeComment}
+                    color="error"
+                >
+                    Remove
+                </Button>
+            </Box>
+            
+            <List>
+                {data.map((file,i)=>
+                <>
+                    <Alert severity="error" sx={{m:2, mb:0}} hidden={props.canteen!="Report"}>Reported @{data[i].canteen}: {data[i].reason}</Alert>
+                    <Card sx={{ display: 'flex', m:2, mt:0}}>
+                        <ListItem
+                            key={i}
+                            secondaryAction={
+                            <Checkbox
+                                edge="end"
+                                onChange={handleToggle(data[i]._id)}
+                                checked={checked.indexOf(data[i]._id) !== -1}
+                                sx={{
+                                    mr:1
+                                }}
+                            />
+                            }
+                            disablePadding
+                        >
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>   
+                                <CardMedia
+                                    component="img"
+                                
+                                    sx={{
+                                        heigth:"30vh",
+                                        width: "30vh",
+                                        m:2,
+                                        borderRadius: 2 
+                                    }}
+                                    image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
+                                    hidden={data[i].image==""}
+                                />
+                            </Box>
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <CardHeader
+                                avatar={
+                                <Avatar sx={{ bgcolor: red[500] }}>
+                                    {data[i].userid[0]}
+                                </Avatar>
+                                }
+                                title={data[i].userid}
+                                subheader={data[i].datetime.substring(0,10)+" "+data[i].datetime.substring(11,16)}
+                       
+                            />         
+                                <CardContent >
+                                    <Typography variant="h5" component="div" >
+                                        {data[i].title}
+                                    </Typography>
+                                    <Typography variant="p" component="div">
+                                        {data[i].description}
+                                    </Typography>
+                                    <Typography component="div" >
+                                        <Rating name="read-only-rating" hidden={data[i].rating==null} value={data[i].rating} readOnly />
+                                    </Typography>
+                            
+                                </CardContent>
+                                
+                            </Box>
+                    
+                        </ListItem>  
+                    </Card>    
+                    
+                    
+                </>
+                )}
+            </List>
+        </>
+        
+    );
+}
+
 
 function ContentPreview(){
     const [target,setTarget]=useState();
@@ -721,8 +963,38 @@ function ContentPreview(){
             <TabContent key={target} i={target} canteen={param.canteen}/>
         </Container> 
     );
-  
 
 }
 
-export {Comment,ContentPreview};
+function AdminComment(){
+    const [loadFinish, setLoadFinish]=React.useState(false);
+    useEffect(()=>{
+        fetch('http://localhost:7000/dbComment/get/Report')
+        .then(res=>res.json())
+        .then(db=>{
+            data=db;
+            console.log(data);
+        }).then(()=>{
+            fetch('http://localhost:7000/dbcanteenInfo/getCanteenInfo')
+            .then(res=>res.json())
+            .then(db=>{
+                canteenInfo=db;
+                console.log(canteenInfo);
+                for(let i=0;i<canteenInfo.length;i++){
+                    canteenList[i]=canteenInfo[i]["canteen_name"];
+                    canteenID[i]=canteenInfo[i]["value"];
+                }
+                setLoadFinish(true);
+            })
+        })
+    })
+
+    if(loadFinish==false){
+        return<>please wait (parent)</>
+    }
+    return(
+        <AdminCommentDrawer />
+    );
+}
+
+export {UserComment, AdminComment, ContentPreview};
