@@ -1,5 +1,7 @@
 import React from 'react'
 import { useGlobalContext } from './sc-context'
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 const CartItem = ({ id, img, title, price, amount }) => {
     const {remove, increase, decrease} = useGlobalContext();
@@ -68,13 +70,21 @@ const CartContainer = () => {
             total <span>{total}</span>
           </h4>
         </div>
-        <button className='sc-btn sc-clear-btn' onClick={clearCart}>
-          clear cart
-        </button>
-
-        <button className='sc-btn sc-pay-btn' onClick={clearCart}>
-          proceed to payment
-        </button>
+        <Box sx={{display: 'flex', flexDirection: 'row'}}>
+          <Button 
+            size="large" 
+            sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+            onClick={clearCart}>
+            clear cart
+          </Button>
+          <Button 
+                size="large" 
+                href="/checkout"
+                sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+          >
+                Proceed to Checkout
+          </Button>
+        </Box>
       </footer>
     </section>
   )
