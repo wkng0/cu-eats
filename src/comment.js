@@ -706,18 +706,23 @@ function AdminCommentDrawer() {
     const [canteen, setCanteen]=React.useState("Report")
 
     const handleClick=(e)=>{
-
-        let canteen=e.currentTarget.getAttribute('value');
-        //console.log(canteenChoice);
-        fetch('http://localhost:7000/dbComment/get/'+canteen)
-        .then(res=>res.json())
-        .then(db=>{
-            data=db;
-            console.log(data); 
-            setCanteen(canteen)
-            //console.log(canteenID);
-            //console.log(canteenList);
-        })       
+        if(e.currentTarget.getAttribute('value')=="Report"){
+            window.location.reload();
+        }else{
+            let canteen=e.currentTarget.getAttribute('value');
+            //console.log(canteenChoice);
+            fetch('http://localhost:7000/dbComment/get/'+canteen)
+            .then(res=>res.json())
+            .then(db=>{
+                data=db;
+                console.log(data); 
+                setCanteen(canteen)
+                //console.log(canteenID);
+                //console.log(canteenList);
+            })
+        }
+        
+       
     }
    
 
@@ -785,7 +790,7 @@ function AdminCommentDrawer() {
                 component="main"
                 sx={{ flexGrow: 1, p: 3, maxWidth: { sm: "750px" } ,padding:0,paddingBottom:5 }}
             >
-                <CommentList canteen={canteen} empty={[]}/>
+                <CommentList canteen={canteen} />
             </Box>
         </Box>
         </Container>
@@ -794,10 +799,13 @@ function AdminCommentDrawer() {
 
 function CommentList(props){
     const [checked, setChecked] = React.useState([]);
+    useEffect(()=>{
+        
+    })
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
-    
+        
         if (currentIndex === -1) {
             newChecked.push(value);
         } else {
@@ -834,14 +842,14 @@ function CommentList(props){
         });
         window.location.reload();
     }
-
+    const clearSelected=()=>{
+        setChecked([]);
+    }
+ 
+    
     return(
         <>
-            <Box >
-                <Alert severity="info" hidden={checked.length==0?true:false} sx={{ml:2, mb:2}}>
-                    You have selected {checked.length} comment(s).
-                </Alert>
-                
+            <Box >                
                 <Button 
                     disabled={checked.length==0||props.canteen!="Report"?true:false} 
                     variant="contained" 
@@ -860,15 +868,25 @@ function CommentList(props){
                 >
                     Remove
                 </Button>
+                <Button 
+                    disabled={checked.length==0?true:false} 
+                    variant="contained" 
+                    sx={{ml:2}} 
+                    onClick={clearSelected}
+                >
+                    Reset
+                </Button>
+                <Alert severity="info" hidden={checked.length==0?true:false} sx={{mx:2, my:2}}>
+                    You have selected {checked.length} comment(s).
+                </Alert>
             </Box>
             
             <List>
                 {data.map((file,i)=>
-                <>
+                <div key={i}>
                     <Alert severity="error" sx={{m:2, mb:0}} hidden={props.canteen!="Report"}>Reported @{data[i].canteen}: {data[i].reason}</Alert>
                     <Card sx={{ display: 'flex', m:2, mt:0}}>
                         <ListItem
-                            key={i}
                             secondaryAction={
                             <Checkbox
                                 edge="end"
@@ -925,7 +943,7 @@ function CommentList(props){
                     </Card>    
                     
                     
-                </>
+                </div>
                 )}
             </List>
         </>
