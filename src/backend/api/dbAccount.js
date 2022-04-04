@@ -63,13 +63,6 @@ router.get("/get/:uid",function(req,res){
     .finally(() => client.close());
 });
 
-router.get("/getAll",function(req,res){
-    fetchAll(res)
-    .then(console.log)
-    .catch(console.error)
-    .finally(() => client.close());
-});
-
 router.post("/updateAccount/:uid",function(req,res){
     uid = req.params.uid;
     updateAcc(req,res)
@@ -107,6 +100,18 @@ router.get("/photo/get/:id",function(req,res){
     res.sendFile(__dirname+"/profile/photo/"+req.params.id)
 });
 
+//admin area
+
+router.get("/getAll",function(req,res){
+    fetchAll(res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
+
+router.get("/getUnverify", function(req,res){
+    
+});
 async function veriUserName(res){
     await client.connect();
     console.log('Connected successfully to server');
@@ -138,9 +143,9 @@ async function fetchAll(res){
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Info");
-    let result = await collection.find({}).toArray();
+    let result = await collection.find({}).sort({_id:-1}).toArray();
     res.send(result);
-    
+    return result;
 };
 
 async function fetchAccount(res){
@@ -150,7 +155,7 @@ async function fetchAccount(res){
     const collection = db.collection("Info");
     let result = await collection.find({"uid":uid}).toArray();
     res.send(result);
-    
+    return result;
 };
 
 

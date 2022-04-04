@@ -31,7 +31,7 @@ import{
   IconButton,
   Avatar,
 } from '@mui/material';
-import { TryOutlined } from '@mui/icons-material';
+import { SentimentSatisfiedOutlined, TryOutlined } from '@mui/icons-material';
 
 let userInfo = [];
 
@@ -1293,58 +1293,61 @@ class ChangePw extends React.Component{
   }
 }
 
+let info = []
 function AdminUser(){
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
+  { field: 'uid', headerName: 'ID', width:180 },
   {
-    field: 'firstName',
+    field: 'first_name',
     headerName: 'First name',
-    width: 150,
-  },
-  {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
-  },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 110,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
     width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
   },
+  {
+    field: 'last_name',
+    headerName: 'Last name',
+    width: 80,
+  },
+  {
+    field: 'user_name',
+    headerName: 'username',
+    type: 'number',
+    width: 100,
+  },
+  {
+    field: 'point',
+    headerName: 'Point',
+    width: 50,
+  },
+  {
+    field: 'phone',
+    headerName: 'Phone'
+  },
+  {
+    field: 'email',
+    headerName: 'email',
+    width: 300,
+  },
+  {
+    field: 'verify',
+    headerName: 'Verify',
+    width: 50,
+  },
+  // {
+  //   field: 'college',
+  //   headerName: 'Collge'
+  // },
+  // {
+  //   field: 'faculty',
+  //   headerName: 'Faculty'
+  // },
+  // {
+  //   field: 'gender',
+  //   headerName: 'gender'
+  // },
 ];
-
-// const columns = [
-//   { field: 'id', headerName: 'ID', width: 70 },
-//   { field: 'lastName', headerName: 'Last name', width: 130 },
-//   { field: 'firstName', headerName: 'First name', width: 130 },
-//   {
-//     field: 'age',
-//     headerName: 'Age',
-//     type: 'number',
-//     width: 90,
-//   },
-//   {
-//     field: 'fullName',
-//     headerName: 'Full name',
-//     description: 'This column has a value getter and is not sortable.',
-//     sortable: false,
-//     width: 160,
-//     valueGetter: (params) =>
-//       `${params.data.firstName || ''} ${params.data.lastName || ''}`,
-//   },
-// ];
-
+const [userinfo,setInfo] = useState();
+const [mounted, setMounted] = useState(false);
 const rows = [
   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
@@ -1356,39 +1359,45 @@ const rows = [
   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
-//   const [userInfo,setInfo] = useState([]);
-//   const [fetchFinish,setFetch] = useState(false);
 
-// useEffect(()=>{
-//   if(fetchFinish==false){
-//   fetch('http://localhost:7000/dbAccount/getAll')
-//   .then(res=>res.json())
-//   .then(data=>{
-//       console.log(data);
-//       setInfo(data);
-//       setFetch(true)
-//       return;
-//   })
-//   .catch(err=>{
-//     console.log(err);
-//     // setFetch(false);
-//   });}
-// })
-// if(fetchFinish==false){
-//   return(<h1>loading</h1>)
-// }
+if(!mounted){
+  fetch('http://localhost:7000/dbAccount/getAll')
+  .then(res=>res.json())
+  .then(data=>{
+   setInfo(data);
+    console.log(data);
+  })
+  .catch(err=>console.log(err))
 
+}
+
+ useEffect(()=>{
+   setMounted(true);
+ })
+ 
+ if(mounted == false){
+   return(
+     <h1>loading</h1>
+   );
+ }else{
+   return(
+    <AdminTable row={userinfo} col={columns}/>
+  );
+}
+}
+
+function AdminTable(props){
   return(
     <div style={{ height: 800, width: '100%' }}>
       <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        getRowId={row => row._id}
+        rows={props.row}
+        columns={props.col}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
         // checkboxSelection
       />
     </div>
   );
 }
-
 export { Profile, Account, Address, AdminUser};
