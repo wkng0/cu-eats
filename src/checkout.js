@@ -3,6 +3,7 @@ import { AddNewAddress } from "./profile";
 import {UserContext} from './UserContext';
 import DiningIcon from '@mui/icons-material/LocalDining';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import CloseIcon from '@mui/icons-material/Close';
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
@@ -18,6 +19,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 
 const CutlerySwitch = styled(Switch)(({ theme }) => ({
@@ -227,14 +229,14 @@ function Checkout() {
                     keepMounted
                     transformOrigin={{ vertical: 'top', horizontal: 'left',}}
                     open={Boolean(anchorElNew)}
-                    sx={{mt: '15px', zIndex: '99999 !important'}}
+                    sx={{mt: '15px', zIndex: '10000'}}
                 >
-                    <Button 
+                    <IconButton 
                         size='small' onClick={handleCloseNew}
                         sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}  
                     >
-                        <ArrowBackIosIcon/>
-                    </Button>
+                        <CloseIcon/>
+                    </IconButton>
                     <AddNewAddress email={userEmail}/>
                 </Menu>
                 <FormControl>
