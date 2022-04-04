@@ -1,10 +1,8 @@
-import React from 'react';
-
-
+import React , { useState, useMemo }from 'react';
 
 import { LoginPage } from './login';
 import { UserComment, ContentPreview, AdminComment} from './comment';
-import { Profile, Account, Address} from './profile';
+import { Profile, Account, Address, AdminUser} from './profile';
 import { Cart } from './cart'
 import { Checkout } from './checkout'
 import { HomePage }  from './HomePage';
@@ -12,7 +10,7 @@ import { HomePage }  from './HomePage';
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
-
+import { UserContext } from "./UserContext";
 
 import './login.css';
 import {NavBar} from './component'
@@ -23,10 +21,14 @@ import { ShoppingCart } from './shoppingCart/sc-context';
 
 
 function App() {
+  const [user, setUser] = useState("l1jc1p8ltukap01mi3");
+  // const value = useMemo(() => ({ user, setUser }), [user, setUser]);
+
   return (
     <div className="App" style={{zIndex:9999 ,position:"relative"}}>
       <NavBar/>
       <BrowserRouter>
+        <UserContext.Provider value={{user, setUser}}>
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/login" element={<LoginPage/>} />
@@ -42,15 +44,15 @@ function App() {
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
 
           <Route path="/admin/comment/" element={<AdminComment/>}/>
-          
+          <Route path="/admin/profile" element={<AdminUser/>}/>
           
           
           
           
           
           <Route path="*" element={<NoMatch/>} />
-          
-        </Routes>
+          </Routes>
+         </UserContext.Provider>
       </BrowserRouter>
       
     </div>

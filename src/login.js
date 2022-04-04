@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useContext} from 'react'
+import {UserContext} from './UserContext';
 import './login.css';
 import  ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
@@ -274,6 +275,10 @@ class LoginWithPassword extends React.Component{
 //         );
 // }
 
+const colleges =["None","CC","CW","MS","NA","SH","SHAW","UC","WS","WYS","Others"];
+const faculties = ["None","Arts","Business Administration","Education","Engineering","Law","Medicine","Science","Social Science","Others"];
+const genders = ["None","Male","Female","Others"];
+
 class Register extends React.Component{
     constructor(props){
         super(props);
@@ -289,6 +294,7 @@ class Register extends React.Component{
             gender:'',
             faculty:'',
             college:'',
+            uid:'',
             iconA:"block",
             iconB:"none",
             iconC:"block",
@@ -318,7 +324,8 @@ class Register extends React.Component{
         this.setState({lname: event.target.value})
     }
     handleChangeUsername(event){
-        this.setState({username: event.target.value})
+        this.setState({username: event.target.value});
+        this.setState({uid: this.createId()});
     }
     handleChangePw1(event){
         this.setState({pw1: event.target.value})
@@ -402,10 +409,13 @@ class Register extends React.Component{
             });
     }
 
+    createId(){
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    };
 
     register(){
         let regex = new RegExp('[a-z0-9]+@+[a-z0-9]+.cuhk.edu.hk');
-
+        console.log("testID",this.createId());
         console.log(this.state.fname);
         let check = true ;
         if(regex.test(this.state.email)==false || this.state.email==""){
@@ -442,6 +452,7 @@ class Register extends React.Component{
                             "faculty": this.state.faculty,
                             "college": this.state.college,
                             "gender": this.state.gender,
+                            "uid": this.state.uid,
                         })  
                     })
                     
@@ -521,10 +532,7 @@ class Register extends React.Component{
                                 <NativeSelect
                                 onChange={this.handleChangeGender}
                                 >
-                                <option value="None">None</option>
-                                <option value="F">Female</option>
-                                <option value="M">Male</option>
-                                <option value="O">Others</option>
+                                {genders.map((gen,index)=>(<option key={gen} value={gen}>{gen}</option>))}
                                 </NativeSelect>
                             </FormControl>
                             </Box>
@@ -536,16 +544,7 @@ class Register extends React.Component{
                                 <NativeSelect
                                 onChange={this.handleChangeCollege}
                                 >
-                                <option value="None">None</option>
-                                <option value="CC">CC</option>
-                                <option value="CW">CW</option>
-                                <option value="MS">MS</option>
-                                <option value="NA">NA</option>
-                                <option value="SH">SH</option>
-                                <option value="SHAW">SHAW</option>
-                                <option value="UC">UC</option>
-                                <option value="WS">WS</option>
-                                <option value="WYS">WYS</option>
+                                {colleges.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
                                 </NativeSelect>
                             </FormControl>
                             </Box>
@@ -557,16 +556,7 @@ class Register extends React.Component{
                                 <NativeSelect
                                 onChange={this.handleChangeFaculty}
                                 >
-                                <option value="None">None</option>
-                                <option value="Arts">Arts</option>
-                                <option value="Business Administration">Business Administration</option>
-                                <option value="Education">Education</option>
-                                <option value="Engineering">Engineering</option>
-                                <option value="Law">Law</option>
-                                <option value="Medicine">Medicine</option>
-                                <option value="Science">Science</option>
-                                <option value="Social Science">Social Science</option>
-                                <option value="">Others</option>
+                                {faculties.map((fac,index)=>(<option key={fac}value={fac}>{fac}</option>))}
                                 </NativeSelect>
                             </FormControl>
                             </Box>

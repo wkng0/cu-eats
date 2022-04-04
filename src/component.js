@@ -13,7 +13,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import './login.css';
 import logo_yellow from './image/logo_yellow.png'
-
+import LoginIcon from '@mui/icons-material/Login';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -131,7 +131,6 @@ function NavBar() {
                         </Button>
                         </Tooltip>
                     </Box>
-
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -153,6 +152,7 @@ function NavBar() {
                                 <a href={settingsRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{setting}</a>
                             </MenuItem>
                         ))}
+                        
                         </Menu>
                     </Box>
                 </Toolbar>

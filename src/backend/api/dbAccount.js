@@ -13,6 +13,7 @@ const client=new MongoClient(url);
 const dbName="Account";
 const space=""
 let user_email = "";
+let uid = "";
 let user_name = "";
 
 let transporter=nodemailer.createTransport({
@@ -54,23 +55,30 @@ router.get("/userName/:name",function(req,res){
     .finally(() => client.close());
 });
 
-router.get("/get/:email",function(req,res){
-    user_email=req.params.email;
+router.get("/get/:uid",function(req,res){
+    uid=req.params.uid;
     fetchAccount(res)
     .then(console.log)
     .catch(console.error)
     .finally(() => client.close());
 });
 
-router.post("/updateAccount/:email",function(req,res){
-    user_email = req.params.email;
+router.get("/getAll",function(req,res){
+    fetchAll(res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
+
+router.post("/updateAccount/:uid",function(req,res){
+    uid = req.params.uid;
     updateAcc(req,res)
     .then(console.log)
     .catch(console.error)
     .finally(() => client.close());
 })
 
-router.post("/updatePw/:email",function(req,res){
+router.post("/updatePw/:uid",function(req,res){
     user_email = req.params.email;
     updatePw(req,res)
     .then(console.log)
@@ -78,7 +86,7 @@ router.post("/updatePw/:email",function(req,res){
     .finally(() => client.close());
 })
 
-router.post("/changePic/:email",function(req,res){
+router.post("/changePic/:uid",function(req,res){
     user_email = req.params.email;
     changePic(req,res)
     .then(console.log)
@@ -125,15 +133,26 @@ async function veriAcc(res){
     }
 };
 
+async function fetchAll(res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    let result = await collection.find({}).toArray();
+    res.send(result);
+    
+};
+
 async function fetchAccount(res){
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Info");
-    let result = await collection.find({"email":user_email}).toArray();
+    let result = await collection.find({"uid":uid}).toArray();
     res.send(result);
     
 };
+
 
 async function addUser(req,res){
     await client.connect();
@@ -154,7 +173,8 @@ async function addUser(req,res){
         gender: req.body['gender'],
         pic: "",
         token:token,
-        verify:0
+        verify:0,
+        uid: req.body['uid'],
     });
     let emailSender={
         name: "CUEats",
@@ -184,7 +204,7 @@ async function updateAcc(req,res){
     const db = client.db(dbName);
     const collection = db.collection("Info");
     const insertResult = await  collection.updateOne(
-        {"email":user_email},
+        {"uid":uid},
         {
             $set:
             {
@@ -207,7 +227,7 @@ async function updatePw(req,res){
     const db = client.db(dbName);
     const collection = db.collection("Info");
     const insertResult = await collection.updateOne(
-        {"email":user_email},
+        {"uid":uid},
         {
             $set:
             {
@@ -223,7 +243,7 @@ async function changePic(req,res){
     const db = client.db(dbName);
     const collection = db.collection("Info");
     const insertResult = await collection.updateOne(
-        {"email":user_email},
+        {"uid":uid},
         {
             $set:
             {
@@ -234,16 +254,16 @@ async function changePic(req,res){
 }
 
 // for address
-router.get("/getAddress/:email",function(req,res){
-    user_email=req.params.email;
+router.get("/getAddress/:uid",function(req,res){
+    uid=req.params.uid;
     fetchAddress(res)
     .then(console.log)
     .catch(console.error)
     .finally(() => client.close());
 });
 
-router.post("/addAddress/:email",function(req,res){
-    user_email = req.params.email;
+router.post("/addAddress/:uid",function(req,res){
+    uid = req.params.uid;
     addAddress(req,res)
     .then(console.log)
     .catch(console.error)
@@ -255,7 +275,7 @@ async function fetchAddress(res){
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Address");
-    let result = await collection.find({"email":user_email}).toArray();
+    let result = await collection.find({"uid":uid}).toArray();
     let address = [];
     for(let i = 0; i < result.length; i++){
         if(result[i].room!=""){
@@ -281,7 +301,7 @@ async function addAddress(req,res){
     const db = client.db(dbName);
     const collection = db.collection("Address");
     const insertResult = await collection.insertOne({ 
-        email: req.body['email'],
+        uid: req.body['uid'],
         room: req.body['room'],
         building: req.body['building'],
         college: req.body['college'],

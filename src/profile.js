@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+import {UserContext} from './UserContext';
 import logo from './image/logo.jpeg';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -8,6 +9,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
+import { DataGrid } from '@mui/x-data-grid';
 import{
   Link,
   Box,
@@ -34,29 +36,37 @@ import { TryOutlined } from '@mui/icons-material';
 let userInfo = [];
 
 function Profile(){
+  const {user, setUser} = useContext(UserContext);
   const[username,setUsername] = useState('');
   const[email,setEmail] = useState('0.0@link.cuhk.edu.hk');
   const[point,setPoint] = useState(-1);
   const[pic, setPic] = useState('');
+  const[fetchFinish, setFetch] = useState(true);
 
   useEffect(()=>{
-    fetch('http://localhost:7000/dbAccount/get/'+email)
+    fetch('http://localhost:7000/dbAccount/get/'+user)
     .then(res=>res.json())
     .then(data=>{
         console.log(data[0]);
+        setEmail(data[0].email);
         setUsername(data[0].user_name);
         setPoint(data[0].point);
         setPic(data[0].pic);
+        setFetch(true);
+    })
+    .catch(err=>{
+      console.log(err);
+      setFetch(false);
     })
 })
 
-  if (username===''){
+  if (username===''||fetchFinish == false){
     return(
       <h1> loading ...</h1>
     )
   }
   return(
-    <ProfileHeader username={username} point={point} email={email} pic={pic}/>
+    <ProfileHeader username={username} point={point} email={email} pic={pic} uid={user}/>
   )
 }
 
@@ -71,6 +81,7 @@ class ProfileHeader extends React.Component{
     email:this.props.email,
     pic: this.props.pic,
     edit: true,
+    change: false,
     }
     this.changeIcon = this.changeIcon.bind(this);
     this.updateIcon = this.updateIcon.bind(this);
@@ -78,8 +89,7 @@ class ProfileHeader extends React.Component{
 
 updateIcon(){
   console.log("pic",this.state.pic);
-    this.setState({edit: true});
-    fetch('http://localhost:7000/dbAccount/changePic/'+this.props.email, {
+    fetch('http://localhost:7000/dbAccount/changePic/'+this.props.uid, {
       method: 'POST', 
       body: new URLSearchParams({
           "pic": this.state.pic,
@@ -87,12 +97,13 @@ updateIcon(){
     })
     .then(data=>console.log(data))
     .then(()=>{
-      window.location.reload();
-      return;
+      this.setState({edit: true});
     })
     .catch((error)=>{
       console.log(error);
     })
+      window.location.reload();
+      return;
 }
 
 changeIcon(event){
@@ -116,10 +127,9 @@ changeIcon(event){
 }
 
   render(){
-    const login = this.state.login;
       return(
         <div>
-        { login?
+        { this.props.uid?
         (
           <div>
               <div class="container fluid">
@@ -128,7 +138,7 @@ changeIcon(event){
                       </div>
                       <div class="mt-5 text-center">
                       
-                        {this.state.edit? 
+                        {this.state.edit&&!this.state.change? 
                         <>
                         <label htmlFor="icon-button-file" >
                         <Avatar 
@@ -145,21 +155,22 @@ changeIcon(event){
                           </IconButton>
                           </label></>
                           :<>
-                          <div >
+                          <label for="button">
                               <Avatar 
                             src={'http://localhost:7000/dbAccount/photo/get/'+this.state.pic}
                             style={{
                               margin: "2px",
                               width: "200px",
                               height: "200px",
+                              justifyContent: "center", 
+                              display: "flex" 
                             }} 
                           />
                           <IconButton style={{color: '#5D4E99'}} onClick={this.updateIcon}>
                             <CheckIcon/>
                             </IconButton>
-                            </div></>}
-                      
-                      
+                            </label>
+                            </>}
                           <h1 class="mb-0" style={{color: "#F4CB86"}}>
                             {this.props.username}
                             </h1> <span class="text-muted d-block mb-2" style={{color: "#F4CB86"}} >
@@ -209,9 +220,10 @@ function Address(){
   const [email,setEmail] = useState('0.0@link.cuhk.edu.hk');
   const [fetchFinish, setFetch] = useState(false);
   const [savedAddress,setAddress] = useState([]);
+  const {user, setUser} = useContext(UserContext);
 
   useEffect(()=>{
-    fetch('http://localhost:7000/dbAccount/getAddress/'+email)
+    fetch('http://localhost:7000/dbAccount/getAddress/'+user)
     .then(res=>res.json())
     .then(res=>setAddress(res))
     // .then(()=>console.log(savedAddress))
@@ -323,6 +335,7 @@ const otherHall = ["iHouse block 1","iHouse block 2","iHouse block 3","iHouse bl
 const [chooseCol, setCol] = useState('');
 const [chooseBlg, setBlg] = useState('');
 const [room,setRoom] = useState('');
+const {user, setUser} = useContext(UserContext);
 
   const handleChangeRoom = (event)=>{
     setRoom(event.target.value);
@@ -343,7 +356,7 @@ const [room,setRoom] = useState('');
     fetch('http://localhost:7000/dbAccount/addAddress/'+props.email, { 
       method: 'POST', 
       body: new URLSearchParams({
-         "email": props.email,
+         "uid": user,
          "room": room,
          "building": chooseBlg,
          "college": chooseCol,
@@ -385,6 +398,7 @@ const [room,setRoom] = useState('');
           College (select if you are inside a college hostel,non college hostel please select Others)
         </InputLabel>
         <NativeSelect
+        defaultValue={chooseCol}
         onChange={handleChangeCollege}
         >
           {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
@@ -600,6 +614,7 @@ const [room,setRoom] = useState('');
         College (select if you are inside a college hostel,non college hostel please select Others)
       </InputLabel>
       <NativeSelect
+      // defaultValue={chooseCol}
       onChange={handleChangeCollege}
       >
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
@@ -689,7 +704,7 @@ function Account(props){
   const [username, setUsername] = useState('');
   const [newUsername, setNewUsername] = useState('');
   const[point, setPoint] = useState(-1);
-  const [email, setEmail] = useState('csci3100.d2@group.cuhk.edu.hk');
+  const [email, setEmail] = useState('');
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [phone, setPhone] = useState('');
@@ -698,6 +713,10 @@ function Account(props){
   const [gender, setGender] = useState('');
   const [fetchFinish, setFetch] = useState(false);
   const [unique, setUnique] = useState(false);
+  const colleges =["None","CC","CW","MS","NA","SH","SHAW","UC","WS","WYS","Others"];
+  const faculties = ["None","Arts","Business Administration","Education","Engineering","Law","Medicine","Science","Social Science","Others"];
+  const genders = ["None","Male","Female","Others"];
+  const {user, setUser} = useContext(UserContext);
 
   const handleChangeGender = (event)=>{
     setGender(event.target.value)
@@ -725,9 +744,10 @@ const handleChangePhone = (event)=>{
 
   useEffect(()=>{
     if(fetchFinish == false){
-   fetch('http://localhost:7000/dbAccount/get/'+email)
+   fetch('http://localhost:7000/dbAccount/get/'+user)
    .then(res=>res.json())
    .then(data=>{
+       setEmail(data[0].email);
        setUsername(data[0].user_name);
        setPoint(data[0].point);
        setFname(data[0].first_name);
@@ -769,26 +789,25 @@ const updateInfo = ()=>{
   console.log(college)
   console.log(gender)
   console.log(faculty)
-  if(newUsername==""){
-    setNewUsername(username);
-  }
-  if(newUsername!=username){
+
+    console.log("checkname");
     fetch('http://localhost:7000/dbAccount/userName/' + newUsername)
     .then(res=>res.json())
     .then((data)=>{
       if(data.unique == "false"){
         setUnique(false);
         window.alert("Username already exists. Please change your username");
+        return;
       }else{
         setUnique(true);
       }
     })
     .catch(err=>console.log(err));
-    }else{
-  fetch('http://localhost:7000/dbAccount/updateAccount/'+email, { //saving to database
+    if(newUsername==""){
+  fetch('http://localhost:7000/dbAccount/updateAccount/'+user, { //saving to database
       method: 'POST', 
       body: new URLSearchParams({
-          "user_name": newUsername,
+          "user_name": username,
           "first_name": fname,
           "last_name":lname,
           "phone": phone,
@@ -802,7 +821,27 @@ const updateInfo = ()=>{
       console.log(err);
   });
   window.location.reload();
+}else{
+  fetch('http://localhost:7000/dbAccount/updateAccount/'+user, { //saving to database
+  method: 'POST', 
+  body: new URLSearchParams({
+      "user_name": newUsername,
+      "first_name": fname,
+      "last_name":lname,
+      "phone": phone,
+      "college": college,
+      "faculty": faculty,
+      "gender": gender,
+  })  
+})
+.then(res=>console.log(res))
+.catch((err)=>{
+  console.log(err);
+});
+window.location.reload();
+
 }
+
   return;
 
 }
@@ -877,10 +916,7 @@ const updateInfo = ()=>{
           defaultValue={gender}
           onChange={handleChangeGender}
           >
-          <option value="None">None</option>
-          <option value="F">Female</option>
-          <option value="M">Male</option>
-          <option value="O">Others</option>
+          {genders.map((gen,index)=>(<option key={gen} value={gen}>{gen}</option>))}
           </NativeSelect>
       </FormControl>
       </Box>
@@ -893,16 +929,7 @@ const updateInfo = ()=>{
           defaultValue={college}
           onChange={handleChangeCollege}
           >
-          <option value="None">None</option>
-          <option value="CC">CC</option>
-          <option value="CW">CW</option>
-          <option value="MS">MS</option>
-          <option value="NA">NA</option>
-          <option value="SH">SH</option>
-          <option value="SHAW">SHAW</option>
-          <option value="UC">UC</option>
-          <option value="WS">WS</option>
-          <option value="WYS">WYS</option>
+         {colleges.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
           </NativeSelect>
       </FormControl>
       </Box>
@@ -915,16 +942,7 @@ const updateInfo = ()=>{
           defaultValue={faculty}
           onChange={handleChangeFaculty}
           >
-          <option value="None">None</option>
-          <option value="Arts">Arts</option>
-          <option value="Business Administration">Business Administration</option>
-          <option value="Education">Education</option>
-          <option value="Engineering">Engineering</option>
-          <option value="Law">Law</option>
-          <option value="Medicine">Medicine</option>
-          <option value="Science">Science</option>
-          <option value="Social Science">Social Science</option>
-          <option value="Others">Others</option>
+            {faculties.map((fac,index)=>(<option key={fac}value={fac}>{fac}</option>))}
           </NativeSelect>
       </FormControl>
       </Box>
@@ -946,6 +964,7 @@ function FormDialog(props) {
   const [submitValid, setSubmit] = useState(false);
   const [veri, setVeri] = useState(false);
   const [pw, setPw] = useState('');
+  const {user, setUser} = useContext(UserContext);
   const handleClickOpen = (event) => {
     setOpen(true);
     setAnchorEl(event.currentTarget);
@@ -987,7 +1006,7 @@ function FormDialog(props) {
       window.alert("wrong password, please enter again.");
       return;
     }else{
-      fetch('http://localhost:7000/dbAccount/updatePw/'+ props.email, { 
+      fetch('http://localhost:7000/dbAccount/updatePw/'+ user, { 
       method: 'POST', 
       body: new URLSearchParams({
           "password": pw2
@@ -1017,7 +1036,7 @@ function FormDialog(props) {
       setSubmit(false);
     }
     if(oldpw==""){
-      fetch('http://localhost:7000/dbAccount/get/'+ props.email)
+      fetch('http://localhost:7000/dbAccount/get/'+ user)
         .then(res=>res.json())
         .then(data=>{
           setPw(data[0].password);
@@ -1274,5 +1293,102 @@ class ChangePw extends React.Component{
   }
 }
 
+function AdminUser(){
 
-export { Profile, Account, Address};
+const columns = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  {
+    field: 'firstName',
+    headerName: 'First name',
+    width: 150,
+  },
+  {
+    field: 'lastName',
+    headerName: 'Last name',
+    width: 150,
+  },
+  {
+    field: 'age',
+    headerName: 'Age',
+    type: 'number',
+    width: 110,
+  },
+  {
+    field: 'fullName',
+    headerName: 'Full name',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 160,
+    valueGetter: (params) =>
+      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+  },
+];
+
+// const columns = [
+//   { field: 'id', headerName: 'ID', width: 70 },
+//   { field: 'lastName', headerName: 'Last name', width: 130 },
+//   { field: 'firstName', headerName: 'First name', width: 130 },
+//   {
+//     field: 'age',
+//     headerName: 'Age',
+//     type: 'number',
+//     width: 90,
+//   },
+//   {
+//     field: 'fullName',
+//     headerName: 'Full name',
+//     description: 'This column has a value getter and is not sortable.',
+//     sortable: false,
+//     width: 160,
+//     valueGetter: (params) =>
+//       `${params.data.firstName || ''} ${params.data.lastName || ''}`,
+//   },
+// ];
+
+const rows = [
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+];
+//   const [userInfo,setInfo] = useState([]);
+//   const [fetchFinish,setFetch] = useState(false);
+
+// useEffect(()=>{
+//   if(fetchFinish==false){
+//   fetch('http://localhost:7000/dbAccount/getAll')
+//   .then(res=>res.json())
+//   .then(data=>{
+//       console.log(data);
+//       setInfo(data);
+//       setFetch(true)
+//       return;
+//   })
+//   .catch(err=>{
+//     console.log(err);
+//     // setFetch(false);
+//   });}
+// })
+// if(fetchFinish==false){
+//   return(<h1>loading</h1>)
+// }
+
+  return(
+    <div style={{ height: 800, width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        // checkboxSelection
+      />
+    </div>
+  );
+}
+
+export { Profile, Account, Address, AdminUser};
