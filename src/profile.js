@@ -1643,4 +1643,4 @@ function AdminTable(props){
     </div>
   );
 }
-export { Profile, Account, Address, AdminUser};
+export { Profile, Account, Address, AdminUser, AddNewAddress};

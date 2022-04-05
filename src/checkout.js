@@ -1,6 +1,9 @@
 import Cart from "./cart.json";
+import { AddNewAddress } from "./profile";
+import {UserContext} from './UserContext';
 import DiningIcon from '@mui/icons-material/LocalDining';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import CloseIcon from '@mui/icons-material/Close';
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
@@ -16,6 +19,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
 
 const CutlerySwitch = styled(Switch)(({ theme }) => ({
     padding: 8,
@@ -44,15 +49,19 @@ function RadioIcon(props) {
       <Radio size="small"  sx={{color: '#5D4E99', '&.Mui-checked': {color:'#5D4E99'}}} {...props}/>
 );}
 
-
 function Checkout() {
     const [name, setName] = React.useState('Chris Wong');
     const [phone, setPhone] = React.useState('98765432');
-    const [email, setEmail] = React.useState('chriswong@gmail.com');
+    const [email, setEmail] = React.useState('0.0@link.cuhk.edu.hk');
     const [pointUse, setPoint] = React.useState(null);
     const [discount, setdiscount] = React.useState(0);
-    const [address, setAddress] = React.useState('AddressA');
+    const [address, setAddress] = React.useState(null);
     const [cutlery, setCutlery] = React.useState(true);
+    const [userEmail,setUserEmail] = React.useState('0.0@link.cuhk.edu.hk');
+    const [fetchFinish, setFetch] = React.useState(false);
+    const [savedAddress,setdbAddress] = React.useState([]);
+    const {user, setUser} = React.useContext(UserContext);
+    const [anchorElNew, setAnchorElNew] = React.useState(null);
     const handleChangeName = (event) => {setName(event.target.value);};
     const handleChangePhone = (event) => {setPhone(event.target.value);};
     const handleChangeEmail = (event) => {setEmail(event.target.value);};
@@ -87,7 +96,49 @@ function Checkout() {
             console.error('Error:', error);
         });
     }
+    const handleAddNew = (event) => {
+        setAnchorElNew(event.currentTarget);
+    };
+    const handleCloseNew = () => {
+        setAnchorElNew(null);
+    };
+    const fetchAddress = (event) => {
+        console.log("start fetch")
+        fetch('http://localhost:7000/dbAccount/getAddress/' + user)
+            .then(res=>res.json())
+            .then(res=>setdbAddress(res))
+            .then(()=>setFetch(true))
+            .catch(err=>{console.log(err); setFetch(false);})
+    }
+    const showAddress = (event) => 
+    { 
+        if(fetchFinish == false){
+            return(
+                <h1>loading address...</h1>
+            )
+        }
+        if(fetchFinish == true){
+            console.log("Address:",savedAddress);
+            return(
+                <>
+                <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue={savedAddress[0]}
+                    name="radio-buttons-group"
+                    color="secondary"
+                    onChange={handleAddress}
+                >
+                    {savedAddress.map((address)=>(
+                        <FormControlLabel value={address} control={<RadioIcon/>} label={address} />
+                    ))}
+                </RadioGroup>
+                </>
+            )
+          }
+      }
     React.useEffect(()=>{setdiscount(pointUse/10);},[pointUse])
+    React.useEffect(()=>{fetchAddress()},[address])
+      
     let receiptID = 'r001';
     let userID = 'user001';
     let total = 0;
@@ -159,26 +210,44 @@ function Checkout() {
             </Box>
             <br/><Divider /><br/>
             <Box>
-                <h4 style={{color: '#5D4E99'}}>Delivery Address</h4>
-                <FormControl>
-                    <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="AddressA"
-                        name="radio-buttons-group"
-                        color="secondary"
-                        onChange={handleAddress}
+                <Grid container>
+                    <Grid item xs={9}><h4 style={{color: '#5D4E99'}}>Delivery Address</h4></Grid>
+                    <Grid item xs={3}  style ={{textAlign:'right'}}>
+                        <Button 
+                            size='small'
+                            onClick={handleAddNew}
+                            sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}
+                        >
+                            + Add New
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Menu 
+                    id="menu-appbar" 
+                    anchorEl={anchorElNew} 
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left',}}
+                    keepMounted
+                    transformOrigin={{ vertical: 'top', horizontal: 'left',}}
+                    open={Boolean(anchorElNew)}
+                    sx={{mt: '15px', zIndex: '10000'}}
+                >
+                    <IconButton 
+                        size='small' onClick={handleCloseNew}
+                        sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}  
                     >
-                        <FormControlLabel value="AddressA" control={<RadioIcon/>} label="Address A" />
-                        <FormControlLabel value="AddressB" control={<RadioIcon/>} label="Address B" />
-                        <FormControlLabel value="AddressC" control={<RadioIcon/>} label="Address C" />
-                    </RadioGroup>
+                        <CloseIcon/>
+                    </IconButton>
+                    <AddNewAddress email={userEmail}/>
+                </Menu>
+                <FormControl>
+                    {showAddress()}
                 </FormControl>
             </Box>
             <br/><Divider /><br/>          
             <h4 style={{color: '#5D4E99'}}>Payment</h4>
             <Grid container>
                 <Grid item xs={9}>Members ordering entitlement</Grid>
-                <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99', textAlign:'right'}}>{~~(total/50)*5} Points</Grid>
+                <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}>{~~(total/50)*5} Points</Grid>
             </Grid>
             <p><small>5 CU EATS Points rebate for every HK$50 net ordering amount of each eligible CUHK email.</small></p>  
             <Grid container>
@@ -218,7 +287,6 @@ function Checkout() {
                         control={<CutlerySwitch  defaultChecked  onChange={handleCutlery}/>}
                         label=''
                     />
-                    {console.log("need:", cutlery)}
                 </Grid>
             </Grid>
         </FormGroup>
