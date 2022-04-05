@@ -9,7 +9,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid  } from '@mui/x-data-grid';
 import{
   Link,
   Box,
@@ -31,7 +31,7 @@ import{
   IconButton,
   Avatar,
 } from '@mui/material';
-import { SentimentSatisfiedOutlined, TryOutlined } from '@mui/icons-material';
+import { FlashlightOnRounded, SentimentSatisfiedOutlined, TryOutlined } from '@mui/icons-material';
 
 let userInfo = [];
 
@@ -41,9 +41,10 @@ function Profile(){
   const[email,setEmail] = useState('0.0@link.cuhk.edu.hk');
   const[point,setPoint] = useState(-1);
   const[pic, setPic] = useState('');
-  const[fetchFinish, setFetch] = useState(true);
+  const[fetchFinish, setFetch] = useState(false);
 
   useEffect(()=>{
+    if(fetchFinish== false){
     fetch('http://localhost:7000/dbAccount/get/'+user)
     .then(res=>res.json())
     .then(data=>{
@@ -57,7 +58,7 @@ function Profile(){
     .catch(err=>{
       console.log(err);
       setFetch(false);
-    })
+    })}
 })
 
   if (username===''||fetchFinish == false){
@@ -223,6 +224,7 @@ function Address(){
   const {user, setUser} = useContext(UserContext);
 
   useEffect(()=>{
+    if(fetchFinish == false){
     fetch('http://localhost:7000/dbAccount/getAddress/'+user)
     .then(res=>res.json())
     .then(res=>setAddress(res))
@@ -230,7 +232,7 @@ function Address(){
     .then(()=>setFetch(true))
     .catch(err=>{console.log(err);
     setFetch(false);
-  })
+  })}
   })
 
   if(fetchFinish == false){
@@ -256,7 +258,7 @@ function Address(){
 }
 
 function AddNewAddress(props){
-  const college =["None","CC","CW","MS","NA","SH","SHAW","UC","WS","WYS","Others"];
+  const college =["None","CC","CW","MS","NA","SH","SHAW","UC","WS","WYS","Other Hostel","Other Building"];
   const building=["None","AB1 Academic Building No.1","AMEW Art Museum East Wing","ARC Lee Shau Kee Architecture Building","BMS Basic Medical Sciences Building",
 "CCCC Chung Chi College Chapel","CCT Chung Chi College Theology Building","CK TSE C.K. Tse Room (C.C. Library)","CKB Chen Kou Bun Building",
 "CML Ch'ien Mu Library",
@@ -317,7 +319,7 @@ function AddNewAddress(props){
 "YCT President Chi-tung Yung Memorial Building",
 "YIA Yasumoto International Academic Park"]
 
-const ccHall = ["Hua Lien Tang",
+const ccHall = ["None","Hua Lien Tang",
   "Lee Shu Pui Hall",
   "Madam S. H. Ho Hall",
   "Ming Hua Tang",
@@ -327,14 +329,18 @@ const ccHall = ["Hua Lien Tang",
   "Wen Chih Tang",
   "Wen Lin Tang",
   "Ying Lin Tang"];
-const naHall = ["Chih Hsing Hall","Xuesi Hall","Grace Tien Hall","Daisy Li Hall"];
-const ucHall = ["Adam Schall Residence","Bethlehem Hall","Chan Chun Ha Hostel","Hang Seng Hall"];
-const shawHall = ["Kuo Mou Hall","Studnet Hostel II high block","Studnet Hostel II low block"];
-const otherHall = ["iHouse block 1","iHouse block 2","iHouse block 3","iHouse block 4","iHouse block 5","Postgraduate Hall 1","Postgraduate Hall 2","Postgraduate Hall 3","Postgraduate Hall 4","Postgraduate Hall 5","Postgraduate Hall 6"]
-
+const naHall = ["None","Chih Hsing Hall","Xuesi Hall","Grace Tien Hall","Daisy Li Hall"];
+const ucHall = ["None","Adam Schall Residence","Bethlehem Hall","Chan Chun Ha Hostel","Hang Seng Hall"];
+const shawHall = ["None","Kuo Mou Hall","Studnet Hostel II high block","Studnet Hostel II low block"];
+const otherHall = ["None","iHouse","Postgraduate Hall","University Residence","UC staff Residence","Panacea Lodge"]
+const msHall = ["None","Morningside College Tower Block","Maurice R. Greenberg Building"];
+const shHall = ["None","Lee Quo Wei Hall","Ho Tim Hall"];
+const wsHall = ["None","North Block","South Block"];
+const wysHall = ["None","WYS East Block","WYS West Block"];
 const [chooseCol, setCol] = useState('');
 const [chooseBlg, setBlg] = useState('');
 const [room,setRoom] = useState('');
+const [valid, setValid] = useState(false);
 const {user, setUser} = useContext(UserContext);
 
   const handleChangeRoom = (event)=>{
@@ -345,6 +351,9 @@ const {user, setUser} = useContext(UserContext);
   const handleChangeCollege=(event)=>{
     setCol(event.target.value);
     console.log(event.target.value);
+    if(event.targe.value=="CW"){
+      setBlg("Student Hostel");
+    }
   }
 
   const handleChangeBuilding=(event)=>{
@@ -353,6 +362,10 @@ const {user, setUser} = useContext(UserContext);
   }
 
   const handleNewAddress=(event)=>{
+    if(chooseBlg==""||chooseBlg=="None"){
+      window.alert("Choose the building please");
+      return;
+    }
     fetch('http://localhost:7000/dbAccount/addAddress/'+props.email, { 
       method: 'POST', 
       body: new URLSearchParams({
@@ -365,13 +378,14 @@ const {user, setUser} = useContext(UserContext);
     })
     .then(()=>console.log())
     .catch(err=>console.log(err))
+    window.location.reload();
   }
 
-  if(chooseCol=="None"||chooseCol == ""){
+  if(chooseCol=="Other Building"||chooseCol == ""){
     return(
       <>
         <h5>Add new address</h5>
-         <Box sx={{ m: 5 ,display: 'inline'}}>
+         {chooseCol?<><Box sx={{ m: 5 ,display: 'inline'}}>
         <TextField
           id="standard-required"
           label="Room"
@@ -390,7 +404,7 @@ const {user, setUser} = useContext(UserContext);
           {building.map((blg,index)=>(<option value={blg} key={blg}>{blg}</option>))}
         </NativeSelect>
       </FormControl>
-        </Box>
+        </Box></>:<></>}
         
          <Box sx={{ m: 5 ,display: 'inline'}}>
       <FormControl sx={{width:500}}>
@@ -415,7 +429,7 @@ const {user, setUser} = useContext(UserContext);
     return(
     <>
       <h5>Add new address</h5>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       {chooseCol?<><Box sx={{ m: 5 ,display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -434,7 +448,7 @@ const {user, setUser} = useContext(UserContext);
         {ccHall.map((col,index)=>(<option value={ccHall[index]}>{ccHall[index]}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box></>:<></>}
       
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
@@ -442,13 +456,14 @@ const {user, setUser} = useContext(UserContext);
         College (select if you are inside a college hostel,non college hostel please select Others)
       </InputLabel>
       <NativeSelect
+      defaultValue={chooseCol}
       onChange={handleChangeCollege}
       >
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress} disable={!valid}>
         <CheckIcon/>
         save
       </IconButton>
@@ -458,7 +473,7 @@ const {user, setUser} = useContext(UserContext);
     return(
       <>
       <h5>Add new address</h5>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       {chooseCol?<><Box sx={{ m: 5 ,display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -477,7 +492,7 @@ const {user, setUser} = useContext(UserContext);
         {naHall.map((col,index)=>(<option value={naHall[index]}>{naHall[index]}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box></>:<></>}
       
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
@@ -501,7 +516,7 @@ const {user, setUser} = useContext(UserContext);
     return(
       <>
       <h5>Add new address</h5>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       {chooseCol?<><Box sx={{ m: 5 ,display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -520,7 +535,7 @@ const {user, setUser} = useContext(UserContext);
         {ucHall.map((col,index)=>(<option value={ucHall[index]}>{ucHall[index]}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box></>:<></>}
       
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
@@ -543,8 +558,7 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="SHAW"){  
     return(
       <>
-      <h5>Add new address</h5>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5>Add new address</h5><Box sx={{ m: 5 ,display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -568,7 +582,7 @@ const {user, setUser} = useContext(UserContext);
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        College (select if you are inside a college hostel,non college hostel please select Others)
+        College 
       </InputLabel>
       <NativeSelect
       onChange={handleChangeCollege}
@@ -583,14 +597,14 @@ const {user, setUser} = useContext(UserContext);
       </IconButton>
       </>
     )
-  }else if(chooseCol=="Others"){
+  }else if(chooseCol=="Other Hostel"){
     return(
       <>
       <h5>Add new address</h5>
        <Box sx={{ m: 5 ,display: 'inline'}}>
       <TextField
         id="standard-required"
-        label="Room"
+        label="Room, Block"
         variant="standard"
         onChange={handleChangeRoom}
       />
@@ -627,36 +641,254 @@ const {user, setUser} = useContext(UserContext);
       </IconButton>
       </>
     )
-  }else{
+  }else if(chooseCol=="MS"){  
     return(
-    <>
-    <h5>Add new address</h5>
+      <>
+      <h5>Add new address</h5>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        SHAW Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {msHall.map((col,index)=>(<option value={msHall[index]}>{msHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College 
+      </InputLabel>
+      <NativeSelect
+      defaultValue= {chooseCol}
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else if(chooseCol=="SH"){  
+    return(
+      <>
+      <h5>Add new address</h5>
      <Box sx={{ m: 5 ,display: 'inline'}}>
-    <TextField
-      id="standard-required"
-      label="Room"
-      variant="standard"
-      onChange={handleChangeRoom}
-    />
-    </Box>
-     <Box sx={{ m: 5 ,display: 'inline'}}>
-  <FormControl sx={{width:500}}>
-    <InputLabel variant="standard" htmlFor="uncontrolled-native">
-      College (select if you are inside a college hostel,non college hostel please select Others)
-    </InputLabel>
-    <NativeSelect
-    onChange={handleChangeCollege}
-    >
-      {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
-    </NativeSelect>
-  </FormControl>
-    </Box>
-    <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
-      <CheckIcon/>
-      save
-    </IconButton>
-    </>)
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        SHAW Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {shHall.map((col,index)=>(<option value={shHall[index]}>{shHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College 
+      </InputLabel>
+      <NativeSelect
+      defaultValue = {chooseCol}
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else if(chooseCol=="WS"){  
+    return(
+      <>
+      <h5>Add new address</h5>
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        SHAW Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {wsHall.map((col,index)=>(<option value={wsHall[index]}>{wsHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College 
+      </InputLabel>
+      <NativeSelect
+      defaultValue={chooseCol}
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else if(chooseCol=="WYS"){  
+    return(
+      <>
+      <h5>Add new address</h5>
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        WYS Hostel
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {wysHall.map((col,index)=>(<option value={wysHall[index]}>{wysHall[index]}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College 
+      </InputLabel>
+      <NativeSelect
+      defaultValue={chooseCol}
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
+  }else if(chooseCol=="CW"){  
+    return(
+      <>
+      <h5>Add new address</h5>
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        defaultValue = {chooseBlg}
+        onChange={handleChangeBuilding}
+      />
+      </Box>
+      
+       <Box sx={{ m: 5 ,display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College 
+      </InputLabel>
+      <NativeSelect
+      defaultValue={chooseCol}
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box>
+      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+        <CheckIcon/>
+        save
+      </IconButton>
+      </>
+    )
   }
+  // }else{
+  //   return(
+  //   <>
+  //   <h5>Add new address</h5>
+  //    <Box sx={{ m: 5 ,display: 'inline'}}>
+  //   <TextField
+  //     id="standard-required"
+  //     label="Room"
+  //     variant="standard"
+  //     onChange={handleChangeRoom}
+  //   />
+  //   </Box>
+  //    <Box sx={{ m: 5 ,display: 'inline'}}>
+  // <FormControl sx={{width:500}}>
+  //   <InputLabel variant="standard" htmlFor="uncontrolled-native">
+  //     College 
+  //   </InputLabel>
+  //   <NativeSelect
+  //   onChange={handleChangeCollege}
+  //   >
+  //     {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+  //   </NativeSelect>
+  // </FormControl>
+  //   </Box>
+  //   <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+  //     <CheckIcon/>
+  //     save
+  //   </IconButton>
+  //   </>)
+  // }
     // return(
     //     <>
     //     <h5>Add new address</h5>
@@ -1006,7 +1238,7 @@ function FormDialog(props) {
       window.alert("wrong password, please enter again.");
       return;
     }else{
-      fetch('http://localhost:7000/dbAccount/updatePw/'+ user, { 
+      fetch('http://localhost:7000/dbAccount/updatePw/'+ props.email, { 
       method: 'POST', 
       body: new URLSearchParams({
           "password": pw2
@@ -1108,192 +1340,6 @@ function FormDialog(props) {
 }
 
 
-class Info extends React.Component{
-  constructor(props){
-    super(props);
-    console.log("fname",this.props.name);
-  }
-
-    render(){
-        return(
-            <>
-            <Box component="form"
-            sx={{
-                '& .MuiTextField-root': { m: 8, width: '25ch' },
-            }}
-            noValidate
-            autoComplete="off"
-            >
-      <div>
-      <TextField
-          required
-          id="standard-required"
-          label="First Name"
-          defaultValue={this.props.fname}
-          variant="standard"
-        />
-         <TextField
-          required
-          id="standard-required"
-          label="Last Name"
-          defaultValue={this.props.lname}
-          variant="standard"
-        />
-        <TextField
-          required
-          id="standard-required"
-          label="Username"
-          defaultValue={this.props.username}
-          variant="standard"
-        />
-        <TextField
-          required
-          id="standard-required"
-          label="Phone"
-          defaultValue={this.props.phone}
-          variant="standard"
-        />
-        <TextField
-          id="standard-read-only-input"
-          label="Read Only Your email"
-          defaultValue={this.props.email}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="standard"
-        />
-      </div>
-    </Box>
-    {/* <SelectLabels/> */}
-            </>
-            )
-    }
-}
-
-
-function ChooseGender() {
-  return (
-    <Box sx={{ m:8 }}>
-      <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Gender
-        </InputLabel>
-        <NativeSelect
-          defaultValue={30}
-          inputProps={{
-            name: 'age',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option>None</option>
-          <option value="F">Female</option>
-          <option value="M">Male</option>
-          <option value="O">Others</option>
-        </NativeSelect>
-      </FormControl>
-    </Box>
-  );
-}
-
-function ChooseCollege() {
-  return (
-    <Box sx={{ m: 8 }}>
-      <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          College
-        </InputLabel>
-        <NativeSelect
-          defaultValue={30}
-          inputProps={{
-            name: 'age',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option>None</option>
-          <option>CC</option>
-          <option>CW</option>
-          <option>MS</option>
-          <option>NA</option>
-          <option>SHAW</option>
-          <option>WS</option>
-          <option>WYS</option>
-          <option>SH</option>
-          <option>UC</option>
-        </NativeSelect>
-      </FormControl>
-    </Box>
-  );
-}
-
-
-function ChooseFaculty() {
-  return (
-    <Box sx={{ m: 8 }}>
-      <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Faculty
-        </InputLabel>
-        <NativeSelect
-          defaultValue={30}
-          inputProps={{
-            name: 'age',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option>None</option>
-          <option>Arts</option>
-          <option>Business Administration</option>
-          <option>Education</option>
-          <option>Engineering</option>
-          <option>Law</option>
-          <option>Medicine</option>
-          <option>Science</option>
-          <option>Social Science</option>
-          <option>Others</option>
-        </NativeSelect>
-      </FormControl>
-    </Box>
-  );
-}
-
-class ChangePw extends React.Component{
-  render(){
-    return(
-      <>
-      <TextField
-          id="standard-password-input"
-          label="Current Password"
-          type="password"
-          autoComplete="current-password"
-          variant="standard"
-          sx={{m:3}}
-        />
-         <br></br>
-        <TextField
-          id="standard-password-input"
-          label="New Password"
-          type="password"
-          autoComplete="current-password"
-          variant="standard"
-          sx={{m:3}}
-        />
-         <br></br>
-        <TextField
-          id="standard-password-input"
-          label="Enter again"
-          type="password"
-          autoComplete="current-password"
-          variant="standard"
-          sx={{m:3}}
-        />
-        <br></br>
-        <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 3 }}>Confirm</Button>
-      </>
-    )
-  }
-}
-
-let info = []
 function AdminUser(){
 
 const columns = [
@@ -1302,17 +1348,20 @@ const columns = [
     field: 'first_name',
     headerName: 'First name',
     width: 160,
+    sortable: false
   },
   {
     field: 'last_name',
     headerName: 'Last name',
     width: 80,
+    sortable: false
   },
   {
     field: 'user_name',
     headerName: 'username',
     type: 'number',
     width: 100,
+    sortable: false
   },
   {
     field: 'point',
@@ -1321,17 +1370,26 @@ const columns = [
   },
   {
     field: 'phone',
-    headerName: 'Phone'
+    headerName: 'Phone',
+    sortable: false
   },
   {
     field: 'email',
     headerName: 'email',
     width: 300,
+    sortable: false
   },
   {
     field: 'verify',
     headerName: 'Verify',
     width: 50,
+
+  },
+  {
+    field: 'password',
+    headerName: 'password',
+    width: 150,
+
   },
   // {
   //   field: 'college',
@@ -1346,30 +1404,65 @@ const columns = [
   //   headerName: 'gender'
   // },
 ];
+// update pw
+const deleteUser = ()=>{
+
+fetch('http://localhost:7000/dbAccount/delete',{ 
+      method: 'POST', 
+      body: new URLSearchParams({
+          "email": email
+      })
+    })
+    .then(console.log("change"))
+    .catch(err=>console.log(err))
+    window.location.reload();
+  }
+
+const changePw = ()=>{
+    fetch('http://localhost:7000/dbAccount/updatePw/'+ email, { 
+      method: 'POST', 
+      body: new URLSearchParams({
+          "password": pw
+      })
+    })
+    .then(console.log("delete"))
+    .catch(err=>console.log(err))  
+    window.location.reload();
+    return;
+  }
+
 const [userinfo,setInfo] = useState();
 const [mounted, setMounted] = useState(false);
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
-
+const [email, setEmail] = useState('');
+const [pw, setPw] = useState('');
+const handleChangeEmail = (event)=>{
+  setEmail(event.target.value);
+}
+const handleChangePassword = (event)=>{
+  setPw(event.target.value);
+}
 if(!mounted){
   fetch('http://localhost:7000/dbAccount/getAll')
   .then(res=>res.json())
   .then(data=>{
    setInfo(data);
+   setMounted(true);
     console.log(data);
   })
   .catch(err=>console.log(err))
 
 }
+// for unverify
+// fetch('http://localhost:7000/dbAccount/getAll')
+// .then(res=>res.json())
+// .then(data=>{
+//  setInfo(data);
+//  setMounted(true);
+//   console.log(data);
+// })
+// .catch(err=>console.log(err))
+
+
 
  useEffect(()=>{
    setMounted(true);
@@ -1381,23 +1474,39 @@ if(!mounted){
    );
  }else{
    return(
-    <AdminTable row={userinfo} col={columns}/>
+    // <AdminTable row={userinfo} col={columns}/>
+    <>
+    <div style={{ height: 500, width: '100%' }}>
+      <DataGrid
+        getRowId={rows => rows._id}
+        rows={userinfo}
+        columns={columns}
+        pagination
+        pageSize={10}
+        rowsPerPageOptions={[10]}
+        disableColumnFilter
+        // checkboxSelection
+      />
+    </div>
+    <Box sx={{ m: 5 ,display: 'inline'}}>
+    <TextField
+      id="standard-required"
+      label="email"
+      variant="standard"
+      onChange={handleChangeEmail}
+    />
+    <TextField
+      id="standard-required"
+      label="password"
+      variant="standard"
+      onChange={handleChangePassword}
+    />
+    </Box>
+    <Button onClick={deleteUser}>delete</Button>
+    <Button onClick={changePw}>update</Button>
+    </>
   );
 }
 }
 
-function AdminTable(props){
-  return(
-    <div style={{ height: 800, width: '100%' }}>
-      <DataGrid
-        getRowId={row => row._id}
-        rows={props.row}
-        columns={props.col}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        // checkboxSelection
-      />
-    </div>
-  );
-}
 export { Profile, Account, Address, AdminUser, AddNewAddress};
