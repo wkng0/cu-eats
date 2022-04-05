@@ -72,14 +72,15 @@ function Checkout() {
         fetch("http://localhost:7000/dbReceipt/user", {
             method: 'POST', 
             body: new URLSearchParams({
-                "receiptId": receiptID,
+                "receiptID": receiptID,
                 "userID": userID,
+                "resID": resID,
                 "name": name,
                 "email": email,
                 "phone": phone,
                 "address": address,
                 "cutlery": cutlery,
-                "items": Cart,
+                "items": JSON.stringify(Cart.cartItems),
                 "subtotal": total,
                 "discount": discount,
                 "total": total-discount,
@@ -141,6 +142,7 @@ function Checkout() {
       
     let receiptID = 'r001';
     let userID = 'user001';
+    let resID = 'res001';
     let total = 0;
     let point = 310;
     return (
@@ -229,14 +231,15 @@ function Checkout() {
                     keepMounted
                     transformOrigin={{ vertical: 'top', horizontal: 'left',}}
                     open={Boolean(anchorElNew)}
-                    sx={{mt: '15px', zIndex: '10000'}}
+                    sx={{zIndex: '10000'}}
+                    //style={{width:'80%', margin:'auto'}}
                 >
                     <IconButton 
                         size='small' onClick={handleCloseNew}
                         sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}  
                     >
                         <CloseIcon/>
-                    </IconButton>
+                    </IconButton><br/>
                     <AddNewAddress email={userEmail}/>
                 </Menu>
                 <FormControl>
