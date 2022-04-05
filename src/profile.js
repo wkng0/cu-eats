@@ -1238,7 +1238,7 @@ function FormDialog(props) {
       window.alert("wrong password, please enter again.");
       return;
     }else{
-      fetch('http://localhost:7000/dbAccount/updatePw/'+ user, { 
+      fetch('http://localhost:7000/dbAccount/updatePw/'+ props.email, { 
       method: 'POST', 
       body: new URLSearchParams({
           "password": pw2
@@ -1340,192 +1340,6 @@ function FormDialog(props) {
 }
 
 
-class Info extends React.Component{
-  constructor(props){
-    super(props);
-    console.log("fname",this.props.name);
-  }
-
-    render(){
-        return(
-            <>
-            <Box component="form"
-            sx={{
-                '& .MuiTextField-root': { m: 8, width: '25ch' },
-            }}
-            noValidate
-            autoComplete="off"
-            >
-      <div>
-      <TextField
-          required
-          id="standard-required"
-          label="First Name"
-          defaultValue={this.props.fname}
-          variant="standard"
-        />
-         <TextField
-          required
-          id="standard-required"
-          label="Last Name"
-          defaultValue={this.props.lname}
-          variant="standard"
-        />
-        <TextField
-          required
-          id="standard-required"
-          label="Username"
-          defaultValue={this.props.username}
-          variant="standard"
-        />
-        <TextField
-          required
-          id="standard-required"
-          label="Phone"
-          defaultValue={this.props.phone}
-          variant="standard"
-        />
-        <TextField
-          id="standard-read-only-input"
-          label="Read Only Your email"
-          defaultValue={this.props.email}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="standard"
-        />
-      </div>
-    </Box>
-    {/* <SelectLabels/> */}
-            </>
-            )
-    }
-}
-
-
-function ChooseGender() {
-  return (
-    <Box sx={{ m:8 }}>
-      <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Gender
-        </InputLabel>
-        <NativeSelect
-          defaultValue={30}
-          inputProps={{
-            name: 'age',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option>None</option>
-          <option value="F">Female</option>
-          <option value="M">Male</option>
-          <option value="O">Others</option>
-        </NativeSelect>
-      </FormControl>
-    </Box>
-  );
-}
-
-function ChooseCollege() {
-  return (
-    <Box sx={{ m: 8 }}>
-      <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          College
-        </InputLabel>
-        <NativeSelect
-          defaultValue={30}
-          inputProps={{
-            name: 'age',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option>None</option>
-          <option>CC</option>
-          <option>CW</option>
-          <option>MS</option>
-          <option>NA</option>
-          <option>SHAW</option>
-          <option>WS</option>
-          <option>WYS</option>
-          <option>SH</option>
-          <option>UC</option>
-        </NativeSelect>
-      </FormControl>
-    </Box>
-  );
-}
-
-
-function ChooseFaculty() {
-  return (
-    <Box sx={{ m: 8 }}>
-      <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Faculty
-        </InputLabel>
-        <NativeSelect
-          defaultValue={30}
-          inputProps={{
-            name: 'age',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option>None</option>
-          <option>Arts</option>
-          <option>Business Administration</option>
-          <option>Education</option>
-          <option>Engineering</option>
-          <option>Law</option>
-          <option>Medicine</option>
-          <option>Science</option>
-          <option>Social Science</option>
-          <option>Others</option>
-        </NativeSelect>
-      </FormControl>
-    </Box>
-  );
-}
-
-class ChangePw extends React.Component{
-  render(){
-    return(
-      <>
-      <TextField
-          id="standard-password-input"
-          label="Current Password"
-          type="password"
-          autoComplete="current-password"
-          variant="standard"
-          sx={{m:3}}
-        />
-         <br></br>
-        <TextField
-          id="standard-password-input"
-          label="New Password"
-          type="password"
-          autoComplete="current-password"
-          variant="standard"
-          sx={{m:3}}
-        />
-         <br></br>
-        <TextField
-          id="standard-password-input"
-          label="Enter again"
-          type="password"
-          autoComplete="current-password"
-          variant="standard"
-          sx={{m:3}}
-        />
-        <br></br>
-        <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 3 }}>Confirm</Button>
-      </>
-    )
-  }
-}
-
-let info = []
 function AdminUser(){
 
 const columns = [
@@ -1534,17 +1348,20 @@ const columns = [
     field: 'first_name',
     headerName: 'First name',
     width: 160,
+    sortable: false
   },
   {
     field: 'last_name',
     headerName: 'Last name',
     width: 80,
+    sortable: false
   },
   {
     field: 'user_name',
     headerName: 'username',
     type: 'number',
     width: 100,
+    sortable: false
   },
   {
     field: 'point',
@@ -1553,17 +1370,26 @@ const columns = [
   },
   {
     field: 'phone',
-    headerName: 'Phone'
+    headerName: 'Phone',
+    sortable: false
   },
   {
     field: 'email',
     headerName: 'email',
     width: 300,
+    sortable: false
   },
   {
     field: 'verify',
     headerName: 'Verify',
     width: 50,
+
+  },
+  {
+    field: 'password',
+    headerName: 'password',
+    width: 150,
+
   },
   // {
   //   field: 'college',
@@ -1578,20 +1404,43 @@ const columns = [
   //   headerName: 'gender'
   // },
 ];
+// update pw
+const deleteUser = ()=>{
+
+fetch('http://localhost:7000/dbAccount/delete',{ 
+      method: 'POST', 
+      body: new URLSearchParams({
+          "email": email
+      })
+    })
+    .then(console.log("change"))
+    .catch(err=>console.log(err))
+    window.location.reload();
+  }
+
+const changePw = ()=>{
+    fetch('http://localhost:7000/dbAccount/updatePw/'+ email, { 
+      method: 'POST', 
+      body: new URLSearchParams({
+          "password": pw
+      })
+    })
+    .then(console.log("delete"))
+    .catch(err=>console.log(err))  
+    window.location.reload();
+    return;
+  }
+
 const [userinfo,setInfo] = useState();
 const [mounted, setMounted] = useState(false);
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
-
+const [email, setEmail] = useState('');
+const [pw, setPw] = useState('');
+const handleChangeEmail = (event)=>{
+  setEmail(event.target.value);
+}
+const handleChangePassword = (event)=>{
+  setPw(event.target.value);
+}
 if(!mounted){
   fetch('http://localhost:7000/dbAccount/getAll')
   .then(res=>res.json())
@@ -1603,6 +1452,17 @@ if(!mounted){
   .catch(err=>console.log(err))
 
 }
+// for unverify
+// fetch('http://localhost:7000/dbAccount/getAll')
+// .then(res=>res.json())
+// .then(data=>{
+//  setInfo(data);
+//  setMounted(true);
+//   console.log(data);
+// })
+// .catch(err=>console.log(err))
+
+
 
  useEffect(()=>{
    setMounted(true);
@@ -1615,32 +1475,38 @@ if(!mounted){
  }else{
    return(
     // <AdminTable row={userinfo} col={columns}/>
-    <div style={{ height: 800, width: '100%' }}>
+    <>
+    <div style={{ height: 500, width: '100%' }}>
       <DataGrid
-        getRowId={row => row._id}
+        getRowId={rows => rows._id}
         rows={userinfo}
         columns={columns}
+        pagination
         pageSize={10}
         rowsPerPageOptions={[10]}
+        disableColumnFilter
         // checkboxSelection
       />
     </div>
+    <Box sx={{ m: 5 ,display: 'inline'}}>
+    <TextField
+      id="standard-required"
+      label="email"
+      variant="standard"
+      onChange={handleChangeEmail}
+    />
+    <TextField
+      id="standard-required"
+      label="password"
+      variant="standard"
+      onChange={handleChangePassword}
+    />
+    </Box>
+    <Button onClick={deleteUser}>delete</Button>
+    <Button onClick={changePw}>update</Button>
+    </>
   );
 }
 }
 
-function AdminTable(props){
-  return(
-    <div style={{ height: 800, width: '100%' }}>
-      <DataGrid
-        getRowId={row => row._id}
-        rows={props.row}
-        columns={props.col}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        // checkboxSelection
-      />
-    </div>
-  );
-}
 export { Profile, Account, Address, AdminUser, AddNewAddress};
