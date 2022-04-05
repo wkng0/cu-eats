@@ -60,6 +60,7 @@ function Checkout() {
     const [userEmail,setUserEmail] = React.useState('0.0@link.cuhk.edu.hk');
     const [fetchFinish, setFetch] = React.useState(false);
     const [savedAddress,setdbAddress] = React.useState([]);
+    const [receiptID,setID] = React.useState('#0001');
     const {user, setUser} = React.useContext(UserContext);
     const [anchorElNew, setAnchorElNew] = React.useState(null);
     const handleChangeName = (event) => {setName(event.target.value);};
@@ -67,14 +68,15 @@ function Checkout() {
     const handleChangeEmail = (event) => {setEmail(event.target.value);};
     const handleChangePoint = (event) => {setPoint(event.target.value);};
     const handleAddress = (event) => {setAddress(event.target.value);};
-    const handleCutlery = (event) => {setCutlery(!cutlery);};
+    const handleCutlery = () => {setCutlery(!cutlery);};
+    const handleAddNew = (event) => {setAnchorElNew(event.currentTarget);};
+    const handleCloseNew = () => {setAnchorElNew(null);};
     const handleReceipt = (event) => {
         fetch("http://localhost:7000/dbReceipt/user", {
             method: 'POST', 
             body: new URLSearchParams({
-                "receiptID": receiptID,
-                "userID": userID,
-                "resID": resID,
+                "uid": uid,
+                "rid": rid,
                 "name": name,
                 "email": email,
                 "phone": phone,
@@ -90,19 +92,10 @@ function Checkout() {
                 "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
             },
         })
-        .then(response => {
-            console.log(response)
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .then(response => {console.log(response)})
+        .catch((error) => {console.error('Error:', error);});
     }
-    const handleAddNew = (event) => {
-        setAnchorElNew(event.currentTarget);
-    };
-    const handleCloseNew = () => {
-        setAnchorElNew(null);
-    };
+
     const fetchAddress = (event) => {
         console.log("start fetch")
         fetch('http://localhost:7000/dbAccount/getAddress/' + user)
@@ -111,17 +104,11 @@ function Checkout() {
             .then(()=>setFetch(true))
             .catch(err=>{console.log(err); setFetch(false);})
     }
-    const showAddress = (event) => 
-    { 
-        if(fetchFinish == false){
-            return(
-                <h1>loading address...</h1>
-            )
-        }
-        if(fetchFinish == true){
+    const showAddress = (event) => { 
+        if (fetchFinish == false) return(<p>loading address...</p>)
+        else {
             console.log("Address:",savedAddress);
             return(
-                <>
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue={savedAddress[0]}
@@ -133,18 +120,17 @@ function Checkout() {
                         <FormControlLabel value={address} control={<RadioIcon/>} label={address} />
                     ))}
                 </RadioGroup>
-                </>
-            )
-          }
-      }
+        )}
+    }
+
     React.useEffect(()=>{setdiscount(pointUse/10);},[pointUse])
     React.useEffect(()=>{fetchAddress()},[address])
       
-    let receiptID = 'r001';
-    let userID = 'user001';
-    let resID = 'res001';
+    let uid = 'U0001';
+    let rid = 'R0001';
     let total = 0;
     let point = 310;
+
     return (
         <>
         <div style={{width:'80%', margin:'auto'}}>
