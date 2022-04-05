@@ -14,6 +14,7 @@ router.use(bodyParser.urlencoded({extended: false}));
 const dbName="Menu";
 
 let canteenname = "";
+let dishid = "";
 
 router.get("/", function(req, res) {
     res.send("API is working properly");
@@ -29,6 +30,49 @@ router.get("/getMenu/:canteenname", function(req, res) {
 });
 
 
+// router.post("/AddMenu/:canteenname", function(req, res) {
+//     canteenname = req.params.canteenname;
+//     postMenu(req, res)
+//     .then(console.log)
+//     .catch(console.error)
+//     .finally(() => client.close());
+// });
+
+
+// router.delete("/DeleteMenu/:dishesID", function(req, res) {
+//     // canteenname = req.params.canteenname;
+//     dishesID = req.params.dishesID;
+//     deleteMenu(req, res)
+//     .then(console.log)
+//     .catch(console.error)
+//     .finally(() => client.close());
+//     res.send(dishesID);
+// })
+
+
+router.get("/getDishes/:canteenname/:dishid", function(req, res) {
+    dishid = req.params.dishid;
+    canteenname = req.params.canteenname;
+    getDishes(req, res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+    // res.send(dishid);    // will have error
+});
+
+router.delete("/deleteDishes/:canteenname/:dishid", function(req, res) {
+    dishid = req.params.dishid;
+    canteenname = req.params.canteenname;
+    deleteDishes(req, res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+    // res.send(dishid);    // will have error
+});
+
+
+// --------------------------------------------------------------------------------------------------------------
+
 async function fetchMenu(res){
     await client.connect();
     console.log('Connected successfully to server');
@@ -39,6 +83,44 @@ async function fetchMenu(res){
     res.send(MenuList);
     return "Menu fetched";
 };
+
+
+
+// async function postMenu(req,res){
+//     await client.connect();
+//     console.log('Connected successfully to server');
+//     const db = client.db(dbName);
+//     const collection = db.collection(canteenname);
+//     const insertResult = await collection.insertOne({ 
+//         dishesID: req.body['dishesID'],
+//         name: req.body['name'],
+//         // varients: req.body[],
+//         // prices: req.body[],
+//         category: req.body['category'],
+//         image:req.body['image']
+//     });
+//     return "Menu Added!";
+// };
+
+
+async function deleteDishes(req, res) {
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection(canteenname);
+    let deleteResult = await collection.findOneAndDelete({"dishesID": dishid});
+    res.send(deleteResult);
+}
+
+
+async function getDishes(req, res) {
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection(canteenname);
+    let result = await collection.findOne({"dishesID": dishid});
+    res.send(result);
+}
 
 
 
