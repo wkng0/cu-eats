@@ -1,31 +1,49 @@
 import { useState, useEffect } from "react";
 import React from "react";
+import Axios from "axios";
+
 
 export default function AddDishes() {
 
-    const [dishesID, setDishesID] = useState('');
     const [name, setName] = useState('');
-    const [Regularprices, setRegularprices] = useState([]);
+    const [variant, SetListOfvariant] = useState('');
+    const [Regularprices, setRegularprices] = useState(0);
     const [category, setCategory] = useState('');
     const [image, setImage] = useState('');
-    const [description, setDescription] = useState('');
+    // const [tempvariant, setTempvariant] = useState([]);
+    // const [tempprices, setTempPrices] = useState([]);
 
 
-    // function formHandler(event) {
-    //     event.preventDefault();
+    const AddDishes = () => {
+        Axios.post('http://localhost:7000/dbNewMenu/AddMenu/NaMenu', {
+          name: name, 
+          varients: variant,
+          prices: Regularprices,
+          category: category,
+          image: image,
+        })
+    };
 
-    //     const dish = { 
-    //         dishesID,
-    //         name,
-    //         varients
-    //         Regularprices,
-    //         category,
-    //         image,
-    //         description,
-    //     }
 
-    //     console.log(dish);
-    // }
+    // function VariantList(props) {
+    //     const [checked, setChecked] = useState([]);
+
+    //     useEffect(() => {
+
+    //     })
+
+    //     const handleToggle = (value) => () => {
+    //         const currentIndex = checked.indexOf(value);
+    //         const newChecked = [...checked];
+
+    //         if (currentIndex === -1) {
+    //             newChecked.push(value);
+    //         } else {
+    //             newChecked.splice(currentIndex, 1); 
+    //         }
+        
+    //     setChecked(newChecked); 
+    // }};
 
     return (
         <div>
@@ -33,18 +51,7 @@ export default function AddDishes() {
                 <h1>Add Dish</h1>
 
                 
-                {/* <form onSubmit={formHandler}> */}
                 <form>
-
-                    <input 
-                        className="form-control"
-                        type="text" 
-                        placeholder="dishesID"
-                        value={dishesID}
-                        onChange={(event)=> {
-                            setDishesID(event.target.value)
-                        }}
-                    />
 
                     <input 
                         className="form-control"
@@ -56,15 +63,53 @@ export default function AddDishes() {
                         }}
                     />
 
+                    {/* <input 
+                        className="form-control"
+                        type="text" 
+                        placeholder="Variant"
+                        value={variant}
+                        onChange={(event)=> {
+                            let data = tempvariant;
+                            data.push(event.target.value);
+                            setTempvariant(data);
+                            SetListOfvariant(event.target.value);
+                        }}
+                    />
+
+                    <input 
+                        className="form-control"
+                        type="number" 
+                        placeholder="Regular Prices"
+                        value={Regularprices}
+                        onChange={(event)=> {
+                            let data = tempprices;
+                            data.push(event.target.value);
+                            setTempPrices(data);
+                            setRegularprices(event.target.value);
+                        }}
+
+                    /> */}
+
                     <input 
                         className="form-control"
                         type="text" 
+                        placeholder="Variant"
+                        value={variant}
+                        onChange={(event)=> {
+                            SetListOfvariant(event.target.value)
+                        }}
+                    />
+
+                    <input 
+                        className="form-control"
+                        type="number" 
                         placeholder="Regular Prices"
                         value={Regularprices}
                         onChange={(event)=> {
                             setRegularprices(event.target.value)
                         }}
-                    />
+
+                    /> 
 
                     <input 
                         className="form-control"
@@ -86,21 +131,10 @@ export default function AddDishes() {
                         }}
                     />
 
-                    <input 
-                        className="form-control"
-                        type="text" 
-                        placeholder="description"
-                        value={description}
-                        onChange={(event)=> {
-                            setDescription(event.target.value)
-                        }}
-                    />
 
                     <button 
                         className="btn mt-3"
-                        type='submit'
-
-                    >Add Dish</button>
+                        onClick={AddDishes}>Add Dish</button>
 
                 </form>
             </div>
