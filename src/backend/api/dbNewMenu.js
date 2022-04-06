@@ -15,13 +15,13 @@ const dbName="NewMenu";
 // const MenuModel= require("./models/menu.models.js")
 
 let canteenname = "";
-let dishid = "";
+let id = "";
 
 router.get("/", function(req, res) {
     res.send("API is working properly");
 });
 
-router.get("/getMenu/:canteenname", function(req, res) {
+router.get("/getnewMenu/:canteenname", function(req, res) {
     canteenname = req.params.canteenname;
     fetchMenu(res)
     .then(console.log)
@@ -31,13 +31,13 @@ router.get("/getMenu/:canteenname", function(req, res) {
 });
 
 
-// router.post("/AddMenu/:canteenname", function(req, res) {
-//     canteenname = req.params.canteenname;
-//     postMenu(req, res)
-//     .then(console.log)
-//     .catch(console.error)
-//     .finally(() => client.close());
-// });
+router.post("/AddMenu/:canteenname", function(req, res) {
+    canteenname = req.params.canteenname;
+    postMenu(req, res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
 
 
 // router.post('/AddMenu', async (req, res) => {
@@ -57,7 +57,7 @@ router.get("/getMenu/:canteenname", function(req, res) {
 
 
 router.get("/getDishes/:canteenname/:dishid", function(req, res) {
-    dishid = req.params.dishid;
+    id = req.params.dishid;
     canteenname = req.params.canteenname;
     getDishes(req, res)
     .then(console.log)
@@ -66,8 +66,8 @@ router.get("/getDishes/:canteenname/:dishid", function(req, res) {
     // res.send(dishid);    // will have error
 });
 
-router.delete("/deleteDishes/:canteenname/:dishid", function(req, res) {
-    dishid = req.params.dishid;
+router.delete("/deleteDishes/:canteenname/:id", function(req, res) {
+    id = req.params.id;
     canteenname = req.params.canteenname;
     deleteDishes(req, res)
     .then(console.log)
@@ -92,32 +92,31 @@ async function fetchMenu(res){
 
 
 
-// async function postMenu(req,res){
-//     await client.connect();
-//     console.log('Connected successfully to server');
-//     const db = client.db(dbName);
-//     const collection = db.collection(canteenname);
-//     const insertResult = await collection.insertOne({ 
-//         dishesID: req.body['dishesID'],
-//         name: req.body['name'],
-//         varients: req.body['varient'],
-//         prices: req.body['prices'],
-//         category: req.body['category'],
-//         image:req.body['image']
-//     });
-//     return "Menu Added!";
-// };
-
-
-async function deleteDishes(req, res) {
+async function postMenu(req,res){
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection(canteenname);
-    let deleteResult = await collection.findOneAndDelete({"dishesID": dishid});
-    res.send(deleteResult);
-    // await collection.find
-}
+    const insertResult = await collection.insertOne({ 
+        name: req.body['name'],
+        varients: req.body['varient'],
+        prices: req.body['prices'],
+        category: req.body['category'],
+        image:req.body['image']
+    });
+    return "Menu Added!";
+};
+
+
+// async function deleteDishes(req, res) {
+//     await client.connect();
+//     console.log('Connected successfully to server');
+//     const db = client.db(dbName);
+//     const collection = db.collection(canteenname);
+//     await collection.findByIdAndRemove(id).exec();
+//     // res.send(deleteResult);
+//     // await collection.find
+// }
 
 
 async function getDishes(req, res) {
@@ -125,8 +124,18 @@ async function getDishes(req, res) {
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection(canteenname);
-    let result = await collection.findOne({"dishesID": dishid});
+    let result = await collection.findOne({"_id": id});
     res.send(result);
+}
+
+async function deleteDishes(req, res) {
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection(canteenname);
+    let deleteResult = await collection.findOneAndDelete({"_id": id});
+    res.send(deleteResult);
+    // await collection.find
 }
 
 
