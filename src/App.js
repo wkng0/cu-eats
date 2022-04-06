@@ -10,6 +10,9 @@ import { HomePage }  from './HomePage';
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
+
+import NACanteenResaurant from "./Restaurant";
+
 import { UserContext } from "./UserContext";
 
 import './login.css';
@@ -42,6 +45,8 @@ function App() {
           <Route path="/UCcanteen" element={<UCCanteen/>} />
           <Route path="/NAcanteen" element={<NACanteen/>} />
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
+            
+          <Route path="/Restaurant" element={<NACanteenResaurant/>} />
 
           <Route path="/admin/comment/" element={<AdminComment/>}/>
           <Route path="/admin/profile" element={<AdminUser/>}/>
