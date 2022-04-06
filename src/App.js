@@ -12,6 +12,7 @@ import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
 
 import DeleteDish from "./DeleteDishes";
+import AddDishes from "./AddDishes";
 
 import { UserContext } from "./UserContext";
 
@@ -47,6 +48,7 @@ function App() {
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
             
           <Route path="/deleteDishes" element={<DeleteDish/>} />
+            <Route path="/AddDishes" element={<AddDishes/>} />
 
           <Route path="/admin/comment/" element={<AdminComment/>}/>
           <Route path="/admin/profile" element={<AdminUser/>}/>
