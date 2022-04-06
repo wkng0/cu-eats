@@ -4,7 +4,7 @@ import './canteen.css';
 import Axios from "axios"; 
 
 
-function NACanteenResaurant() {
+function DeleteDish() {
 
     const [varient, setvarient] = useState('small');
     const [quantity, setquantity] = useState(1);
@@ -119,4 +119,4 @@ function NACanteenResaurant() {
     )
 }
 
-export default NACanteenResaurant;
+export default DeleteDish;
