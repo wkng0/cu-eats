@@ -3,10 +3,9 @@ import React , { useState, useMemo }from 'react';
 import { LoginPage } from './login';
 import { UserComment, ContentPreview, AdminComment} from './comment';
 import { Profile, Account, Address, AdminUser} from './profile';
-import { Cart } from './cart'
 import { Checkout } from './checkout'
 import { HomePage }  from './HomePage';
-
+import { Receipt } from './receipt';
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
@@ -42,14 +41,9 @@ function App() {
           <Route path="/UCcanteen" element={<UCCanteen/>} />
           <Route path="/NAcanteen" element={<NACanteen/>} />
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
-
+          <Route path="/receipt/:id" element={<Receipt/>} />
           <Route path="/admin/comment/" element={<AdminComment/>}/>
           <Route path="/admin/profile" element={<AdminUser/>}/>
-          
-          
-          
-          
-          
           <Route path="*" element={<NoMatch/>} />
           </Routes>
          </UserContext.Provider>
