@@ -110,6 +110,7 @@ async function deleteDishes(req, res) {
     const collection = db.collection(canteenname);
     let deleteResult = await collection.findOneAndDelete({"dishesID": dishid});
     res.send(deleteResult);
+    // await collection.find
 }
 
 
