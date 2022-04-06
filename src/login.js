@@ -18,6 +18,18 @@ import{
     IconButton
   } from '@mui/material';
 
+
+function LoginPage(){
+    return( 
+        <div className="body">
+            
+            <div id="Component">
+                <CheckEmail />   
+            </div>            
+        </div>
+    );
+}
+/*
 class LoginPage extends React.Component{  
     render(){
         return(
@@ -33,9 +45,83 @@ class LoginPage extends React.Component{
         );
     }
 
+}*/
+
+function CheckEmail(){
+    const [email,setEmail]=React.useState("");
+    const [pass,setPass]=React.useState(false);
+    const handleChange=(event)=>{
+        setEmail(event.target.value);
+    }
+    const checkEmail=(event)=>{
+        let regex = new RegExp('[a-z0-9]+@+[a-z0-9]+.cuhk.edu.hk');
+        let register = false;
+        let withpw = false;
+        if(regex.test(email)==false || email==""){
+            console.log("false email!");
+        }else{
+            fetch('http://localhost:7000/dbAccount/exist/'+email)
+            .then((res)=>
+                res.json()
+                // console.log(res);
+                // if (res==true){
+                //     this.setState({pass: true});
+                // }else{
+                //     this.setState({pass: false});
+                // }
+            )
+            .then(db=>{
+                console.log(db);
+                console.log(typeof(db.email));
+                if (db.email=="true"){
+                    //this.setState({pass: true});
+                    // renderComponent = <LoginWithPassword email={this.state.email}/>;
+                    withpw = true;
+                    console.log(withpw);
+                    // ReactDOM.render(<LoginWithPassword email={this.state.email}/>,document.getElementById('Component'))
+                    // return ReactDOM.render(<LoginWithPassword email={this.state.email}/>),document.getElementById('Component');
+                    }
+                else{
+                    //this.setState({pass: false});
+                    // renderComponent = <Register email={this.state.email}/>;
+                    register = true;
+                    console.log(register);
+                    // return ReactDOM.render(<Register email={this.state.email}/>),document.getElementById('Component');
+                    // return <Register email={this.state.email}/>;
+                }
+            })
+            .then(()=> ReactDOM.render(<div>
+                {register && <Register email={email}/>}
+                {withpw && <LoginWithPassword email={email}/>}
+            </div>,document.getElementById('Component')))
+            .catch((err)=>{console.log(err)});
+            
+        }
+    }
+    return(
+        <>
+      
+            <div id="login-email" className="login-container">
+                <section className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: '#5D4E99 !important'}}> 
+                    <h2>Enter you email</h2>
+                    <h6 className="text-muted">We&apos;ll check whether your account already exists :)</h6>
+                    <br/>
+                    <form className="text-secondary">
+                        <div className="mb-3">
+                            <input type="email" className="form-control" value={email} onChange={handleChange} id="user-email" placeholder="e.g. name@example.com" required></input>
+                        </div>
+                        <br/>
+                        <button type="button" id="email-continue" className="btn  text-white" style={{backgroundColor: '#5D4E99'}} onClick={checkEmail}>Continue</button>
+                    </form>
+                </section>
+            </div>
+
+        </>
+        
+    );
+    
 }
-
-
+/*
 class CheckEmail extends React.Component{
     constructor(){
         super();
@@ -116,8 +202,79 @@ class CheckEmail extends React.Component{
             
         );
     }
-}
+}*/
 
+function LoginWithPassword(props){
+    const [email, setEmail]=React.useState(props.email);
+    const [password, setPassword]=React.useState("");
+    const [iconA, setIconA]=React.useState("none");
+    const [iconB, setIconB]=React.useState("block");
+    const handleChange=(event)=>{
+        setPassword(event.target.value);
+    }
+    const viewPassword=(event)=>{
+        let passwordInput = document.getElementById('user-pw');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordInput.setAttribute('aria-label',
+              'Hide password.');
+              console.log("hi");
+              setIconA("block");
+              setIconB("none");
+            
+            
+          } else {
+            passwordInput.type = 'password';
+            passwordInput.setAttribute('aria-label',
+              'Show password as plain text. ' +
+              'Warning: this will display your password on the screen.');
+              setIconA("none");
+              setIconB("block");
+          }
+    
+    }
+    const login=()=>{
+        fetch('http://localhost:7000/dbAccount/get/'+props.email)
+        .then(res=>res.json())
+        .then(data=>{
+            console.log(data[0].password);
+            if(data[0].password == password){
+                console.log("password is true");
+                // this.props.history.push("/");
+                window.location.assign("/");
+                // navigate("/",{state:{login: true}});
+            }
+        })
+        .catch(err=>console.log(err))
+    }
+    return(
+        <div id="login-password" className="login-container" >
+            <section className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
+                <h2>Great to see you again!</h2>
+                <h5 id="exist-email">{props.email}</h5>
+                <br/>
+                <form className="text-secondary">
+                    <div className="mb-3">
+                        <label for="new-comment" className="form-label">Enter you password to log in</label>
+                        <div className="input-group">
+                            <input type="password" className="form-control" value={password} onChange={handleChange} id="user-pw" placeholder="password" required></input>
+                            <button type="button" className="btn btn-secondary" onClick={viewPassword}>
+                                <i className="bi bi-eye-slash-fill icon" style={{display: iconA }}></i>
+                                <i className="bi bi-eye-fill icon" style={{display: iconB }}></i>
+                            </button>
+                        </div>
+                    </div>
+                    <br/>
+                
+                    <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick={login} >Log in</button>
+                    <small className="float-end"><a style={{color: "#F4CB86"}} href="reset.html">Forgot your password?</a></small>
+            
+                </form>
+            </section>
+        </div>
+    );
+}
+/*
 class LoginWithPassword extends React.Component{
     constructor(props){
         super(props);
@@ -190,7 +347,7 @@ class LoginWithPassword extends React.Component{
         );
     }
 }
-
+*/
 // function LoginWithPassword(props){
 //     // constructor(props){
 //     //     super(props);
@@ -279,6 +436,291 @@ const colleges =["None","CC","CW","MS","NA","SH","SHAW","UC","WS","WYS","Others"
 const faculties = ["None","Arts","Business Administration","Education","Engineering","Law","Medicine","Science","Social Science","Others"];
 const genders = ["None","Male","Female","Others"];
 
+
+function Register(props){
+    const [email,setEmail]=React.useState(props.email);
+    const [pw1,setPw1]=React.useState('');
+    const [pw2,setPw2]=React.useState('');
+    const [fname,setFname]=React.useState('');
+    const [lname,setLname]=React.useState('');
+    const [username,setUsername]=React.useState('');
+    const [unique,setUnique]=React.useState(false);
+    const [phone,setPhone]=React.useState('');
+    const [gender,setGender]=React.useState('');
+    const [faculty,setFaculty]=React.useState('');
+    const [college,setCollege]=React.useState('');
+    const [uid,setUid]=React.useState('');
+    const [iconA,setIconA]=React.useState('block');
+    const [iconB,setIconB]=React.useState('none');
+    const [iconC,setIconC]=React.useState('block');
+    const [iconD,setIconD]=React.useState('none');
+
+
+      
+    const handleChangeEmail=(event)=>{
+        setEmail(event.target.value);
+ 
+    }
+    const handleChangeFname=(event)=>{
+        setFname(event.target.value);
+    }
+    const handleChangeLname=(event)=>{
+        setLname(event.target.value)
+    }
+    const handleChangeUsername=(event)=>{
+        setUsername(event.target.value);
+        setUid(createId());
+    }
+    const handleChangePw1=(event)=>{
+        setPw1(event.target.value);
+    }
+    const handleChangePw2=(event)=>{
+        setPw2(event.target.value);
+    }
+    const handleChangePhone=(event)=>{
+        setPhone(event.target.value);
+    }
+    const handleChangeGender=(event)=>{
+        setGender(event.target.value);
+    }
+    const handleChangeFaculty=(event)=>{
+        setFaculty(event.target.value);
+    }
+    const handleChangeCollege=(event)=>{
+        setCollege(event.target.value);
+    }
+    const viewPassword1=(event)=>{
+        let passwordInput = document.getElementById('user-pw-1');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordInput.setAttribute('aria-label',
+              'Hide password.');
+              console.log("hi");
+              setIconA("none");
+              setIconB("block");
+            
+          } else {
+            passwordInput.type = 'password';
+            passwordInput.setAttribute('aria-label',
+              'Show password as plain text. ' +
+              'Warning: this will display your password on the screen.');
+              setIconB("none");
+              setIconA("block");
+          }
+
+      
+    }
+    const viewPassword2=(event)=>{
+        let passwordInput = document.getElementById('user-pw-2');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordInput.setAttribute('aria-label',
+              'Hide password.');
+              console.log("hi");
+              setIconC("none");
+              setIconD("block");
+            
+          } else {
+            passwordInput.type = 'password';
+            passwordInput.setAttribute('aria-label',
+              'Show password as plain text. ' +
+              'Warning: this will display your password on the screen.');
+              setIconD("none");
+              setIconC("block");
+          }
+    
+    }
+
+    const checkUsename=()=>{
+        return fetch('http://localhost:7000/dbAccount/userName/'+username) //check if the username unique
+        .then(res=>res.json())
+        .then(data=>{
+            console.log("user name?????",data.unique);
+            if(data.unique=="false"){
+                setUnique(false);
+                // error = true;
+                window.alert("Username already exists. Please change your username");
+            }
+            if(data.unique=="true"){
+                setUnique(true);
+            }})
+            .then(res=>{
+                console.log("success to post");
+                // window.location.assign("/");
+            })
+            .then(()=> {console.log();
+            window.location.assign("/");})
+            .catch((err)=>{
+                console.log(err);
+                // error = true;
+            });
+    }
+
+    const createId=()=>{
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    };
+
+    const register=()=>{
+        let regex = new RegExp('[a-z0-9]+@+[a-z0-9]+.cuhk.edu.hk');
+        console.log("testID",createId());
+        console.log(fname);
+        let check = true ;
+        if(regex.test(email)==false || email==""){
+            console.log("email problem");
+            check = false;
+        }
+        if(fname=="" || lname=="" || username=="" ||pw1=="" || pw2==""){
+            console.log("something empty");
+            check = false;
+        }
+        if(pw1!=pw2){
+            console.log("different password");
+            window.alert("Different passwords. Please check again");
+            check = false;
+        }
+
+        if(check ==true){
+
+            // let error = true;
+            
+            checkUsename()
+            .then(()=>{
+                console.log("after checking ge unique",unique);
+                if(unique== true){
+                    fetch('http://localhost:7000/dbAccount/createAccount', { //saving to database
+                        method: 'POST', 
+                        body: new URLSearchParams({
+                            "email":email,
+                            "password":pw2,
+                            "user_name": username,
+                            "phone": phone,
+                            "first_name":fname,
+                            "last_name":lname,
+                            "faculty": faculty,
+                            "college": college,
+                            "gender": gender,
+                            "uid": uid,
+                        })  
+                    })
+                    
+                    .then(()=> {
+                        console.log();
+                        window.location.assign("/");
+                    })
+                    .catch((err)=>{
+                        console.log(err);
+                    });
+                
+                }
+            })
+
+         
+            return;
+        }
+        // console.log(false)
+    }
+
+
+    return(
+        <div id="login-register" className="login-container" >
+            <section className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
+                <h2>Let&apos;s get started!</h2>
+                <h6 className="text-muted">Create a new account</h6>
+                <br/>
+                <form className="form-floating text-secondary">
+                    <div className="form-floating mb-3">
+                        <input className="form-control" id="new-user-email" value={email} onChange={handleChangeEmail} placeholder="email" required></input>
+                        <label for="floatingPassword">Email*</label>
+                    </div>
+                    <div className="input-group">
+                        <div className="form-floating mb-3">
+                            <input className="form-control" id="user-fn" value={fname} onChange={handleChangeFname} placeholder="firstname" required></input>
+                            <label for="floatingPassword">First Name*</label>
+                        </div>
+                        <div>&ensp;</div>
+                        <div className="form-floating mb-3">
+                            <input className="form-control" id="user-ln" value={lname} onChange={handleChangeLname} placeholder="lastname" required></input>
+                            <label for="floatingPassword">Last Name*</label>
+                        </div>
+                    </div>
+                        <div className="form-floating mb-3">
+                            <input className="form-control" id="user-un" value={phone} onChange={handleChangePhone} placeholder="phone" required></input>
+                            <label for="floatingPassword">Phone*</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input className="form-control" id="user-un" value={username} onChange={handleChangeUsername} placeholder="username" required></input>
+                            <label for="floatingPassword">Username*</label>
+                        </div>
+                    <div className="input-group mb-3">
+                        <div className="form-floating col-11">
+                            <input type="password" className="form-control" id="user-pw-1" value={pw1} onChange={handleChangePw1} placeholder="password" required></input>
+                            <label for="floatingPassword">Password*</label>
+                        </div>
+                        <button type="button" onClick={viewPassword1} className="btn col-1">
+                            <i id="first-close" className="bi bi-eye-slash-fill icon" style={{display: iconA}}></i>
+                            <i id="first-open" className="bi bi-eye-fill icon" style={{display: iconB}}></i>
+                        </button>
+                    </div>
+                    <div className="input-group mb-3">
+                        <div className="form-floating col-11">
+                            <input type="password" className="form-control" id="user-pw-2" value={pw2} onChange={handleChangePw2} placeholder="re-enter" required></input>
+                            <label for="floatingPassword">Re-enter Password*</label>
+                        </div>
+                        <button type="button" onClick={viewPassword2} className="btn col-1">
+                            <i id="second-close" className="bi bi-eye-slash-fill icon" style={{display: iconC}}></i>
+                            <i id="second-open" className="bi bi-eye-fill icon" style={{display: iconD}}></i>
+                        </button>
+                    </div>
+                    <Box sx={{margin: 2}}>
+                        <FormControl fullWidth>
+                            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                            Gender
+                            </InputLabel>
+                            <NativeSelect
+                            onChange={handleChangeGender}
+                            >
+                            {genders.map((gen,index)=>(<option key={gen} value={gen}>{gen}</option>))}
+                            </NativeSelect>
+                        </FormControl>
+                        </Box>
+                        <Box sx={{margin: 2}}>
+                        <FormControl fullWidth>
+                            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                            College
+                            </InputLabel>
+                            <NativeSelect
+                            onChange={handleChangeCollege}
+                            >
+                            {colleges.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+                            </NativeSelect>
+                        </FormControl>
+                        </Box>
+                        <Box sx={{margin: 2}}>
+                        <FormControl fullWidth>
+                            <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                            Faculty
+                            </InputLabel>
+                            <NativeSelect
+                            onChange={handleChangeFaculty}
+                            >
+                            {faculties.map((fac,index)=>(<option key={fac}value={fac}>{fac}</option>))}
+                            </NativeSelect>
+                        </FormControl>
+                        </Box>
+
+                    <br/>
+                    <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick={register} >Register</button>
+                    <br/><br/>
+                    <p><a style={{color: "#F4CB86"}} href="contact.html">*: Required field</a></p>
+                    <p><a style={{color: "#F4CB86"}} href="contact.html">Join us as a restaurant? Welcome and contact us!</a></p>
+                </form>
+            </section>
+        </div>
+    );
+}
+
+
+/*
 class Register extends React.Component{
     constructor(props){
         super(props);
@@ -571,5 +1013,5 @@ class Register extends React.Component{
             </div>
         );
     }
-}
+}*/
 export {LoginPage };
