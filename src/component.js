@@ -10,7 +10,8 @@ import Paper from '@mui/material/Paper';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CommentIcon from '@mui/icons-material/Comment';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import { Fab } from '@mui/material';
 import './login.css';
 import logo_yellow from './image/logo_yellow.png'
 import LoginIcon from '@mui/icons-material/Login';
@@ -26,6 +27,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { List,ListItem,ListItemIcon,ListItemText } from '@mui/material';
+import { SwipeableDrawer } from '@mui/material';
+import { Divider } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
@@ -161,7 +166,97 @@ function NavBar() {
   );
 };
 
+function AdminDrawer(props){
+  const [state,setState]=React.useState(false)
+  const drawerWidth=180;
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
 
+    setState(open);
+};
+  const drawer = (
+    <div>
+     
+      <List>
+          <ListItem 
+            button 
+            key="Profile"
+            sx={{
+              color:"white"
+            }}
+            
+            onClick={()=>{
+              window.location.href='/admin/profile'
+            }}
+          >
+            <ListItemIcon>
+              <AccountCircleIcon sx={{color:"white"}}/>
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </ListItem>
+          <ListItem 
+            button 
+            key="Comment" 
+            sx={{
+              color:"white"
+            }}
+            onClick={()=>{
+              window.location.href='/admin/comment'
+            }}
+          >
+            <ListItemIcon>
+              <CommentIcon sx={{color:"white"}}/>
+            </ListItemIcon>
+            <ListItemText primary="Comment" />
+          </ListItem>
+          
+   
+      </List>
+  
+    </div>
+  );
+  return(
+    <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },p:0 }}            
+        
+      >
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Fab 
+            color="secondary" 
+            sx={{
+                position: 'fixed', 
+                bottom: 30 ,
+                left:30,
+                zIndex:10000,
+                display:"block",
+            }}
+            onClick={toggleDrawer(true)}
+          >   
+          <AdminPanelSettingsIcon />
+        </Fab>
+        <SwipeableDrawer
+           anchor='left'
+           open={state}
+           onClose={toggleDrawer(false)}
+           onOpen={toggleDrawer(true)}
+          sx={{
+            '& .MuiDrawer-paper': {bgcolor: '#152342', boxSizing: 'border-box', width: drawerWidth },
+            zIndex: 10000, 
+          }}
+        >
+          {drawer}
+        </SwipeableDrawer>
+      
+      </Box>
+  );
+}
 /*
 function NavBar() {
   const [auth, setAuth] = React.useState(true);
@@ -315,4 +410,4 @@ class Footer extends React.Component{
 
 
   
-export {NavBar, Footer};
+export {NavBar, Footer, AdminDrawer};

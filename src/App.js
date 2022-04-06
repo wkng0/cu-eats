@@ -17,7 +17,7 @@ import AddDishes from "./AddDishes";
 import { UserContext } from "./UserContext";
 
 import './login.css';
-import {NavBar} from './component'
+import {NavBar,AdminDrawer} from './component'
 import { BrowserRouter, Route, Routes, useLocation, useParams} from 'react-router-dom';
 
 
@@ -31,6 +31,7 @@ function App() {
   return (
     <div className="App" style={{zIndex:9999 ,position:"relative"}}>
       <NavBar/>
+      
       <BrowserRouter>
         <UserContext.Provider value={{user, setUser}}>
         <Routes>
@@ -56,6 +57,7 @@ function App() {
           </Routes>
          </UserContext.Provider>
       </BrowserRouter>
+      <AdminDrawer/>
       
     </div>
   );
