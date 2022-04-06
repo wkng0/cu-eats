@@ -34,19 +34,21 @@ export default function AddDishes() {
         para.appendChild(node);
         document.getElementById("variantList").appendChild(para);
         setVariant("");
-    }
 
-    const savePrices=()=>{
+        
         let newPricesList=pricesList;
         newPricesList.push(price);
         setPricesList(newPricesList);
         let newPrices=price;
-        let node=document.createTextNode(newPrices);
-        let para= document.createElement("p");
-        para.appendChild(node);
-        document.getElementById("pricesList").appendChild(para);
+        let node2=document.createTextNode(newPrices);
+        let para2= document.createElement("p");
+        para2.appendChild(node2);
+        document.getElementById("pricesList").appendChild(para2);
         setPrice("");
+    
     }
+
+   
 
     return (
         <div className="container">
@@ -90,7 +92,7 @@ export default function AddDishes() {
                             setPrice(event.target.value)
                         }}
                     /> 
-                    <Button variant="contained" onClick={savePrices}>+</Button>
+                    {/* <Button variant="contained" onClick={savePrices}>+</Button> */}
                     <div id="pricesList">
 
                     </div>
