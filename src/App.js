@@ -11,7 +11,7 @@ import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
 
-import NACanteenResaurant from "./DeleteDishes";
+import DeleteDish from "./DeleteDishes";
 
 import { UserContext } from "./UserContext";
 
@@ -46,7 +46,7 @@ function App() {
           <Route path="/NAcanteen" element={<NACanteen/>} />
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
             
-          <Route path="/Restaurant" element={<NACanteenResaurant/>} />
+          <Route path="/deleteDishes" element={<DeleteDish/>} />
 
           <Route path="/admin/comment/" element={<AdminComment/>}/>
           <Route path="/admin/profile" element={<AdminUser/>}/>
