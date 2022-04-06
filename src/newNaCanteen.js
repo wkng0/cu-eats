@@ -51,7 +51,7 @@ function NewNACanteen() {
 
 
 function NewShowDishes({menu}) {
-    const [varient, setvarient] = useState('regular');
+    const [varient, setvarient] = useState();
     const [quantity, setquantity] = useState(1);
 
     const [name] = useState("");
@@ -97,10 +97,10 @@ function NewShowDishes({menu}) {
                         <h1 className='mt-1'>Price: ${menu.prices[0]}</h1>
                     </div>
 
-                    <div className='m-1 w-100'>
-                        {/* menu.prices[0]*(quantity) */}
+                    {/* <div className='m-1 w-100'>
+                       
                         <h1 className='mt-1'>Total: ${menu.prices[menu.varients.indexOf(varient)]*(quantity)}</h1>
-                    </div>
+                    </div> */}
 
                     <div className='m-1 w-100'>
                         <button className='btn'>ADD TO CART</button>
