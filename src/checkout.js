@@ -14,7 +14,7 @@ import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import Radio, { RadioProps } from '@mui/material/Radio';
+import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
@@ -50,36 +50,43 @@ function RadioIcon(props) {
 );}
 
 function Checkout() {
-    const [name, setName] = React.useState('Chris Wong');
-    const [phone, setPhone] = React.useState('98765432');
-    const [email, setEmail] = React.useState('0.0@link.cuhk.edu.hk');
-    const [pointUse, setPoint] = React.useState(null);
-    const [discount, setdiscount] = React.useState(0);
+    const {user, setUser} = React.useContext(UserContext);
+    const [name, setName] = React.useState('');
+    const [phone, setPhone] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [point, setPoint] = React.useState(0);
+    const [uid, setUID] = React.useState(0);
+    const [pointUse, setPointUse] = React.useState(0);
+    const [discount, setDiscount] = React.useState(0);
     const [address, setAddress] = React.useState(null);
     const [cutlery, setCutlery] = React.useState(true);
-    const [userEmail,setUserEmail] = React.useState('0.0@link.cuhk.edu.hk');
     const [fetchFinish, setFetch] = React.useState(false);
     const [savedAddress,setdbAddress] = React.useState([]);
-    const {user, setUser} = React.useContext(UserContext);
+    //const [userEmail,setUserEmail] = React.useState('0.0@link.cuhk.edu.hk');
     const [anchorElNew, setAnchorElNew] = React.useState(null);
     const handleChangeName = (event) => {setName(event.target.value);};
     const handleChangePhone = (event) => {setPhone(event.target.value);};
     const handleChangeEmail = (event) => {setEmail(event.target.value);};
-    const handleChangePoint = (event) => {setPoint(event.target.value);};
+    const handleChangePoint = (event) => {setPointUse(event.target.value);};
     const handleAddress = (event) => {setAddress(event.target.value);};
-    const handleCutlery = (event) => {setCutlery(!cutlery);};
+    const handleCutlery = () => {setCutlery(!cutlery);};
+    const handleAddNew = (event) => {setAnchorElNew(event.currentTarget);};
+    const handleCloseNew = () => {setAnchorElNew(null);};
     const handleReceipt = (event) => {
+        receiptID = uid + '_' + Date.now();
+        console.log('receipt:', receiptID);
         fetch("http://localhost:7000/dbReceipt/user", {
             method: 'POST', 
             body: new URLSearchParams({
-                "receiptId": receiptID,
-                "userID": userID,
+                "receiptID": receiptID,
+                "uid": uid,
+                "rid": rid,
                 "name": name,
                 "email": email,
                 "phone": phone,
-                "address": address,
+                "address": address==null? savedAddress[0]:address,
                 "cutlery": cutlery,
-                "items": Cart,
+                "items": JSON.stringify(Cart.cartItems),
                 "subtotal": total,
                 "discount": discount,
                 "total": total-discount,
@@ -89,19 +96,10 @@ function Checkout() {
                 "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
             },
         })
-        .then(response => {
-            console.log(response)
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .then(response => {console.log(response)})
+        .catch((error) => {console.error('Error:', error);});
     }
-    const handleAddNew = (event) => {
-        setAnchorElNew(event.currentTarget);
-    };
-    const handleCloseNew = () => {
-        setAnchorElNew(null);
-    };
+
     const fetchAddress = (event) => {
         console.log("start fetch")
         fetch('http://localhost:7000/dbAccount/getAddress/' + user)
@@ -109,40 +107,53 @@ function Checkout() {
             .then(res=>setdbAddress(res))
             .then(()=>setFetch(true))
             .catch(err=>{console.log(err); setFetch(false);})
+        
     }
-    const showAddress = (event) => 
-    { 
-        if(fetchFinish == false){
-            return(
-                <h1>loading address...</h1>
-            )
-        }
-        if(fetchFinish == true){
-            console.log("Address:",savedAddress);
-            return(
-                <>
-                <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue={savedAddress[0]}
-                    name="radio-buttons-group"
-                    color="secondary"
-                    onChange={handleAddress}
-                >
-                    {savedAddress.map((address)=>(
-                        <FormControlLabel value={address} control={<RadioIcon/>} label={address} />
-                    ))}
-                </RadioGroup>
-                </>
-            )
-          }
-      }
-    React.useEffect(()=>{setdiscount(pointUse/10);},[pointUse])
-    React.useEffect(()=>{fetchAddress()},[address])
+    const showAddress = (event) => { 
+        if (fetchFinish == false) return(<p>loading address...</p>)
+        else {
+            if (savedAddress[0] == null) return (<p>No address record has been inserted.</p>);
+            else {
+                //setAddress(savedAddress[0]);
+                return(
+                    <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        defaultValue={savedAddress[0]}
+                        name="radio-buttons-group"
+                        color="secondary"
+                        onChange={handleAddress}
+                    >
+                        {savedAddress.map((address)=>(
+                            <FormControlLabel value={address} control={<RadioIcon/>} label={address} />
+                        ))}
+                    </RadioGroup>
+        )}}
+    }
+
+    React.useEffect(()=>{setDiscount(pointUse/10);},[pointUse])
+    React.useEffect(()=>{fetchAddress()},([address]))
+    React.useEffect(()=>{
+        if(fetchFinish== false){
+        fetch('http://localhost:7000/dbAccount/get/'+user)
+        .then(res=>res.json())
+        .then(data=>{
+            setEmail(data[0].email);
+            setName(data[0].user_name);
+            setPoint(data[0].point);
+            setPhone(data[0].phone);
+            setUID(data[0].uid);
+            setFetch(true);
+        })
+        .catch(err=>{
+          console.log(err);
+          setFetch(false);
+        })}
+    })
       
-    let receiptID = 'r001';
-    let userID = 'user001';
+    let rid = "R0001";
     let total = 0;
-    let point = 310;
+    let receiptID = 'l1jc1p8ltukap01mi3_1649237597093';
+
     return (
         <>
         <div style={{width:'80%', margin:'auto'}}>
@@ -154,6 +165,7 @@ function Checkout() {
             <ArrowBackIosIcon/>Continue Shopping
             </Button>
         </div>
+
         <br/>
         <h3 style={{color: '#5D4E99'}}>Your Order</h3>
         <br/>
@@ -229,15 +241,16 @@ function Checkout() {
                     keepMounted
                     transformOrigin={{ vertical: 'top', horizontal: 'left',}}
                     open={Boolean(anchorElNew)}
-                    sx={{mt: '15px', zIndex: '10000'}}
+                    sx={{zIndex: '10000'}}
+                    //style={{width:'80%', margin:'auto'}}
                 >
                     <IconButton 
                         size='small' onClick={handleCloseNew}
                         sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}  
                     >
                         <CloseIcon/>
-                    </IconButton>
-                    <AddNewAddress email={userEmail}/>
+                    </IconButton> Add New Address<br/>
+                    {/*<AddNewAddress email={userEmail}/>*/}
                 </Menu>
                 <FormControl>
                     {showAddress()}
@@ -294,7 +307,7 @@ function Checkout() {
         <div style={{margin: 'auto', textAlign: 'right'}}>
             <Button 
                 size="large" 
-                //href="/receipt"
+                href={'/receipt/'+receiptID}
                 onClick={handleReceipt}
                 sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
                 //disabled={!formIsValid()}

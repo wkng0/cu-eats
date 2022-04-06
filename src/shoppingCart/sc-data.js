@@ -1,10 +1,13 @@
+import food1 from './fast_food_1.png';
+import food2 from './fast_food_2.png';
+import food3 from './fast_food_3.png';
 export default [
     {
       id: 1,
       title: 'Food 1',
       price: 69.9,
       img:
-        '../image/fast_food_1.png',
+        food1,
       amount: 1,
     },
     {
@@ -12,7 +15,7 @@ export default [
       title: 'Food 2',
       price: 79.9,
       img:
-        '../image/fast_food_2.png',
+        food2,
       amount: 1,
     },
     {
@@ -20,7 +23,7 @@ export default [
       title: 'Food 3',
       price: 79.3,
       img:
-        '/image/fast_food_3.png',
+        food3,
       amount: 1,
     },
   ];

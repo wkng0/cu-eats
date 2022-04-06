@@ -71,7 +71,7 @@ router.post("/updateAccount/:uid",function(req,res){
     .finally(() => client.close());
 })
 
-router.post("/updatePw/:uid",function(req,res){
+router.post("/updatePw/:email",function(req,res){
     user_email = req.params.email;
     updatePw(req,res)
     .then(console.log)
@@ -110,8 +110,40 @@ router.get("/getAll",function(req,res){
 });
 
 router.get("/getUnverify", function(req,res){
-    
+    fetchUnverify(res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
 });
+
+router.post("/delete",function(req,res){
+    deleteUser(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
+async function deleteUser(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    const deleteResult = await collection.deleteOne(
+        {"email":req.body['email']}
+    );
+    return deleteResult;
+}
+
+async function fetchUnverify(res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    let result = await collection.find({"verify":0}).sort({_id:-1}).toArray();
+    res.send(result);
+    return result;
+};
+
 async function veriUserName(res){
     await client.connect();
     console.log('Connected successfully to server');
@@ -232,7 +264,7 @@ async function updatePw(req,res){
     const db = client.db(dbName);
     const collection = db.collection("Info");
     const insertResult = await collection.updateOne(
-        {"uid":uid},
+        {"email":user_email},
         {
             $set:
             {
