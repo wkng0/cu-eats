@@ -11,7 +11,7 @@ import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
 
-import NACanteenResaurant from "./Restaurant";
+import NACanteenResaurant from "./DeleteDishes";
 
 import { UserContext } from "./UserContext";
 
