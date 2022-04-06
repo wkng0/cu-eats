@@ -4,6 +4,7 @@ import user from "./api/users.route.js"
 import comment from "./api/dbComment.js"
 import account from "./api/dbAccount.js"
 import menu from "./api/dbMenu.js"
+import newmenu from "./api/dbNewMenu.js"
 import canteenInfo from "./api/dbcanteenInfo.js"
 import receipt from "./api/dbReceipt.js"
 import verify from "./api/verify.js"
@@ -19,6 +20,7 @@ app.use("/api/v1/users", user);
 app.use("/dbAccount",account);
 app.use("/dbComment",comment);
 app.use("/dbMenu", menu);
+app.use("/dbNewMenu", newmenu);
 app.use("/dbcanteenInfo", canteenInfo);
 app.use("/dbReceipt",receipt);
 app.use("/verify",verify);

@@ -2,15 +2,18 @@ import React from 'react'
 import { useGlobalContext } from './sc-context'
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
 const CartItem = ({ id, img, title, price, amount }) => {
     const {remove, increase, decrease} = useGlobalContext();
     return (
       <article className='sc-cart-item'>
-        <img src={img} alt={title} width='100' display='block'/>
+          <img src={img} alt={title} width='100' display='block' className='sc-cart-photo'/>
+        
         <div>
-          <h4 letter-spacing='0.25' line-height='1.25' margin-bottom='0.75' font-size='0.875'>{title}</h4>
-          <h4 className='sc-item-price'>${price}</h4>
+          <h5 letter-spacing='0.25' line-height='1.25' margin-bottom='0.75' font-size='0.875'>{title}</h5>
+          <h6 className='sc-item-price'>$&nbsp;{price}</h6>
           {/* remove button */}
           <button className='sc-remove-btn' onClick={() => remove(id)}
           >
@@ -44,7 +47,7 @@ const CartContainer = () => {
       <section className='sc-cart'>
         {/* cart header */}
         <header>
-          <h2>your shopping cart</h2>
+          <h2>Your Shopping Cart</h2>
           <h4 className='sc-empty-cart'>is currently empty</h4>
         </header>
       </section>
@@ -54,7 +57,7 @@ const CartContainer = () => {
     <section className='sc-cart'>
       {/* cart header */}
       <header>
-        <h3>your shopping cart</h3>
+        <h3>Your Shopping Cart</h3>
       </header>
       {/* cart items */}
       <div>
@@ -66,23 +69,25 @@ const CartContainer = () => {
       <footer>
         <hr />
         <div className='sc-cart-total'>
-          <h4>
-            total <span>{total}</span>
-          </h4>
+          <h5>
+            total <span>$&nbsp;{total}</span>
+          </h5>
         </div>
-        <Box sx={{display: 'flex', flexDirection: 'row'}}>
+        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
           <Button 
-            size="large" 
-            sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
-            onClick={clearCart}>
-            clear cart
-          </Button>
+                size="small" 
+                sx={{border: 2,bgcolor: '#transparent', color: '#86888A', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+                onClick={clearCart}>
+            <DeleteIcon fontSize="small" />
+              CLEAR CART
+            </Button>
           <Button 
-                size="large" 
+                size="small" 
                 href="/checkout"
                 sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
           >
-                Proceed to Checkout
+            <ShoppingCartCheckoutIcon fontSize="small"/>
+              CHECKOUT
           </Button>
         </Box>
       </footer>

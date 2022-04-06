@@ -11,7 +11,8 @@ const client=new MongoClient(url);
 
 router.use(bodyParser.urlencoded({extended: false}));
 
-const dbName="Menu";
+const dbName="NewMenu";
+// const MenuModel= require("./models/menu.models.js")
 
 let canteenname = "";
 let dishid = "";
@@ -39,15 +40,20 @@ router.get("/getMenu/:canteenname", function(req, res) {
 // });
 
 
-// router.delete("/DeleteMenu/:dishesID", function(req, res) {
-//     // canteenname = req.params.canteenname;
-//     dishesID = req.params.dishesID;
-//     deleteMenu(req, res)
-//     .then(console.log)
-//     .catch(console.error)
-//     .finally(() => client.close());
-//     res.send(dishesID);
-// })
+// router.post('/AddMenu', async (req, res) => {
+//     const name = req.body.name;
+//     const age = req.body.age;
+
+
+//     const friend = new MenuModel({
+//         name: name, 
+//         age: age
+//     });
+
+//     await friend.save();
+//     res.send(friend);
+// });
+
 
 
 router.get("/getDishes/:canteenname/:dishid", function(req, res) {
@@ -94,8 +100,8 @@ async function fetchMenu(res){
 //     const insertResult = await collection.insertOne({ 
 //         dishesID: req.body['dishesID'],
 //         name: req.body['name'],
-//         // varients: req.body[],
-//         // prices: req.body[],
+//         varients: req.body['varient'],
+//         prices: req.body['prices'],
 //         category: req.body['category'],
 //         image:req.body['image']
 //     });

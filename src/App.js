@@ -9,6 +9,11 @@ import { Receipt } from './receipt';
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
+import NewNACanteen from './newNaCanteen';
+
+import DeleteDish from "./DeleteDishes";
+import AddDishes from "./AddDishes";
+
 import { UserContext } from "./UserContext";
 
 import './login.css';
@@ -42,6 +47,9 @@ function App() {
           <Route path="/NAcanteen" element={<NACanteen/>} />
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
           <Route path="/receipt/:id" element={<Receipt/>} />
+          <Route path="/newNAcanteen" element={<NewNACanteen/>} />
+          <Route path="/deleteDishes" element={<DeleteDish/>} />
+          <Route path="/AddDishes" element={<AddDishes/>} />
           <Route path="/admin/comment/" element={<AdminComment/>}/>
           <Route path="/admin/profile" element={<AdminUser/>}/>
           <Route path="*" element={<NoMatch/>} />
