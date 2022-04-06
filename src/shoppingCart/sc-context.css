@@ -111,6 +111,12 @@ Variables
     height: 5rem;
     object-fit: cover;
   }
+
+  .sc-cart-photo {
+    border: solid #E2E2E2;
+    border-radius: 10px;
+  }
+
   .sc-cart-item h5 {
     color: #5D4E99;
     margin-bottom: 0.5rem;

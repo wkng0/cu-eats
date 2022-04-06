@@ -9,7 +9,7 @@ const CartItem = ({ id, img, title, price, amount }) => {
     const {remove, increase, decrease} = useGlobalContext();
     return (
       <article className='sc-cart-item'>
-          <img src={img} alt={title} width='100' display='block'/>
+          <img src={img} alt={title} width='100' display='block' className='sc-cart-photo'/>
         
         <div>
           <h5 letter-spacing='0.25' line-height='1.25' margin-bottom='0.75' font-size='0.875'>{title}</h5>
