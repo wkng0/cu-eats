@@ -10,6 +10,7 @@ import { HomePage }  from './HomePage';
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
+import NewNACanteen from './newNaCanteen';
 
 import DeleteDish from "./DeleteDishes";
 import AddDishes from "./AddDishes";
@@ -46,6 +47,8 @@ function App() {
           <Route path="/UCcanteen" element={<UCCanteen/>} />
           <Route path="/NAcanteen" element={<NACanteen/>} />
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
+            
+            <Route path="/newNAcanteen" element={<NewNACanteen/>} />
             
           <Route path="/deleteDishes" element={<DeleteDish/>} />
             <Route path="/AddDishes" element={<AddDishes/>} />
