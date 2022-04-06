@@ -99,7 +99,7 @@ async function postMenu(req,res){
     const collection = db.collection(canteenname);
     const insertResult = await collection.insertOne({ 
         name: req.body['name'],
-        varients: req.body['varient'],
+        varients: req.body['varients'],
         prices: req.body['prices'],
         category: req.body['category'],
         image:req.body['image']
