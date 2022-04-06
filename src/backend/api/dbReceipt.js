@@ -17,6 +17,14 @@ router.get("/", function(req, res) {
     res.send("API is working properly");
 });
 
+router.get("/get/:id",function(req,res){
+    id=req.params.id;
+    fetchReceipt(res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
+
 router.post("/user",async function(req,res){
     receiptID = await getReceiptId(req,res);
     await submitOrder(req,res,receiptID);
@@ -28,20 +36,26 @@ async function getReceiptId(req,res){
     const db = client.db(dbName);
     const collection = db.collection("User");
     let result = await collection.find({rid: req.body['rid']}).sort({receiptID: -1}).toArray();
-    let lastID = result[0].receiptID;
-    let newID = '#' + JSON.stringify(((parseInt(lastID.slice(-4))+1)%10000)).padStart(4,'0');
-    console.log("Latest receipt:", lastID);
-    console.log("New receipt:", newID);
-    return newID;
+    if (result[0] == null) return "#0001"
+    else {
+        let lastID = result[0].receiptID;
+        let num = (parseInt(lastID.slice(-4))+1) % 10000;
+        let newID = '#' + JSON.stringify(num==0? 1:num).padStart(4,'0');
+        console.log("Latest receipt:", lastID);
+        console.log("New receipt:", newID);
+        return newID;
+    }
 }
 
 async function submitOrder(req,res,receiptID){
     await client.connect();
-    console.log('Connected successfully to server');
+    console.log('Connected successfully to server Receipt');
     const db = client.db(dbName);
     const collection = db.collection("User");
+    
     const insertResult = await collection.insertOne({ 
         receiptID: receiptID,
+        irid: req.body['receiptID'],
         uid: req.body['uid'],
         rid: req.body['rid'],
         ctName: req.body['name'],
@@ -53,10 +67,23 @@ async function submitOrder(req,res,receiptID){
         subtotal: parseInt(req.body['subtotal']),
         discount: parseInt(req.body['discount']),
         total: parseInt(req.body['total']),
-        point: parseInt(req.body['pointEarn'])
+        point: parseInt(req.body['pointEarn']),
+        status: false
     });
     res.send("Order submitted");
-    console.log('Submitted successfully to server');
+    console.log(res.json({file:req.file}))
+    console.log('Submitted successfully to server Receipt');
 }
+
+async function fetchReceipt(res){
+    await client.connect();
+    console.log('Connected successfully to server Receipt');
+    const db = client.db(dbName);
+    const collection = db.collection("User");
+    let result = await collection.find({"irid":id}).toArray();
+    res.send(result[0]);
+    return result[0];
+};
+
 
 export default router;
