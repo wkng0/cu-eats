@@ -44,20 +44,20 @@ function Receipt() {
         fetch("http://localhost:7000/dbReceipt/get" + param.id)
         .then(res=>res.json())
         .then(data=>{
-            console.log(data);
-            setReceiptID(data.receiptID);
-            setRestaurant(data.rid);
-            setEmail(data.email);
-            setName(data.user_name);
-            setPoint(data.point);
-            setPhone(data.phone);
-            setAddress(data.address);
-            setCutlery(data.cutlery)
-            setItem(data.item);
-            setSubtotal(data.subtotal);
-            setDiscount(data.discount);
-            setTotal(data.total);
-            setStatus(data.status);
+            console.log(data[0]);
+            setReceiptID(data[0].receiptID);
+            setRestaurant(data[0].rid);
+            setEmail(data[0].email);
+            setName(data[0].user_name);
+            setPoint(data[0].point);
+            setPhone(data[0].phone);
+            setAddress(data[0].address);
+            setCutlery(data[0].cutlery)
+            setItem(data[0].item);
+            setSubtotal(data[0].subtotal);
+            setDiscount(data[0].discount);
+            setTotal(data[0].total);
+            setStatus(data[0].status);
             setFetch(true);
         })
         .catch(err=>{
