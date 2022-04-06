@@ -6,7 +6,7 @@ import './canteen.css';
 import Axios from "axios"; 
 
 
-function NACanteen() {
+function NewNACanteen() {
 
   
 
@@ -15,7 +15,7 @@ function NACanteen() {
 
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbMenu/getMenu/NaMenu").then((response) => {
+        Axios.get("http://localhost:7000/dbNewMenu/getMenu/NaMenu").then((response) => {
             setListOfMenu(response.data)
         });
     }, []);
@@ -39,7 +39,7 @@ function NACanteen() {
                 {listOfMenu.map( (menu) =>{
                     return(
                         <div>
-                            <ShowDishes menu={menu}/>
+                            <NewShowDishes menu={menu}/>
                         </div>
                     );
                 })}
@@ -50,14 +50,16 @@ function NACanteen() {
 }
 
 
-function ShowDishes({menu}) {
-    const [varient, setvarient] = useState('small');
+function NewShowDishes({menu}) {
+    const [varient, setvarient] = useState();
     const [quantity, setquantity] = useState(1);
 
     const [name] = useState("");
     const [varients] = useState([]);
     const [prices] = useState([]);
     const [username] = useState("");
+
+
 
     return(
         <div>
@@ -70,6 +72,8 @@ function ShowDishes({menu}) {
                 {/* <h3>${NAmenu.prices}</h3> */}
                 <div className='w-100 m-1'>
                     <p>Varients</p>
+
+               
                         <select className='form-control' value={varient} onChange={(e)=> {setvarient(e.target.value)}}>
                             {menu.varients.map(varient=>{
                                 return <option value={varient}>{varient}</option>
@@ -85,11 +89,18 @@ function ShowDishes({menu}) {
                         })}
                     </select>
                 </div>
-
+                {/* varients.findIndex(varient) */}
                 <div className='flex-container'>
+                    
                     <div className='m-1 w-100'>
-                        <h1 className='mt-1'>Price: ${menu.prices[0][varient]*(quantity)}</h1>
+                        {/* menu.prices[0]*(quantity) */}
+                        <h1 className='mt-1'>Price: ${menu.prices[0]}</h1>
                     </div>
+
+                    {/* <div className='m-1 w-100'>
+                       
+                        <h1 className='mt-1'>Total: ${menu.prices[menu.varients.indexOf(varient)]*(quantity)}</h1>
+                    </div> */}
 
                     <div className='m-1 w-100'>
                         <button className='btn'>ADD TO CART</button>
@@ -105,4 +116,4 @@ function ShowDishes({menu}) {
 
 }
 
-export default NACanteen;
+export default NewNACanteen;
