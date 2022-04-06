@@ -16,8 +16,8 @@ function DeleteDish() {
     const [username] = useState("");
     const [dishesID] = useState("");
 
-    const deleteDish = (dishesID) => {
-        Axios.delete(`http://localhost:7000/dbMenu/deleteDishes/NaMenu/${dishesID}`)
+    const deleteDish = (id) => {
+        Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
         // .then(()=>{
         //     alert(dishesID); 
         //     // setListOfMenu(listOfMenu.filter((NAmenu) => {
@@ -28,7 +28,7 @@ function DeleteDish() {
 
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbMenu/getMenu/NaMenu").then((response) => {
+        Axios.get("http://localhost:7000/dbNewMenu/getMenu/NaMenu").then((response) => {
             setListOfMenu(response.data)
         });
     }, []);
@@ -98,7 +98,7 @@ function DeleteDish() {
                                             <button id="removeBtn" 
                                                     className='btn'
                                                     onClick={() => {
-                                                        deleteDish(NAmenu.dishesID)
+                                                        deleteDish(NAmenu._id)
                                                     }}
                                             >Delete</button>
                                         </div>

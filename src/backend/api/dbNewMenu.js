@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import bodyParser from "body-parser";
 import multer from "multer";
 import path from 'path'
+import { ObjectId } from "mongodb";
 const __dirname=path.resolve();
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.get("/", function(req, res) {
     res.send("API is working properly");
 });
 
-router.get("/getnewMenu/:canteenname", function(req, res) {
+router.get("/getMenu/:canteenname", function(req, res) {
     canteenname = req.params.canteenname;
     fetchMenu(res)
     .then(console.log)
@@ -133,8 +134,8 @@ async function deleteDishes(req, res) {
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection(canteenname);
-    let deleteResult = await collection.findOneAndDelete({"_id": id});
-    res.send(deleteResult);
+    let deletelist = await collection.findOneAndDelete({_id: ObjectId(id)});
+    res.send(deletelist);
     // await collection.find
 }
 
