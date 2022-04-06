@@ -91,9 +91,15 @@ function NewShowDishes({menu}) {
                 </div>
                 {/* varients.findIndex(varient) */}
                 <div className='flex-container'>
+                    
                     <div className='m-1 w-100'>
                         {/* menu.prices[0]*(quantity) */}
-                        <h1 className='mt-1'>Price: ${menu.prices[menu.varients.indexOf(varient)]*(quantity)}</h1>
+                        <h1 className='mt-1'>Price: ${menu.prices[0]}</h1>
+                    </div>
+
+                    <div className='m-1 w-100'>
+                        {/* menu.prices[0]*(quantity) */}
+                        <h1 className='mt-1'>Total: ${menu.prices[menu.varients.indexOf(varient)]*(quantity)}</h1>
                     </div>
 
                     <div className='m-1 w-100'>
