@@ -9,7 +9,8 @@ export default function AddDishes() {
     const [name, setName] = useState('');
     const [variant, setVariant] = useState('');
     const [variantList, setVariantList]=useState([]);
-    const [Regularprices, setRegularprices] = useState(0);
+    const [price , setPrice] = useState(0);
+    const [pricesList, setPricesList] = useState([]);
     const [category, setCategory] = useState('');
     const [image, setImage] = useState('');
 
@@ -17,7 +18,7 @@ export default function AddDishes() {
         Axios.post('http://localhost:7000/dbNewMenu/AddMenu/NaMenu', {
           name: name, 
           varients: variantList,
-          prices: Regularprices,
+          prices: pricesList,
           category: category,
           image: image,
         })
@@ -34,6 +35,19 @@ export default function AddDishes() {
         document.getElementById("variantList").appendChild(para);
         setVariant("");
     }
+
+    const savePrices=()=>{
+        let newPricesList=pricesList;
+        newPricesList.push(price);
+        setPricesList(newPricesList);
+        let newPrices=price;
+        let node=document.createTextNode(newPrices);
+        let para= document.createElement("p");
+        para.appendChild(node);
+        document.getElementById("pricesList").appendChild(para);
+        setPrice("");
+    }
+
     return (
         <div className="container">
             <div>
@@ -62,19 +76,24 @@ export default function AddDishes() {
                         }}
                     />
                     <Button variant="contained" onClick={saveVariant}>+</Button>
+
                     <div id="variantList">
 
                     </div>
+
                     <input 
                         className="form-control"
                         type="number" 
-                        placeholder="Regular Prices"
-                        value={Regularprices}
+                        placeholder="Prices"
+                        value={price}
                         onChange={(event)=> {
-                            setRegularprices(event.target.value)
+                            setPrice(event.target.value)
                         }}
-
                     /> 
+                    <Button variant="contained" onClick={savePrices}>+</Button>
+                    <div id="pricesList">
+
+                    </div>
 
                     <input 
                         className="form-control"
