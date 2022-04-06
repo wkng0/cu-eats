@@ -51,13 +51,15 @@ function NewNACanteen() {
 
 
 function NewShowDishes({menu}) {
-    const [varient, setvarient] = useState('small');
+    const [varient, setvarient] = useState('regular');
     const [quantity, setquantity] = useState(1);
 
     const [name] = useState("");
     const [varients] = useState([]);
     const [prices] = useState([]);
     const [username] = useState("");
+
+
 
     return(
         <div>
@@ -70,6 +72,8 @@ function NewShowDishes({menu}) {
                 {/* <h3>${NAmenu.prices}</h3> */}
                 <div className='w-100 m-1'>
                     <p>Varients</p>
+
+               
                         <select className='form-control' value={varient} onChange={(e)=> {setvarient(e.target.value)}}>
                             {menu.varients.map(varient=>{
                                 return <option value={varient}>{varient}</option>
@@ -85,10 +89,11 @@ function NewShowDishes({menu}) {
                         })}
                     </select>
                 </div>
-
+                {/* varients.findIndex(varient) */}
                 <div className='flex-container'>
                     <div className='m-1 w-100'>
-                        <h1 className='mt-1'>Price: ${menu.prices[0]*(quantity)}</h1>
+                        {/* menu.prices[0]*(quantity) */}
+                        <h1 className='mt-1'>Price: ${menu.prices[menu.varients.indexOf(varient)]*(quantity)}</h1>
                     </div>
 
                     <div className='m-1 w-100'>
