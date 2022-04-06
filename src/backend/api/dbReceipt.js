@@ -8,7 +8,7 @@ const router = express.Router();
 
 const url="mongodb+srv://admin:admin_d2@groupd2.d3lwk.mongodb.net/sample_users?retryWrites=true&w=majority";
 const client=new MongoClient(url);
-const dbName="Receipt";
+const dbName="Account";
 let receiptID="";
 
 router.use(bodyParser.urlencoded({extended: false}));
@@ -34,7 +34,7 @@ async function getReceiptId(req,res){
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
-    const collection = db.collection("User");
+    const collection = db.collection("Receipt");
     let result = await collection.find({rid: req.body['rid']}).sort({receiptID: -1}).toArray();
     if (result[0] == null) return "#0001"
     else {
@@ -51,7 +51,7 @@ async function submitOrder(req,res,receiptID){
     await client.connect();
     console.log('Connected successfully to server Receipt');
     const db = client.db(dbName);
-    const collection = db.collection("User");
+    const collection = db.collection("Receipt");
     
     const insertResult = await collection.insertOne({ 
         receiptID: receiptID,
@@ -79,10 +79,10 @@ async function fetchReceipt(res){
     await client.connect();
     console.log('Connected successfully to server Receipt');
     const db = client.db(dbName);
-    const collection = db.collection("User");
+    const collection = db.collection("Receipt");
     let result = await collection.find({"irid":id}).toArray();
-    res.send(result[0]);
-    return result[0];
+    res.send(result);
+    return result;
 };
 
 
