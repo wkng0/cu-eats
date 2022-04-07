@@ -52,10 +52,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import {useParams} from 'react-router-dom'
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import FlagIcon from '@mui/icons-material/Flag';
-import MenuIcon from '@mui/icons-material/Menu';
-import zIndex from '@mui/material/styles/zIndex';
-import { render } from '@testing-library/react';
-import { TurnedIn } from '@mui/icons-material';
+
 
 let data = [];
 
@@ -560,7 +557,7 @@ function AddComment(){
         { value: 'SC', label: 'SeeYou@Shaw' },
         { value: 'UC', label: 'Joyful Inn' },
         { value: 'NA', label: 'Now &,' }
-      ]
+    ]
       
     return(
         <div>
