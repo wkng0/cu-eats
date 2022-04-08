@@ -3,6 +3,7 @@ import { AddNewAddress } from "./profile";
 import {UserContext} from './UserContext';
 import DiningIcon from '@mui/icons-material/LocalDining';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import CloseIcon from '@mui/icons-material/Close';
 
 import * as React from 'react';
@@ -61,8 +62,9 @@ function Checkout() {
     const [address, setAddress] = React.useState(null);
     const [cutlery, setCutlery] = React.useState(true);
     const [fetchFinish, setFetch] = React.useState(false);
+    const [refresh, setRefresh] = React.useState(false);
     const [savedAddress,setdbAddress] = React.useState([]);
-    //const [userEmail,setUserEmail] = React.useState('0.0@link.cuhk.edu.hk');
+    const [userEmail,setUserEmail] = React.useState('0.0@link.cuhk.edu.hk');
     const [anchorElNew, setAnchorElNew] = React.useState(null);
     const handleChangeName = (event) => {setName(event.target.value);};
     const handleChangePhone = (event) => {setPhone(event.target.value);};
@@ -70,8 +72,9 @@ function Checkout() {
     const handleChangePoint = (event) => {setPointUse(event.target.value);};
     const handleAddress = (event) => {setAddress(event.target.value);};
     const handleCutlery = () => {setCutlery(!cutlery);};
-    const handleAddNew = (event) => {setAnchorElNew(event.currentTarget);};
+    const handleAddNew = (event) => {setAnchorElNew(event);};
     const handleCloseNew = () => {setAnchorElNew(null);};
+    const handleRefresh = () => {setRefresh(!refresh);};
     const handleReceipt = (event) => {
         receiptID = uid + '_' + Date.now();
         console.log('receipt:', receiptID);
@@ -135,7 +138,7 @@ function Checkout() {
     }
 
     React.useEffect(()=>{setDiscount(pointUse/10);},[pointUse])
-    React.useEffect(()=>{fetchAddress()},([address]))
+    React.useEffect(()=>{fetchAddress()},([refresh]))
     React.useEffect(()=>{
         if(fetchFinish== false){
         fetch('http://localhost:7000/dbAccount/get/'+user)
@@ -227,7 +230,17 @@ function Checkout() {
             <br/><Divider /><br/>
             <Box>
                 <Grid container>
-                    <Grid item xs={9}><h4 style={{color: '#5D4E99'}}>Delivery Address</h4></Grid>
+                    <Grid item xs={9}>
+                        <h4 style={{color: '#5D4E99'}}>Delivery Address
+                        <IconButton 
+                            size='small'
+                            onClick={handleRefresh}
+                            sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}
+                        >
+                            <RefreshIcon/>
+                        </IconButton>
+                        </h4>
+                    </Grid>
                     <Grid item xs={3}  style ={{textAlign:'right'}}>
                         <Button 
                             size='small'
@@ -241,20 +254,21 @@ function Checkout() {
                 <Menu 
                     id="menu-appbar" 
                     anchorEl={anchorElNew} 
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left',}}
+                    anchorOrigin={{ vertical: 'center', horizontal: 'center',}}
                     keepMounted
-                    transformOrigin={{ vertical: 'top', horizontal: 'left',}}
+                    transformOrigin={{ vertical: 'center', horizontal: 'center',}}
                     open={Boolean(anchorElNew)}
-                    sx={{zIndex: '10000'}}
-                    //style={{width:'80%', margin:'auto'}}
+                    style={{zIndex: '10000'}}
                 >
                     <IconButton 
                         size='small' onClick={handleCloseNew}
                         sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}  
                     >
                         <CloseIcon/>
-                    </IconButton> Add New Address<br/>
-                    {/*<AddNewAddress email={userEmail}/>*/}
+                    </IconButton>
+                    <div  style={{width:'90%', margin:'auto'}}>
+                        <AddNewAddress email={userEmail}/><br/><br/>
+                    </div>
                 </Menu>
                 <FormControl>
                     {showAddress()}

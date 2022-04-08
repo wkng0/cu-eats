@@ -270,7 +270,7 @@ function Address(){
       <Button 
           size="small" 
           onClick={()=>navigate(-1)}
-          sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transport', color: '#5D4E99'}}}
+          sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transparent', color: '#5D4E99'}}}
         >
           <ArrowBackIosIcon/>
         </Button>
@@ -1124,7 +1124,7 @@ window.location.reload();
       <Button 
           size="small" 
           onClick={()=>navigate(-1)}
-          sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transport', color: '#5D4E99'}}}
+          sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transparent', color: '#5D4E99'}}}
         >
           <ArrowBackIosIcon/>
         </Button>
