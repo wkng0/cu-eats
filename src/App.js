@@ -3,9 +3,9 @@ import React , { useState, useMemo }from 'react';
 import { LoginPage } from './login';
 import { UserComment, ContentPreview, AdminComment} from './comment';
 import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
-import { Checkout } from './checkout'
+import Checkout from './checkout'
 import { HomePage }  from './HomePage';
-import { Receipt } from './receipt';
+import { Receipt, Records } from './receipt';
 import UCCanteen from './UCcanteen';
 import NACanteen from './NAcanteen';
 import ShawCanteen from './ShawCanteen';
@@ -44,6 +44,7 @@ function App() {
           <Route path="/comment" element={<UserComment />} />
           <Route path="/comment/:canteen/:id" element={<ContentPreview />} />
           <Route path="/profile" element={<Profile/>} />
+          <Route path="/record" element={<Records/>} />
           <Route path="/checkout" element={<Checkout/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
