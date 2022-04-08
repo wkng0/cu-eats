@@ -195,7 +195,8 @@ function Receipt() {
                 </Grid><br/><br/>
                 <Button fullWidth
                     size="large" 
-                    //href='/ShoppingCart'
+                    href='/ShoppingCart'
+                    //onClick={handleReorder}
                     sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
                 >
                     Reorder items
