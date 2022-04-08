@@ -1,12 +1,12 @@
-import React from 'react'
-import { useGlobalContext } from './sc-context'
+import React,{useContext} from 'react'
+import { DishContext } from './sc-context';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
 const CartItem = ({ id, img, title, price, amount }) => {
-    const {remove, increase, decrease} = useGlobalContext();
+    const {remove, increase, decrease} = useContext(DishContext);
     return (
       <article className='sc-cart-item'>
           <img src={img} alt={title} width='100' display='block' className='sc-cart-photo'/>
@@ -41,7 +41,7 @@ const CartItem = ({ id, img, title, price, amount }) => {
   }
 
 const CartContainer = () => {
-  const { cart, total, clearCart } = useGlobalContext()
+  const { cart, total, clearCart } = useContext(DishContext);
   if (cart.length === 0) {
     return (
       <section className='sc-cart'>
