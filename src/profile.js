@@ -9,17 +9,20 @@ import DoneIcon from '@mui/icons-material/Done';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
 import{
   Link,
   Box,
   Button,
   Container,
+  Card,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   TextField,
   InputLabel,
   Input,
@@ -31,8 +34,35 @@ import{
   IconButton,
   Avatar,
 } from '@mui/material';
-import { FlashlightOnRounded, SentimentSatisfiedOutlined, TryOutlined } from '@mui/icons-material';
 
+// const Styles = styled.div`
+// padding: 1rem;
+
+// table {
+//   border-spacing: 0;
+//   border: 1px solid black;
+
+//   tr {
+//     :last-child {
+//       td {
+//         border-bottom: 0;
+//       }
+//     }
+//   }
+
+//   th,
+//   td {
+//     margin: 0;
+//     padding: 0.5rem;
+//     border-bottom: 1px solid black;
+//     border-right: 1px solid black;
+
+//     :last-child {
+//       border-right: 0;
+//     }
+//   }
+// }
+// `
 let userInfo = [];
 
 function Profile(){
@@ -222,12 +252,15 @@ function Address(){
   const [fetchFinish, setFetch] = useState(false);
   const [savedAddress,setAddress] = useState([]);
   const {user, setUser} = useContext(UserContext);
+  function deleteAdd(address){
+    console.log(address);
+  }
 
   useEffect(()=>{
     if(fetchFinish == false){
     fetch('http://localhost:7000/dbAccount/getAddress/'+user)
     .then(res=>res.json())
-    .then(res=>setAddress(res))
+    .then(res=>{setAddress(res);})
     // .then(()=>console.log(savedAddress))
     .then(()=>setFetch(true))
     .catch(err=>{console.log(err);
@@ -246,7 +279,8 @@ function Address(){
       <Link href="/profile"><ArrowBackIcon/></Link>
       {savedAddress.map((address, index)=>(
         <>
-        <h5>Address {index}</h5>
+        <h5>Address {index+1}</h5>
+        <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={deleteAdd(index)}><DeleteIcon/></IconButton>
         <p key={address}>{address}</p>
         <br></br>
         </>
@@ -409,7 +443,7 @@ const {user, setUser} = useContext(UserContext);
          <Box sx={{ m: 5 ,display: 'inline'}}>
       <FormControl sx={{width:500}}>
         <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          College (select if you are inside a college hostel,non college hostel please select Others)
+          College 
         </InputLabel>
         <NativeSelect
         defaultValue={chooseCol}
@@ -453,7 +487,7 @@ const {user, setUser} = useContext(UserContext);
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        College (select if you are inside a college hostel,non college hostel please select Others)
+        College 
       </InputLabel>
       <NativeSelect
       defaultValue={chooseCol}
@@ -497,7 +531,7 @@ const {user, setUser} = useContext(UserContext);
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        College (select if you are inside a college hostel,non college hostel please select Others)
+        College 
       </InputLabel>
       <NativeSelect
       onChange={handleChangeCollege}
@@ -540,7 +574,7 @@ const {user, setUser} = useContext(UserContext);
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        College (select if you are inside a college hostel,non college hostel please select Others)
+        College 
       </InputLabel>
       <NativeSelect
       onChange={handleChangeCollege}
@@ -625,7 +659,7 @@ const {user, setUser} = useContext(UserContext);
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        College (select if you are inside a college hostel,non college hostel please select Others)
+        College 
       </InputLabel>
       <NativeSelect
       // defaultValue={chooseCol}
@@ -656,7 +690,7 @@ const {user, setUser} = useContext(UserContext);
       <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        SHAW Hostel
+        MS Hostel
       </InputLabel>
       <NativeSelect
       onChange={handleChangeBuilding}
@@ -700,7 +734,7 @@ const {user, setUser} = useContext(UserContext);
       <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        SHAW Hostel
+        SH Hostel
       </InputLabel>
       <NativeSelect
       onChange={handleChangeBuilding}
@@ -744,7 +778,7 @@ const {user, setUser} = useContext(UserContext);
       <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
-        SHAW Hostel
+        WS Hostel
       </InputLabel>
       <NativeSelect
       onChange={handleChangeBuilding}
@@ -829,16 +863,6 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
-      <TextField
-        id="standard-required"
-        label="Room"
-        variant="standard"
-        defaultValue = {chooseBlg}
-        onChange={handleChangeBuilding}
-      />
-      </Box>
-      
        <Box sx={{ m: 5 ,display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
@@ -1339,29 +1363,27 @@ function FormDialog(props) {
   );
 }
 
-
 function AdminUser(){
-
 const columns = [
   { field: 'uid', headerName: 'ID', width:180 },
   {
     field: 'first_name',
     headerName: 'First name',
     width: 160,
-    sortable: false
+    sortable: true
   },
   {
     field: 'last_name',
     headerName: 'Last name',
     width: 80,
-    sortable: false
+    sortable: true
   },
   {
     field: 'user_name',
     headerName: 'username',
     type: 'number',
     width: 100,
-    sortable: false
+    sortable: true
   },
   {
     field: 'point',
@@ -1371,38 +1393,43 @@ const columns = [
   {
     field: 'phone',
     headerName: 'Phone',
-    sortable: false
+    sortable: true
   },
   {
     field: 'email',
     headerName: 'email',
     width: 300,
-    sortable: false
+    sortable: true
   },
   {
     field: 'verify',
     headerName: 'Verify',
     width: 50,
+    sortable: true
 
   },
   {
     field: 'password',
     headerName: 'password',
     width: 150,
+    sortable: true
 
   },
-  // {
-  //   field: 'college',
-  //   headerName: 'Collge'
-  // },
-  // {
-  //   field: 'faculty',
-  //   headerName: 'Faculty'
-  // },
-  // {
-  //   field: 'gender',
-  //   headerName: 'gender'
-  // },
+  {
+    field: 'college',
+    headerName: 'Collge',
+    sortable: true
+  },
+  {
+    field: 'faculty',
+    headerName: 'Faculty',
+    sortable: true
+  },
+  {
+    field: 'gender',
+    headerName: 'gender',
+    sortable: true
+  },
 ];
 // update pw
 const deleteUser = ()=>{
@@ -1452,18 +1479,6 @@ if(!mounted){
   .catch(err=>console.log(err))
 
 }
-// for unverify
-// fetch('http://localhost:7000/dbAccount/getAll')
-// .then(res=>res.json())
-// .then(data=>{
-//  setInfo(data);
-//  setMounted(true);
-//   console.log(data);
-// })
-// .catch(err=>console.log(err))
-
-
-
  useEffect(()=>{
    setMounted(true);
  })
@@ -1476,6 +1491,7 @@ if(!mounted){
    return(
     // <AdminTable row={userinfo} col={columns}/>
     <>
+    <h1>User List</h1>
     <div style={{ height: 500, width: '100%' }}>
       <DataGrid
         getRowId={rows => rows._id}
@@ -1485,7 +1501,9 @@ if(!mounted){
         pageSize={10}
         rowsPerPageOptions={[10]}
         disableColumnFilter
-        // checkboxSelection
+        sx={{"& .MuiDataGrid-menuIconButton":{
+          display:"none"
+        }}}
       />
     </div>
     <Box sx={{ m: 5 ,display: 'inline'}}>
@@ -1509,4 +1527,355 @@ if(!mounted){
 }
 }
 
-export { Profile, Account, Address, AdminUser, AddNewAddress};
+function ManagePw(){
+ const[password, setPassword] = useState('');
+ const[email, setEmail] = useState('');
+ const[fetchFinish, setFetch] = useState(false);
+ const [isCopied, setIsCopied] = useState(false);
+ const handleChangeEmail = (event)=>{
+   setEmail(event.target.value);
+ }
+ const handleChangepw = (event)=>{
+   setPassword(event.target.value);
+ }
+ const genPassword=(event)=> {
+    var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var passwordLength = 12;
+    var pw = "";
+ for (var i = 0; i <= passwordLength; i++) {
+   var randomNumber = Math.floor(Math.random() * chars.length);
+   pw += chars.substring(randomNumber, randomNumber +1);
+  }
+  console.log(pw);
+   setPassword(pw);
+   return pw;
+}
+async function copyTextToClipboard(text) {
+  if('clipboard' in navigator){
+    return await navigator.clipboard.writeText(text);
+  } else {
+    return document.execCommand('copy', true, text);
+  }
+}
+
+const handleCopyClick = () => {
+  // Asynchronously call copyTextToClipboard
+  copyTextToClipboard(password)
+    .then(() => {
+      // If successful, update the isCopied state value
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 1500);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+const changePw = ()=>{
+  fetch('http://localhost:7000/dbAccount/updatePw/'+ email, { 
+    method: 'POST', 
+    body: new URLSearchParams({
+        "password": password
+    })
+  })
+  .then(console.log("delete"))
+  .catch(err=>console.log(err))  
+  window.location.reload();
+  return;
+}
+
+  return(
+    <>
+  {/* <Grid> */}
+  {/* <Box sx={{display: 'inline'}}> */}
+    <Card sx={{width: 500, m:3}}>
+    <h1>Password Generator</h1>
+    <TextField
+      id="standard-read-only-input"
+      label="Generate password"
+      value={password}
+      InputProps={{
+        readOnly: true,
+      }}
+      sx ={{m:3, x:5}}
+      variant="standard"
+    />
+    <br></br>
+    <Button sx={{float: 'left'}} onClick={genPassword}>Generate</Button>
+    <Button sx={{float: 'right'}} onClick={handleCopyClick}>Copy</Button>
+    </Card>
+  {/* </Grid> */}
+  {/* <br></br> */}
+  <Card sx={{width: 500, m:3}}>
+    <h1>Change Password</h1>
+    <TextField
+      id="standard-required"
+      label="email"
+      variant="standard"
+      onChange={handleChangeEmail}
+      sx={{m:2}}
+    />
+    <TextField
+      id="standard-required"
+      label="password"
+      default={password}
+      variant="standard"
+      onChange={handleChangepw}
+      sx={{m:2}}
+    />
+    <br></br>
+    <Button onClick={changePw} sx={{float: 'right'}}>Change</Button>
+  </Card>
+  {/* </Box> */}
+    {/* <List>
+      <ListItem>email1</ListItem>
+    </List> */}
+    </>
+  );
+}
+
+function DeleteAcc(){
+  const[email, setEmail] = useState('');
+  const[fetchFinish, setFetch] = useState(false);
+  const[acc, setAcc] = useState('');
+  const columns = [
+    { field: 'uid', headerName: 'ID', width:180 },
+    {
+      field: 'first_name',
+      headerName: 'First name',
+      width: 160,
+      sortable: true
+    },
+    {
+      field: 'last_name',
+      headerName: 'Last name',
+      width: 80,
+      sortable: true
+    },
+    {
+      field: 'user_name',
+      headerName: 'username',
+      type: 'number',
+      width: 100,
+      sortable: true
+    },
+    {
+      field: 'phone',
+      headerName: 'Phone',
+      sortable: true
+    },
+    {
+      field: 'email',
+      headerName: 'email',
+      width: 300,
+      sortable: true
+    },
+    {
+      field: 'verify',
+      headerName: 'Verify',
+      width: 50,
+      sortable: true
+  
+    },
+  ];
+  const handleChangeEmail = (event)=>{
+    setEmail(event.target.value);
+  }
+  const deleteUser = ()=>{
+
+    fetch('http://localhost:7000/dbAccount/delete',{ 
+          method: 'POST', 
+          body: new URLSearchParams({
+              "email": email
+          })
+        })
+        .then(console.log("change"))
+        .catch(err=>console.log(err))
+        window.location.reload();
+      }
+
+  if(!fetchFinish){
+    fetch('http://localhost:7000/dbAccount/getUnverify')
+      .then(res=>res.json())
+      .then(data=>{
+        setAcc(data);
+        setFetch(true);
+      })
+      .catch((err)=>{
+        console.log(err);
+        setFetch(false);
+      })
+  }
+  useEffect(()=>{
+    setFetch(true);
+  })
+  if(fetchFinish == false){
+    return(
+      <h1>loading</h1>
+    );
+    }else{
+      return(
+        <>
+        <Card sx={{width: 500, m:3}}>
+          <h1>Delete Account</h1>
+          <TextField
+            id="standard-required"
+            label="email"
+            variant="standard"
+            onChange={handleChangeEmail}
+            sx={{m:2}}
+          />
+          <br></br>
+          <Button onClick={deleteUser} sx={{float: 'right'}}>Delete</Button>
+        </Card>
+          <div style={{ height: 500, width: '100%' }}>
+          <DataGrid
+            getRowId={rows => rows._id}
+            rows={acc}
+            columns={columns}
+            pagination
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            disableColumnFilter
+            sx={{"& .MuiDataGrid-menuIconButton":{
+              display:"none"
+            }}}
+          />
+        </div>
+        </>
+
+  );}
+}
+// import * as React from 'react';
+// import Box from '@mui/material/Box';
+// import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
+// import Divider from '@mui/material/Divider';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemButton from '@mui/material/ListItemButton';
+// import ListItemIcon from '@mui/material/ListItemIcon';
+// import ListItemText from '@mui/material/ListItemText';
+// import Paper from '@mui/material/Paper';
+// import IconButton from '@mui/material/IconButton';
+// import Tooltip from '@mui/material/Tooltip';
+// import ArrowRight from '@mui/icons-material/ArrowRight';
+// import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+// import Home from '@mui/icons-material/Home';
+// import Settings from '@mui/icons-material/Settings';
+// import People from '@mui/icons-material/People';
+// import PermMedia from '@mui/icons-material/PermMedia';
+// import Dns from '@mui/icons-material/Dns';
+// import Public from '@mui/icons-material/Public';
+
+// const data = [
+//   { icon: <People />, label: 'Authentication' },
+//   { icon: <Dns />, label: 'Database' },
+//   { icon: <PermMedia />, label: 'Storage' },
+//   { icon: <Public />, label: 'Hosting' },
+// ];
+
+// const FireNav = styled(List)({
+//   '& .MuiListItemButton-root': {
+//     paddingLeft: 24,
+//     paddingRight: 24,
+//   },
+//   '& .MuiListItemIcon-root': {
+//     minWidth: 0,
+//     marginRight: 16,
+//   },
+//   '& .MuiSvgIcon-root': {
+//     fontSize: 20,
+//   },
+// });
+
+// export default function CustomizedList() {
+//   const [open, setOpen] = React.useState(true);
+//   return (
+//     <Box sx={{ display: 'flex' }}>
+//       <ThemeProvider
+//         theme={createTheme({
+//           components: {
+//             MuiListItemButton: {
+//               defaultProps: {
+//                 disableTouchRipple: true,
+//               },
+//             },
+//           },
+//           palette: {
+//             mode: 'dark',
+//             primary: { main: 'rgb(102, 157, 246)' },
+//             background: { paper: 'rgb(5, 30, 52)' },
+//           },
+//         })}
+//       >
+//         <Paper elevation={0} sx={{ maxWidth: 256 }}>
+//           {/* <FireNav component="nav" disablePadding> */}
+//             <Divider />
+//             <Box
+//               sx={{
+//                 bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
+//                 pb: open ? 2 : 0,
+//               }}
+//             >
+//               <ListItemButton
+//                 alignItems="flex-start"
+//                 onClick={() => setOpen(!open)}
+//                 sx={{
+//                   px: 3,
+//                   pt: 2.5,
+//                   pb: open ? 0 : 2.5,
+//                   '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
+//                 }}
+//               >
+//                 <ListItemText
+//                   primary="Profile"
+//                   primaryTypographyProps={{
+//                     fontSize: 15,
+//                     fontWeight: 'medium',
+//                     lineHeight: '20px',
+//                     mb: '2px',
+//                   }}
+//                   secondary="User Info, Change Password, Delete Account"
+//                   secondaryTypographyProps={{
+//                     noWrap: true,
+//                     fontSize: 12,
+//                     lineHeight: '16px',
+//                     color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
+//                   }}
+//                   sx={{ my: 0 }}
+//                 />
+//                 <KeyboardArrowDown
+//                   sx={{
+//                     mr: -1,
+//                     opacity: 0,
+//                     transform: open ? 'rotate(-180deg)' : 'rotate(0)',
+//                     transition: '0.2s',
+//                   }}
+//                 />
+//               </ListItemButton>
+//               {open &&
+//                 data.map((item) => (
+//                   <ListItemButton
+//                     key={item.label}
+//                     sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}
+//                   >
+//                     <ListItemIcon sx={{ color: 'inherit' }}>
+//                       {item.icon}
+//                     </ListItemIcon>
+//                     <ListItemText
+//                       primary={item.label}
+//                       primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
+//                     />
+//                   </ListItemButton>
+//                 ))}
+//             </Box>
+//           {/* </FireNav> */}
+//         </Paper>
+//       </ThemeProvider>
+//     </Box>
+//   );
+// }
+
+export { Profile, Account, Address, AdminUser, AddNewAddress, ManagePw, DeleteAcc};

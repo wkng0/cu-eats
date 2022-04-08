@@ -28,12 +28,17 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { List,ListItem,ListItemIcon,ListItemText } from '@mui/material';
+import { List,ListItem,ListItemIcon,ListItemText,ListItemButton } from '@mui/material';
 import { SwipeableDrawer } from '@mui/material';
 import { Divider } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
+import BackupTableIcon from '@mui/icons-material/BackupTable';
+import PasswordIcon from '@mui/icons-material/Password';
+import DeleteIcon from '@mui/icons-material/Delete';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+
 
 
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
@@ -167,7 +172,8 @@ function NavBar() {
 };
 
 function AdminDrawer(props){
-  const [state,setState]=React.useState(false)
+  const [state,setState]=React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const drawerWidth=180;
   const toggleDrawer = (open) => (event) => {
     if (
@@ -180,11 +186,16 @@ function AdminDrawer(props){
 
     setState(open);
 };
+const data = [
+  { icon: <BackupTableIcon />, label: 'User Info' , link: '/admin/profile',},
+  { icon: <PasswordIcon />, label: 'Change Password' , link:'/admin/change',},
+  { icon: <DeleteIcon />, label: 'Delete Account' ,link:'/admin/delete',},
+];
   const drawer = (
     <div>
      
       <List>
-          <ListItem 
+          {/* <ListItem 
             button 
             key="Profile"
             sx={{
@@ -197,9 +208,82 @@ function AdminDrawer(props){
           >
             <ListItemIcon>
               <AccountCircleIcon sx={{color:"white"}}/>
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
+            </ListItemIcon> */}
+            <Box
+              sx={{
+                // bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
+                pb: open ? 2 : 0,
+              }}
+            >
+              <ListItemButton
+                alignItems="flex-start"
+                onClick={() => setOpen(!open)}
+                sx={{
+                  px: 3,
+                  pt: 2.5,
+                  pb: open ? 0 : 2.5,
+                  '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
+                }}
+              >
+                 <ListItemIcon sx={{color:"white"}}>
+              <AccountCircleIcon/>
+                </ListItemIcon>
+                <ListItemText
+                  primary="Profile"
+                  primaryTypographyProps={{
+                    fontSize: 15,
+                    fontWeight: 'medium',
+                    lineHeight: '20px',
+                    mb: '2px',
+                    color: "white"
+                  }}
+                  // secondary="User Info, Change Password, Delete Account"
+                  // secondaryTypographyProps={{
+                  //   noWrap: true,
+                  //   fontSize: 12,
+                  //   lineHeight: '16px',
+                  //   color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
+                  // }}
+                  // sx={{ my: 0 }}
+                />
+                <KeyboardArrowDown
+                  sx={{
+                    mr: -1,
+                    opacity: 0,
+                    transform: open ? 'rotate(-180deg)' : 'rotate(0)',
+                    transition: '0.2s',
+                  }}
+                />
+              </ListItemButton>
+              {open &&
+                data.map((item) => (
+                  <ListItemButton
+                    key={item.label}
+                    sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}
+                  >
+                    <ListItemIcon sx={{ color: 'inherit' }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={item.label}
+                      primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
+                      onClick={()=>{
+                        if(item.label=="User Info"){
+                          window.location.href= '/admin/profile'
+                        }else if(item.label=="Change Password"){
+                          window.location.href = '/admin/change'
+                        }else{
+                          window.location.href = '/admin/delete'
+                        }
+                      
+                      }}
+                    />
+                  </ListItemButton>
+                ))}
+            </Box>
+            <Divider/>
+            {/* <ListItemText primary="Profile" /> */}
+          {/* </ListItem> */}
           <ListItem 
             button 
             key="Comment" 

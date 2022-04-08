@@ -318,13 +318,13 @@ async function fetchAddress(res){
         if(result[i].room!=""){
             address[i] = result[i].room 
             if(result[i].building!=""){
-            address[i] += "," + result[i].building
+            address[i] += ", " + result[i].building
         }
         }else if(result[i].building!=""){
             address[i] = result[i].building
         }
         if(result[i].college != "None" || result[i].college != "None"){
-            address[i] += "," + result[i].college
+            address[i] += ", " + result[i].college
         }
     }
     res.send(address);

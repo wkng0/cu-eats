@@ -2,7 +2,7 @@ import React , { useState, useMemo }from 'react';
 
 import { LoginPage } from './login';
 import { UserComment, ContentPreview, AdminComment} from './comment';
-import { Profile, Account, Address, AdminUser} from './profile';
+import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
 import { Checkout } from './checkout'
 import { HomePage }  from './HomePage';
 import { Receipt } from './receipt';
@@ -61,6 +61,8 @@ function App() {
           <Route path="/AddDishes" element={<AddDishes/>} />
           <Route path="/admin/comment/" element={<AdminComment/>}/>
           <Route path="/admin/profile" element={<AdminUser/>}/>
+          <Route path="/admin/change" element={<ManagePw/>}/>
+          <Route path="/admin/delete" element={<DeleteAcc/>}/>
           <Route path="*" element={<NoMatch/>} />
           </Routes>
          </UserContext.Provider>
