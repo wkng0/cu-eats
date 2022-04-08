@@ -10,6 +10,7 @@ const url="mongodb+srv://admin:admin_d2@groupd2.d3lwk.mongodb.net/sample_users?r
 const client=new MongoClient(url);
 const dbName="Account";
 let receiptID="";
+let id='';
 
 router.use(bodyParser.urlencoded({extended: false}));
 
@@ -18,7 +19,7 @@ router.get("/", function(req, res) {
 });
 
 router.get("/get/:id",function(req,res){
-    let id=req.params.id;
+    id=req.params.id;
     fetchReceipt(res)
     .then(console.log)
     .catch(console.error)
@@ -41,8 +42,8 @@ async function getReceiptId(req,res){
         let lastID = result[0].id;
         let num = (parseInt(lastID.slice(-4))+1) % 10000;
         let newID = '#' + JSON.stringify(num==0? 1:num).padStart(4,'0');
-        console.log("Latest receipt:", lastID);
-        console.log("New receipt:", newID);
+        //console.log("Latest receipt:", lastID);
+        //console.log("New receipt:", newID);
         return newID;
     }
 }
@@ -68,7 +69,7 @@ async function submitOrder(req,res,receiptID){
         total: parseInt(req.body['total']),
         point: parseInt(req.body['pointEarn']),
         status: false,
-        timestamp: req.body['timestamp']
+        timestamp: parseInt(req.body['timestamp'])
     });
     res.send("Order submitted");
     console.log('Submitted successfully to server Receipt');
