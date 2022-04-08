@@ -240,6 +240,7 @@ function LoginWithPassword(props){
             console.log(data[0].password);
             if(data[0].password == password){
                 console.log("password is true");
+                
                 // this.props.history.push("/");
                 window.location.assign("/");
                 // navigate("/",{state:{login: true}});

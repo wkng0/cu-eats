@@ -307,26 +307,23 @@ router.post("/addAddress/:uid",function(req,res){
     .finally(() => client.close());
 })
 
+router.post("/delAddress/:uid",function(req,res){
+    uid = req.params.uid;
+    delAddress(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
 async function fetchAddress(res){
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Address");
     let result = await collection.find({"uid":uid}).toArray();
-    let address = [];
-    for(let i = 0; i < result.length; i++){
-        if(result[i].room!=""){
-            address[i] = result[i].room 
-            if(result[i].building!=""){
-            address[i] += ", " + result[i].building
-        }
-        }else if(result[i].building!=""){
-            address[i] = result[i].building
-        }
-        if(result[i].college != "None" || result[i].college != "None"){
-            address[i] += ", " + result[i].college
-        }
-    }
+    let address=[];
+    for(let i =0; i< result.length; i++){
+        address[i] = result[i].address;}
     res.send(address);
     return "address";
     
@@ -339,10 +336,20 @@ async function addAddress(req,res){
     const collection = db.collection("Address");
     const insertResult = await collection.insertOne({ 
         uid: req.body['uid'],
-        room: req.body['room'],
-        building: req.body['building'],
-        college: req.body['college'],
+        address: req.body['address'],
     });
     return"insertResult";
 };
+
+async function delAddress(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Address");
+    const insertResult = await collection.deleteMany({ 
+        uid: req.body['uid'],
+        address: req.body['address'],
+    });
+    return"insertResult";
+}
 export default router;
