@@ -6,7 +6,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CloseIcon from '@mui/icons-material/Close';
 
 import * as React from 'react';
-import { Navigate  } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -98,9 +97,11 @@ function Checkout() {
                 "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
             },
         })
-        .then(response => {console.log(response)})
+        .then(response => {console.log(response);
+            window.location.href = '/receipt/' + receiptID})
+        //.then(window.location.href = '/receipt/' + receiptID)
         .catch((error) => {console.error('Error:', error);});
-        return <Navigate to={'/receipt/'+receiptID}/>;
+        
     }
 
     const fetchAddress = (event) => {
