@@ -11,7 +11,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
-import{ Link, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
+import{ Divider, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
   InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar } from '@mui/material';
 
 // const Styles = styled.div`
@@ -266,22 +266,26 @@ function Address(){
   if(fetchFinish == true){
     return(
       <>
+      <div style={{width:'90%', margin:'auto'}}>
       <Button 
           size="small" 
           onClick={()=>navigate(-1)}
           sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transport', color: '#5D4E99'}}}
         >
           <ArrowBackIosIcon/>
-        </Button><br/><br/>
-      <div style={{width:'80%', margin:'auto', maxWidth:800}}>
+        </Button>
+      </div><br/>
+      <div style={{width:'70%', margin:'auto'}}>
+        <h3 style={{color: '#5D4E99'}}>My Address</h3><br/>
         {savedAddress.map((address, index)=>(
           <>
-          <h5>Address {index+1}</h5>
+          <h5 style={{color: '#5D4E99'}}>Address {index+1}</h5>
           <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={()=>deleteAdd(address)}><DeleteIcon/></IconButton>
-          <p key={address}>{address}</p>
-          <br></br>
+          <div key={address}>{address}</div>
+          <br/>
           </>
         ))}
+        <br/><Divider /><br/>  
         <AddNewAddress email={email}/>
       </div>
       </>
@@ -424,8 +428,8 @@ const {user, setUser} = useContext(UserContext);
   if(chooseCol=="Other Building"||chooseCol == ""){
     return(
       <>
-        <h5>Add new address</h5>
-         {chooseCol?<><Box sx={{ m: 5 ,display: 'inline'}}>
+        <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+         {chooseCol?<><Box sx={{m: 2, display: 'inline'}}>
         <TextField
           id="standard-required"
           label="Room"
@@ -446,7 +450,7 @@ const {user, setUser} = useContext(UserContext);
       </FormControl>
         </Box></>:<></>}
         
-         <Box sx={{ m: 5 ,display: 'inline'}}>
+         <Box sx={{m: 2, display: 'inline'}}>
       <FormControl sx={{width:500}}>
         <InputLabel variant="standard" htmlFor="uncontrolled-native">
           College 
@@ -457,7 +461,7 @@ const {user, setUser} = useContext(UserContext);
         >
           {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
         </NativeSelect>
-      </FormControl>
+      </FormControl><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -468,8 +472,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="CC"){
     return(
     <>
-      <h5>Add new address</h5>
-       {chooseCol?<><Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+       {chooseCol?<><Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -477,7 +481,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         CC Hostel
@@ -490,7 +494,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box></>:<></>}
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -502,7 +506,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress} disable={!valid}>
         <CheckIcon/>
         save
@@ -512,8 +516,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="NA"){
     return(
       <>
-      <h5>Add new address</h5>
-       {chooseCol?<><Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+       {chooseCol?<><Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -521,7 +525,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         NA Hostel
@@ -534,7 +538,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box></>:<></>}
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -546,7 +550,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -556,8 +560,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="UC"){
     return(
       <>
-      <h5>Add new address</h5>
-       {chooseCol?<><Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+       {chooseCol?<><Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -565,7 +569,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         UC Hostel
@@ -579,7 +583,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box></>:<></>}
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -590,7 +594,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -600,7 +604,7 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="SHAW"){  
     return(
       <>
-      <h5>Add new address</h5><Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/><Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -608,7 +612,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         SHAW Hostel
@@ -621,7 +625,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box>
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -633,7 +637,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -643,8 +647,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="Other Hostel"){
     return(
       <>
-      <h5>Add new address</h5>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+      <Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room, Block"
@@ -652,7 +656,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         Hostel
@@ -665,7 +669,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box>
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -677,7 +681,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -687,8 +691,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="MS"){  
     return(
       <>
-      <h5>Add new address</h5>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+      <Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -696,7 +700,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         MS Hostel
@@ -709,7 +713,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box>
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -721,7 +725,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -731,8 +735,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="SH"){  
     return(
       <>
-      <h5>Add new address</h5>
-     <Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+     <Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -740,7 +744,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         SH Hostel
@@ -753,7 +757,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box>
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -765,7 +769,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -775,8 +779,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="WS"){  
     return(
       <>
-      <h5>Add new address</h5>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+       <Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -784,7 +788,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         WS Hostel
@@ -797,7 +801,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box>
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -809,7 +813,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -819,8 +823,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="WYS"){  
     return(
       <>
-      <h5>Add new address</h5>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+       <Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -828,7 +832,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-      <Box sx={{ m: 5 ,display: 'inline'}}>
+      <Box sx={{m: 2, display: 'inline'}}>
     <FormControl >
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         WYS Hostel
@@ -841,7 +845,7 @@ const {user, setUser} = useContext(UserContext);
     </FormControl>
       </Box>
       
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -853,7 +857,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -863,8 +867,8 @@ const {user, setUser} = useContext(UserContext);
   }else if(chooseCol=="CW"){  
     return(
       <>
-      <h5>Add new address</h5>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+       <Box sx={{m: 2, display: 'inline'}}>
       <TextField
         id="standard-required"
         label="Room"
@@ -872,7 +876,7 @@ const {user, setUser} = useContext(UserContext);
         onChange={handleChangeRoom}
       />
       </Box>
-       <Box sx={{ m: 5 ,display: 'inline'}}>
+       <Box sx={{m: 2, display: 'inline'}}>
     <FormControl sx={{width:500}}>
       <InputLabel variant="standard" htmlFor="uncontrolled-native">
         College 
@@ -884,7 +888,7 @@ const {user, setUser} = useContext(UserContext);
         {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
       </NativeSelect>
     </FormControl>
-      </Box>
+      </Box><br/><br/>
       <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
@@ -895,8 +899,8 @@ const {user, setUser} = useContext(UserContext);
   // }else{
   //   return(
   //   <>
-  //   <h5>Add new address</h5>
-  //    <Box sx={{ m: 5 ,display: 'inline'}}>
+  //   <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+  //    <Box sx={{m: 2, display: 'inline'}}>
   //   <TextField
   //     id="standard-required"
   //     label="Room"
@@ -904,7 +908,7 @@ const {user, setUser} = useContext(UserContext);
   //     onChange={handleChangeRoom}
   //   />
   //   </Box>
-  //    <Box sx={{ m: 5 ,display: 'inline'}}>
+  //    <Box sx={{m: 2, display: 'inline'}}>
   // <FormControl sx={{width:500}}>
   //   <InputLabel variant="standard" htmlFor="uncontrolled-native">
   //     College 
@@ -924,8 +928,8 @@ const {user, setUser} = useContext(UserContext);
   // }
     // return(
     //     <>
-    //     <h5>Add new address</h5>
-    //      <Box sx={{ m: 5 ,display: 'inline'}}>
+    //     <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+    //      <Box sx={{m: 2, display: 'inline'}}>
     //     <TextField
     //       id="standard-required"
     //       label="Room"
@@ -946,7 +950,7 @@ const {user, setUser} = useContext(UserContext);
     //   </FormControl>
     //     </Box>
         
-    //      <Box sx={{ m: 5 ,display: 'inline'}}>
+    //      <Box sx={{m: 2, display: 'inline'}}>
     //   <FormControl sx={{width:500}}>
     //     <InputLabel variant="standard" htmlFor="uncontrolled-native">
     //       College (select if you are inside a college hostel,non college hostel please select Others)
@@ -1116,15 +1120,19 @@ window.location.reload();
   } else {
    return(
      <>
+      <div style={{width:'90%', margin:'auto'}}>
       <Button 
-        size="small" 
-        onClick={()=>navigate(-1)}
-        sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transport', color: '#5D4E99'}}}
-      >
-        <ArrowBackIosIcon/>
-      </Button><br/><br/>
-      <div style={{width:'80%', margin:'auto', maxWidth:800}}>
-     <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={updateInfo}><DoneIcon/></IconButton>
+          size="small" 
+          onClick={()=>navigate(-1)}
+          sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transport', color: '#5D4E99'}}}
+        >
+          <ArrowBackIosIcon/>
+        </Button>
+      </div><br/>
+      <div style={{width:'70%', margin:'auto'}}>
+      
+     <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={updateInfo}><DoneIcon/></IconButton><br/>
+     <h3 style={{color: '#5D4E99'}}>Peronal Information</h3><br/>
      <Box component="form"
             sx={{
                 '& .MuiTextField-root': { m: 8, width: '25ch' },
@@ -1520,7 +1528,7 @@ if(!mounted){
         }}}
       />
     </div>
-    <Box sx={{ m: 5 ,display: 'inline'}}>
+    <Box sx={{m: 2, display: 'inline'}}>
     <TextField
       id="standard-required"
       label="email"
@@ -1603,7 +1611,7 @@ const changePw = ()=>{
   return(
     <>
   {/* <Grid> */}
-  {/* <Box sx={{display: 'inline'}}> */}
+  {/* <Box sx={{m: 2, display: 'inline'}}> */}
     <Card sx={{width: 500, m:3}}>
     <h1>Password Generator</h1>
     <TextField
