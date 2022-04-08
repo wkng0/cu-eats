@@ -6,6 +6,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CloseIcon from '@mui/icons-material/Close';
 
 import * as React from 'react';
+import { Navigate  } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -78,7 +79,7 @@ function Checkout() {
         fetch("http://localhost:7000/dbReceipt/user", {
             method: 'POST', 
             body: new URLSearchParams({
-                "receiptID": receiptID,
+                "irid": receiptID,
                 "uid": uid,
                 "rid": rid,
                 "name": name,
@@ -90,7 +91,8 @@ function Checkout() {
                 "subtotal": total,
                 "discount": discount,
                 "total": total-discount,
-                "pointEarn": ~~(total/50)*5
+                "pointEarn": ~~(total/50)*5,
+                "timestamp": Date.now()
             }),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -98,6 +100,7 @@ function Checkout() {
         })
         .then(response => {console.log(response)})
         .catch((error) => {console.error('Error:', error);});
+        return <Navigate to={'/receipt/'+receiptID}/>;
     }
 
     const fetchAddress = (event) => {
@@ -152,7 +155,7 @@ function Checkout() {
       
     let rid = "R0001";
     let total = 0;
-    let receiptID = 'l1jc1p8ltukap01mi3_1649237597093';
+    var receiptID = '';
 
     return (
         <>
@@ -307,8 +310,8 @@ function Checkout() {
         <div style={{margin: 'auto', textAlign: 'right'}}>
             <Button 
                 size="large" 
-                href={'/receipt/'+receiptID}
                 onClick={handleReceipt}
+                //href={'/receipt/'+receiptID}
                 sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
                 //disabled={!formIsValid()}
             >
