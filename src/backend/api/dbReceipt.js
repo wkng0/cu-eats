@@ -18,7 +18,7 @@ router.get("/", function(req, res) {
 });
 
 router.get("/get/:id",function(req,res){
-    id=req.params.id;
+    let id=req.params.id;
     fetchReceipt(res)
     .then(console.log)
     .catch(console.error)
@@ -35,10 +35,10 @@ async function getReceiptId(req,res){
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Receipt");
-    let result = await collection.find({rid: req.body['rid']}).sort({receiptID: -1}).toArray();
+    let result = await collection.find({rid: req.body['rid']}).sort({id: -1}).toArray();
     if (result[0] == null) return "#0001"
     else {
-        let lastID = result[0].receiptID;
+        let lastID = result[0].id;
         let num = (parseInt(lastID.slice(-4))+1) % 10000;
         let newID = '#' + JSON.stringify(num==0? 1:num).padStart(4,'0');
         console.log("Latest receipt:", lastID);
@@ -52,10 +52,9 @@ async function submitOrder(req,res,receiptID){
     console.log('Connected successfully to server Receipt');
     const db = client.db(dbName);
     const collection = db.collection("Receipt");
-    
     const insertResult = await collection.insertOne({ 
-        receiptID: receiptID,
-        irid: req.body['receiptID'],
+        id: receiptID,
+        irid: req.body['irid'],
         uid: req.body['uid'],
         rid: req.body['rid'],
         ctName: req.body['name'],
@@ -68,10 +67,10 @@ async function submitOrder(req,res,receiptID){
         discount: parseInt(req.body['discount']),
         total: parseInt(req.body['total']),
         point: parseInt(req.body['pointEarn']),
-        status: false
+        status: false,
+        timestamp: req.body['timestamp']
     });
     res.send("Order submitted");
-    console.log(res.json({file:req.file}))
     console.log('Submitted successfully to server Receipt');
 }
 
