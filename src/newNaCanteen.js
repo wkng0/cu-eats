@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState,useContext} from 'react';
 import {useEffect} from "react";
+import { DishContext } from './shoppingCart/sc-context';
 import './canteen.css';
 // import NAmenu from './NAmenu';
 // import Select from 'react-select';
@@ -8,11 +9,9 @@ import { Card,CardMedia,CardContent } from '@mui/material';
 import { Box } from '@mui/system';
 import { Typography } from '@mui/material';
 import Select from 'react-select';
-import { MenuItem } from '@mui/material';
 import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
-
 
 function NewNACanteen() {
     const [listOfMenu, setListOfMenu] = useState([]);
@@ -50,12 +49,10 @@ function NewNACanteen() {
     )
 }
 
-
-
-function NewShowDishes({menu}) {
+function NewShowDishes({menu}){
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
-
+    const {addToCart} = useContext(DishContext);
     const [price,setPrice]=useState(0);
     const variantList=[]
     useEffect(()=>{
@@ -68,7 +65,6 @@ function NewShowDishes({menu}) {
             data.push(obj);
         }
     })
-    
     const quantityList=[
         { value: 0, label: '0' },
         { value: 1, label: '1' },
@@ -85,10 +81,7 @@ function NewShowDishes({menu}) {
         
     }
 
-
     return(
-       
-        
         <Card sx={{display:"flex", alignItems: 'center', my:5}}>
             <CardMedia
                 component="img"
@@ -127,7 +120,13 @@ function NewShowDishes({menu}) {
                     <Typography variant="h6" component="div" >
                         Price: ${menu.prices[variant]*quantity}
                     </Typography>
-                    <Button variant="contained" endIcon={<AddShoppingCartIcon />}>
+                    <Button 
+                        variant="contained" 
+                        endIcon={<AddShoppingCartIcon />}
+                        onClick={()=>{
+                           addToCart(1)
+                        }
+                    } >
                         ADD TO CART
                     </Button>
   

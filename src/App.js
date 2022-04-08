@@ -22,9 +22,9 @@ import { UserContext } from "./UserContext";
 import './login.css';
 import {NavBar,AdminDrawer} from './component'
 import { BrowserRouter, Route, Routes, useLocation, useParams} from 'react-router-dom';
+import CartContainer from './shoppingCart/sc-CartContainer';
 
-
-import { ShoppingCart } from './shoppingCart/sc-context';
+import { DishProvider } from './shoppingCart/sc-context';
 
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
       
       <BrowserRouter>
         <UserContext.Provider value={{user, setUser}}>
+        <DishProvider>
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/login" element={<LoginPage/>} />
@@ -47,16 +48,17 @@ function App() {
           <Route path="/checkout" element={<Checkout/>} />
           <Route path="/profile/account" element={<Account/>} />
           <Route path="/profile/address" element={<Address/>} />
-          <Route path="/ShoppingCart" element={<ShoppingCart/>} />
+          
+          <Route path="/ShoppingCart" element={<CartContainer/>} />
           <Route path="/UCcanteen" element={<UCCanteen/>} />
           <Route path="/NAcanteen" element={<NACanteen/>} />
           <Route path="/Shawcanteen" element={<ShawCanteen/>} />
-          <Route path="/receipt/:id" element={<Receipt/>} />
           <Route path="/newNAcanteen" element={<NewNACanteen/>} />
-            
-           <Route path="/newNAcanteen" element={<NewNACanteen/>} />
           <Route path="/newShawcanteen" element={<NewShawCanteen/>} />
           <Route path="/newUccanteen" element={<NewUcCanteen/>} />
+        
+            
+          <Route path="/receipt/:id" element={<Receipt/>} />
             
           <Route path="/deleteDishes" element={<DeleteDish/>} />
           <Route path="/AddDishes" element={<AddDishes/>} />
@@ -65,10 +67,11 @@ function App() {
           <Route path="/admin/change" element={<ManagePw/>}/>
           <Route path="/admin/delete" element={<DeleteAcc/>}/>
           <Route path="*" element={<NoMatch/>} />
-          </Routes>
-         </UserContext.Provider>
-      </BrowserRouter>
-      <AdminDrawer/>
+        </Routes>
+        </DishProvider>
+        </UserContext.Provider>
+    </BrowserRouter>
+    <AdminDrawer/>
       
     </div>
   );
