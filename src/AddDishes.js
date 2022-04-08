@@ -2,6 +2,14 @@ import { useState, useEffect } from "react";
 import React from "react";
 import Axios from "axios";
 import { Button } from "@mui/material";
+import {
+    Typography,
+    AppBar,
+    Toolbar,
+    TextField,
+    // Button,
+    Box
+} from "@mui/material";
 
 
 export default function AddDishes() {
@@ -53,12 +61,90 @@ export default function AddDishes() {
     return (
         <div className="container">
             <div>
+            {/* <AppBar>
+                <toolbar>
+                <h1>SIGNIN FORM </h1>
+                </toolbar>
+            </AppBar> */}
                 <h1>Add Dish</h1>
 
                 
                 <form>
 
-                    <input 
+                    <TextField
+                        style={{ width: "1000px", margin: "5px" }}
+                        type="text"
+                        label="name"
+                        variant="outlined"
+                        onChange={(event)=> {
+                            setName(event.target.value)
+                        }}
+                    />
+                    <br />
+
+                    <TextField
+                        style={{ width: "1000px", margin: "5px" }}
+                        type="text"
+                        label="variant"
+                        variant="outlined"
+                        onChange={(event)=> {
+                            setVariant(event.target.value)
+                        }}
+                    />
+                   
+                    <br />
+
+                     <TextField
+                        style={{ width: "1000px", margin: "5px" }}
+                        type="number"
+                        label="Prices"
+                        variant="outlined"
+                        onChange={(event)=> {
+                            setPrice(event.target.value)
+                        }}
+                    />
+                    <br />  
+
+                    {/* <p style={{fontsize: "24px"}}>What you have added in pairs</p> */}
+                    <div id="variantList">
+
+                    </div>
+                    <div id="pricesList">
+
+                    </div>
+                    <br />
+                    <Button variant="contained" onClick={saveVariant}>Please Add Variant and Price In pairs</Button> 
+                    <br />
+                    <br />
+
+                    <TextField
+                        style={{ width: "1000px", margin: "5px" }}
+                        type="text"
+                        label="category"
+                        variant="outlined"
+                        onChange={(event)=> {
+                            setCategory(event.target.value)
+                        }}
+                    />
+                    <br />
+
+                    <TextField
+                        style={{ width: "1000px", margin: "5px" }}
+                        type="text"
+                        label="image url"
+                        variant="outlined"
+                        onChange={(event)=> {
+                            setImage(event.target.value)
+                        }}
+                    />
+                    <br />
+
+                    <button 
+                        className="btn mt-3"
+                        onClick={AddDishes}>Add Dish</button>
+
+
+                    {/* <input 
                         className="form-control"
                         type="text" 
                         placeholder="name"
@@ -76,10 +162,11 @@ export default function AddDishes() {
                         onChange={(event)=> {
                             setVariant(event.target.value)
                         }}
-                    />
-                    <Button variant="contained" onClick={saveVariant}>+</Button>
+                    /> */}
+                    {/* <Button variant="contained" onClick={saveVariant}>+</Button> */}
+                     {/* <Button variant="contained" onClick={savePrices}>+</Button> */}
 
-                    <div id="variantList">
+                    {/* <div id="variantList">
 
                     </div>
 
@@ -92,7 +179,7 @@ export default function AddDishes() {
                             setPrice(event.target.value)
                         }}
                     /> 
-                    {/* <Button variant="contained" onClick={savePrices}>+</Button> */}
+                   
                     <div id="pricesList">
 
                     </div>
@@ -120,7 +207,7 @@ export default function AddDishes() {
 
                     <button 
                         className="btn mt-3"
-                        onClick={AddDishes}>Add Dish</button>
+                        onClick={AddDishes}>Add Dish</button> */}
 
                 </form>
             </div>
