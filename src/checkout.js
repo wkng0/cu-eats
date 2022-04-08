@@ -154,7 +154,7 @@ function Checkout() {
         })}
     })
       
-    let rid = "R0001";
+    let rid = "Joyful Inn";
     let total = 0;
     var receiptID = '';
 

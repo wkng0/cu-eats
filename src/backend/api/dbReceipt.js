@@ -64,9 +64,9 @@ async function submitOrder(req,res,receiptID){
         address: req.body['address'],
         cutlery: req.body['cutlery'],
         item: req.body['items'],
-        subtotal: parseInt(req.body['subtotal']),
-        discount: parseInt(req.body['discount']),
-        total: parseInt(req.body['total']),
+        subtotal: parseFloat(req.body['subtotal']),
+        discount: parseFloat(req.body['discount']),
+        total: parseFloat(req.body['total']),
         point: parseInt(req.body['pointEarn']),
         status: false,
         timestamp: parseInt(req.body['timestamp'])

@@ -47,7 +47,7 @@ function Receipt() {
     }
     const handleTaken = () => {setStatus(true);};
     const handleCutlery = () => {
-        if (cutlery) {
+        if (cutlery == true) {
             return (
                 <Grid container sx ={{color: '#707070'}}>
                     <Grid item xs={1} sx={{color: '#5D4E99'}}><b>{cutleryNo}</b></Grid>
@@ -102,14 +102,17 @@ function Receipt() {
         <br/>
         <h3 style={{color: '#5D4E99'}}>Receipt <span style={{color: '#FFC107'}}>{receiptID}</span></h3><br/>
         <div style={{textAlign: 'center'}}>
-            <h5 style={{color: '#5D4E99'}}>Order time: {formatDate(timestamp)}</h5>
-            <h5 style={{color: '#5D4E99'}}>Expected delivery time: {formatTime(timestamp+900000)} - {formatTime(timestamp+1800000)}</h5><br/>
+            <h5 style={{color: '#5D4E99'}}>Expected arrival time: {formatTime(timestamp+900000)} - {formatTime(timestamp+1800000)}</h5><br/>
             <h5 style={{color: '#5D4E99'}}>Name: {name}&nbsp;&nbsp;&nbsp;Tel: {phone}</h5>
             <h5 style={{color: '#5D4E99'}}>Address: {address}</h5>
         </div>
          
         <Table style={{width:'80%', margin:'auto', maxWidth:650}} aria-label="spanning table" padding='normal'>
             <br/><Divider /><br/> 
+            <Grid container sx ={{color: '#707070'}}>
+                    <Grid item xs={6} sx={{color: '#5D4E99'}}>Order from <b>{res}</b></Grid>
+                    <Grid item xs={6} sx={{textAlign:'right'}}>{formatDate(timestamp)}</Grid>
+            </Grid><br/>
             {orderItem.map((item) => (
                 cutleryNo += item.amount,
                 <>
@@ -137,9 +140,9 @@ function Receipt() {
             </Grid><br/>  
             <Grid container>
                 <Grid item xs={6}>Use Points</Grid>
-                <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>{discount} point(s)</small></Grid>
+                <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>{discount*10} point(s)</small></Grid>
             </Grid>
-            <div style={{textAlign:'right'}}><b style={{fontSize: 12, color:'#5D4E99'}}>Get ${(discount/10).toFixed(1)} off</b></div>
+            <div style={{textAlign:'right'}}><b style={{fontSize: 12, color:'#5D4E99'}}>Get ${discount.toFixed(1)} off</b></div>
             <br/><Divider /><br/>  
             <Grid container sx ={{color:'#5D4E99'}}>
                 <Grid item xs={10}> <b>Total</b></Grid>
@@ -158,11 +161,53 @@ function Receipt() {
         </Table>
         </>
     );} else {
-        return(
-            <div>Order taken</div>
-        )
-    }
-    } else return (<p>Loading receipt...</p>)
+        return (
+            <>
+            <br/>
+            <h3 style={{color: '#5D4E99'}}>Order from <span style={{color: '#FFC107'}}>{res}</span></h3>
+            <div style={{color: '#707070', textAlign: 'center'}}>{formatDate(timestamp)}</div>
+            <Table style={{width:'80%', margin:'auto', maxWidth:650}} aria-label="spanning table" padding='normal'>
+                <br/><Divider /><br/> 
+                {orderItem.map((item) => (
+                    cutleryNo += item.amount,
+                    <>
+                    <Grid container sx ={{color: '#707070'}}>
+                        <Grid item xs={1} sx={{color: '#5D4E99'}}><b>{item.amount}</b></Grid>
+                        <Grid item xs={9}>x &nbsp;{item.title}</Grid>
+                        <Grid item xs={1} sx={{textAlign:'right'}}>$</Grid>
+                        <Grid item xs={1} sx={{textAlign:'right'}}>{(item.amount * item.price).toFixed(1)}</Grid>
+                    </Grid>
+                    <Grid container sx ={{color: '#707070'}}>
+                        <Grid item xs={1} />
+                        <Grid item xs={11}><pre>{item.description && '   - '}{item.description}</pre></Grid>
+                    </Grid>
+                    </>
+                ))}
+                {handleCutlery()}
+                <br/><Divider /><br/>          
+                <Grid container>
+                    <Grid item xs={9}>Points Rebate</Grid>
+                    <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}>{point} Points</Grid>
+                </Grid><br/>
+                <Grid container>
+                    <Grid item xs={10}>Subtotal</Grid>
+                    <Grid item xs={2} sx ={{textAlign:'right', color: '#5D4E99'}}><b>${subtotal.toFixed(1)}</b></Grid>
+                </Grid><br/>  
+                <Grid container>
+                    <Grid item xs={6}>Use Points</Grid>
+                    <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>{discount*10} point(s)</small></Grid>
+                </Grid>
+                <div style={{textAlign:'right'}}><b style={{fontSize: 12, color:'#5D4E99'}}>Get ${discount.toFixed(1)} off</b></div>
+                <br/><Divider /><br/>  
+                <Grid container sx ={{color:'#5D4E99'}}>
+                    <Grid item xs={10}> <b>Total</b></Grid>
+                    <Grid item xs={2} sx={{textAlign:'right'}}> <b>${(total).toFixed(1)}</b></Grid>
+                </Grid><br/><br/>
+                <br/>
+            </Table>
+            </>
+    )}}
+    else return (<p>Loading receipt...</p>)
 }
 
 export {Receipt};
