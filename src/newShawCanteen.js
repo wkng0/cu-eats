@@ -4,28 +4,24 @@ import './canteen.css';
 // import menu from './menu';
 // import Select from 'react-select';
 import Axios from "axios"; 
+import { Card,CardMedia,CardContent } from '@mui/material';
+import { Box } from '@mui/system';
+import { Typography } from '@mui/material';
+import Select from 'react-select';
+import { MenuItem } from '@mui/material';
+import {Container} from '@mui/material';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { Button } from '@mui/material';
 
 
 function NewShawCanteen() {
-
-    const [varient, setvarient] = useState('');
-    const [quantity, setquantity] = useState(1);
-
     const [listOfMenu, setListOfMenu] = useState([]);
-    const [name] = useState("");
-    const [varients] = useState([]);
-    const [prices] = useState([]);
-    const [username] = useState("");
-
-
     // make api call 
     useEffect(() => {
         Axios.get("http://localhost:7000/dbNewMenu/getMenu/ShawMenu").then((response) => {
             setListOfMenu(response.data)
         });
     }, []);
-
-
     return(
         <>
          <section class="Shawheader">
@@ -39,67 +35,115 @@ function NewShawCanteen() {
                     <a href="https://www.shaw.cuhk.edu.hk/zh/content/shaw-college-seeyoushaw-resuming-lunch-dine-services" class="hero-btn">Visit Us To Know More</a>
             </div>
         </section>
-
-        {/* <!-- ----- restaurant ------ --> */}
-        <div>
-            <div className="row">
+           {/* <!-- ----- restaurant ------ --> */}
+           <div>
+            <Container maxWidth="md">
                 {listOfMenu.map( (menu) =>{
                     return(
                         <div>
-                            {/* <ShowNADishes menu={menu}/> */}
-                             <div style={{margin: '70px'}} className='shadow-lg p-3 mb-5 bg-white rounded'>
-
-                                <div>
-                                    <h1>{menu.name}</h1>
-                                    <img src={menu.image} className="img-fluid" style={{height: '200px' , width: '200px'}}/>
-                                    {/* <h3>${menu.prices}</h3> */}
-                                    <div className='w-100 m-1'>
-                                        <p>Varients</p>
-                                            <select className='form-control' value={varient} onChange={(e)=> {setvarient(e.target.value)}}>
-                                                {menu.varients.map(varient=>{
-                                                    return <option value={varient}>{varient}</option>
-                                                })} 
-                                            </select>
-                                    </div>
-
-                                    <div className='w-100 m-1'>
-                                        <p>Quality</p>
-                                        <select className='form-control' value={quantity} onChange={(e)=>{setquantity(e.target.value)}}>
-                                            {[...Array(10).keys()].map((x, i)=> {
-                                                return <option value={i+1}>{i+1}</option>
-                                            })}
-                                        </select>
-                                    </div>
-
-                                    <div className='flex-container'>
-
-                                        <div className='m-1 w-100'>
-                                            {/* menu.prices[0]*(quantity) */}
-                                            <h1 className='mt-1'>Price: ${menu.prices[0]}</h1>
-                                        </div>
-
-                                        {/* <div className='m-1 w-100'>
-                                            <h1 className='mt-1'>Price: ${menu.prices[menu.varients.indexOf(varient)]*(quantity)}</h1>
-                                        </div> */}
-
-                                        <div className='m-1 w-100'>
-                                            <button className='btn'>ADD TO CART</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                
-
-                            </div>
-
+                            <NewShowDishes menu={menu}/>
                         </div>
                     );
                 })}
-            </div>
+            </Container>
         </div>
         </>
     )
+}
+
+
+
+
+function NewShowDishes({menu}) {
+    const [variant, setVariant] = useState(0);
+    const [quantity, setQuantity] = useState(0);
+
+    const [price,setPrice]=useState(0);
+    const variantList=[]
+    useEffect(()=>{
+        let data=variantList;
+        for(let i=0;i<menu.varients.length;i++){
+            const obj={
+                value: i,
+                label: menu.varients[i]
+            }
+            data.push(obj);
+        }
+    })
+    
+    const quantityList=[
+        { value: 0, label: '0' },
+        { value: 1, label: '1' },
+        { value: 2, label: '2' }
+    ]
+
+    const handleVariant=(option)=>{
+        setVariant(option.value)
+        setPrice(menu.prices[variant]*quantity)
+
+    }
+    const handleQuantity=(option)=>{
+        setQuantity(option.value)
+        
+    }
+
+
+    return(
+       
+        
+        <Card sx={{display:"flex", alignItems: 'center', my:5}}>
+            <CardMedia
+                component="img"
+                sx={{ width: 300, height:300 }}
+                image={menu.image}
+            />
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ flex: '1 0 auto' }}>
+                    <Typography component="div" variant="h6" fullWidth>
+                        {menu.name}
+                    </Typography>
+                    <Typography variant="subtitle1" color="text.secondary" component="div">
+                        Variants
+                    </Typography>
+                    <Select 
+                        options={variantList} 
+                        sx={{zIndex:99999}}
+                        onChange={handleVariant}
+            
+                        //ref
+                        menuPortalTarget={document.body} 
+                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                    />
+                    <Typography variant="subtitle1" color="text.secondary" component="div">
+                        Quantity
+                    </Typography>
+                    <Select 
+                        options={quantityList} 
+                        sx={{zIndex:99999}}
+                        onChange={handleQuantity}
+                        //ref
+                        menuPortalTarget={document.body} 
+                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                    />
+                    
+                    <Typography variant="h6" component="div" >
+                        Price: ${menu.prices[variant]*quantity}
+                    </Typography>
+                    <Button variant="contained" endIcon={<AddShoppingCartIcon />}>
+                        ADD TO CART
+                    </Button>
+  
+              
+        
+                </CardContent>
+            </Box>
+        
+        </Card>
+
+            
+    );
+
+
 }
 
 export default NewShawCanteen;
