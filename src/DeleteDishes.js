@@ -1,51 +1,27 @@
 import React, {useState} from 'react';
 import {useEffect} from "react";
 import './canteen.css';
+// import NAmenu from './NAmenu';
+// import Select from 'react-select';
 import Axios from "axios"; 
+import { Card,CardMedia,CardContent } from '@mui/material';
+import { Box } from '@mui/system';
+import { Typography } from '@mui/material';
+import Select from 'react-select';
+import { MenuItem } from '@mui/material';
+import {Container} from '@mui/material';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { Button } from '@mui/material';
 
 
 function DeleteDish() {
-
-    const [varient, setvarient] = useState('small');
-    const [quantity, setquantity] = useState(1);
-
     const [listOfMenu, setListOfMenu] = useState([]);
-    const [name] = useState("");
-    const [varients] = useState([]);
-    const [prices] = useState([]);
-    const [username] = useState("");
-    const [dishesID] = useState("");
-
-    const deleteDish = (id) => {
-        Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
-        // .then(()=>{
-        //     alert(dishesID); 
-        //     // setListOfMenu(listOfMenu.filter((NAmenu) => {
-        //     //     return NAmenu.dishesID != dishesID;
-        //     // }))
-        // }) ;
-    }
-
     // make api call 
     useEffect(() => {
         Axios.get("http://localhost:7000/dbNewMenu/getMenu/NaMenu").then((response) => {
             setListOfMenu(response.data)
         });
     }, []);
-
-    // useEffect(() => {
-    //     Axios.get("http://localhost:7000/dbMenu/deleteDishes/NaMenu").then((response) => {
-    //         setListOfMenu(response.data)
-    //     });
-    // }, []);
-
-    // useEffect(() => {
-    //     Axios.get("http://localhost:7000/dbMenu/getDishes/NaMenu").then((response) => {
-    //         setListOfMenu(response.data)
-    //     });
-    // }, []);
-
-
     return(
         <>
         <section class="NAheader">
@@ -60,63 +36,154 @@ function DeleteDish() {
 
         {/* <!-- ----- restaurant ------ --> */}
         <div>
-            <div className="row">
-                {listOfMenu.map( (NAmenu) =>{
+            <Container maxWidth="md">
+                {listOfMenu.map( (menu) =>{
                     return(
                         <div>
-                            {/* <ShowNADishes NAmenu={NAmenu}/> */}
-                             <div style={{margin: '70px'}} className='shadow-lg p-3 mb-5 bg-white rounded'>
-
-                                <div>
-                                    <h1>{NAmenu.name}</h1>
-                                    <img src={NAmenu.image} className="img-fluid" style={{height: '200px' , width: '200px'}}/>
-                                    {/* <h3>${NAmenu.prices}</h3> */}
-                                    <div className='w-100 m-1'>
-                                        <p>Varients</p>
-                                            <select className='form-control' value={varient} onChange={(e)=> {setvarient(e.target.value)}}>
-                                                {NAmenu.varients.map(varient=>{
-                                                    return <option value={varient}>{varient}</option>
-                                                })} 
-                                            </select>
-                                    </div>
-
-                                    <div className='w-100 m-1'>
-                                        <p>Quality</p>
-                                        <select className='form-control' value={quantity} onChange={(e)=>{setquantity(e.target.value)}}>
-                                            {[...Array(10).keys()].map((x, i)=> {
-                                                return <option value={i+1}>{i}</option>
-                                            })}
-                                        </select>
-                                    </div>
-
-                                    <div className='flex-container'>
-                                        <div className='m-1 w-100'>
-                                            <h1 className='mt-1'>Price: ${NAmenu.prices[0][varient]*(quantity-1)}</h1>
-                                        </div>
-
-                                        <div className='m-1 w-100'>
-                                            <button id="removeBtn" 
-                                                    className='btn'
-                                                    onClick={() => {
-                                                        deleteDish(NAmenu._id)
-                                                    }}
-                                            >Delete</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                
-
-                            </div>
-
+                            <EditingDIshes menu={menu}/>
                         </div>
                     );
                 })}
-            </div>
+            </Container>
         </div>
         </>
     )
 }
+
+
+
+function EditingDIshes({menu}) {
+    const [variant, setVariant] = useState(0);
+    const [quantity, setQuantity] = useState(0);
+
+    const [price,setPrice]=useState(0);
+    const variantList=[]
+    useEffect(()=>{
+        let data=variantList;
+        for(let i=0;i<menu.varients.length;i++){
+            const obj={
+                value: i,
+                label: menu.varients[i]
+            }
+            data.push(obj);
+        }
+    })
+    
+    const quantityList=[
+        { value: 0, label: '0' },
+        { value: 1, label: '1' },
+        { value: 2, label: '2' }
+    ]
+
+    const handleVariant=(option)=>{
+        setVariant(option.value)
+        setPrice(menu.prices[variant]*quantity)
+
+    }
+    const handleQuantity=(option)=>{
+        setQuantity(option.value)
+        
+    }
+
+
+    const deleteDish = (id) => {
+        Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
+        // .then(()=>{
+        //     // alert(dishidesID); 
+        //     setListOfMenu(listOfMenu.filter((NAmenu) => {
+        //         return NAmenu.dishesID != dishesID;
+        //     }))
+        // }) ;
+    }
+
+
+    // const updatePrices = (id) => {
+    //     const newAge = prompt("Enter new age: ");
+    
+    //     Axios.put('http://localhost:3001/update', {newAge: newAge, id: id}).then(()=>{
+    //       setListOfFriends(listOfFriends.map((val)=> {
+    //         return val._id == id 
+    //           ? {_id: id, name: val.name, age: newAge} 
+    //           : val;
+    //       }))
+    //     });
+    //   }
+
+
+
+    return(
+       
+        
+        <Card sx={{display:"flex", alignItems: 'center', my:5}}>
+            <CardMedia
+                component="img"
+                sx={{ width: 300, height:300 }}
+                image={menu.image}
+            />
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ flex: '1 0 auto' }}>
+                    <Typography component="div" variant="h6" fullWidth>
+                        {menu.name}
+                    </Typography>
+                    <Typography variant="subtitle1" color="text.secondary" component="div">
+                        Variants
+                    </Typography>
+                    <Select 
+                        options={variantList} 
+                        sx={{zIndex:99999}}
+                        onChange={handleVariant}
+            
+                        //ref
+                        menuPortalTarget={document.body} 
+                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                    />
+
+                    {/* <Typography variant="subtitle1" color="text.secondary" component="div">
+                        Quantity
+                    </Typography>
+                    <Select 
+                        options={quantityList} 
+                        sx={{zIndex:99999}}
+                        onChange={handleQuantity}
+                        //ref
+                        menuPortalTarget={document.body} 
+                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                    /> */}
+                    
+                    <Typography variant="h6" component="div" >
+                        Price: ${menu.prices[variant]}
+                    </Typography>
+
+                    {/* <Button variant="contained" 
+                            endIcon={<AddShoppingCartIcon />}
+                            onClick={() => {
+                                // updatePrices(menu._id)
+                    }}>
+                        Update Prices
+                    </Button> */}
+
+                    {/* <span>{"       "}</span> */}
+
+                    <Button variant="contained" 
+                            endIcon={<AddShoppingCartIcon />}
+                            onClick={() => {
+                                deleteDish(menu._id)
+                    }}>
+                        Delete
+                    </Button>
+  
+              
+        
+                </CardContent>
+            </Box>
+        
+        </Card>
+
+            
+    );
+
+
+}
+
 
 export default DeleteDish;
