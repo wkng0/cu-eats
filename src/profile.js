@@ -1,39 +1,18 @@
 import React, {useEffect, useState, useContext} from 'react';
-import {UserContext} from './UserContext';
-import logo from './image/logo.jpeg';
+import { useNavigate } from "react-router-dom";
+import { UserContext } from './UserContext';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DoneIcon from '@mui/icons-material/Done';
-import PhoneIcon from '@mui/icons-material/Phone';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
-import{
-  Link,
-  Box,
-  Button,
-  Container,
-  Card,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Grid,
-  TextField,
-  InputLabel,
-  Input,
-  FormControl,
-  Select,
-  FormHelperText,
-  NativeSelect,
-  MenuItem,
-  IconButton,
-  Avatar,
-} from '@mui/material';
+import{ Link, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
+  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar } from '@mui/material';
 
 // const Styles = styled.div`
 // padding: 1rem;
@@ -229,7 +208,7 @@ changeIcon(event){
         </Button>
                           </div>
                           <div class="stats">
-                              <Button  href="/" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}>
+                              <Button  href="/record" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}>
                                 <ReceiptLongIcon fontSize="large" sx={{color:  "#F4CB86"}}/>Shopping Record</Button> 
                           </div>
                   </div>
@@ -252,6 +231,7 @@ function Address(){
   const [fetchFinish, setFetch] = useState(false);
   const [savedAddress,setAddress] = useState([]);
   const {user, setUser} = useContext(UserContext);
+  const navigate = useNavigate();
   function deleteAdd(address){
     fetch('http://localhost:7000/dbAccount/delAddress/'+user, { 
       method: 'POST', 
@@ -286,16 +266,24 @@ function Address(){
   if(fetchFinish == true){
     return(
       <>
-      <Link href="/profile"><ArrowBackIcon/></Link>
-      {savedAddress.map((address, index)=>(
-        <>
-        <h5>Address {index+1}</h5>
-        <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={()=>deleteAdd(address)}><DeleteIcon/></IconButton>
-        <p key={address}>{address}</p>
-        <br></br>
-        </>
-      ))}
-      <AddNewAddress email={email}/>
+      <Button 
+          size="small" 
+          onClick={()=>navigate(-1)}
+          sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transport', color: '#5D4E99'}}}
+        >
+          <ArrowBackIosIcon/>
+        </Button><br/><br/>
+      <div style={{width:'80%', margin:'auto', maxWidth:800}}>
+        {savedAddress.map((address, index)=>(
+          <>
+          <h5>Address {index+1}</h5>
+          <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={()=>deleteAdd(address)}><DeleteIcon/></IconButton>
+          <p key={address}>{address}</p>
+          <br></br>
+          </>
+        ))}
+        <AddNewAddress email={email}/>
+      </div>
       </>
     )
     }
@@ -470,10 +458,10 @@ const {user, setUser} = useContext(UserContext);
           {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
         </NativeSelect>
       </FormControl>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
         </Box>
         </>
     )
@@ -515,10 +503,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress} disable={!valid}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress} disable={!valid}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="NA"){
@@ -559,10 +547,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="UC"){
@@ -603,10 +591,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="SHAW"){  
@@ -646,10 +634,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="Other Hostel"){
@@ -690,10 +678,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="MS"){  
@@ -734,10 +722,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="SH"){  
@@ -778,10 +766,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="WS"){  
@@ -822,10 +810,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="WYS"){  
@@ -866,10 +854,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }else if(chooseCol=="CW"){  
@@ -897,10 +885,10 @@ const {user, setUser} = useContext(UserContext);
       </NativeSelect>
     </FormControl>
       </Box>
-      <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
         <CheckIcon/>
         save
-      </IconButton>
+      </Button>
       </>
     )
   }
@@ -1056,7 +1044,7 @@ const checkUsername=async ()=>{
     console.log(err);
   }
 }
-
+const navigate = useNavigate();
 const updateInfo = ()=>{
   console.log("updated info here");
   console.log(newUsername)
@@ -1124,14 +1112,18 @@ window.location.reload();
 }
 
   if(fetchFinish == false){
-    return(
-      <h1>loading</h1>
-    )
-  }
-  if (fetchFinish == true){
+    return( <p>loading</p> )
+  } else {
    return(
      <>
-     <Link href="/profile" sx={{color: '#5D4E99'}}><ArrowBackIcon/></Link>
+      <Button 
+        size="small" 
+        onClick={()=>navigate(-1)}
+        sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transport', color: '#5D4E99'}}}
+      >
+        <ArrowBackIosIcon/>
+      </Button><br/><br/>
+      <div style={{width:'80%', margin:'auto', maxWidth:800}}>
      <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={updateInfo}><DoneIcon/></IconButton>
      <Box component="form"
             sx={{
@@ -1226,6 +1218,7 @@ window.location.reload();
      {/* <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} onClick={() => setShow(prev => !prev)}>Change Password</Button>
      {show &&  <FormDialog email={email}/>} */}
      <FormDialog email={email}/>
+     </div>
      </>
    );}
 }
@@ -1330,8 +1323,8 @@ function FormDialog(props) {
 
   return (
     <div>
-      <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} 
-      aria-owns={open ? 'simple-open' : null} aria-haspopup="true" onClick={handleClickOpen}>Change Password</Button>
+      <Button sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+      aria-owns={open ? 'simple-open' : null} aria-haspopup="true" onClick={handleClickOpen}>Change Password</Button><br/><br/>
       <Dialog 
       id='simple-open'
       open={open} 

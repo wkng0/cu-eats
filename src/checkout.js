@@ -325,4 +325,4 @@ function Checkout() {
     );
 }
 
-export {Checkout};
+export default Checkout;
