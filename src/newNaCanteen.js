@@ -12,6 +12,7 @@ import Select from 'react-select';
 import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
+import { Chip,Stack } from '@mui/material';
 
 function NewNACanteen() {
     const [listOfMenu, setListOfMenu] = useState([]);
@@ -54,17 +55,23 @@ function NewShowDishes({menu}){
     const [quantity, setQuantity] = useState(0);
     const {addToCart} = useContext(DishContext);
     const [price,setPrice]=useState(0);
-    const variantList=[]
+    let variantList=[];
+    const tag=menu.tag;
+    
     useEffect(()=>{
+        console.log(tag)
         let data=variantList;
-        for(let i=0;i<menu.varients.length;i++){
+        for(let i=0;i<menu.variants.length;i++){
             const obj={
                 value: i,
-                label: menu.varients[i]
+                label: menu.variants[i].name
             }
             data.push(obj);
+        
         }
+        //console.log(variantList);
     })
+    
     const quantityList=[
         { value: 0, label: '0' },
         { value: 1, label: '1' },
@@ -73,7 +80,7 @@ function NewShowDishes({menu}){
 
     const handleVariant=(option)=>{
         setVariant(option.value)
-        setPrice(menu.prices[variant]*quantity)
+        setPrice(menu.variants[variant].price*quantity)
 
     }
     const handleQuantity=(option)=>{
@@ -93,6 +100,18 @@ function NewShowDishes({menu}){
                     <Typography component="div" variant="h6" fullWidth>
                         {menu.name}
                     </Typography>
+                    <Stack direction="row" spacing={1}>
+
+                    
+                    {tag.map((file,i) =>{   
+                        return (
+                            <Chip
+                                label={tag[i].label}
+                                color={tag[i].color}
+                            />   
+                        );
+                    })}
+                    </Stack>
                     <Typography variant="subtitle1" color="text.secondary" component="div">
                         Variants
                     </Typography>
@@ -118,7 +137,7 @@ function NewShowDishes({menu}){
                     />
                     
                     <Typography variant="h6" component="div" >
-                        Price: ${menu.prices[variant]*quantity}
+                        Price: ${menu.variants[variant].price*quantity}
                     </Typography>
                     <Button 
                         variant="contained" 
