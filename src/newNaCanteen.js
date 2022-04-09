@@ -148,9 +148,7 @@ function NewShowDishes({menu}){
                     } >
                         ADD TO CART
                     </Button>
-  
-              
-        
+
                 </CardContent>
             </Box>
         
