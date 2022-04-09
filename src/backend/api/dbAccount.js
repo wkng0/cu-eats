@@ -55,7 +55,15 @@ router.get("/userName/:name",function(req,res){
     .finally(() => client.close());
 });
 
-router.get("/get/:uid",function(req,res){
+router.get("/get/:email",function(req,res){
+    user_email=req.params.email;
+    fetchAccount(res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
+
+router.get("/getByUID/:uid",function(req,res){
     uid=req.params.uid;
     fetchAccount(res)
     .then(console.log)
@@ -185,11 +193,20 @@ async function fetchAccount(res){
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Info");
-    let result = await collection.find({"uid":uid}).toArray();
+    let result = await collection.find({"email":user_email}).toArray();
     res.send(result);
     return result;
 };
 
+async function fetchAccountUID(res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    let result = await collection.find({"uid":uid}).toArray();
+    res.send(result);
+    return result;
+};
 
 async function addUser(req,res){
     await client.connect();

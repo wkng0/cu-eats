@@ -1,8 +1,9 @@
-import React, {useContext} from 'react'
-import {UserContext} from './UserContext';
+import React, {useContext} from 'react';
+import { UserContext } from "./UserContext";
 import './login.css';
 import  ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
 import{
     Link,
     Box,
@@ -209,6 +210,7 @@ function LoginWithPassword(props){
     const [password, setPassword]=React.useState("");
     const [iconA, setIconA]=React.useState("none");
     const [iconB, setIconB]=React.useState("block");
+    const {user, setUser} = useContext(UserContext);
     const handleChange=(event)=>{
         setPassword(event.target.value);
     }
@@ -234,21 +236,26 @@ function LoginWithPassword(props){
     
     }
     const login=()=>{
-        fetch('http://localhost:7000/dbAccount/get/'+props.email)
+        fetch('http://localhost:7000/dbAccount/get/'+email)
         .then(res=>res.json())
         .then(data=>{
             console.log(data[0].password);
             if(data[0].password == password){
                 console.log("password is true");
-                
-                // this.props.history.push("/");
+                console.log(user);
+                if(data[0].type == "user"){
+                    console.log("Checked user!!!!!!!!!!!!!!!");
+                    console.log("UID: ",data[0].uid);
+                    // setUser(data[0].uid); buggg
+                    
+                }
                 window.location.assign("/");
-                // navigate("/",{state:{login: true}});
             }
         })
         .catch(err=>console.log(err))
     }
     return(
+        <>
         <div id="login-password" className="login-container" >
             <section className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
                 <h2>Great to see you again!</h2>
@@ -273,6 +280,8 @@ function LoginWithPassword(props){
                 </form>
             </section>
         </div>
+
+        </>
     );
 }
 /*
