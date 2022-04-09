@@ -19,7 +19,7 @@ import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
 export default function AddDishes() {
 
-    const [name, setName] = useState('');
+    const [name, setName] = useState("");
     const [variant, setVariant] = useState('');
     const [variantList, setVariantList]=useState([]);
     const [price , setPrice] = useState(0);
@@ -27,18 +27,26 @@ export default function AddDishes() {
     const [category, setCategory] = useState('');
     const [image, setImage] = useState('');
     const [tag, setTag]=useState("");
+    const [tagError, setTagError]=useState(false)
     const [tagList, setTagList]=useState([]);
     const [chipData, setChipData]=useState([]);
-    const [color, setColor]=useState("")
-
+    const [color, setColor]=useState("default")
+    const [variantError, setVariantError]=useState(false)
+    const [nameError, setNameError]=useState(false);
     const AddDishes = () => {
-        Axios.post('http://localhost:7000/dbNewMenu/AddMenu/NaMenu', {
-          name: name, 
-          variants: variantList,
-          category: category,
-          image: image,
-          tag: tagList,
-        })
+        if(name==""||variantList.length==0){
+            if(name=="") setNameError(true);
+            if(variantList.length==0) setVariantError(true);
+        }else{
+            Axios.post('http://localhost:7000/dbNewMenu/AddMenu/NaMenu', {
+                name: name, 
+                variants: variantList,
+                category: category,
+                image: image,
+                tag: tagList,
+            })
+        }
+        
     };
     const handleDelete = (chipToDelete) => () => {
         let label=chipToDelete.label;
@@ -67,6 +75,10 @@ export default function AddDishes() {
             }
         }
     };
+    const handleChangeTag=(event)=>{
+        setTag(event.target.value);
+        setTagError(false);
+    }
 
     const saveTag=()=>{
         if(tag!=""){
@@ -90,8 +102,8 @@ export default function AddDishes() {
 
 
             setTag("")
-            
-
+        }else{
+            setTagError(true);
         }
     }
     const handleChangeColor=(event)=>{
@@ -120,6 +132,8 @@ export default function AddDishes() {
 
             setPrice("");
             setVariant("");
+        }else{
+            setVariantError(true);
         }
         
     }
@@ -148,8 +162,10 @@ export default function AddDishes() {
                         variant="outlined"
                         onChange={(event)=> {
                             setName(event.target.value)
+                            setNameError(false);
                         }}
                         fullWidth
+                        error={nameError}
                     />
                     <br />
                         
@@ -162,8 +178,10 @@ export default function AddDishes() {
                             variant="outlined"
                             onChange={(event)=> {
                                 setVariant(event.target.value)
+                                setVariantError(false)
                             }}
                             fullWidth
+                            error={variantError}
                         />
                 
                 
@@ -177,8 +195,10 @@ export default function AddDishes() {
                             variant="outlined"
                             onChange={(event)=> {
                                 setPrice(event.target.value)
+                                setVariantError(false)
                             }}
                             fullWidth
+                            error={variantError}
                         />
                 
                         
@@ -238,10 +258,9 @@ export default function AddDishes() {
                         label="tag"
                         variant="outlined"
                         value={tag}
-                        onChange={(event)=> {
-                            setTag(event.target.value)
-                        }}
+                        onChange={handleChangeTag}
                         fullWidth
+                        error={tagError}
                     />
                     <br />
                     <FormLabel id="demo-controlled-radio-buttons-group">Tag Color</FormLabel>
@@ -250,7 +269,7 @@ export default function AddDishes() {
                         value={color}
                         onChange={handleChangeColor}
                         >
-                        <FormControlLabel value="" control={<Radio />} label="default (gray)" />
+                        <FormControlLabel value="default" control={<Radio />} label="default (gray)" />
                         <FormControlLabel value="primary" control={<Radio />} label="light blue" />
                         <FormControlLabel value="secondary" control={<Radio />} label="purple" />
                         <FormControlLabel value="error" control={<Radio />} label="red" />
@@ -281,9 +300,9 @@ export default function AddDishes() {
                     </Stack>
                     <br />
 
-                    <button 
-                        className="btn mt-3"
-                        onClick={AddDishes}>Add Dish</button>
+                    <Button 
+                        variant="contained"
+                        onClick={AddDishes}>Add Dish</Button>
 
 
                     {/* <input 
