@@ -157,9 +157,7 @@ changeIcon(event){
                             {this.props.username}
                             </h1> <span class="text-muted d-block mb-2" style={{color: "#F4CB86"}} >
                               {this.props.email} 
-                              </span>  <h2 class="mb-0" style={{color: '#5D4E99'}}>Points: 
-                              {this.props.point} 
-                              </h2>
+                              </span>  <h2 class="mb-0" style={{color: '#5D4E99'}}>Points: {this.props.point}</h2>
                       </div>
                       <></>
                   </div>

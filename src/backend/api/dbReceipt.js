@@ -10,7 +10,8 @@ const url="mongodb+srv://admin:admin_d2@groupd2.d3lwk.mongodb.net/sample_users?r
 const client=new MongoClient(url);
 const dbName="Account";
 let receiptID="";
-let id='';
+let rid="";
+let uid="";
 
 router.use(bodyParser.urlencoded({extended: false}));
 
@@ -18,32 +19,46 @@ router.get("/", function(req, res) {
     res.send("API is working properly");
 });
 
-router.get("/get/:id",function(req,res){
-    id=req.params.id;
+router.get("/get/:rid",function(req,res){
+    rid=req.params.rid;
     fetchReceipt(res)
+    //.then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
+
+router.get("/getRecords/:uid",function(req,res){
+    uid=req.params.uid;
+    fetchRecord(res)
     .then(console.log)
     .catch(console.error)
     .finally(() => client.close());
 });
 
 router.post("/user",async function(req,res){
-    receiptID = await getReceiptId(req,res);
+    receiptID = await getReceiptId(req);
     await submitOrder(req,res,receiptID);
+    await updatePoint(req);
 })
 
-async function getReceiptId(req,res){
+router.post("/updateStatus/:rid",function(req,res){
+    updateStatus()
+    //.then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
+async function getReceiptId(req){
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Receipt");
-    let result = await collection.find({rid: req.body['rid']}).sort({id: -1}).toArray();
+    let result = await collection.find({rName: req.body['rid']}).sort({id: -1}).toArray();
     if (result[0] == null) return "#0001"
     else {
         let lastID = result[0].id;
         let num = (parseInt(lastID.slice(-4))+1) % 10000;
         let newID = '#' + JSON.stringify(num==0? 1:num).padStart(4,'0');
-        //console.log("Latest receipt:", lastID);
-        //console.log("New receipt:", newID);
         return newID;
     }
 }
@@ -55,10 +70,10 @@ async function submitOrder(req,res,receiptID){
     const collection = db.collection("Receipt");
     const insertResult = await collection.insertOne({ 
         id: receiptID,
-        irid: req.body['irid'],
+        rid: req.body['irid'],
         uid: req.body['uid'],
-        rid: req.body['rid'],
-        ctName: req.body['name'],
+        rName: req.body['rid'],
+        name: req.body['name'],
         email: req.body['email'],
         phone: req.body['phone'],
         address: req.body['address'],
@@ -67,7 +82,9 @@ async function submitOrder(req,res,receiptID){
         subtotal: parseFloat(req.body['subtotal']),
         discount: parseFloat(req.body['discount']),
         total: parseFloat(req.body['total']),
-        point: parseInt(req.body['pointEarn']),
+        point: parseInt(req.body['point']),
+        pointEarn: parseInt(req.body['pointEarn']),
+        pointRemain: parseInt(req.body['pointRemain']),
         status: false,
         timestamp: parseInt(req.body['timestamp'])
     });
@@ -75,15 +92,52 @@ async function submitOrder(req,res,receiptID){
     console.log('Submitted successfully to server Receipt');
 }
 
+async function updatePoint(req){
+    await client.connect();
+    console.log('Connected successfully to server Info');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    const insertResult = await collection.updateOne(
+        {"uid": req.body['uid']},
+        {
+            $set: {point: parseInt(req.body['pointRemain'])}
+        }
+    );
+    return insertResult;
+}
+
+async function updateStatus(){
+    await client.connect();
+    console.log('Connected successfully to server Receipt');
+    const db = client.db(dbName);
+    const collection = db.collection("Receipt");
+    await collection.updateOne(
+        {"rid":rid},
+        {
+            $set: { status: true },
+            $unset: {name:"", email:"", phone:"", address:""}
+        }
+    );
+}
+
 async function fetchReceipt(res){
     await client.connect();
     console.log('Connected successfully to server Receipt');
     const db = client.db(dbName);
     const collection = db.collection("Receipt");
-    let result = await collection.find({"irid":id}).toArray();
+    let result = await collection.find({"rid":rid}).toArray();
     res.send(result);
     return result;
 };
 
+async function fetchRecord(res){
+    await client.connect();
+    console.log('Connected successfully to server Receipt');
+    const db = client.db(dbName);
+    const collection = db.collection("Receipt");
+    let result = await collection.find({"uid":uid}).toArray();
+    res.send(result);
+    return result;
+};
 
 export default router;
