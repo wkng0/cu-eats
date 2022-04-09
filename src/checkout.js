@@ -7,6 +7,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import CloseIcon from '@mui/icons-material/Close';
 
 import * as React from 'react';
+import { v4 as uuid } from 'uuid';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -75,8 +76,9 @@ function Checkout() {
     const handleAddNew = (event) => {setAnchorElNew(event);};
     const handleCloseNew = () => {setAnchorElNew(null);};
     const handleRefresh = () => {setRefresh(!refresh);};
+    const receiptID = uuid();
     const handleReceipt = (event) => {
-        receiptID = uid + '_' + Date.now();
+        //receiptID = uid(Date.now().toString() + uid);
         console.log('receipt:', receiptID);
         fetch("http://localhost:7000/dbReceipt/user", {
             method: 'POST', 
@@ -93,7 +95,9 @@ function Checkout() {
                 "subtotal": total,
                 "discount": discount,
                 "total": total-discount,
+                "point": point,
                 "pointEarn": ~~(total/50)*5,
+                "pointRemain": point - discount*10 + ~~(total/50)*5,
                 "timestamp": Date.now()
             }),
             headers: {
@@ -102,7 +106,7 @@ function Checkout() {
         })
         .then(response => {console.log(response);
             window.location.href = '/receipt/' + receiptID})
-        //.then(window.location.href = '/receipt/' + receiptID)
+        //.then(clearCart)
         .catch((error) => {console.error('Error:', error);});
         
     }
@@ -145,7 +149,7 @@ function Checkout() {
             console.log("set!",user);
         }
         if(fetchFinish== false){
-        fetch('http://localhost:7000/dbAccount/get/'+user)
+        fetch('http://localhost:7000/dbAccount/getByUID/'+user)
         .then(res=>res.json())
         .then(data=>{
             setEmail(data[0].email);
@@ -163,7 +167,7 @@ function Checkout() {
       
     let rid = "Joyful Inn";
     let total = 0;
-    var receiptID = '';
+    //var receiptID = '';
 
     return (
         <>
