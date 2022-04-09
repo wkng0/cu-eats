@@ -100,10 +100,10 @@ async function postMenu(req,res){
     const collection = db.collection(canteenname);
     const insertResult = await collection.insertOne({ 
         name: req.body['name'],
-        varients: req.body['varients'],
-        prices: req.body['prices'],
+        variants: req.body['variants'],
         category: req.body['category'],
-        image:req.body['image']
+        image:req.body['image'],
+        tag: req.body['tag']
     });
     return "Menu Added!";
 };

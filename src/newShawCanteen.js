@@ -12,7 +12,8 @@ import { MenuItem } from '@mui/material';
 import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
-
+import { Stack } from '@mui/material';
+import { Chip } from '@mui/material';
 
 function NewShawCanteen() {
     const [listOfMenu, setListOfMenu] = useState([]);
@@ -57,18 +58,22 @@ function NewShawCanteen() {
 function NewShowDishes({menu}) {
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
-
     const [price,setPrice]=useState(0);
-    const variantList=[]
+    let variantList=[];
+    const tag=menu.tag;
+    
     useEffect(()=>{
+        console.log(tag)
         let data=variantList;
-        for(let i=0;i<menu.varients.length;i++){
+        for(let i=0;i<menu.variants.length;i++){
             const obj={
                 value: i,
-                label: menu.varients[i]
+                label: menu.variants[i].name
             }
             data.push(obj);
+        
         }
+        //console.log(variantList);
     })
     
     const quantityList=[
@@ -79,7 +84,7 @@ function NewShowDishes({menu}) {
 
     const handleVariant=(option)=>{
         setVariant(option.value)
-        setPrice(menu.prices[variant]*quantity)
+        setPrice(menu.variants[variant].price*quantity)
 
     }
     const handleQuantity=(option)=>{
@@ -87,10 +92,7 @@ function NewShowDishes({menu}) {
         
     }
 
-
     return(
-       
-        
         <Card sx={{display:"flex", alignItems: 'center', my:5}}>
             <CardMedia
                 component="img"
@@ -102,6 +104,18 @@ function NewShowDishes({menu}) {
                     <Typography component="div" variant="h6" fullWidth>
                         {menu.name}
                     </Typography>
+                    <Stack direction="row" spacing={1}>
+
+                    
+                    {tag.map((file,i) =>{   
+                        return (
+                            <Chip
+                                label={tag[i].label}
+                                color={tag[i].color}
+                            />   
+                        );
+                    })}
+                    </Stack>
                     <Typography variant="subtitle1" color="text.secondary" component="div">
                         Variants
                     </Typography>
@@ -127,14 +141,15 @@ function NewShowDishes({menu}) {
                     />
                     
                     <Typography variant="h6" component="div" >
-                        Price: ${menu.prices[variant]*quantity}
+                        Price: ${menu.variants[variant].price*quantity}
                     </Typography>
-                    <Button variant="contained" endIcon={<AddShoppingCartIcon />}>
+                    <Button 
+                        variant="contained" 
+                        endIcon={<AddShoppingCartIcon />}
+                    >
                         ADD TO CART
                     </Button>
-  
-              
-        
+
                 </CardContent>
             </Box>
         

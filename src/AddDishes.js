@@ -3,13 +3,18 @@ import React from "react";
 import Axios from "axios";
 import { Button } from "@mui/material";
 import {
-
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    FormLabel,
     TextField,
     Chip,
+    Container,
     // Button,
-    Paper,
-    ListItem
+    ListItem,
+    Stack
 } from "@mui/material";
+import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
 
 export default function AddDishes() {
@@ -21,68 +26,108 @@ export default function AddDishes() {
     const [pricesList, setPricesList] = useState([]);
     const [category, setCategory] = useState('');
     const [image, setImage] = useState('');
+    const [tag, setTag]=useState("");
+    const [tagList, setTagList]=useState([]);
     const [chipData, setChipData]=useState([]);
+    const [color, setColor]=useState("")
 
     const AddDishes = () => {
         Axios.post('http://localhost:7000/dbNewMenu/AddMenu/NaMenu', {
           name: name, 
-          varients: variantList,
-          prices: pricesList,
+          variants: variantList,
           category: category,
           image: image,
+          tag: tagList,
         })
     };
     const handleDelete = (chipToDelete) => () => {
         let label=chipToDelete.label;
-        label=label.substring(0,label.indexOf("$")-1);
-        console.log(label);
-        setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-        for(let i=0;i<variantList.length;i++){
-            if(variantList[i].localeCompare(label)==0){
-                let newVariantList=variantList;
-                newVariantList.splice(i,1);
-                let newPricesList=pricesList;
-                newPricesList.splice(i,1);
-
-                setVariantList(newVariantList);
-                setPricesList(newPricesList);
+        if(chipToDelete.type=="variant"){
+            label=label.substring(0,label.indexOf("$")-1);
+            //console.log(label);
+            setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+            for(let i=0;i<variantList.length;i++){
+                if(variantList[i].name.localeCompare(label)==0){
+                    let newVariantList=variantList;
+                    newVariantList.splice(i,1);
+                    setVariantList(newVariantList);
+                    break;
+                }
             }
+        }else{
+            setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+            for(let i=0;i<tagList.length;i++){
+                if(tagList[i].label.localeCompare(label)==0){
+                    let newTagList=tagList;
+                    newTagList.splice(i,1);
+                
+                    setTagList(newTagList);
+                }
 
+            }
         }
     };
 
-    const saveVariant=()=>{
-        let newVariantList=variantList;
-        newVariantList.push(variant);
-        setVariantList(newVariantList);
-        
-                
-        let newPricesList=pricesList;
-        newPricesList.push(price);
-        setPricesList(newPricesList);
+    const saveTag=()=>{
+        if(tag!=""){
+            let max;
+            let newChipData=chipData;
+            //console.log(newChipData)
+            if (newChipData.length==0){
+                max=0;
+            }else{
+                max=chipData[chipData.length-1].key+1;
+            }
+            
+            let chipItem={ key: max, label: tag, color: color,type: "tag"}
+            newChipData.push(chipItem)
+            setChipData(newChipData);
+            
+            chipItem={label:tag, color:color}
+            let newTagList=tagList;
+            newTagList.push(chipItem);
+            setTagList(newTagList);
 
-        let max;
-        let newChipData=chipData;
-        console.log(newChipData)
-        if (newChipData.length==0){
-            max=0;
-        }else{
-            max=chipData[chipData.length-1].key+1;
+
+            setTag("")
+            
+
+        }
+    }
+    const handleChangeColor=(event)=>{
+        setColor(event.target.value)
+    }
+    
+    const saveVariant=()=>{
+        if(variant!="" && price!=""){
+            let newVariantList=variantList;
+            let variantItem={name: variant,price: price}
+            newVariantList.push(variantItem)
+
+            let max;
+            let newChipData=chipData;
+            //console.log(newChipData)
+            if (newChipData.length==0){
+                max=0;
+            }else{
+                max=chipData[chipData.length-1].key+1;
+            }
+            
+            let chipItem={ key: max, label: variant+" $"+price,type: "variant"}
+            newChipData.push(chipItem)
+            setChipData(newChipData);
+        
+
+            setPrice("");
+            setVariant("");
         }
         
-        let chipItem={ key: max, label: variant+" $"+price}
-        newChipData.push(chipItem)
-        setChipData(newChipData);
-      
-
-        setPrice("");
-        setVariant("");
     }
 
    
 
     return (
-        <div className="container">
+        <Container maxWidth="md">
             <div>
             {/* <AppBar>
                 <toolbar>
@@ -93,41 +138,51 @@ export default function AddDishes() {
 
                 
                 <form>
+                
 
+                    
                     <TextField
-                        style={{ width: "1000px", margin: "5px" }}
+                        style={{  margin: "5px" }}
                         type="text"
                         label="name"
                         variant="outlined"
                         onChange={(event)=> {
                             setName(event.target.value)
                         }}
+                        fullWidth
                     />
                     <br />
+                        
+                    
+                        <TextField
+                            style={{ margin: "5px" }}
+                            type="text"
+                            value={variant}
+                            label="variant"
+                            variant="outlined"
+                            onChange={(event)=> {
+                                setVariant(event.target.value)
+                            }}
+                            fullWidth
+                        />
+                
+                
+                        <br />
 
-                    <TextField
-                        style={{ width: "1000px", margin: "5px" }}
-                        type="text"
-                        value={variant}
-                        label="variant"
-                        variant="outlined"
-                        onChange={(event)=> {
-                            setVariant(event.target.value)
-                        }}
-                    />
-                   
-                    <br />
-
-                     <TextField
-                        style={{ width: "1000px", margin: "5px" }}
-                        value={price}
-                        type="number"
-                        label="Prices"
-                        variant="outlined"
-                        onChange={(event)=> {
-                            setPrice(event.target.value)
-                        }}
-                    />
+                        <TextField
+                            style={{margin: "5px" }}
+                            value={price}
+                            type="number"
+                            label="Prices"
+                            variant="outlined"
+                            onChange={(event)=> {
+                                setPrice(event.target.value)
+                            }}
+                            fullWidth
+                        />
+                
+                        
+             
                     <br />  
 
                     {/* <p style={{fontsize: "24px"}}>What you have added in pairs</p> */}
@@ -136,38 +191,94 @@ export default function AddDishes() {
                     <Button variant="contained" onClick={saveVariant}>Please Add Variant and Price In pairs</Button> 
                     <br />
                     <br />
-                        {chipData.map((data) =>{ 
-                        
-                            return (
-                                <ListItem key={data.key}>
-                                    <Chip
-                                        label={data.label}
-                                        onDelete={handleDelete(data)}
-                                    />
+                    <Stack direction="row" spacing={1}>
 
-                                </ListItem>
+                        {chipData.map((data) =>{ 
+                            
+                            return (
+    
+                                <Chip
+                                    label={data.label}
+                                    key={data.key}
+                                    onDelete={handleDelete(data)}
+                                    hidden={data.type=="tag"}
+                                />
+
+                    
                             );
                         })}
+                    </Stack>
+                    <br />
                     <TextField
-                        style={{ width: "1000px", margin: "5px" }}
+                        style={{ margin: "5px" }}
                         type="text"
                         label="category"
                         variant="outlined"
                         onChange={(event)=> {
                             setCategory(event.target.value)
                         }}
+                        fullWidth
                     />
                     <br />
 
                     <TextField
-                        style={{ width: "1000px", margin: "5px" }}
+                        style={{ margin: "5px" }}
                         type="text"
                         label="image url"
                         variant="outlined"
                         onChange={(event)=> {
                             setImage(event.target.value)
                         }}
+                        fullWidth
                     />
+                    <br />
+                    <TextField
+                        style={{ margin: "5px" }}
+                        type="text"
+                        label="tag"
+                        variant="outlined"
+                        value={tag}
+                        onChange={(event)=> {
+                            setTag(event.target.value)
+                        }}
+                        fullWidth
+                    />
+                    <br />
+                    <FormLabel id="demo-controlled-radio-buttons-group">Tag Color</FormLabel>
+                    <RadioGroup
+                        row
+                        value={color}
+                        onChange={handleChangeColor}
+                        >
+                        <FormControlLabel value="" control={<Radio />} label="default (gray)" />
+                        <FormControlLabel value="primary" control={<Radio />} label="light blue" />
+                        <FormControlLabel value="secondary" control={<Radio />} label="purple" />
+                        <FormControlLabel value="error" control={<Radio />} label="red" />
+                        <FormControlLabel value="info" control={<Radio />} label="blue" />
+                        <FormControlLabel value="success" control={<Radio />} label="green" />
+                        <FormControlLabel value="warning" control={<Radio />} label="yellow" />
+                    </RadioGroup>
+                    <Button variant="contained" onClick={saveTag}>Add Tag</Button> 
+                    <br />
+                    <br />
+                    <Stack direction="row" spacing={1}>
+
+                        {chipData.map((data) =>{ 
+                            
+                            return (
+    
+                                <Chip
+                                    label={data.label}
+                                    key={data.key}
+                                    color={data.color}
+                                    hidden={data.type=="variant"}
+                                    onDelete={handleDelete(data)}
+                                />
+
+                    
+                            );
+                        })}
+                    </Stack>
                     <br />
 
                     <button 
@@ -242,6 +353,6 @@ export default function AddDishes() {
 
                 </form>
             </div>
-        </div>
+        </Container>
     );
 }
