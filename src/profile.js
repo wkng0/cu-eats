@@ -12,49 +12,21 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
 import{ Divider, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
-  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar } from '@mui/material';
+  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar, Select, MenuItem } from '@mui/material';
 
-// const Styles = styled.div`
-// padding: 1rem;
-
-// table {
-//   border-spacing: 0;
-//   border: 1px solid black;
-
-//   tr {
-//     :last-child {
-//       td {
-//         border-bottom: 0;
-//       }
-//     }
-//   }
-
-//   th,
-//   td {
-//     margin: 0;
-//     padding: 0.5rem;
-//     border-bottom: 1px solid black;
-//     border-right: 1px solid black;
-
-//     :last-child {
-//       border-right: 0;
-//     }
-//   }
-// }
-// `
 let userInfo = [];
 
 function Profile(){
   const {user, setUser} = useContext(UserContext);
   const[username,setUsername] = useState('');
-  const[email,setEmail] = useState('0.0@link.cuhk.edu.hk');
+  const[email,setEmail] = useState('');
   const[point,setPoint] = useState(-1);
   const[pic, setPic] = useState('');
   const[fetchFinish, setFetch] = useState(false);
 
   useEffect(()=>{
     if(fetchFinish== false){
-    fetch('http://localhost:7000/dbAccount/get/'+user)
+    fetch('http://localhost:7000/dbAccount/getByUID/'+user)
     .then(res=>res.json())
     .then(data=>{
         console.log(data[0]);
@@ -385,6 +357,10 @@ const {user, setUser} = useContext(UserContext);
   }
 
   const handleChangeCollege=(event)=>{
+    if(event.target.value=="None"){
+      setCol("");
+      return;
+    }
     setCol(event.target.value);
     console.log(event.target.value);
     if(event.target.value=="CW"){
@@ -425,49 +401,49 @@ const {user, setUser} = useContext(UserContext);
     window.location.reload();
   }
 
-  if(chooseCol=="Other Building"||chooseCol == ""){
+  if(chooseCol=="Other Building"||chooseCol == ""|| chooseCol =="None"){
     return(
       <>
-        <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
-         {chooseCol?<><Box sx={{m: 2, display: 'inline'}}>
-        <TextField
-          id="standard-required"
-          label="Room"
-          variant="standard"
-          onChange={handleChangeRoom}
-        />
-        </Box>
-        <Box sx={{ m: 5  ,display: 'inline'}}>
-      <FormControl >
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Building
-        </InputLabel>
-        <NativeSelect
-        onChange={handleChangeBuilding}
-        >
-          {building.map((blg,index)=>(<option value={blg} key={blg}>{blg}</option>))}
-        </NativeSelect>
-      </FormControl>
-        </Box></>:<></>}
-        
-         <Box sx={{m: 2, display: 'inline'}}>
-      <FormControl sx={{width:500}}>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          College 
-        </InputLabel>
-        <NativeSelect
-        defaultValue={chooseCol}
-        onChange={handleChangeCollege}
-        >
-          {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
-        </NativeSelect>
-      </FormControl><br/><br/>
-      <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
-        <CheckIcon/>
-        save
-      </Button>
-        </Box>
-        </>
+      <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
+       {chooseCol?<><Box sx={{m: 2, display: 'inline'}}>
+      <TextField
+        id="standard-required"
+        label="Room"
+        variant="standard"
+        onChange={handleChangeRoom}
+      />
+      </Box>
+      <Box sx={{ m: 2  ,display: 'inline'}}>
+    <FormControl >
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        Building
+      </InputLabel>
+      <NativeSelect
+      onChange={handleChangeBuilding}
+      >
+        {building.map((blg,index)=>(<option value={blg} key={blg}>{blg}</option>))}
+      </NativeSelect>
+    </FormControl>
+      </Box></>:<></>}
+      
+       <Box sx={{m: 2, display: 'inline'}}>
+    <FormControl sx={{width:500}}>
+      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        College 
+      </InputLabel>
+      <NativeSelect
+      defaultValue={chooseCol}
+      onChange={handleChangeCollege}
+      >
+        {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
+      </NativeSelect>
+    </FormControl><br/><br/>
+    <Button  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
+      <CheckIcon/>
+      save
+    </Button>
+      </Box>
+      </>
     )
   }else if(chooseCol=="CC"){
     return(
