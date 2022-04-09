@@ -25,6 +25,10 @@ function Profile(){
   const[fetchFinish, setFetch] = useState(false);
 
   useEffect(()=>{
+    if(localStorage.getItem('user') != undefined){
+      setUser(localStorage.getItem('user'));
+      console.log("set!",user);
+  }
     if(fetchFinish== false){
     fetch('http://localhost:7000/dbAccount/getByUID/'+user)
     .then(res=>res.json())
@@ -185,7 +189,7 @@ changeIcon(event){
                           </div>
                   </div>
               </div>
-              <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} onClick={()=>this.setState({login: false})}>Sign out</Button>
+              {/* <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} onClick={()=>this.setState({login: false})}>Sign out</Button> */}
           </div>
           )
           :(<div class="container fluid">
@@ -219,6 +223,10 @@ function Address(){
   }
 
   useEffect(()=>{
+    if(localStorage.getItem('user') != undefined){
+      setUser(localStorage.getItem('user'));
+      console.log("set!",user);
+  }
     if(fetchFinish == false){
     fetch('http://localhost:7000/dbAccount/getAddress/'+user)
     .then(res=>res.json())
@@ -350,6 +358,13 @@ const [chooseBlg, setBlg] = useState('');
 const [room,setRoom] = useState('');
 const [valid, setValid] = useState(false);
 const {user, setUser} = useContext(UserContext);
+
+  useEffect(()=>{
+    if(localStorage.getItem('user') != undefined){
+      setUser(localStorage.getItem('user'));
+      console.log("set!",user);
+  }
+  })
 
   const handleChangeRoom = (event)=>{
     setRoom(event.target.value);
@@ -988,6 +1003,10 @@ const handleChangePhone = (event)=>{
 }
 
   useEffect(()=>{
+    if(localStorage.getItem('user') != undefined){
+      setUser(localStorage.getItem('user'));
+      console.log("set!",user);
+  }
     if(fetchFinish == false){
    fetch('http://localhost:7000/dbAccount/get/'+user)
    .then(res=>res.json())
@@ -1284,6 +1303,10 @@ function FormDialog(props) {
     };
 
   useEffect(()=>{
+    if(localStorage.getItem('user') != undefined){
+      setUser(localStorage.getItem('user'));
+      console.log("set!",user);
+  }
     if(oldpw!="" && pw1!="" && pw2!=""){
       setSubmit(true);
     }else{
@@ -1467,6 +1490,7 @@ const handleChangePassword = (event)=>{
   setPw(event.target.value);
 }
 if(!mounted){
+  
   fetch('http://localhost:7000/dbAccount/getAll')
   .then(res=>res.json())
   .then(data=>{

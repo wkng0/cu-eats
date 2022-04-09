@@ -1,5 +1,6 @@
 import './HomePage.css';
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
+import { UserContext } from "./UserContext";
 import logo from './HomePageimages/logo.jpeg';
 import lemonPie from './HomePageimages/lemonPie.jpeg';
 import RedBean from "./HomePageimages/RedBeanIcyDrink.jpg";
@@ -13,6 +14,13 @@ import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 // class HomePage extends React.Component {
 //   render() {
 function HomePage() {
+    const {user, setUser} = useContext(UserContext);
+    useEffect(()=>{
+        if(localStorage.getItem('user') != undefined){
+            setUser(localStorage.getItem('user'));
+            console.log("set!",user);
+        }
+    })
     return (
       <> 
 

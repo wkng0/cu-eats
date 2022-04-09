@@ -28,8 +28,8 @@ import { DishProvider } from './shoppingCart/sc-context';
 
 
 function App() {
-  const [user, setUser] = useState("l1jc1p8ltukap01mi3");
-  // const value = useMemo(() => ({ user, setUser }), [user, setUser]);
+  const [user, setUser] = useState(null);
+  const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
   return (
     <div className="App" style={{zIndex:9999 ,position:"relative"}}>

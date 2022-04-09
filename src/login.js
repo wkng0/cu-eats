@@ -13,6 +13,7 @@ import{
     InputLabel,
     FormControl,
     Select,
+    Typography,
     FormHelperText,
     NativeSelect,
     MenuItem,
@@ -210,7 +211,7 @@ function LoginWithPassword(props){
     const [password, setPassword]=React.useState("");
     const [iconA, setIconA]=React.useState("none");
     const [iconB, setIconB]=React.useState("block");
-    const {user, setUser} = useContext(UserContext);
+    // const {user, setUser} = useContext(UserContext);
     const handleChange=(event)=>{
         setPassword(event.target.value);
     }
@@ -242,12 +243,12 @@ function LoginWithPassword(props){
             console.log(data[0].password);
             if(data[0].password == password){
                 console.log("password is true");
-                console.log(user);
+                // console.log(user);
                 if(data[0].type == "user"){
                     console.log("Checked user!!!!!!!!!!!!!!!");
                     console.log("UID: ",data[0].uid);
-                    // setUser(data[0].uid); buggg
-                    
+                    localStorage.setItem('user',data[0].uid);
+                    localStorage.setItem('type',data[0].type);                 
                 }
                 window.location.assign("/");
             }
