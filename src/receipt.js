@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './UserContext';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Grid, Table, Divider, Button } from '@mui/material';
+import { Grid, Table, Divider, Button, Card } from '@mui/material';
 
 function Receipt() {
     const {user, setUser} = React.useContext(UserContext);
@@ -78,9 +78,6 @@ function Receipt() {
             setStatus(data[0].status);
             setTime(data[0].timestamp);
             setFetch(true);
-            console.log(orderItem[0])
-            console.log(formatDate(timestamp))
-            console.log(formatTime(timestamp))
         })
         .then(console.log("Successfully get to receipt info"))
         .catch(err=>{console.log(err);})
@@ -260,9 +257,28 @@ function Receipt() {
 };
 
 function Records() {
+    const {user, setUser} = React.useContext(UserContext);
+    const [records, setRecord] = React.useState(null);
+    const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
-    return(
-        <>
+
+    React.useEffect(()=>{
+        fetch('http://localhost:7000/dbReceipt/getRecords/'+user)
+        .then(res=>res.json())
+        .then(data=>{
+            setRecord(data);
+            setFetch(true);
+        })
+        .catch(err=>{console.log(err);})
+    },[fetchFinish])
+    
+      if(!fetchFinish){
+        return(
+          <p>Searching records from database...</p>
+        )
+      } else {
+        return(
+            <>
             <div style={{width:'80%', margin:'auto'}}>
                 <Button 
                     size="small" 
@@ -272,9 +288,21 @@ function Records() {
                 <ArrowBackIosIcon/>
                 </Button>
             </div>
-            <h3 style={{color: '#5D4E99'}}>Shopping Records</h3>
-        </>    
-    );
+            <div style={{width:'70%', margin:'auto'}}>
+                <h3 style={{color: '#5D4E99'}}>Shopping Records</h3>
+                <div style={{display: records == null? 'none':'block'}}>
+                    {records.map((receipt, index)=>(
+                        <>
+                        <Card sx={{p:2, m:3, boxShadow: 2}}>
+                            <h5 style={{color: '#5D4E99'}}>Receipt {index+1}</h5>
+                            <div key={receipt.rid}>{receipt.rid}</div>
+                        </Card>
+                        </>
+                    ))}
+                </div>
+            </div>
+            </>
+    )}
 };
 
 export { Receipt, Records };

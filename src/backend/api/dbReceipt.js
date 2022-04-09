@@ -10,8 +10,8 @@ const url="mongodb+srv://admin:admin_d2@groupd2.d3lwk.mongodb.net/sample_users?r
 const client=new MongoClient(url);
 const dbName="Account";
 let receiptID="";
-let point=0;
-let rid='';
+let rid="";
+let uid="";
 
 router.use(bodyParser.urlencoded({extended: false}));
 
@@ -27,8 +27,16 @@ router.get("/get/:rid",function(req,res){
     .finally(() => client.close());
 });
 
+router.get("/getRecords/:uid",function(req,res){
+    uid=req.params.uid;
+    fetchRecord(res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
+
 router.post("/user",async function(req,res){
-    receiptID = await getReceiptId(req,res);
+    receiptID = await getReceiptId(req);
     await submitOrder(req,res,receiptID);
     await updatePoint(req);
 })
@@ -40,7 +48,7 @@ router.post("/updateStatus/:rid",function(req,res){
     .finally(() => client.close());
 })
 
-async function getReceiptId(req,res){
+async function getReceiptId(req){
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
@@ -122,5 +130,14 @@ async function fetchReceipt(res){
     return result;
 };
 
+async function fetchRecord(res){
+    await client.connect();
+    console.log('Connected successfully to server Receipt');
+    const db = client.db(dbName);
+    const collection = db.collection("Receipt");
+    let result = await collection.find({"uid":uid}).toArray();
+    res.send(result);
+    return result;
+};
 
 export default router;
