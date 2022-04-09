@@ -3,12 +3,12 @@ import React from "react";
 import Axios from "axios";
 import { Button } from "@mui/material";
 import {
-    Typography,
-    AppBar,
-    Toolbar,
+
     TextField,
+    Chip,
     // Button,
-    Box
+    Paper,
+    ListItem
 } from "@mui/material";
 
 
@@ -21,6 +21,7 @@ export default function AddDishes() {
     const [pricesList, setPricesList] = useState([]);
     const [category, setCategory] = useState('');
     const [image, setImage] = useState('');
+    const [chipData, setChipData]=useState([]);
 
     const AddDishes = () => {
         Axios.post('http://localhost:7000/dbNewMenu/AddMenu/NaMenu', {
@@ -31,29 +32,51 @@ export default function AddDishes() {
           image: image,
         })
     };
+    const handleDelete = (chipToDelete) => () => {
+        let label=chipToDelete.label;
+        label=label.substring(0,label.indexOf("$")-1);
+        console.log(label);
+        setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+        for(let i=0;i<variantList.length;i++){
+            if(variantList[i].localeCompare(label)==0){
+                let newVariantList=variantList;
+                newVariantList.splice(i,1);
+                let newPricesList=pricesList;
+                newPricesList.splice(i,1);
+
+                setVariantList(newVariantList);
+                setPricesList(newPricesList);
+            }
+
+        }
+    };
 
     const saveVariant=()=>{
         let newVariantList=variantList;
         newVariantList.push(variant);
         setVariantList(newVariantList);
-        let newVariant=variant;
-        let node=document.createTextNode(newVariant);
-        let para= document.createElement("p");
-        para.appendChild(node);
-        document.getElementById("variantList").appendChild(para);
-        setVariant("");
-
         
+                
         let newPricesList=pricesList;
         newPricesList.push(price);
         setPricesList(newPricesList);
-        let newPrices=price;
-        let node2=document.createTextNode(newPrices);
-        let para2= document.createElement("p");
-        para2.appendChild(node2);
-        document.getElementById("pricesList").appendChild(para2);
+
+        let max;
+        let newChipData=chipData;
+        console.log(newChipData)
+        if (newChipData.length==0){
+            max=0;
+        }else{
+            max=chipData[chipData.length-1].key+1;
+        }
+        
+        let chipItem={ key: max, label: variant+" $"+price}
+        newChipData.push(chipItem)
+        setChipData(newChipData);
+      
+
         setPrice("");
-    
+        setVariant("");
     }
 
    
@@ -85,6 +108,7 @@ export default function AddDishes() {
                     <TextField
                         style={{ width: "1000px", margin: "5px" }}
                         type="text"
+                        value={variant}
                         label="variant"
                         variant="outlined"
                         onChange={(event)=> {
@@ -96,6 +120,7 @@ export default function AddDishes() {
 
                      <TextField
                         style={{ width: "1000px", margin: "5px" }}
+                        value={price}
                         type="number"
                         label="Prices"
                         variant="outlined"
@@ -106,17 +131,23 @@ export default function AddDishes() {
                     <br />  
 
                     {/* <p style={{fontsize: "24px"}}>What you have added in pairs</p> */}
-                    <div id="variantList">
-
-                    </div>
-                    <div id="pricesList">
-
-                    </div>
+                   
                     <br />
                     <Button variant="contained" onClick={saveVariant}>Please Add Variant and Price In pairs</Button> 
                     <br />
                     <br />
+                        {chipData.map((data) =>{ 
+                        
+                            return (
+                                <ListItem key={data.key}>
+                                    <Chip
+                                        label={data.label}
+                                        onDelete={handleDelete(data)}
+                                    />
 
+                                </ListItem>
+                            );
+                        })}
                     <TextField
                         style={{ width: "1000px", margin: "5px" }}
                         type="text"
