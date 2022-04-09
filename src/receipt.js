@@ -16,11 +16,14 @@ function Receipt() {
     const [subtotal, setSubtotal] = React.useState(0);
     const [timestamp, setTime] = React.useState(0);
     const [total, setTotal] = React.useState(0);
+    const [pointEarn, setEarn] = React.useState(0);
+    const [pointRemain, setRemain] = React.useState(0);
     const [address, setAddress] = React.useState(null);
     const [cutlery, setCutlery] = React.useState(true);
     const [status, setStatus] = React.useState(false);
     const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
+    const irid = window.location.pathname.replace('/receipt/','');
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: '2-digit',day: '2-digit' ,hour: '2-digit', minute: '2-digit'}
         return new Intl.DateTimeFormat('en-US', options).format(dateString);
@@ -29,7 +32,19 @@ function Receipt() {
         const options = { hour: '2-digit', minute: '2-digit'}
         return new Intl.DateTimeFormat('en-US', options).format(dateString);
     }
-    const handleTaken = () => {setStatus(true);};
+    const handleTaken = () => {
+        fetch('http://localhost:7000/dbReceipt/updateStatus/'+irid, {
+            method: 'POST', 
+            body: new URLSearchParams({
+                "rid": irid,
+            })  
+        })
+        .then(data=>console.log(data))
+        .then(()=>{setStatus(true);})
+        .catch((error)=>{console.log(error);})
+        window.location.reload();
+    };
+
     const handleCutlery = () => {
         if (cutlery === 'true') {
             return (
@@ -44,19 +59,21 @@ function Receipt() {
     }
 
     React.useEffect(()=>{
-        fetch("http://localhost:7000/dbReceipt/get/"+window.location.pathname.replace('/receipt/',''))
+        fetch("http://localhost:7000/dbReceipt/get/"+irid)
         .then(res=>res.json())
         .then(data=>{
             setReceiptID(data[0].id);
-            setRestaurant(data[0].rid);
-            setName(data[0].ctName);
-            setPoint(data[0].point);
+            setRestaurant(data[0].rName);
+            setName(data[0].name);
             setPhone(data[0].phone);
             setAddress(data[0].address);
             setCutlery(data[0].cutlery)
             setItem(JSON.parse(data[0].item));
             setSubtotal(data[0].subtotal);
             setDiscount(data[0].discount);
+            setPoint(data[0].point);
+            setEarn(data[0].pointEarn);
+            setRemain(data[0].pointRemain)
             setTotal(data[0].total);
             setStatus(data[0].status);
             setTime(data[0].timestamp);
@@ -112,32 +129,49 @@ function Receipt() {
                 </Grid>
                 </>
             ))}
-            {handleCutlery()}
+            {handleCutlery()}<br/>
+            <Grid container>
+                <Grid item xs={10} sx ={{color: '#5D4E99'}}><b>Subtotal</b></Grid>
+                <Grid item xs={2} sx ={{textAlign:'right', color: '#5D4E99'}}><b>${subtotal.toFixed(1)}</b></Grid>
+            </Grid>
             <br/><Divider /><br/>          
             <Grid container>
-                <Grid item xs={9}>Points Rebate</Grid>
-                <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}>{point} Points</Grid>
+                <Grid item xs={9}>Valid points</Grid>
+                <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>{point} point(s)</small></Grid>
+            </Grid><br/>
+            <div style={{display: discount==0? 'none':'block'}}>
+                <Grid container>
+                    <Grid item xs={6}>Point used</Grid>
+                    <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>- {discount*10} point(s)</small></Grid>
+                </Grid><br/>
+            </div>
+            <Grid container>
+                <Grid item xs={9}>Points rebate</Grid>
+                <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>+ {pointEarn} point(s)</small></Grid>
             </Grid><br/>
             <Grid container>
+                <Grid item xs={9} style ={{color:'#5D4E99'}}><b>Remaining points</b></Grid>
+                <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}><b>{pointRemain} point(s)</b></Grid>
+            </Grid>
+            <br/><Divider /><br/>  
+            <Grid container>
                 <Grid item xs={10}>Subtotal</Grid>
-                <Grid item xs={2} sx ={{textAlign:'right', color: '#5D4E99'}}><b>${subtotal.toFixed(1)}</b></Grid>
+                <Grid item xs={2} sx ={{textAlign:'right', color: '#707070'}}><small>${subtotal.toFixed(1)}</small></Grid>
             </Grid><br/>  
             <Grid container>
-                <Grid item xs={6}>Use Points</Grid>
-                <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>{discount*10} point(s)</small></Grid>
-            </Grid>
-            <div style={{textAlign:'right'}}><b style={{fontSize: 12, color:'#5D4E99'}}>Get ${discount.toFixed(1)} off</b></div>
-            <br/><Divider /><br/>  
+                <Grid item xs={10}>Discount</Grid>
+                <Grid item xs={2} sx ={{textAlign:'right', color: '#707070'}}><small>- ${discount.toFixed(1)}</small></Grid>
+            </Grid><br/>  
             <Grid container sx ={{color:'#5D4E99'}}>
                 <Grid item xs={10}> <b>Total</b></Grid>
                 <Grid item xs={2} sx={{textAlign:'right'}}> <b>${(total).toFixed(1)}</b></Grid>
             </Grid><br/><br/>
             <Button fullWidth
                 size="large" 
-                onClick={handleTaken}
+                onDoubleClick={handleTaken}
                 sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
             >
-                Confirm order delivered
+                Double click to confirm order delivered
             </Button>
             <br/><br/>
         </Table>
@@ -173,22 +207,39 @@ function Receipt() {
                     </Grid>
                     </>
                 ))}
-                {handleCutlery()}
+                {handleCutlery()}<br/>
+                <Grid container>
+                    <Grid item xs={10} sx ={{color: '#5D4E99'}}><b>Subtotal</b></Grid>
+                    <Grid item xs={2} sx ={{textAlign:'right', color: '#5D4E99'}}><b>${subtotal.toFixed(1)}</b></Grid>
+                </Grid>
                 <br/><Divider /><br/>          
                 <Grid container>
-                    <Grid item xs={9}>Points Rebate</Grid>
-                    <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}>{point} Points</Grid>
+                    <Grid item xs={9}>Valid points</Grid>
+                    <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>{point} point(s)</small></Grid>
+                </Grid><br/>
+                <div style={{display: discount==0? 'none':'block'}}>
+                    <Grid container>
+                        <Grid item xs={6}>Point used</Grid>
+                        <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>- {discount*10} point(s)</small></Grid>
+                    </Grid><br/>
+                </div>
+                <Grid container>
+                    <Grid item xs={9}>Points rebate</Grid>
+                    <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>+ {pointEarn} point(s)</small></Grid>
                 </Grid><br/>
                 <Grid container>
+                    <Grid item xs={9} style ={{color:'#5D4E99'}}><b>Remaining points</b></Grid>
+                    <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}><b>{pointRemain} point(s)</b></Grid>
+                </Grid>
+                <br/><Divider /><br/>  
+                <Grid container>
                     <Grid item xs={10}>Subtotal</Grid>
-                    <Grid item xs={2} sx ={{textAlign:'right', color: '#5D4E99'}}><b>${subtotal.toFixed(1)}</b></Grid>
+                    <Grid item xs={2} sx ={{textAlign:'right', color: '#707070'}}><small>${subtotal.toFixed(1)}</small></Grid>
                 </Grid><br/>  
                 <Grid container>
-                    <Grid item xs={6}>Use Points</Grid>
-                    <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>{discount*10} point(s)</small></Grid>
-                </Grid>
-                <div style={{textAlign:'right'}}><b style={{fontSize: 12, color:'#5D4E99'}}>Get ${discount.toFixed(1)} off</b></div>
-                <br/><Divider /><br/>  
+                    <Grid item xs={10}>Discount</Grid>
+                    <Grid item xs={2} sx ={{textAlign:'right', color: '#707070'}}><small>- ${discount.toFixed(1)}</small></Grid>
+                </Grid><br/>  
                 <Grid container sx ={{color:'#5D4E99'}}>
                     <Grid item xs={10}> <b>Total</b></Grid>
                     <Grid item xs={2} sx={{textAlign:'right'}}> <b>${(total).toFixed(1)}</b></Grid>
