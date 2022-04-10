@@ -66,8 +66,9 @@ function TabContent(props){
     const [option,setOption]=useState("");
     const [optionEmpty,setOptionEmpty]=useState(false);
     const [helperText,setHelperText]=useState("");
+    const [loading,setLoading]=useState(true);
+    const [storage,setStorage]=useState(users);
 
-   
     const handleShare=()=>{
         navigator.clipboard.writeText("http://localhost:3000/comment/"+props.canteen+"/"+data[props.i]._id);
     }
@@ -129,6 +130,7 @@ function TabContent(props){
     ]
     let i=props.i;
     let postTime=data[i].datetime.substring(0,10)+" "+data[i].datetime.substring(11,16);
+
     return(
         <Card sx={{borderRadius:3}}>
             <CardHeader
@@ -226,7 +228,12 @@ function ResponsiveDrawer(props) {
     const [canteen, setCanteen]=React.useState("SC")
     const [state, setState] = React.useState(false);
     const [value,setValue]=React.useState(-1);
-    
+    const [loading,setLoading]=React.useState(true)
+    useEffect(()=>{
+        setTimeout(function() {
+            setLoading(false)
+        }, 1000);
+    })
     const toggleDrawer = (open) => (event) => {
         if (
           event &&
@@ -292,7 +299,9 @@ function ResponsiveDrawer(props) {
     );
     console.log(data);
     console.log(users);
-    return ( 
+    if(loading==true){
+        return <>please wait</>
+    }else return ( 
         <Container >
         <Box sx={{ display: 'flex' }}>        
             <Box
