@@ -838,8 +838,7 @@ function CommentList(props){
     const clearSelected=()=>{
         setChecked([]);
     }
- 
-    
+   
     return(
         <>
             <Box >                
@@ -876,7 +875,7 @@ function CommentList(props){
             
             <List>
                 {data.map((file,i)=>
-                <div key={i}>
+                <div key={i} >
                     <Alert severity="error" sx={{m:2, mb:0}} hidden={props.canteen!="Report"}>Reported @{data[i].canteen}: {data[i].reason}</Alert>
                     <Card sx={{ display: 'flex', m:2, mt:0}}>
                         <ListItem
@@ -908,12 +907,6 @@ function CommentList(props){
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <CardHeader
-                                avatar={
-                                <Avatar sx={{ bgcolor: red[500] }}>
-                                    {data[i].userid[0]}
-                                </Avatar>
-                                }
-                                title={data[i].userid}
                                 subheader={data[i].datetime.substring(0,10)+" "+data[i].datetime.substring(11,16)}
                        
                             />         
