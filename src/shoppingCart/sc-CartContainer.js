@@ -1,28 +1,32 @@
-import React,{useContext} from 'react'
+import React,{useContext, useEffect} from 'react'
 import { DishContext } from './sc-context';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
-const CartItem = ({ id, img, title, price, amount }) => {
+
+const CartItem = ({ id,img ,title, variant,price,amount }) => {
+    
     const {remove, increase, decrease} = useContext(DishContext);
+    
     return (
       <article className='sc-cart-item'>
           <img src={img} alt={title} width='100' display='block' className='sc-cart-photo'/>
         
         <div>
           <h5 letter-spacing='0.25' line-height='1.25' margin-bottom='0.75' font-size='0.875'>{title}</h5>
+          <h6 className='sc-item-price'>{variant}</h6>
           <h6 className='sc-item-price'>$&nbsp;{price}</h6>
           {/* remove button */}
-          <button className='sc-remove-btn' onClick={() => remove(id)}
+          <button className='sc-remove-btn' onClick={() => remove({id:id,variant:variant})}
           >
             remove
           </button>
         </div>
         <div>
           {/* increase amount */}
-          <button className='sc-amount-btn' onClick={() => increase(id) }>
+          <button className='sc-amount-btn' onClick={() => increase({id:id,variant:variant}) }>
             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
               <path d='M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z' />
             </svg>
@@ -30,7 +34,7 @@ const CartItem = ({ id, img, title, price, amount }) => {
           {/* amount */}
           <p className='sc-amount'>{amount}</p>
           {/* decrease amount */}
-          <button className='sc-amount-btn' onClick={() => decrease(id) }>
+          <button className='sc-amount-btn' onClick={() => decrease({id:id,variant:variant}) }>
             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
               <path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z' />
             </svg>
@@ -41,6 +45,7 @@ const CartItem = ({ id, img, title, price, amount }) => {
   }
 
 const CartContainer = () => {
+  
   const { cart, total, clearCart } = useContext(DishContext);
   if (cart.length === 0) {
     return (
@@ -76,7 +81,7 @@ const CartContainer = () => {
         <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
           <Button 
                 size="small" 
-                sx={{border: 2,bgcolor: '#transparent', color: '#86888A', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+                sx={{border: 2, bgcolor: '#transparent', color: '#86888A', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
                 onClick={clearCart}>
             <DeleteIcon fontSize="small" />
               CLEAR CART

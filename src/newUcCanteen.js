@@ -17,11 +17,12 @@ import { Chip,Stack } from '@mui/material';
 
 
 
+
 function NewUcCanteen() {
     const [listOfMenu, setListOfMenu] = useState([]);
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbNewMenu/getMenu/UcMenu").then((response) => {
+        Axios.get("http://localhost:7000/dbMenu/getMenu/UcMenu").then((response) => {
             setListOfMenu(response.data)
         });
     }, []);
@@ -59,6 +60,7 @@ function NewUcCanteen() {
 function NewShowDishes({menu}) {
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
+    const {addToCart} = useContext(DishContext);
     const [price,setPrice]=useState(0);
     let variantList=[];
     const tag=menu.tag;
@@ -147,6 +149,9 @@ function NewShowDishes({menu}) {
                     <Button 
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
+                        onClick={()=>{
+                            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
+                        }}
                     >
                         ADD TO CART
                     </Button>

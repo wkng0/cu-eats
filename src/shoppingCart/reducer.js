@@ -1,21 +1,30 @@
+
 const reducer = (state, action) => {
+    
     if (action.type === 'ADD_TO_CART'){
-        console.log("in reducer")
         //may not be this
         const item = state.cart.find((prod)=>prod.id===action.payload.id);
         const inCart = state.cart.find((item)=>
-          item.id===action.payload.id?true:false
+          item.id===action.payload.id?(item.variant==action.payload.variant.name?true:false):false
         );
         return{
           ...state,
           cart: inCart? state.cart.map(item=>
             item.id === action.payload.id
-            ? {...item,amount: item.amount+1}
+            ? {...item,amount: item.amount+action.payload.quantity}
             : item
             )
-            :[...state.cart, {...item, amount:1}]
+            :[...state.cart, {
+                id:action.payload.id,
+                title:action.payload.title,
+                variant: action.payload.variant.name,
+                price: action.payload.variant.price,
+                img:action.payload.image, 
+                amount:action.payload.quantity, 
+                
+            }]
         };
-      }
+    }
     if (action.type === 'CLEAR_CART') {
         return { ...state, cart: [] }
     }
@@ -23,13 +32,13 @@ const reducer = (state, action) => {
     if (action.type === 'REMOVE') {
         return {
         ...state,
-        cart: state.cart.filter((cartItem) => cartItem.id !== action.payload),
+        cart: state.cart.filter((cartItem) => cartItem.id !== action.payload.id ||cartItem.variant!=action.payload.variant),
         }
     }
 
     if (action.type === 'INCREASE') {
         let tempCart = state.cart.map((cartItem) => {
-            if (cartItem.id === action.payload) {
+            if (cartItem.id === action.payload.id && cartItem.variant==action.payload.variant) {
                 return { ...cartItem, amount: cartItem.amount + 1 }
             }
             return cartItem
@@ -40,7 +49,7 @@ const reducer = (state, action) => {
     if (action.type === 'DECREASE') {
         let tempCart = state.cart
             .map((cartItem) => {
-            if (cartItem.id === action.payload) {
+            if (cartItem.id === action.payload.id && cartItem.variant==action.payload.variant) {
                 return { ...cartItem, amount: cartItem.amount - 1 }
             }
             return cartItem

@@ -1,6 +1,8 @@
 import food1 from './fast_food_1.png';
 import food2 from './fast_food_2.png';
 import food3 from './fast_food_3.png';
+
+
 export default [
     {
       id: 1,

@@ -11,11 +11,10 @@ const DishContext = React.createContext()
 
 const initialState = {
   loading: false,
-  cart: cartItems,
+  cart: [],
   total: 0,
   amount: 0,
 }
-
 
 
 const DishProvider = ({ children }) => {
@@ -36,9 +35,8 @@ const DishProvider = ({ children }) => {
   const decrease = (id) => {
     dispatch( { type:'DECREASE', payload: id})
   }
-  const addToCart = (id)=>{
-    console.log("added to cart")
-    dispatch({type:"ADD_TO_CART", payload: id})
+  const addToCart = async(item)=>{
+    dispatch({type:"ADD_TO_CART", payload: item})
   }
 
   // const fetchData = async () => {

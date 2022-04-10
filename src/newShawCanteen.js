@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useEffect} from "react";
+import {useEffect,useContext} from "react";
 import './canteen.css';
 // import menu from './menu';
 // import Select from 'react-select';
@@ -14,12 +14,14 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
 import { Stack } from '@mui/material';
 import { Chip } from '@mui/material';
+import { DishContext } from './shoppingCart/sc-context';
+
 
 function NewShawCanteen() {
     const [listOfMenu, setListOfMenu] = useState([]);
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbNewMenu/getMenu/ShawMenu").then((response) => {
+        Axios.get("http://localhost:7000/dbMenu/getMenu/ShawMenu").then((response) => {
             setListOfMenu(response.data)
         });
     }, []);
@@ -58,6 +60,7 @@ function NewShawCanteen() {
 function NewShowDishes({menu}) {
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
+    const {addToCart} = useContext(DishContext);
     const [price,setPrice]=useState(0);
     let variantList=[];
     const tag=menu.tag;
@@ -146,6 +149,9 @@ function NewShowDishes({menu}) {
                     <Button 
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
+                        onClick={()=>{
+                            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
+                        }}
                     >
                         ADD TO CART
                     </Button>

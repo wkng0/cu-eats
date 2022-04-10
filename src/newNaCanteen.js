@@ -18,7 +18,7 @@ function NewNACanteen() {
     const [listOfMenu, setListOfMenu] = useState([]);
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbNewMenu/getMenu/NaMenu").then((response) => {
+        Axios.get("http://localhost:7000/dbMenu/getMenu/NaMenu").then((response) => {
             setListOfMenu(response.data)
         });
     }, []);
@@ -143,7 +143,7 @@ function NewShowDishes({menu}){
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
                         onClick={()=>{
-                           addToCart(1)
+                           addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
                         }
                     } >
                         ADD TO CART
