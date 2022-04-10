@@ -23,6 +23,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
+import { Link } from "react-router-dom";
 
 const CutlerySwitch = styled(Switch)(({ theme }) => ({
     padding: 8,
@@ -172,13 +173,14 @@ function Checkout() {
     return (
         <>
         <div style={{width:'80%', margin:'auto'}}>
+        <Link to="/menu" style={{textDecoration: 'none'}}>
             <Button 
               size="small" 
-              href="/menu"
               sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'#5D4E99', color: '#F4CB86'}}}
             >
             <ArrowBackIosIcon/>Continue Shopping
             </Button>
+        </Link>
         </div>
 
         <br/>
@@ -331,6 +333,7 @@ function Checkout() {
         </FormGroup>
         <br/>
         <div style={{margin: 'auto', textAlign: 'right'}}>
+
             <Button 
                 size="large" 
                 onClick={handleReceipt}

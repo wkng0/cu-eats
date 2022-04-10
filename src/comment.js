@@ -52,6 +52,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import {useParams} from 'react-router-dom'
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import FlagIcon from '@mui/icons-material/Flag';
+import { Link,Navigate,useLocation } from 'react-router-dom';
 
 
 let data = [];
@@ -426,6 +427,7 @@ function AddComment(){
         setOpen(true);
         
     }
+    let location = useLocation();
     const handlePublish=(e)=>{
         if(titleEmpty==true||descEmpty==true||type==-1||(type==1)&&(rating==null)){
             if(type==-1){
@@ -463,10 +465,7 @@ function AddComment(){
                 
             })
             .then(response => console.log(response))
-            .then(() => {
-                
-                setOpen(false);window.location.reload();
-            })
+    
             .catch((error) => {
                 console.error('Error:', error);
             });

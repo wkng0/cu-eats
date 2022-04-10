@@ -8,7 +8,7 @@ import Toast from "./HomePageimages/Toast.jpg";
 import NA from "./HomePageimages/NAcan.jpg";
 import UC from "./HomePageimages/UCcan.jpg";
 import Shaw from "./HomePageimages/Shawcan.jpg";
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation,Link } from 'react-router-dom';
 
 
 // class HomePage extends React.Component {
@@ -46,7 +46,7 @@ function HomePage() {
             <div className="text-box">
                 <h1>CUHK's Food Delivery System</h1>
                 <p>We are delicate to provide to best food delivery system you, espiecally in this diffcult time</p>
-                <a href="" class="hero-btn">Visit Us To Know More</a>
+                <Link to="" className ="hero-btn" style={{textDecoration: 'none'}}>Visit Us To Know More</Link>
             </div>
 
         </section>
@@ -119,19 +119,19 @@ function HomePage() {
             <div className="row">
            
                 <div className="location-col">
-                <a className="NAcanLink" href={"/newNaCanteen"}>
+                <Link className="NAcanLink" to="/newNaCanteen" style={{textDecoration: 'none'}}>
                     <img src={NA}/>
                     <h3>NA can</h3>
                     <p> 地址:新亞樂群館梁雄姬樓地下  <br/>
                         電話訂位: 沒有電話號提供 <br/>
                         價錢每人: 50以下 <br/>
                         人氣指數: 15</p>
-                </a>
+                </Link>
                 </div>
             
 
                 <div className="location-col">
-                    <a className="UCcanLink" href={"/newUcCanteen"}>
+                    <Link className="UCcanLink" to="/newUcCanteen" style={{textDecoration: 'none'}}>
                     <img src={UC}/>
                     <h3>UC can</h3>
                     <p> Opening Hours:     
@@ -143,18 +143,19 @@ function HomePage() {
                         Take-away and delivery service (over HK$30) will continue after 6:00pm.   <br/> 
                         <br/>                     
                         Order Hotline for On-campus Delivery: Whatsapp 9094 1558</p>
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="location-col">
-                <a className="ShawcanLink" href={"/newShawCanteen"}>
+                <Link className="ShawcanLink" to="/newShawCanteen" style={{textDecoration: 'none'}}>
+
                     <img src={Shaw}/>
                     <h3>Shaw can</h3>
                     <p> 
                         營業時間 : 上午11時至下午2時30分 (星期一至五)<br/>
                         備註:SeeYou@Shaw 風味小館的膳食服務維持暫停 <br/>
                         如有查詢或其他服務安排，請與餐廳聯絡，電話 2267 0618。</p>
-                </a>
+                </Link>
                 </div>
             </div>
         </section>

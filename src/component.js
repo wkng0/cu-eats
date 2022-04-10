@@ -114,7 +114,7 @@ function NavBar() {
                         >
                         {pages.map((page, index) => (
                             <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={pagesRoute[index]} style={{color: '#5D4E99'}}>
-                                <a href={pagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</a>
+                                <Link to={pagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
                             </MenuItem>
                         ))}
                         </Menu>
@@ -124,14 +124,16 @@ function NavBar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page, index) => (
+                        <Link to={pagesRoute[index]} style={{textDecoration: 'none'}}>
                         <Button
                             key={page}
                             onClick={handleCloseNavMenu}
                             sx={{ my: 2, color: '#F4CB86', display: 'block', ':hover': {color: 'white'}}}
-                            href={pagesRoute[index]}
+                        
                         >
                             {page}
                         </Button>
+                        </Link>
                         ))}
                     </Box>
 
