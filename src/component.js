@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -38,6 +38,8 @@ import BackupTableIcon from '@mui/icons-material/BackupTable';
 import PasswordIcon from '@mui/icons-material/Password';
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import { useParams, useNavigate } from "react-router-dom";
+
 
 
 
@@ -80,7 +82,6 @@ function NavBar() {
         setAnchorElUser(null);
         userMenuStatus = -1;
     };
-
     return (
 
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
@@ -135,11 +136,23 @@ function NavBar() {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
+                          
                         <Tooltip title="Shopping Cart">
-                        <Button variant="outlined" color="inherit" sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}} href="/ShoppingCart">
-                            <ShoppingCartIcon />
-                        </Button>
+                        <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
+                            <Button 
+                              variant="outlined"
+                              color="inherit" 
+                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
+                              
+                            >
+                                <ShoppingCartIcon />
+                            </Button>
+                        </Link>
+                        
                         </Tooltip>
+
+                        
+                        
                     </Box>
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">

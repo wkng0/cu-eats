@@ -33,9 +33,10 @@ function App() {
 
   return (
     <div className="App" style={{zIndex:9999 ,position:"relative"}}>
-      <NavBar/>
+      
       
       <BrowserRouter>
+        <NavBar/>
         <UserContext.Provider value={{user, setUser}}>
         <DishProvider>
         <Routes>
