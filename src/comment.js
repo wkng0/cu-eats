@@ -232,7 +232,7 @@ function ResponsiveDrawer(props) {
     useEffect(()=>{
         setTimeout(function() {
             setLoading(false)
-        }, 1000);
+        }, 500);
     })
     const toggleDrawer = (open) => (event) => {
         if (
