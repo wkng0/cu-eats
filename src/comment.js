@@ -56,82 +56,32 @@ import { Link,Navigate,useLocation } from 'react-router-dom';
 
 
 let data = [];
+let users=[];
 
 
-class TabPanel extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={
-            value:-1,
-        }
-    }
-    
-    handleChange=(event,newValue)=>{  
-        this.setState({value:newValue})
-    };
- 
-    render(){
 
-        return(
-            <>
-                <Container maxWidth="sm"  >  
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
-                        <Tabs value={this.state.value} onChange={this.handleChange}>
-                            <Typography variant="h5" sx={{lineHeight:2, marginRight:"10px"}}>
-                                {canteenList[canteenID.indexOf(this.props.canteen)]}
-                            </Typography>
-                            <Tab label="All" value={-1}/> 
-                            <Tab label="Chit-Chat" value={0} />
-                            <Tab label="Rating" value={1}/>
-                        </Tabs>
-                    </Box>
-                    
-                   
-                    {data.map((file,i)=>
-                        <div role="tabpanel" style={{marginTop:"1rem"}} key={i}>
-                            {(this.state.value==data[i].type || this.state.value=="-1") &&(
-                                <TabContent  i={i} canteen={this.props.canteen}/>
-                            )}
-                            
-                        </div>
-                    
-                    )}
-                    <Typography variant="h5">
-                        You have scrolled to the bottom :)
-                    </Typography>
-                </Container>
-                
-        
-            </>
-        );
-    }
-    
-}
 
-class TabContent extends React.Component{
-    constructor(props){
-        super(props)
-        this.state={
-            open:false,
-            option:"",
-            optionEmpty:false,
-            helperText:""
-        }
+function TabContent(props){
+    const [open,setOpen]=useState(false);
+    const [option,setOption]=useState("");
+    const [optionEmpty,setOptionEmpty]=useState(false);
+    const [helperText,setHelperText]=useState("");
+
+   
+    const handleShare=()=>{
+        navigator.clipboard.writeText("http://localhost:3000/comment/"+props.canteen+"/"+data[props.i]._id);
     }
-    handleShare=()=>{
-        navigator.clipboard.writeText("http://localhost:3000/comment/"+this.props.canteen+"/"+data[this.props.i]._id);
-    }
-    handleLike=()=>{
+    const handleLike=()=>{
 
     }
-    handleReport=()=>{
-        console.log(data[this.props.i]._id);
+    const handleReport=()=>{
+        console.log(data[props.i]._id);
         fetch("http://localhost:7000/dbComment/report", {
             method: 'POST', 
             body: new URLSearchParams({
-                "postid":data[this.props.i]._id,
-                "reason": this.state.option,
-                "canteen": this.props.canteen
+                "postid":data[props.i]._id,
+                "reason": option,
+                "canteen": props.canteen
             }),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -142,135 +92,128 @@ class TabContent extends React.Component{
             console.log(response)
         })
         .then(() => {
-            this.setState({open:false});
+            setOpen(false)
         })
         .catch((error) => {
             console.error('Error:', error);
         });
     }
-    handleClose=()=>{
-        this.setState({open:false})
+    const handleClose=()=>{
+        setOpen(false)
     }
-    handleOption=(option)=>{
-        this.setState({option:option.value});
+    const handleOption=(option)=>{
+        setOption(option.value)
         if(option.value==""){
-            this.setState({
-                optionEmpty:true,
-                helperText:"Please choose an option"
-            })
+            setOptionEmpty(true);
+            setHelperText("Please choose an option")
         }else{
-            this.setState({
-                optionEmpty:false,
-                helperText:""
-            })
+            setOptionEmpty(false);
+            setHelperText("")
         }
     }
-    handleOpenForm=()=>{
-        this.setState({
-            open:true
-        })
+    const handleOpenForm=()=>{
+        setOpen(true)
     }
     
 
-    render(){
-        const options = [
-            { value: 'Sexual content', label: 'Sexual content' },
-            { value: 'Violent or repulsive content', label: 'Violent or repulsive content' },
-            { value: 'Hateful or abusive content', label: 'Hateful or abusive content' },
-            { value: 'Harassment or bullying', label: 'Harassment or bullying' },
-            { value: 'Harmful or dangerous acts', label: 'Harmful or dangerous acts' },
-            { value: 'Spam or misleading', label: 'Spam or misleading' },
-            { value: 'None of these are my issues', label: 'None of these are my issues' }
 
-        ]
-        let i=this.props.i;
-        let postTime=data[i].datetime.substring(0,10)+" "+data[i].datetime.substring(11,16);
+    const options = [
+        { value: 'Sexual content', label: 'Sexual content' },
+        { value: 'Violent or repulsive content', label: 'Violent or repulsive content' },
+        { value: 'Hateful or abusive content', label: 'Hateful or abusive content' },
+        { value: 'Harassment or bullying', label: 'Harassment or bullying' },
+        { value: 'Harmful or dangerous acts', label: 'Harmful or dangerous acts' },
+        { value: 'Spam or misleading', label: 'Spam or misleading' },
+        { value: 'None of these are my issues', label: 'None of these are my issues' }
 
-        return(
-            
-            <Card sx={{borderRadius:3}}>
-                <CardHeader
-                    avatar={
-                    <Avatar sx={{ bgcolor: red[500] }}>
-                        {data[i].userid[0]}
-                    </Avatar>
-                    }
-                    action={<>
-                   
-                    <IconButton aria-label="settings" onClick={this.handleOpenForm}>
-                        <FlagIcon />
-                    </IconButton>
-                    <Dialog component={"div"} width="md"height="md" open={this.state.open} onClose={this.handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>
-                        <Paper>
-                            <DialogTitle >
-                            Report
-                            </DialogTitle> 
-                            <DialogContent>
-                                
-                                <FormLabel error={this.state.optionEmpty}>What's the problem?</FormLabel>    
-                                <Select 
-                                    options={options} 
-                                    sx={{zIndex:99999}}
-                                    onChange={this.handleOption}
-                                    //ref
-                                    menuPortalTarget={document.body} 
-                                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                />
-                                <FormHelperText error={this.state.optionEmpty}>{this.state.helperText}</FormHelperText>
+    ]
+    let i=props.i;
+    let postTime=data[i].datetime.substring(0,10)+" "+data[i].datetime.substring(11,16);
+    return(
+        <Card sx={{borderRadius:3}}>
+            <CardHeader
+                avatar={users[props.userIndex]["pic"]==null?
+                    <Avatar />
+                       
+                :
+                    <Avatar src={"http://localhost:7000/dbAccount/photo/get/"+users[props.userIndex]["pic"]}/>
+                }
+                action={<>
+                
+                <IconButton aria-label="settings" onClick={handleOpenForm}>
+                    <FlagIcon />
+                </IconButton>
+                <Dialog component={"div"} width="md"height="md" open={open} onClose={handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>
+                    <Paper>
+                        <DialogTitle >
+                        Report
+                        </DialogTitle> 
+                        <DialogContent>
+                            
+                            <FormLabel error={optionEmpty}>What's the problem?</FormLabel>    
+                            <Select 
+                                options={options} 
+                                sx={{zIndex:99999}}
+                                onChange={handleOption}
+                                //ref
+                                menuPortalTarget={document.body} 
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                            />
+                            <FormHelperText error={optionEmpty}>{helperText}</FormHelperText>
 
-                            </DialogContent>
-                            <DialogActions>
-                                
-                                <Button variant="outlined" startIcon={<DeleteIcon />} onClick={this.handleClose}>
-                                    Cancel
-                                </Button>
-                                <Button variant="contained" endIcon={<PublishIcon />} onClick={this.handleReport}>
-                                    Publish
-                                </Button>
-                            </DialogActions>
-                        </Paper>
-                    </Dialog> </>
-                    }
-                    title={data[i].userid}
-                    subheader={postTime}
-                    
+                        </DialogContent>
+                        <DialogActions>
+                            
+                            <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handleClose}>
+                                Cancel
+                            </Button>
+                            <Button variant="contained" endIcon={<PublishIcon />} onClick={handleReport}>
+                                Publish
+                            </Button>
+                        </DialogActions>
+                    </Paper>
+                </Dialog> </>
+                }
+                title={users[props.userIndex]["user_name"]}
+                subheader={postTime}
+                
+            />
+
+            <CardContent sx={{p:0, px:2, py:0}}>
+                <CardMedia
+                    component="img"
+                    height="auto"
+                    image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
+                    sx={{mb:2, borderRadius: 2 }}
+                    hidden={data[i].image==""}
                 />
-    
-                <CardContent sx={{p:0, px:2, py:0}}>
-                    <CardMedia
-                        component="img"
-                        height="auto"
-                        image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
-                        sx={{mb:2, borderRadius: 2 }}
-                        hidden={data[i].image==""}
-                    />
-                    <Typography variant="h5" component="div" sx={{mb:1}}>
-                        {data[i].title}
-                    </Typography>
-                    <Typography variant="p" component="div">
-                        {data[i].description}
-                    </Typography>
-                    <Typography component="div" >
-                        <Rating name="read-only-rating" hidden={data[i].rating==null} value={data[i].rating} readOnly />
-                    </Typography>
-                
+                <Typography variant="h5" component="div" sx={{mb:1}}>
+                    {data[i].title}
+                </Typography>
+                <Typography variant="p" component="div">
+                    {data[i].description}
+                </Typography>
+                <Typography component="div" >
+                    <Rating name="read-only-rating" hidden={data[i].rating==null} value={data[i].rating} readOnly />
+                </Typography>
+            
 
-                </CardContent>
-                
-                <CardActions>
-                    <IconButton aria-label="add to favorites">
-                        <ThumbUpIcon />
-                    </IconButton>
-                    <IconButton aria-label="share" onClick={this.handleShare}>
-                        <ShareIcon />
-                    </IconButton>
-                </CardActions>
-            </Card>
-                
-           
+            </CardContent>
+            
+            <CardActions>
+                <IconButton aria-label="add to favorites">
+                    <ThumbUpIcon />
+                </IconButton>
+                <IconButton aria-label="share" onClick={handleShare}>
+                    <ShareIcon />
+                </IconButton>
+            </CardActions>
+        </Card>
+            
+        
 
-        );
-     }
+    );
+ 
 }
 let canteenInfo=[];
 const canteenList=[];
@@ -282,7 +225,7 @@ function ResponsiveDrawer(props) {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [canteen, setCanteen]=React.useState("SC")
     const [state, setState] = React.useState(false);
-
+    const [value,setValue]=React.useState(-1);
     
     const toggleDrawer = (open) => (event) => {
         if (
@@ -295,11 +238,21 @@ function ResponsiveDrawer(props) {
     
         setState(open);
     };
-
+    const handleChange=(event,newValue)=>{  
+        setValue(newValue)
+    };
     const handleClick=(e)=>{
 
         let canteenChoice=e.currentTarget.getAttribute('value');
         //console.log(canteenChoice);
+        
+
+        fetch("http://localhost:7000/dbAccount/getAll/")
+        .then(res=>res.json())
+        .then(db=>{
+            users=db;
+            console.log(users);
+        })
         fetch('http://localhost:7000/dbComment/get/'+canteenChoice)
         .then(res=>res.json())
         .then(db=>{
@@ -308,11 +261,8 @@ function ResponsiveDrawer(props) {
             //console.log("send to " +canteenChoice);
             setCanteen(canteenChoice)
         })
-        
     }
-    const handleOpenMenu=()=>{
 
-    }
   
     const drawer = (
       <div>
@@ -340,8 +290,8 @@ function ResponsiveDrawer(props) {
        
       </div>
     );
-  
-    
+    console.log(data);
+    console.log(users);
     return ( 
         <Container >
         <Box sx={{ display: 'flex' }}>        
@@ -394,13 +344,38 @@ function ResponsiveDrawer(props) {
                 component="main"
                 sx={{ flexGrow: 1, p: 3, maxWidth: { sm: "750px" } ,padding:0,paddingBottom:5 }}
             >
-                <TabPanel canteen={canteen}/>
+                <Container maxWidth="sm"  >  
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
+                        <Tabs value={value} onChange={handleChange}>
+                            <Typography variant="h5" sx={{lineHeight:2, marginRight:"10px"}}>
+                                {canteenList[canteenID.indexOf(canteen)]}
+                            </Typography>
+                            <Tab label="All" value={-1}/> 
+                            <Tab label="Chit-Chat" value={0} />
+                            <Tab label="Rating" value={1}/>
+                        </Tabs>
+                    </Box>
+                    
+                   
+                    {data.map((file,i)=>
+                        <div role="tabpanel" style={{marginTop:"1rem"}} key={i}>
+                            {(value==data[i].type || value=="-1") &&(
+                                <TabContent  i={i} canteen={canteen} userIndex={users.findIndex(user=>user.uid==data[i].userid) }/>
+                            )}
+                            
+                        </div>
+                    
+                    )}
+                    <Typography variant="h5">
+                        You have scrolled to the bottom :)
+                    </Typography>
+                </Container>
+                
+        
+           
             </Box>
         </Box>
         </Container>
-      
-       
-       
     );
 }
 
@@ -452,7 +427,7 @@ function AddComment(){
             fetch('http://localhost:7000/dbComment/post/'+canteen, {
                 method: 'POST', 
                 body: new URLSearchParams({
-                    "userid":"temp",
+                    "userid":localStorage.getItem('user'),
                     "title":title,
                     "image": newFileName,
                     "description":description,
@@ -671,21 +646,30 @@ function UserComment(){
         .then(res=>res.json())
         .then(db=>{
             data=db;
-            console.log(data);
+            //console.log(data);
+        }).then(()=>{
+            fetch("http://localhost:7000/dbAccount/getAll/")
+            .then(res=>res.json())
+            .then(db=>{
+                users=db;
+            })
         }).then(()=>{
             fetch('http://localhost:7000/dbcanteenInfo/getCanteenInfo')
             .then(res=>res.json())
             .then(db=>{
                 canteenInfo=db;
-                console.log(canteenInfo);
+                //console.log(canteenInfo);
                 for(let i=0;i<canteenInfo.length;i++){
                     canteenList[i]=canteenInfo[i]["canteen_name"];
                     canteenID[i]=canteenInfo[i]["value"];
-                }
-                setLoadFinish(true);
+                }          
             })
+            .then(()=>setLoadFinish(true));
         })
+        
     })
+    console.log(users);
+    console.log(data);
     if(loadFinish==false){
         return<>please wait</>
     }
@@ -715,6 +699,13 @@ function AdminCommentDrawer() {
                 setCanteen(canteen)
                 //console.log(canteenID);
                 //console.log(canteenList);
+            }).then(()=>{
+                fetch("http://localhost:7000/dbAccount/getAll/")
+                .then(res=>res.json())
+                .then(db=>{
+                    users=db;
+                    console.log(users);
+                })
             })
         }
         
@@ -795,9 +786,6 @@ function AdminCommentDrawer() {
 
 function CommentList(props){
     const [checked, setChecked] = React.useState([]);
-    useEffect(()=>{
-        
-    })
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
