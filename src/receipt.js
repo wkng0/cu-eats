@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from './UserContext';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Grid, Table, Divider, Button, Card } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit',day: '2-digit' ,hour: '2-digit', minute: '2-digit'}
+    return new Intl.DateTimeFormat('en-US', options).format(dateString);
+}
 
 function Receipt() {
     const {user, setUser} = React.useContext(UserContext);
@@ -24,10 +30,6 @@ function Receipt() {
     const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
     const irid = window.location.pathname.replace('/receipt/','');
-    const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: '2-digit',day: '2-digit' ,hour: '2-digit', minute: '2-digit'}
-        return new Intl.DateTimeFormat('en-US', options).format(dateString);
-    }
     const formatTime = (dateString) => {
         const options = { hour: '2-digit', minute: '2-digit'}
         return new Intl.DateTimeFormat('en-US', options).format(dateString);
@@ -292,15 +294,27 @@ function Records() {
                 <ArrowBackIosIcon/>
                 </Button>
             </div>
-            <div style={{width:'70%', margin:'auto'}}>
+            <div style={{width:'60%', margin:'auto'}}>
                 <h3 style={{color: '#5D4E99'}}>Shopping Records</h3>
                 <div style={{display: records == null? 'none':'block'}}>
-                    {records.map((receipt, index)=>(
+                    {records.map((receipt)=>(
                         <>
-                        
-                        <Card sx={{p:2, m:3, boxShadow: 2}} onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}>
-                            <h5 style={{color: '#5D4E99'}}>Receipt {index+1}</h5>
-                            <div key={receipt.rid}>{receipt.rid}</div>
+                        <Card
+                            sx={{p:5, m:3, boxShadow: 2, cursor:"pointer"}} 
+                            onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
+                        >                            
+                            <Grid container >
+                                    <Grid item xs={6}>
+                                        <h5 style={{color: '#5D4E99'}}><b>{receipt.rName}</b></h5>
+                                    </Grid>
+                                    <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>
+                                        <small style={{color: '#707070'}}>More detail <span style={{color: '#5D4E99'}}><ArrowForwardIosIcon/></span></small>
+                                    </Grid>
+                            </Grid><br/>
+                            <Grid container >
+                                    <Grid item xs={6} sx={{color: '#707070'}}>{formatDate(receipt.timestamp)}</Grid>
+                                    <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>$ {receipt.total.toFixed(1)}</Grid>
+                            </Grid>
                         </Card>
                         </>
                     ))}
