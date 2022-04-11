@@ -132,6 +132,9 @@ function NewShowDishes(props){
 
 
     return(
+        <>
+        { !menu.hide ?
+        <>
         <Card sx={{display:"flex", alignItems: 'center', my:5}}>
             <CardMedia
                 component="img"
@@ -200,6 +203,10 @@ function NewShowDishes(props){
             </Box>
         
         </Card>
+         </> :
+        <></>
+        }
+        </>
 
             
     );
