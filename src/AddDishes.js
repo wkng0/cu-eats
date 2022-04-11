@@ -16,12 +16,8 @@ import {
 } from "@mui/material";
 import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
-let canteenInfo=[];
-let listOfMenu=[];
 
-const menu=["NaMenu","ShawMenu","UcMenu"];
 
-// fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
 export default function AddDishes(props) {
 
     const [name, setName] = useState("");
@@ -43,7 +39,7 @@ export default function AddDishes(props) {
             if(name=="") setNameError(true);
             if(variantList.length==0) setVariantError(true);
         }else{
-            Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/${menu[props.value]}`, {
+            Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/NaMenu`, {
                 name: name, 
                 variants: variantList,
                 category: category,
