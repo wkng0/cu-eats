@@ -80,7 +80,6 @@ function Checkout() {
     const { cart, total, clearCart } = React.useContext(DishContext);
     const [name, setName] = React.useState('');
     const [phone, setPhone] = React.useState('');
-    const [email, setEmail] = React.useState('');
     const [point, setPoint] = React.useState(0);
     const [uid, setUID] = React.useState(0);
     const [pointUse, setPointUse] = React.useState(0);
@@ -94,7 +93,6 @@ function Checkout() {
     const [anchorElNew, setAnchorElNew] = React.useState(null);
     const handleChangeName = (event) => {setName(event.target.value);};
     const handleChangePhone = (event) => {setPhone(event.target.value);};
-    const handleChangeEmail = (event) => {setEmail(event.target.value);};
     const handleChangePoint = (event) => {setPointUse(event.target.value);};
     const handleAddress = (event) => {setAddress(event.target.value);};
     const handleCutlery = () => {setCutlery(!cutlery);};
@@ -112,7 +110,6 @@ function Checkout() {
                 "uid": uid,
                 "rid": rid,
                 "name": name,
-                "email": email,
                 "phone": phone,
                 "address": address==null? savedAddress[0]:address,
                 "cutlery": cutlery,
@@ -178,7 +175,6 @@ function Checkout() {
         fetch('http://localhost:7000/dbAccount/getByUID/'+user)
         .then(res=>res.json())
         .then(data=>{
-            setEmail(data[0].email);
             setName(data[0].user_name);
             setPoint(data[0].point);
             setPhone(data[0].phone);
@@ -192,8 +188,6 @@ function Checkout() {
     })
       
     let rid = "Joyful Inn";
-    // let total = 0;
-    //var receiptID = '';
 
     return (
         <>
