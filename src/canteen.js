@@ -185,7 +185,8 @@ function NewShowDishes(props){
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
                         onClick={()=>{
-                           addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name, canteen:props.canteen})
+                            localStorage.setItem("cartCanteen",props.canteen);
+                            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
                         }}
                         hidden={localStorage.getItem("type")=="admin"}
                     >

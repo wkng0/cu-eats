@@ -14,7 +14,7 @@ const initialState = {
   cart: JSON.parse(localStorage.getItem("cart") || "[]"),
   total: 0,
   amount: 0,
-  canteen: "",
+  canteen: localStorage.getItem("cartCanteen") || "",
 }
 
 
