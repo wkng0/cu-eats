@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import { ConstructionOutlined } from '@mui/icons-material';
 
 
 const CartItem = ({ id,img ,title, variant,price,amount }) => {
@@ -50,6 +49,9 @@ const CartContainer = () => {
   const { cart, total, clearCart } = useContext(DishContext);
   console.log(cart)
   if (cart.length === 0) {
+    localStorage.setItem("cart","[]")
+    localStorage.setItem("cart","[]")
+    localStorage.setItem("cart","[]")
     return (
       <section className='sc-cart'>
         {/* cart header */}
