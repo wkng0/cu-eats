@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -40,8 +39,6 @@ import { useContext } from 'react';
 
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
 const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
-const settings = ['Profile', 'Account', 'Dashboard'];
-const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
 
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
@@ -91,25 +88,35 @@ function NavBar() {
       window.location.assign("/");
     }
 
+    const openProfile = () =>{
+      setAnchorElUser(null);
+      userMenuStatus = -1;
+      window.location.assign("/profile");
+    }
+
+    // const openAccount = () =>{
+    //   setAnchorElUser(null);
+    //   userMenuStatus = -1;
+    //   window.location.assign("/profile/account")
+    // }
+
+
     React.useEffect(()=>{
-      if(fetchFinish== false){
-      if(type== null){
-        setUser(localStorage.getItem('user'));
-        setType(localStorage.getItem('type'));
-        console.log("set!",user);
-        console.log("type!",type);
-      }
-      if(fetchFinish== false){
-        fetch('http://localhost:7000/dbAccount/getByUID/'+user)
-        .then(res=>res.json())
-        .then(data=>{
-            setPic(data[0].pic);
-            setFetch(true);
-        })
-        .catch(err=>{
-          console.log(err);
-          setFetch(false);
-        })}
+      if(fetchFinish== false||(pic!=""&&type=="user")){
+        if(type== null){
+          setUser(localStorage.getItem('user'));
+          setType(localStorage.getItem('type'));
+          fetch('http://localhost:7000/dbAccount/getByUID/'+localStorage.getItem('user'))
+          .then(res=>res.json())
+          .then(data=>{
+              setPic(data[0].pic);
+              setFetch(true);
+          })
+          .catch(err=>{
+            console.log(err);
+            setFetch(false);
+          })
+        }
       }
     })
 
@@ -203,11 +210,19 @@ function NavBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
+                          {/* const settings = ['Profile', 'Account', 'Dashboard'];
+                          const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
                         {settings.map((setting, index) => (
                             <MenuItem key={setting} onClick={handleCloseUserMenu}>
                                 <a href={settingsRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{setting}</a>
                             </MenuItem>
-                        ))}
+                        ))} */}
+                        <MenuItem onClick={openProfile}>
+                        <a style={{color: '#5D4E99', textDecoration: 'none' }}> Profile </a>
+                        </MenuItem>
+                        {/* <MenuItem onClick={openAccount}>
+                        <a style={{color: '#5D4E99', textDecoration: 'none' }}> Account </a>
+                        </MenuItem> */}
                         <MenuItem onClick={logout}>
                         <a style={{color: '#5D4E99', textDecoration: 'none' }}> Logout </a>
                         </MenuItem>
@@ -220,7 +235,7 @@ function NavBar() {
   );}
   if(type=="admin"){
     return(
-      <AdminDrawer/>
+      <AdminDrawer></AdminDrawer>
     );
   }
   else{
@@ -282,24 +297,28 @@ function NavBar() {
                           
                         <Tooltip title="Shopping Cart">
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
-
-                            <IconButton aria-label="cart">
-                              <Badge badgeContent={cart.length} color="secondary">
-                                <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
-                              </Badge>
-                            </IconButton>
+                            <Button 
+                              variant="outlined"
+                              color="inherit" 
+                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
+                              
+                            >
+                                <ShoppingCartIcon />
+                            </Button>
                         </Link>
                         </Tooltip>
                     </Box>
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Login">
                         <Link to='/login' style={{color:"#F4CB86"}}>
-                            <IconButton aria-label="cart">
+                            <Button 
+                              variant="outlined"
+                              color="inherit" 
+                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
                               
-                                <LoginIcon sx={{color: '#F4CB86'}}/>
-                      
-                            </IconButton>
-                                
+                            >
+                                <LoginIcon/>
+                            </Button>
                         </Link>
                         </Tooltip>
                     </Box>
@@ -350,7 +369,7 @@ const data = [
                   '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
                 }}
               >
-                 <ListItemIcon sx={{color:"white"}}>
+                <ListItemIcon sx={{color:"white"}}>
               <AccountCircleIcon/>
                 </ListItemIcon>
                 <ListItemText
@@ -436,8 +455,8 @@ const data = [
           >
             <ListItemIcon>
               <LogoutIcon sx={{color:"white"}}/>
-              <ListItemText primary="Logout" sx={{color:"white"}}/>
-            </ListItemIcon>
+              </ListItemIcon>
+              <ListItemText primary="Logout"/>
           </ListItem>
       </List>
   
@@ -483,19 +502,15 @@ const data = [
 function NavBar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-
   const handleChange = (event) => {
     setAuth(event.target.checked);
   };
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <FormGroup>
@@ -611,7 +626,6 @@ class Footer extends React.Component{
     return (
         <div style={{zIndex:9999 ,position:"relative",marginTop:"8rem"}}>
         <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={6}>
-
             <BottomNavigation
                 showLabels
                 value={value}
