@@ -5,9 +5,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Grid, Table, Divider, Button, Card } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
-
 const formatDate = (dateString) => {
     const options = { year: 'numeric', month: '2-digit',day: '2-digit' ,hour: '2-digit', minute: '2-digit'}
     return new Intl.DateTimeFormat('en-US', options).format(dateString);
@@ -384,7 +381,7 @@ function Dashboard() {
                         >                            
                             <Grid container >
                                     <Grid item xs={6}>
-                                        <h5 style={{color: '#5D4E99'}}><b>{receipt.rName}</b></h5>
+                                        <h5 style={{color: '#5D4E99'}}><b>{receipt.id}</b></h5>
                                     </Grid>
                                     <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>
                                         <small style={{color: '#707070'}}>More detail <span style={{color: '#5D4E99'}}><ArrowForwardIosIcon/></span></small>
@@ -398,20 +395,6 @@ function Dashboard() {
                         </>
                     ))}
                 </div>
-                {/*const { data } = useDemoData({
-    dataSet: 'Employee',
-    visibleFields: VISIBLE_FIELDS,
-    rowLength: 100,
-  });
-
-  return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid {...data} components={{ Toolbar: GridToolbar }} />
-    </div>
-  );
-}
-                );
-                */}
 
             </div>
             </>
