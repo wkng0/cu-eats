@@ -68,7 +68,7 @@ const CartContainer = () => {
       {/* cart header */}
       <header>
         <h3>Your Shopping Cart</h3>
-        <h6>{canteen}</h6>
+        <h6>{localStorage.getItem("cartCanteen")}</h6>
       </header>
       {/* cart items */}
       <div>

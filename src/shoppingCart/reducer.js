@@ -3,7 +3,6 @@ const reducer = (state, action) => {
     
     if (action.type === 'ADD_TO_CART'){
         //may not be this
-        state.canteen=action.payload.canteen;
         const item = state.cart.find((prod)=>prod.id===action.payload.id);
         const inCart = state.cart.find((item)=>
           item.id===action.payload.id?(item.variant==action.payload.variant.name?true:false):false
