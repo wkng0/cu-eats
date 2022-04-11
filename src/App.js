@@ -9,9 +9,9 @@ import { Receipt, Records } from './receipt';
 
 import ShowCanteen from './Menu';
 
-import NewNACanteen from './newNaCanteen';
-import NewUcCanteen from './newUcCanteen';
-import NewShawCanteen from './newShawCanteen';
+
+import Canteen from "./canteen";
+
 
 import DeleteDish from "./DeleteDishes";
 import AddDishes from "./AddDishes";
@@ -80,9 +80,10 @@ function App() {
             
             <Route path="/ShoppingCart" element={<CartContainer/>} />
               
-            <Route path="/newNAcanteen" element={<NewNACanteen/>} />
-            <Route path="/newShawcanteen" element={<NewShawCanteen/>} />
-            <Route path="/newUccanteen" element={<NewUcCanteen/>} />
+            <Route path="/NAcanteen" element={<Canteen value={0}/>} />
+            <Route path="/Shawcanteen" element={<Canteen value={1}/>} />
+            <Route path="/Uccanteen" element={<Canteen value={2}/>} />
+
             
             <Route path="/menu" element={<ShowCanteen/>} />
               

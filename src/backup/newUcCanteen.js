@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
-import {useEffect,useContext} from "react";
+import React, {useState,useContext} from 'react';
+import {useEffect} from "react";
+import { DishContext } from './shoppingCart/sc-context';
 import './canteen.css';
 // import menu from './menu';
 // import Select from 'react-select';
@@ -12,34 +13,33 @@ import { MenuItem } from '@mui/material';
 import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
-import { Stack } from '@mui/material';
-import { Chip } from '@mui/material';
-import { DishContext } from './shoppingCart/sc-context';
+import { Chip,Stack } from '@mui/material';
 
 
-function NewShawCanteen() {
+
+
+function NewUcCanteen() {
     const [listOfMenu, setListOfMenu] = useState([]);
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbMenu/getMenu/ShawMenu").then((response) => {
+        Axios.get("http://localhost:7000/dbMenu/getMenu/UcMenu").then((response) => {
             setListOfMenu(response.data)
         });
     }, []);
     return(
         <>
-         <section class="Shawheader">
+        <section class="UCheader">
             <div class="text-box">
-                    <h1>Shaw Canteen</h1>
-                    <p>SeeYou@Shaw是一個結合良朋好友和優質餐飲，並使你足以自豪的理想社群。
-
-                        SeeYou@Shaw也是一個建基於友情的品牌。
-
-                        2016年初，我們獲得投標經營逸夫書院學生飯堂的機會，而這次投標剛好出現於各人事業生涯中的合適時機，因緣際會之下，成就了SeeYou@Shaw的誕生。 </p>
-                    <a href="https://www.shaw.cuhk.edu.hk/zh/content/shaw-college-seeyoushaw-resuming-lunch-dine-services" class="hero-btn">Visit Us To Know More</a>
+                    <h1>UC Canteen</h1>
+                    <p>The College Staff and Student Canteens are located on the G/F of the Cheung Chuk Shan Amenities Building.  <br/>
+                        The total floor area is about 570 square metres and it can serve up to 360 people. <br/>
+                         The College canteens are now operated by Joyful Inn Limited.  </p>
+                    <a href="https://www.uc.cuhk.edu.hk/canteen/" class="hero-btn">Visit Us To Know More</a>
             </div>
         </section>
-           {/* <!-- ----- restaurant ------ --> */}
-           <div>
+
+                {/* <!-- ----- restaurant ------ --> */}
+                <div>
             <Container maxWidth="md">
                 {listOfMenu.map( (menu) =>{
                     return(
@@ -152,6 +152,7 @@ function NewShowDishes({menu}) {
                         onClick={()=>{
                             addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
                         }}
+                        hidden={localStorage.getItem("type")=="admin"}
                     >
                         ADD TO CART
                     </Button>
@@ -167,4 +168,4 @@ function NewShowDishes({menu}) {
 
 }
 
-export default NewShawCanteen;
+export default NewUcCanteen;

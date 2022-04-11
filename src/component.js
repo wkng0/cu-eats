@@ -236,7 +236,7 @@ function NavBar() {
   );}
   if(type=="admin"){
     return(
-      <AdminDrawer></AdminDrawer>
+      <AdminDrawer/>
     );
   }
   else{

@@ -14,23 +14,47 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
 import { Chip,Stack } from '@mui/material';
 
-function NewNACanteen() {
-    const [listOfMenu, setListOfMenu] = useState([]);
+
+let canteenInfo=[];
+let listOfMenu=[];
+
+const menu=["NaMenu","ShawMenu","UcMenu"]
+
+function Canteen(props) {
+    console.log(listOfMenu)
+    const [loadFinish,setLoadFinish]=useState(false);
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbMenu/getMenu/NaMenu").then((response) => {
-            setListOfMenu(response.data)
-        });
-    }, []);
-    return(
+        if(loadFinish==false){
+            fetch("http://localhost:7000/dbcanteenInfo/getCanteenInfo")
+            .then(res=>res.json())
+            .then(db=>canteenInfo=db)
+            .then(
+                fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
+                .then(res=>res.json())
+                .then(db=>listOfMenu=db)
+                .then(()=>setLoadFinish(true)) 
+                
+            )   
+        }
+    });
+    console.log(canteenInfo)
+    if(loadFinish==false) return <>please wait</>
+    else return(
         <>
-        <section class="NAheader">
+        <section style={{
+            minHeight: "60vh",
+            width: "100%",
+            backgroundImage: `linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url(${canteenInfo[props.value].canteen_image})`,  
+            backgroundColor: "#5d4e99",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            position: "relative",
+        }}>
             <div class="text-box">
-                    <h1>NA Canteen</h1>
-                    <p>New Asia Canteen is operated by a local innovative catering service company, Fortune River Catering Ltd., 
-                        which is established by a group of New Asia and CUHK alumni, 
-                        with an aim to provide high quality food and dining environment for students and staff of New Asia College and the University.   </p>
-                    <a href="http://www.na.cuhk.edu.hk/en-us/aboutnewasia/news.aspx?udt_1148_param_detail=14215" class="hero-btn">Visit Us To Know More</a>
+                <h1>{canteenInfo[props.value].canteen_name}</h1>
+                <p>{canteenInfo[props.value].canteen_description}</p>
+                <a href={canteenInfo[props.value].website} class="hero-btn">Visit Us To Know More</a>
             </div>
         </section>
 
@@ -144,8 +168,9 @@ function NewShowDishes({menu}){
                         endIcon={<AddShoppingCartIcon />}
                         onClick={()=>{
                            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
-                        }
-                    } >
+                        }}
+                        hidden={localStorage.getItem("type")=="admin"}
+                    >
                         ADD TO CART
                     </Button>
 
@@ -159,6 +184,4 @@ function NewShowDishes({menu}){
 
 
 }
-
-
-export default NewNACanteen;
+export default Canteen;

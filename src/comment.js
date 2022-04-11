@@ -725,7 +725,6 @@ function AdminCommentDrawer() {
 
     const drawer = (
       <div>
-        <Toolbar />
         <Divider />
         <List>
             <ListItem >
@@ -842,7 +841,7 @@ function CommentList(props){
    
     return(
         <>
-            <Box >                
+            <Box sx={{mt:2}}>                
                 <Button 
                     disabled={checked.length==0||props.canteen!="Report"?true:false} 
                     variant="contained" 
