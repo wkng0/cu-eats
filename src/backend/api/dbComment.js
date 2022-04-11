@@ -5,9 +5,11 @@ import multer from "multer";
 import path from 'path'
 const __dirname=path.resolve();
 
+
 const upload=multer({dest:"comment/photo/"})
 const router = express.Router();
-
+const cors=require('cors');
+router.use(cors());
 const url="mongodb+srv://admin:admin_d2@groupd2.d3lwk.mongodb.net/sample_users?retryWrites=true&w=majority";
 const client=new MongoClient(url);
 const dbName="Comment";
