@@ -295,9 +295,9 @@ function NavBar() {
                         <Tooltip title="Login">
                         <Link to='/login' style={{color:"#F4CB86"}}>
                             <IconButton aria-label="cart">
-                              <Badge badgeContent={cart.length} color="secondary">
+                              
                                 <LoginIcon sx={{color: '#F4CB86'}}/>
-                              </Badge>
+                      
                             </IconButton>
                                 
                         </Link>
