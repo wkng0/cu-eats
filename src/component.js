@@ -103,7 +103,7 @@ function NavBar() {
 
 
     React.useEffect(()=>{
-      if(fetchFinish== false||(pic!=""&&type=="user")){
+      if(fetchFinish== false){
         if(type== null){
           setUser(localStorage.getItem('user'));
           setType(localStorage.getItem('type'));
@@ -198,7 +198,7 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar alt="Hemy Sharp" src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+                            <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
                         </IconButton>
                         </Tooltip>
                         <Menu
