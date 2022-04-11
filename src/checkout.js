@@ -145,7 +145,7 @@ function Checkout() {
     React.useEffect(()=>{setDiscount(pointUse/10);},[pointUse])
     React.useEffect(()=>{fetchAddress()},([refresh]))
     React.useEffect(()=>{
-        if(localStorage.getItem('user') != undefined){
+        if(localStorage.getItem('user') != ""){
             setUser(localStorage.getItem('user'));
             console.log("set!",user);
         }

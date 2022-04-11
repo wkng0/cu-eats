@@ -25,7 +25,7 @@ function Profile(){
   const[fetchFinish, setFetch] = useState(false);
 
   useEffect(()=>{
-    if(localStorage.getItem('user') != undefined){
+    if(localStorage.getItem('user') != ""){
       setUser(localStorage.getItem('user'));
       console.log("set!",user);
   }
@@ -1001,12 +1001,10 @@ const handleChangePhone = (event)=>{
 }
 
   useEffect(()=>{
-    if(localStorage.getItem('user') != undefined){
-      setUser(localStorage.getItem('user'));
-      console.log("set!",user);
-  }
+    setUser(localStorage.getItem('user'));
+    console.log("set!",user);
     if(fetchFinish == false){
-   fetch('http://localhost:7000/dbAccount/get/'+user)
+   fetch('http://localhost:7000/dbAccount/getByUID/'+user)
    .then(res=>res.json())
    .then(data=>{
        setEmail(data[0].email);
@@ -1301,7 +1299,7 @@ function FormDialog(props) {
     };
 
   useEffect(()=>{
-    if(localStorage.getItem('user') != undefined){
+    if(localStorage.getItem('user') != ""){
       setUser(localStorage.getItem('user'));
       console.log("set!",user);
   }
@@ -1311,7 +1309,7 @@ function FormDialog(props) {
       setSubmit(false);
     }
     if(oldpw==""){
-      fetch('http://localhost:7000/dbAccount/get/'+ user)
+      fetch('http://localhost:7000/dbAccount/getByUID/'+ user)
         .then(res=>res.json())
         .then(data=>{
           setPw(data[0].password);
