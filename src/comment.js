@@ -544,7 +544,7 @@ function AddComment(){
       
     return(
         <div>
-            <Fab color="secondary" sx={{position: 'fixed', bottom: 32 ,right:32,zIndex:10000}} onClick={handleClick}>
+            <Fab color="secondary" sx={{position: 'fixed', bottom: 32 ,right:32,zIndex:10000}} onClick={handleClick} hidden={localStorage.getItem('user') == undefined}>
                 <AddIcon />
             </Fab>
             <Dialog component={"div"} width="md"height="md" open={open} onClose={handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>

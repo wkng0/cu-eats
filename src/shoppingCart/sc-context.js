@@ -11,7 +11,7 @@ const DishContext = React.createContext()
 
 const initialState = {
   loading: false,
-  cart: [],
+  cart: JSON.parse(localStorage.getItem("cart") || "[]"),
   total: 0,
   amount: 0,
 }
