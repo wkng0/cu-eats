@@ -1,6 +1,5 @@
-import React, {useState,useContext} from 'react';
+import React, {useState} from 'react';
 import {useEffect} from "react";
-import { DishContext } from './shoppingCart/sc-context';
 import './canteen.css';
 // import NAmenu from './NAmenu';
 // import Select from 'react-select';
@@ -9,74 +8,29 @@ import { Card,CardMedia,CardContent } from '@mui/material';
 import { Box } from '@mui/system';
 import { Typography } from '@mui/material';
 import Select from 'react-select';
+import { MenuItem } from '@mui/material';
 import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
-import { Chip,Stack } from '@mui/material';
-import {Skeleton} from '@mui/material';
 
 
-let canteenInfo=[];
-let listOfMenu=[];
-
-const menu=["NaMenu","ShawMenu","UcMenu"]
-
-
-window.number = 0;
-
-function DeleteDish(props) {
-    console.log(listOfMenu)
-    const [loadFinish,setLoadFinish]=useState(false);
-    // const [menunumber] = useState(props.value);
-    window.number = props.value; 
+function DeleteDish() {
+    const [listOfMenu, setListOfMenu] = useState([]);
     // make api call 
     useEffect(() => {
-        if(loadFinish==false){
-            fetch("http://localhost:7000/dbcanteenInfo/getCanteenInfo")
-            .then(res=>res.json())
-            .then(db=>canteenInfo=db)
-            .then(
-                fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
-                .then(res=>res.json())
-                .then(db=>listOfMenu=db)
-                .then(()=>{
-                    setTimeout(()=>{
-                        setLoadFinish(true)
-                    },1000) 
-                })
-            )
-        }
-    });
-    console.log(canteenInfo)
-    if(loadFinish==false) {
-        return (
-            <>
-                <Box sx={{mb:8}}>
-                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"60vh"} />
-                </Box>
-                <Box sx={{mx:10}}>
-                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={300} />
-                </Box>
-   
-                
-            </>
-        )
-    }
-    else return(
+        Axios.get("http://localhost:7000/dbNewMenu/getMenu/NaMenu").then((response) => {
+            setListOfMenu(response.data)
+        });
+    }, []);
+    return(
         <>
-        <section style={{
-            minHeight: "60vh",
-            width: "100%",
-            backgroundImage: `linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url(${canteenInfo[props.value].canteen_image})`,  
-            backgroundColor: "#5d4e99",
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-            position: "relative",
-        }}>
+        <section class="NAheader">
             <div class="text-box">
-                <h1>{canteenInfo[props.value].canteen_name}</h1>
-                <p>{canteenInfo[props.value].canteen_description}</p>
-                <a href={canteenInfo[props.value].website} class="hero-btn">Visit Us To Know More</a>
+                    <h1>NA Canteen</h1>
+                    <p>New Asia Canteen is operated by a local innovative catering service company, Fortune River Catering Ltd., 
+                        which is established by a group of New Asia and CUHK alumni, 
+                        with an aim to provide high quality food and dining environment for students and staff of New Asia College and the University.   </p>
+                    <a href="http://www.na.cuhk.edu.hk/en-us/aboutnewasia/news.aspx?udt_1148_param_detail=14215" class="hero-btn">Visit Us To Know More</a>
             </div>
         </section>
 
@@ -86,7 +40,7 @@ function DeleteDish(props) {
                 {listOfMenu.map( (menu) =>{
                     return(
                         <div>
-                            <NewShowDishes menu={menu}/>
+                            <EditingDIshes menu={menu}/>
                         </div>
                     );
                 })}
@@ -96,39 +50,34 @@ function DeleteDish(props) {
     )
 }
 
-const canteen=["NaMenu","ShawMenu","UcMenu"]
 
-function NewShowDishes({menu} , value){
+
+function EditingDIshes({menu}) {
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
-    const {addToCart} = useContext(DishContext);
+
     const [price,setPrice]=useState(0);
-    let variantList=[];
-    const tag=menu.tag;
-    
+    const variantList=[]
     useEffect(()=>{
-        console.log(tag)
         let data=variantList;
-        for(let i=0;i<menu.variants.length;i++){
+        for(let i=0;i<menu.varients.length;i++){
             const obj={
                 value: i,
-                label: menu.variants[i].name
+                label: menu.varients[i]
             }
             data.push(obj);
-        
         }
-        //console.log(variantList);
     })
     
-    // const quantityList=[
-    //     { value: 0, label: '0' },
-    //     { value: 1, label: '1' },
-    //     { value: 2, label: '2' }
-    // ]
+    const quantityList=[
+        { value: 0, label: '0' },
+        { value: 1, label: '1' },
+        { value: 2, label: '2' }
+    ]
 
     const handleVariant=(option)=>{
         setVariant(option.value)
-        setPrice(menu.variants[variant].price*quantity)
+        setPrice(menu.prices[variant]*quantity)
 
     }
     const handleQuantity=(option)=>{
@@ -136,18 +85,35 @@ function NewShowDishes({menu} , value){
         
     }
 
+
     const deleteDish = (id) => {
-        // Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
-        Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
-        .then(()=>{
-            alert(window.number + "deleted! please refresh" ); 
-            // setListOfMenu(listOfMenu.filter((NAmenu) => {
-            //     return NAmenu.dishesID != dishesID;
-            // }))
-    }) ;
+        Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
+        // .then(()=>{
+        //     // alert(dishidesID); 
+        //     setListOfMenu(listOfMenu.filter((NAmenu) => {
+        //         return NAmenu.dishesID != dishesID;
+        //     }))
+        // }) ;
     }
 
+
+    // const updatePrices = (id) => {
+    //     const newAge = prompt("Enter new age: ");
+    
+    //     Axios.put('http://localhost:3001/update', {newAge: newAge, id: id}).then(()=>{
+    //       setListOfFriends(listOfFriends.map((val)=> {
+    //         return val._id == id 
+    //           ? {_id: id, name: val.name, age: newAge} 
+    //           : val;
+    //       }))
+    //     });
+    //   }
+
+
+
     return(
+       
+        
         <Card sx={{display:"flex", alignItems: 'center', my:5}}>
             <CardMedia
                 component="img"
@@ -159,18 +125,6 @@ function NewShowDishes({menu} , value){
                     <Typography component="div" variant="h6" fullWidth>
                         {menu.name}
                     </Typography>
-                    <Stack direction="row" spacing={1}>
-
-                    
-                    {tag.map((file,i) =>{   
-                        return (
-                            <Chip
-                                label={tag[i].label}
-                                color={tag[i].color}
-                            />   
-                        );
-                    })}
-                    </Stack>
                     <Typography variant="subtitle1" color="text.secondary" component="div">
                         Variants
                     </Typography>
@@ -183,10 +137,11 @@ function NewShowDishes({menu} , value){
                         menuPortalTarget={document.body} 
                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                     />
+
                     {/* <Typography variant="subtitle1" color="text.secondary" component="div">
                         Quantity
-                    </Typography> */}
-                    {/* <Select 
+                    </Typography>
+                    <Select 
                         options={quantityList} 
                         sx={{zIndex:99999}}
                         onChange={handleQuantity}
@@ -196,20 +151,29 @@ function NewShowDishes({menu} , value){
                     /> */}
                     
                     <Typography variant="h6" component="div" >
-                        Price: ${menu.variants[0].price}
+                        Price: ${menu.prices[variant]}
                     </Typography>
 
-                    <Button 
-                        variant="contained" 
-                        endIcon={<AddShoppingCartIcon />}
-                        onClick={()=>{
-                            deleteDish(menu._id);
-                        }}
-                        hidden={localStorage.getItem("type")=="admin"}
-                    >
+                    {/* <Button variant="contained" 
+                            endIcon={<AddShoppingCartIcon />}
+                            onClick={() => {
+                                // updatePrices(menu._id)
+                    }}>
+                        Update Prices
+                    </Button> */}
+
+                    {/* <span>{"       "}</span> */}
+
+                    <Button variant="contained" 
+                            endIcon={<AddShoppingCartIcon />}
+                            onClick={() => {
+                                deleteDish(menu._id)
+                    }}>
                         Delete
                     </Button>
-
+  
+              
+        
                 </CardContent>
             </Box>
         
@@ -220,19 +184,6 @@ function NewShowDishes({menu} , value){
 
 
 }
+
+
 export default DeleteDish;
-
-
-
-//     // const updatePrices = (id) => {
-//     //     const newAge = prompt("Enter new age: ");
-    
-//     //     Axios.put('http://localhost:3001/update', {newAge: newAge, id: id}).then(()=>{
-//     //       setListOfFriends(listOfFriends.map((val)=> {
-//     //         return val._id == id 
-//     //           ? {_id: id, name: val.name, age: newAge} 
-//     //           : val;
-//     //       }))
-//     //     });
-//     //   }
-
