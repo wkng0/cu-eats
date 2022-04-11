@@ -298,7 +298,7 @@ function NavBar() {
                             Comment
                         </Button>
                         </Link>
-                        <Link to='/' style={{textDecoration: 'none'}}>
+                        <Link to='/dashboard' style={{textDecoration: 'none'}}>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{ my: 2, color: '#F4CB86', display: 'block', ':hover': {color: 'white'}}}

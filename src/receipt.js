@@ -2,8 +2,10 @@ import * as React from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './UserContext';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Grid, Table, Divider, Button, Card } from '@mui/material';
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Divider, Button, Card } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { DataGrid } from '@mui/x-data-grid';
+
 
 const formatDate = (dateString) => {
     const options = { year: 'numeric', month: '2-digit',day: '2-digit' ,hour: '2-digit', minute: '2-digit'}
@@ -92,7 +94,7 @@ function Receipt() {
     if (status == false) {
     return (
         <>
-        <div style={{width:'80%', margin:'auto'}}>
+        <div style={{width:'80%', margin:'auto', display: type=='user'? 'block':'none'}}>
             <Button 
               size="small" 
               href="/menu"
@@ -101,6 +103,15 @@ function Receipt() {
             <ArrowBackIosIcon/>Continue Shopping
             </Button>
         </div>
+        <div style={{width:'80%', margin:'auto', display: type=='user'? 'none':'block'}}>
+                <Button 
+                    size="small" 
+                    onClick={()=>navigate(-1)}
+                    sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transparent', color: '#5D4E99'}}}
+                >
+                <ArrowBackIosIcon/>
+                </Button>
+            </div>
         <br/>
         <h3 style={{color: '#5D4E99'}}>Receipt <span style={{color: '#FFC107'}}>{receiptID}</span></h3><br/>
         <div style={{textAlign: 'center'}}>
@@ -338,6 +349,30 @@ function Dashboard() {
     const [records, setRecord] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
+    /*
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 90 },
+        {
+            field: 'date',
+            headerName: 'Order Time',
+            width: 150,
+            editable: true,
+          },
+        {
+          field: 'total',
+          headerName: 'Total',
+          width: 100,
+          editable: true,
+        },
+        {
+          field: 'status',
+          headerName: 'Status',
+          type: 'number',
+          width: 110,
+          editable: false,
+        },
+      ];
+      */
 
     React.useEffect(()=>{
         if(localStorage.getItem('user') != ""){
@@ -373,27 +408,32 @@ function Dashboard() {
             <div style={{width:'60%', margin:'auto'}}>
                 <h3 style={{color: '#5D4E99'}}>Dashboard</h3>
                 <div style={{display: records == null? 'none':'block'}}>
+                    <TableContainer component={Paper}>
+                    <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Receipt ID</TableCell>
+                            <TableCell>Order Time</TableCell>
+                            <TableCell>Total&nbsp;($)</TableCell>
+                            <TableCell>Status</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {records.map((receipt)=>(
-                        <>
-                        <Card
-                            sx={{p:5, m:3, boxShadow: 2, cursor:"pointer"}} 
+                        <TableRow
+                            key={receipt.rid}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor:"pointer" }}
                             onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
-                        >                            
-                            <Grid container >
-                                    <Grid item xs={6}>
-                                        <h5 style={{color: '#5D4E99'}}><b>{receipt.id}</b></h5>
-                                    </Grid>
-                                    <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>
-                                        <small style={{color: '#707070'}}>More detail <span style={{color: '#5D4E99'}}><ArrowForwardIosIcon/></span></small>
-                                    </Grid>
-                            </Grid><br/>
-                            <Grid container >
-                                    <Grid item xs={6} sx={{color: '#707070'}}>{formatDate(receipt.timestamp)}</Grid>
-                                    <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>$ {receipt.total.toFixed(1)}</Grid>
-                            </Grid>
-                        </Card>
-                        </>
+                        >
+                            <TableCell component="th" scope="row">{receipt.id}</TableCell>
+                            <TableCell>{formatDate(receipt.timestamp)}</TableCell>
+                            <TableCell>{receipt.total.toFixed(1)}</TableCell>
+                            <TableCell style={{color: receipt.status? '#707070':'red'}}>{receipt.status? 'complete':'not complete'}</TableCell>
+                        </TableRow>
                     ))}
+                    </TableBody>
+                    </Table>
+                    </TableContainer>
                 </div>
 
             </div>
