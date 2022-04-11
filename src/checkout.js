@@ -109,7 +109,7 @@ function Checkout() {
             body: new URLSearchParams({
                 "irid": receiptID,
                 "uid": uid,
-                "rid": rid,
+                "res": localStorage.getItem("cartCanteen"),
                 "name": name,
                 "phone": phone,
                 "address": address==null? savedAddress[0]:address,
@@ -214,8 +214,6 @@ function Checkout() {
           setFetch(false);
         })}
     })
-      
-    let rid = "Joyful Inn";
 
     return (
         <>
