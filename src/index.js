@@ -1,15 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
+import { StyledEngineProvider } from '@mui/material/styles';
 
 import './login.css';
 import App from './App';
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <StyledEngineProvider injectFirst>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </StyledEngineProvider>,
+  
   document.getElementById('root')
 );
 

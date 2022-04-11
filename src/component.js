@@ -1,12 +1,6 @@
 
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import HomeIcon from '@mui/icons-material/Home';
-import StoreIcon from '@mui/icons-material/Store';
-import Paper from '@mui/material/Paper';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CommentIcon from '@mui/icons-material/Comment';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -40,9 +34,9 @@ import PasswordIcon from '@mui/icons-material/Password';
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { useParams, useNavigate } from "react-router-dom";
-
-
-
+import Badge from '@mui/material/Badge';
+import { DishContext } from './shoppingCart/sc-context';
+import { useContext } from 'react';
 
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
 const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
@@ -52,6 +46,8 @@ const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
 
+
+
 function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -59,6 +55,8 @@ function NavBar() {
     const [user, setUser] = React.useState(null);
     const [pic, setPic] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
+    const { cart, total, clearCart } = useContext(DishContext);
+    
 
     const handleOpenNavMenu = (event) => {
         if (NavMenuStatus == -1)
@@ -116,7 +114,7 @@ function NavBar() {
 
     if(type=="user" && user!="")
     {return (
-    <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
+    <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em' ,overflow: 'visible'}} >
         <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
@@ -131,6 +129,7 @@ function NavBar() {
                             aria-haspopup="true" 
                             onClick={handleOpenNavMenu} 
                             color="inherit"
+                            
                         >
                             <MenuIcon />
                         </IconButton>
@@ -173,14 +172,12 @@ function NavBar() {
                           
                         <Tooltip title="Shopping Cart">
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
-                            <Button 
-                              variant="outlined"
-                              color="inherit" 
-                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
-                              
-                            >
-                                <ShoppingCartIcon />
-                            </Button>
+
+                            <IconButton aria-label="cart">
+                              <Badge badgeContent={cart.length} color="secondary">
+                                <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
+                              </Badge>
+                            </IconButton>
                         </Link>
                         
                         </Tooltip>

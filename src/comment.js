@@ -34,7 +34,7 @@ import {
     IconButton,
     DialogContent,
     DialogActions, 
-
+    Tooltip,
     Input,
     FormLabel,
     RadioGroup,
@@ -141,10 +141,11 @@ function TabContent(props){
                     <Avatar src={"http://localhost:7000/dbAccount/photo/get/"+users[props.userIndex]["pic"]}/>
                 }
                 action={<>
-                
+                <Tooltip title="Report">
                 <IconButton aria-label="settings" onClick={handleOpenForm} hidden={localStorage.getItem('type') == "guest"}>
                     <FlagIcon />
                 </IconButton>
+                </Tooltip>
                 <Dialog component={"div"} width="md"height="md" open={open} onClose={handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>
                     <Paper>
                         <DialogTitle >
@@ -203,12 +204,12 @@ function TabContent(props){
             </CardContent>
             
             <CardActions>
-                <IconButton aria-label="add to favorites">
-                    <ThumbUpIcon />
-                </IconButton>
-                <IconButton aria-label="share" onClick={handleShare}>
-                    <ShareIcon />
-                </IconButton>
+                <Tooltip title="Share">
+                    <IconButton aria-label="share" onClick={handleShare}>
+                        <ShareIcon />
+                    </IconButton>
+                </Tooltip>
+                
             </CardActions>
         </Card>
             
