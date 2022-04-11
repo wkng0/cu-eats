@@ -80,6 +80,27 @@ router.delete("/deleteDishes/:canteenname/:id", function(req, res) {
 });
 
 
+router.put("/hideDishes/:canteenname/:id", function(req, res) {
+    id = req.params.id;
+    canteenname = req.params.canteenname;
+    hideDishes(req, res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+    // res.send(dishid);    // will have error
+});
+
+router.put("/unhideDishes/:canteenname/:id", function(req, res) {
+    id = req.params.id;
+    canteenname = req.params.canteenname;
+    unhideDishes(req, res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+    // res.send(dishid);    // will have error
+});
+
+
 // --------------------------------------------------------------------------------------------------------------
 
 async function fetchMenu(res){
@@ -105,7 +126,8 @@ async function postMenu(req,res){
         variants: req.body['variants'],
         category: req.body['category'],
         image:req.body['image'],
-        tag: req.body['tag']
+        tag: req.body['tag'],
+        hide: req.body['hide']
     });
     return "Menu Added!";
 };
@@ -139,6 +161,25 @@ async function deleteDishes(req, res) {
     let deletelist = await collection.findOneAndDelete({_id: ObjectId(id)});
     res.send(deletelist);
     // await collection.find
+}
+
+async function hideDishes(req, res) {
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection(canteenname);
+    let updatedlist = await collection.updateOne({_id: ObjectId(id)}, {$set: {hide: true}});
+    res.send(updatedlist);
+}
+
+
+async function unhideDishes(req, res) {
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection(canteenname);
+    let updatedlist = await collection.updateOne({_id: ObjectId(id)}, {$set: {hide: false}});
+    res.send(updatedlist);
 }
 
 
