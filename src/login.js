@@ -20,6 +20,7 @@ import{
     MenuItem,
     IconButton
   } from '@mui/material';
+import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
 
 function LoginPage(){
@@ -226,8 +227,8 @@ function LoginWithPassword(props){
             
             
           } else {
-            passwordInput.type = 'password';
-            passwordInput.setAttribute('aria-label',
+              passwordInput.type = 'password';
+              passwordInput.setAttribute('aria-label',
               'Show password as plain text. ' +
               'Warning: this will display your password on the screen.');
               setIconA("none");
