@@ -428,7 +428,7 @@ function Dashboard() {
                             <TableCell component="th" scope="row">{receipt.id}</TableCell>
                             <TableCell>{formatDate(receipt.timestamp)}</TableCell>
                             <TableCell>{receipt.total.toFixed(1)}</TableCell>
-                            <TableCell style={{color: receipt.status? '#707070':'red'}}>{receipt.status? 'complete':'not complete'}</TableCell>
+                            <TableCell style={{color: receipt.status? 'black':'red'}}>{receipt.status? 'complete':'not complete'}</TableCell>
                         </TableRow>
                     ))}
                     </TableBody>
