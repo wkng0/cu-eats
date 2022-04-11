@@ -5,6 +5,9 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Grid, Table, Divider, Button, Card } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { useDemoData } from '@mui/x-data-grid-generator';
+
 const formatDate = (dateString) => {
     const options = { year: 'numeric', month: '2-digit',day: '2-digit' ,hour: '2-digit', minute: '2-digit'}
     return new Intl.DateTimeFormat('en-US', options).format(dateString);
@@ -27,6 +30,7 @@ function Receipt() {
     const [address, setAddress] = React.useState(null);
     const [cutlery, setCutlery] = React.useState(true);
     const [status, setStatus] = React.useState(false);
+    const [type, setType] = React.useState('user');
     const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
     const irid = window.location.pathname.replace('/receipt/','');
@@ -80,6 +84,7 @@ function Receipt() {
             setStatus(data[0].status);
             setTime(data[0].timestamp);
             setFetch(true);
+            setType(localStorage.getItem('type'));
         })
         .then(console.log("Successfully get to receipt info"))
         .catch(err=>{console.log(err);})
@@ -133,26 +138,28 @@ function Receipt() {
                 <Grid item xs={10} sx ={{color: '#5D4E99'}}><b>Subtotal</b></Grid>
                 <Grid item xs={2} sx ={{textAlign:'right', color: '#5D4E99'}}><b>${subtotal.toFixed(1)}</b></Grid>
             </Grid>
-            <br/><Divider /><br/>          
-            <Grid container>
-                <Grid item xs={9}>Valid points</Grid>
-                <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>{point} point(s)</small></Grid>
-            </Grid><br/>
-            <div style={{display: discount==0? 'none':'block'}}>
-                <Grid container>
-                    <Grid item xs={6}>Point used</Grid>
-                    <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>- {discount*10} point(s)</small></Grid>
-                </Grid><br/>
-            </div>
-            <Grid container>
-                <Grid item xs={9}>Points rebate</Grid>
-                <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>+ {pointEarn} point(s)</small></Grid>
-            </Grid><br/>
-            <Grid container>
-                <Grid item xs={9} style ={{color:'#5D4E99'}}><b>Remaining points</b></Grid>
-                <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}><b>{pointRemain} point(s)</b></Grid>
-            </Grid>
             <br/><Divider /><br/>  
+            <div style={{display: type=='user'? 'block':'none'}}>      
+                <Grid container>
+                    <Grid item xs={9}>Valid points</Grid>
+                    <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>{point} point(s)</small></Grid>
+                </Grid><br/>
+                <div style={{display: discount==0? 'none':'block'}}>
+                    <Grid container>
+                        <Grid item xs={6}>Point used</Grid>
+                        <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>- {discount*10} point(s)</small></Grid>
+                    </Grid><br/>
+                </div>
+                <Grid container>
+                    <Grid item xs={9}>Points rebate</Grid>
+                    <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>+ {pointEarn} point(s)</small></Grid>
+                </Grid><br/>
+                <Grid container>
+                    <Grid item xs={9} style ={{color:'#5D4E99'}}><b>Remaining points</b></Grid>
+                    <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}><b>{pointRemain} point(s)</b></Grid>
+                </Grid>
+                <br/><Divider /><br/>  
+            </div>  
             <Grid container>
                 <Grid item xs={10}>Subtotal</Grid>
                 <Grid item xs={2} sx ={{textAlign:'right', color: '#707070'}}><small>${subtotal.toFixed(1)}</small></Grid>
@@ -211,26 +218,28 @@ function Receipt() {
                     <Grid item xs={10} sx ={{color: '#5D4E99'}}><b>Subtotal</b></Grid>
                     <Grid item xs={2} sx ={{textAlign:'right', color: '#5D4E99'}}><b>${subtotal.toFixed(1)}</b></Grid>
                 </Grid>
-                <br/><Divider /><br/>          
-                <Grid container>
-                    <Grid item xs={9}>Valid points</Grid>
-                    <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>{point} point(s)</small></Grid>
-                </Grid><br/>
-                <div style={{display: discount==0? 'none':'block'}}>
+                <br/><Divider /><br/> 
+                <div style={{display: type=='user'? 'block':'none'}}>        
                     <Grid container>
-                        <Grid item xs={6}>Point used</Grid>
-                        <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>- {discount*10} point(s)</small></Grid>
+                        <Grid item xs={9}>Valid points</Grid>
+                        <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>{point} point(s)</small></Grid>
                     </Grid><br/>
-                </div>
-                <Grid container>
-                    <Grid item xs={9}>Points rebate</Grid>
-                    <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>+ {pointEarn} point(s)</small></Grid>
-                </Grid><br/>
-                <Grid container>
-                    <Grid item xs={9} style ={{color:'#5D4E99'}}><b>Remaining points</b></Grid>
-                    <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}><b>{pointRemain} point(s)</b></Grid>
-                </Grid>
-                <br/><Divider /><br/>  
+                    <div style={{display: discount==0? 'none':'block'}}>
+                        <Grid container>
+                            <Grid item xs={6}>Point used</Grid>
+                            <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>- {discount*10} point(s)</small></Grid>
+                        </Grid><br/>
+                    </div>
+                    <Grid container>
+                        <Grid item xs={9}>Points rebate</Grid>
+                        <Grid item xs={3} style ={{textAlign:'right', color:'#707070'}}><small>+ {pointEarn} point(s)</small></Grid>
+                    </Grid><br/>
+                    <Grid container>
+                        <Grid item xs={9} style ={{color:'#5D4E99'}}><b>Remaining points</b></Grid>
+                        <Grid item xs={3} style ={{textAlign:'right', color:'#5D4E99'}}><b>{pointRemain} point(s)</b></Grid>
+                    </Grid>
+                    <br/><Divider /><br/>  
+                </div> 
                 <Grid container>
                     <Grid item xs={10}>Subtotal</Grid>
                     <Grid item xs={2} sx ={{textAlign:'right', color: '#707070'}}><small>${subtotal.toFixed(1)}</small></Grid>
@@ -326,4 +335,87 @@ function Records() {
     )}
 };
 
-export { Receipt, Records };
+function Dashboard() {
+    const {user, setUser} = React.useContext(UserContext);
+    const [name, setName] = React.useState(null);
+    const [records, setRecord] = React.useState(null);
+    const [fetchFinish, setFetch] = React.useState(false);
+    const navigate = useNavigate();
+
+    React.useEffect(()=>{
+        if(localStorage.getItem('user') != ""){
+            setUser(localStorage.getItem('user'));
+            setName(localStorage.getItem('name'));
+            console.log("set!",user);
+        }
+        fetch('http://localhost:7000/dbReceipt/getDashboard/'+name)
+        .then(res=>res.json())
+        .then(data=>{
+            setRecord(data);
+            setFetch(true);
+        })
+        .catch(err=>{console.log(err);})
+    },[fetchFinish])
+    
+      if(!fetchFinish){
+        return(
+          <p>Searching records from database...</p>
+        )
+      } else {
+        return(
+            <>
+            <div style={{width:'80%', margin:'auto'}}>
+                <Button 
+                    size="small" 
+                    onClick={()=>navigate(-1)}
+                    sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transparent', color: '#5D4E99'}}}
+                >
+                <ArrowBackIosIcon/>
+                </Button>
+            </div>
+            <div style={{width:'60%', margin:'auto'}}>
+                <h3 style={{color: '#5D4E99'}}>Dashboard</h3>
+                <div style={{display: records == null? 'none':'block'}}>
+                    {records.map((receipt)=>(
+                        <>
+                        <Card
+                            sx={{p:5, m:3, boxShadow: 2, cursor:"pointer"}} 
+                            onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
+                        >                            
+                            <Grid container >
+                                    <Grid item xs={6}>
+                                        <h5 style={{color: '#5D4E99'}}><b>{receipt.rName}</b></h5>
+                                    </Grid>
+                                    <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>
+                                        <small style={{color: '#707070'}}>More detail <span style={{color: '#5D4E99'}}><ArrowForwardIosIcon/></span></small>
+                                    </Grid>
+                            </Grid><br/>
+                            <Grid container >
+                                    <Grid item xs={6} sx={{color: '#707070'}}>{formatDate(receipt.timestamp)}</Grid>
+                                    <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>$ {receipt.total.toFixed(1)}</Grid>
+                            </Grid>
+                        </Card>
+                        </>
+                    ))}
+                </div>
+                {/*const { data } = useDemoData({
+    dataSet: 'Employee',
+    visibleFields: VISIBLE_FIELDS,
+    rowLength: 100,
+  });
+
+  return (
+    <div style={{ height: 400, width: '100%' }}>
+      <DataGrid {...data} components={{ Toolbar: GridToolbar }} />
+    </div>
+  );
+}
+                );
+                */}
+
+            </div>
+            </>
+    )}
+};
+
+export { Receipt, Records, Dashboard };
