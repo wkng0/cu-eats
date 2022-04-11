@@ -226,8 +226,8 @@ function LoginWithPassword(props){
             
             
           } else {
-            passwordInput.type = 'password';
-            passwordInput.setAttribute('aria-label',
+              passwordInput.type = 'password';
+              passwordInput.setAttribute('aria-label',
               'Show password as plain text. ' +
               'Warning: this will display your password on the screen.');
               setIconA("none");
@@ -282,8 +282,8 @@ function LoginWithPassword(props){
                         <div className="input-group">
                             <input type="password" className="form-control" value={password} onChange={handleChange} id="user-pw" placeholder="password" required></input>
                             <button type="button" className="btn btn-secondary" onClick={viewPassword}>
-                                <i className="bi bi-eye-slash-fill icon" style={{display: iconA }}></i>
-                                <i className="bi bi-eye-fill icon" style={{display: iconB }}></i>
+                                <i className="bi bi-eye-slash-fill icon" style={{display: iconB }}></i>
+                                <i className="bi bi-eye-fill icon" style={{display: iconA }}></i>
                             </button>
                         </div>
                     </div>
@@ -556,29 +556,27 @@ function Register(props){
     
     }
 
-    const checkUsename=()=>{
-        return fetch('http://localhost:7000/dbAccount/userName/'+username) //check if the username unique
-        .then(res=>res.json())
-        .then(data=>{
-            console.log("user name?????",data.unique);
-            if(data.unique=="false"){
+    async function checkUsename() {
+        try {
+            const res = await fetch('http://localhost:7000/dbAccount/userName/' + username) //check if the username unique
+                ;
+            const data = await res.json();
+            console.log("user name?????", data.unique);
+            if (data.unique == "false") {
                 setUnique(false);
                 // error = true;
                 window.alert("Username already exists. Please change your username");
             }
-            if(data.unique=="true"){
+            if (data.unique == "true") {
                 setUnique(true);
-            }})
-            .then(res=>{
-                console.log("success to post");
-                // window.location.assign("/");
-            })
-            .then(()=> {console.log();
-            window.location.assign("/");})
-            .catch((err)=>{
-                console.log(err);
-                // error = true;
-            });
+            }
+            const res_1 = undefined;
+            console.log("success to post"); console.log();
+            // window.location.assign("/")
+            ;
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     const createId=()=>{
@@ -605,13 +603,8 @@ function Register(props){
         }
 
         if(check ==true){
-
-            // let error = true;
-            
             checkUsename()
             .then(()=>{
-                console.log("after checking ge unique",unique);
-                if(unique== true){
                     fetch('http://localhost:7000/dbAccount/createAccount', { //saving to database
                         method: 'POST', 
                         body: new URLSearchParams({
@@ -627,16 +620,13 @@ function Register(props){
                             "uid": uid,
                         })  
                     })
-                    
                     .then(()=> {
-                        console.log();
-                        window.location.assign("/");
+                        console.log("registered");
+                        ReactDOM.render(<AskForVerification/>,document.getElementById('Component'));
                     })
                     .catch((err)=>{
                         console.log(err);
                     });
-                
-                }
             })
 
          
@@ -765,7 +755,7 @@ function AskForVerification(){
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
+          {"Email Verification"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
