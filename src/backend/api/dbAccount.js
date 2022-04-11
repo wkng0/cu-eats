@@ -249,8 +249,9 @@ async function addUser(req,res){
         }else{
             console.log("Email sent: "+ info.response);
         }
+        res.send("Email sent: "+ info.response);
     });
-    res.send("Email sent: "+ info.response);
+    
 
 };
 
