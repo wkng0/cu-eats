@@ -14,7 +14,7 @@ const client=new MongoClient(url);
 
 router.use(bodyParser.urlencoded({extended: false}));
 
-const dbName="NewMenu";
+const dbName="Menu";
 // const MenuModel= require("./models/menu.models.js")
 
 let canteenname = "";
