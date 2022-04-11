@@ -102,7 +102,6 @@ function NavBar() {
 
 
     React.useEffect(()=>{
-<<<<<<< HEAD
       if(fetchFinish== false||(pic!=""&&type=="user")){
         if(type== null){
           setUser(localStorage.getItem('user'));
@@ -118,26 +117,6 @@ function NavBar() {
             setFetch(false);
           })
         }
-=======
-      if(fetchFinish== false){
-      if(type== null){
-        setUser(localStorage.getItem('user'));
-        setType(localStorage.getItem('type'));
-        console.log("set!",user);
-        console.log("type!",type);
-      }
-      if(fetchFinish== false){
-        fetch('http://localhost:7000/dbAccount/getByUID/'+user)
-        .then(res=>res.json())
-        .then(data=>{
-            setPic(data[0].pic);
-            setFetch(true);
-        })
-        .catch(err=>{
-          console.log(err);
-          setFetch(false);
-        })}
->>>>>>> 3a8d0b8ed94da38bfa0bdc93dd49a20a62cc85a3
       }
     })
 
