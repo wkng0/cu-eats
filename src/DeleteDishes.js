@@ -142,10 +142,26 @@ function NewShowDishes({menu} , value){
         .then(()=>{
             alert("deleted! please refresh" ); 
             window.location.reload();
-            // setListOfMenu(listOfMenu.filter((NAmenu) => {
-            //     return NAmenu.dishesID != dishesID;
-            // }))
-    }) ;
+         
+        });
+    }
+
+    const hideDish = (id) => {
+        // Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
+        Axios.put(`http://localhost:7000/dbNewMenu/hideDishes/${canteen[window.number]}/${id}`)
+        .then(()=>{
+            alert("Hide Menu!"); 
+            window.location.reload();
+        });
+    }
+
+    const unhideDish = (id) => {
+        // Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
+        Axios.put(`http://localhost:7000/dbNewMenu/unhideDishes/${canteen[window.number]}/${id}`)
+        .then(()=>{
+            alert("Un-Hide Menu!"); 
+            window.location.reload();
+        });
     }
 
     return(
@@ -210,7 +226,32 @@ function NewShowDishes({menu} , value){
                     >
                         Delete
                     </Button>
-
+                    {"     "}
+                    { !menu.hide ? 
+                    <>
+                    <Button 
+                        variant="contained" 
+                        endIcon={<AddShoppingCartIcon />}
+                        onClick={()=>{
+                            hideDish(menu._id);
+                        }}
+                        hidden={localStorage.getItem("type")=="admin"}
+                    >
+                        Hide
+                    </Button>
+                    </>
+                    : 
+                    <Button 
+                        variant="contained" 
+                        endIcon={<AddShoppingCartIcon />}
+                        onClick={()=>{
+                            unhideDish(menu._id);
+                        }}
+                        hidden={localStorage.getItem("type")=="admin"}
+                    >
+                        Un-Hide
+                    </Button>
+                    }
                 </CardContent>
             </Box>
         
