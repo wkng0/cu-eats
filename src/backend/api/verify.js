@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import {MongoClient} from "mongodb";
 
 const router = express.Router();
-const cors=require('cors');
+import cors from 'cors';
 router.use(cors());
 
 const url="mongodb+srv://admin:admin_d2@groupd2.d3lwk.mongodb.net/sample_users?retryWrites=true&w=majority";

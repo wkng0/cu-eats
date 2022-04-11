@@ -6,7 +6,7 @@ import path from 'path';
 import nodemailer from 'nodemailer'
 const __dirname=path.resolve();
 const router = express.Router();
-const cors=require('cors');
+import cors from 'cors';
 router.use(cors());
 
 const upload=multer({dest:"profile/photo/"})
