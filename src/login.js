@@ -9,6 +9,7 @@ import{
     Box,
     Button,
     Container,
+    Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText,
     TextField,
     InputLabel,
     FormControl,
@@ -65,12 +66,6 @@ function CheckEmail(){
             fetch('http://localhost:7000/dbAccount/exist/'+email)
             .then((res)=>
                 res.json()
-                // console.log(res);
-                // if (res==true){
-                //     this.setState({pass: true});
-                // }else{
-                //     this.setState({pass: false});
-                // }
             )
             .then(db=>{
                 console.log(db);
@@ -211,6 +206,10 @@ function LoginWithPassword(props){
     const [password, setPassword]=React.useState("");
     const [iconA, setIconA]=React.useState("none");
     const [iconB, setIconB]=React.useState("block");
+    const [uid, setUID] = React.useState(null);
+    const [type, setType] = React.useState(null);
+    const [target,setTarget] = React.useState(null);
+    const [fetchFinish, setFetch] = React.useState(false);
     // const {user, setUser} = useContext(UserContext);
     const handleChange=(event)=>{
         setPassword(event.target.value);
@@ -237,24 +236,35 @@ function LoginWithPassword(props){
     
     }
     const login=()=>{
+        if(password===target){
+            localStorage.setItem('user',uid);
+            localStorage.setItem('type',type);                 
+            window.location.assign("/");
+        }
+        return;
+
+    }
+
+    React.useEffect(()=>{
+        if(fetchFinish==false){
         fetch('http://localhost:7000/dbAccount/get/'+email)
         .then(res=>res.json())
         .then(data=>{
-            console.log(data[0].password);
-            if(data[0].password == password){
-                console.log("password is true");
-                // console.log(user);
-                // if(data[0].type == "user"){
-                console.log("Checked user!!!!!!!!!!!!!!!");
-                console.log("UID: ",data[0].uid);
-                localStorage.setItem('user',data[0].uid);
-                localStorage.setItem('type',data[0].type);                 
-                // }
-                window.location.assign("/");
+            if(data[0].verify != 1&& data[0].type=="user"){
+                ReactDOM.render(<AskForVerification/>,document.getElementById('Component'));
+            }else{
+                setTarget(data[0].password);
+                setUID(data[0].uid);
+                setType(data[0].type);
             }
+            setFetch(true);
         })
-        .catch(err=>console.log(err))
+        .catch(err=>{
+            console.log(err);
+            setFetch(false);
+        });
     }
+    })
     return(
         <>
         <div id="login-password" className="login-container" >
@@ -730,7 +740,43 @@ function Register(props){
     );
 }
 
+function AskForVerification(){
+  const [open, setOpen] = React.useState(true);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    window.location.reload();
+  };
+
+  return (
+    <div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please verify your account by clicking the link sent to your email before login :)
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
 /*
 class Register extends React.Component{
     constructor(props){

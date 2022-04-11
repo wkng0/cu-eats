@@ -92,6 +92,7 @@ function NavBar() {
     }
 
     React.useEffect(()=>{
+      if(fetchFinish== false){
       if(type== null){
         setUser(localStorage.getItem('user'));
         setType(localStorage.getItem('type'));
@@ -109,6 +110,7 @@ function NavBar() {
           console.log(err);
           setFetch(false);
         })}
+      }
     })
 
 
