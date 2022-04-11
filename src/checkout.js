@@ -130,11 +130,11 @@ function Checkout() {
         .then(response => {console.log(response);
             localStorage.setItem('cart',"");
             window.location.href = '/receipt/' + receiptID})
-        //.then(clearCart)
+        .then(clearCart)
         .catch((error) => {console.error('Error:', error);});
-        
     }
 
+    /*
     const fetchAddress = () => {
         console.log("start fetch")
         fetch('http://localhost:7000/dbAccount/getAddress/' + user)
@@ -143,6 +143,8 @@ function Checkout() {
             .then(()=>setFetch(true))
             .catch(err=>{console.log(err); setFetch(false);})
     }
+    */
+
     const showAddress = (event) => { 
         if (fetchFinish == false) return(<p>loading address...</p>)
         else {
@@ -163,18 +165,7 @@ function Checkout() {
                     </RadioGroup>
         )}}
     }
-    React.useEffect(()=>{
-        setDiscount(pointUse/10);
-        if (pointUse < 0) 
-            setpText('Point must be non-negative!');
-        else if (pointUse > point)
-            setpText('Not enough valid points!');
-        else if (pointUse > 0) 
-            setpText('Get $'+ discount.toFixed(1)+ ' off');
-        else if (pointUse === "") 
-            setpText('Entry cannot be empty!');
-        else setpText('Get $'+ discount.toFixed(1)+ ' off');
-    },[pointUse])
+
     React.useEffect(()=>{
         if (phone === "") 
             setText('Entry cannot be empty!');
@@ -182,8 +173,27 @@ function Checkout() {
             setText('Invalid entry!');
         else setText('');
     },[phone])
-    
-    React.useEffect(()=>{fetchAddress()},([refresh]))
+    React.useEffect(()=>{ 
+        setDiscount(pointUse/10); 
+        if (pointUse === "")  setpText('Entry cannot be empty!');
+    },[pointUse])
+    React.useEffect(()=>{
+        if (pointUse < 0) 
+            setpText('Point must be non-negative!');
+        else if (pointUse > point)
+            setpText('Not enough valid points!');
+        else if (pointUse >= 0) 
+            setpText('Get $'+ discount.toFixed(1)+ ' off');
+        else if (pointUse === "") setText('Entry cannot be empty!');
+    },[discount])
+    React.useEffect(()=>{
+        console.log("start fetch");
+        fetch('http://localhost:7000/dbAccount/getAddress/' + user)
+            .then(res=>res.json())
+            .then(res=>setdbAddress(res))
+            .then(()=>setFetch(true))
+            .catch(err=>{console.log(err); setFetch(false);})
+    },[refresh])
     React.useEffect(()=>{
         if(localStorage.getItem('user') != ""){
             setUser(localStorage.getItem('user'));
@@ -280,8 +290,8 @@ function Checkout() {
                     value={email}
                     onChange={handleChangeEmail}
                 />
-            */}
-            </Box>
+                */}
+            </Box><br/>
             <br/><Divider /><br/>
             <Box>
                 <Grid container>
@@ -355,7 +365,7 @@ function Checkout() {
                 color="secondary"
                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                 onChange={handleChangePoint}
-                error={pointUse<0 || pointUse>point}
+                error={pointUse<0 || pointUse>point || pointUse===""}
                 helperText={pointText}
             />
             <br/><br/>
