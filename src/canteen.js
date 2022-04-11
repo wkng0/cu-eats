@@ -13,7 +13,7 @@ import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
 import { Chip,Stack } from '@mui/material';
-import {Skeleton} from '@mui/material';
+import {Skeleton, Snackbar, Alert} from '@mui/material';
 
 
 let canteenInfo=[];
@@ -96,6 +96,7 @@ function NewShowDishes(props){
     const [quantity, setQuantity] = useState(0);
     const {addToCart} = useContext(DishContext);
     const [price,setPrice]=useState(0);
+    const [open, setOpen] = React.useState(false);
     let variantList=[];
     let menu=props.menu
     const tag=menu.tag;
@@ -129,6 +130,16 @@ function NewShowDishes(props){
         setQuantity(option.value)
         
     }
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+    };
+    const handleClick = () => {
+        setOpen(true);
+    };
 
 
     return(
@@ -189,12 +200,19 @@ function NewShowDishes(props){
                             if(quantity!=0){
                                 localStorage.setItem("cartCanteen",props.canteen);
                                 addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
+                            }else{
+                                handleClick();
                             }
                         }}
                         hidden={localStorage.getItem("type")=="admin"}
                     >
                         ADD TO CART
                     </Button>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                            Please choose at least one item into the cart!
+                        </Alert>
+                    </Snackbar>
 
                 </CardContent>
             </Box>
