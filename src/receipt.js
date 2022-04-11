@@ -27,6 +27,7 @@ function Receipt() {
     const [address, setAddress] = React.useState(null);
     const [cutlery, setCutlery] = React.useState(true);
     const [status, setStatus] = React.useState(false);
+    const [type, setType] = React.useState('user');
     const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
     const irid = window.location.pathname.replace('/receipt/','');
