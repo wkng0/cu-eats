@@ -3,7 +3,7 @@ import cartItems from './sc-data'
 import CartContainer from './sc-CartContainer'
 import './sc-context.css';
 import reducer from './reducer'
-import NewNACanteen from '../newNaCanteen';
+
 
 const DishContext = React.createContext()
 

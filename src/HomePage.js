@@ -119,7 +119,7 @@ function HomePage() {
             <div className="row">
            
                 <div className="location-col">
-                <Link className="NAcanLink" to="/newNaCanteen" style={{textDecoration: 'none'}}>
+                <Link className="NAcanLink" to="/NaCanteen" style={{textDecoration: 'none'}}>
                     <img src={NA}/>
                     <h3>NA can</h3>
                     <p> 地址:新亞樂群館梁雄姬樓地下  <br/>
@@ -131,7 +131,7 @@ function HomePage() {
             
 
                 <div className="location-col">
-                    <Link className="UCcanLink" to="/newUcCanteen" style={{textDecoration: 'none'}}>
+                    <Link className="UCcanLink" to="/UcCanteen" style={{textDecoration: 'none'}}>
                     <img src={UC}/>
                     <h3>UC can</h3>
                     <p> Opening Hours:     
@@ -147,7 +147,7 @@ function HomePage() {
                 </div>
 
                 <div className="location-col">
-                <Link className="ShawcanLink" to="/newShawCanteen" style={{textDecoration: 'none'}}>
+                <Link className="ShawcanLink" to="/ShawCanteen" style={{textDecoration: 'none'}}>
 
                     <img src={Shaw}/>
                     <h3>Shaw can</h3>

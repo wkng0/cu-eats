@@ -144,8 +144,9 @@ function NewShowDishes({menu}){
                         endIcon={<AddShoppingCartIcon />}
                         onClick={()=>{
                            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
-                        }
-                    } >
+                        }}
+                        hidden={localStorage.getItem("type")=="admin"}
+                    >
                         ADD TO CART
                     </Button>
 

@@ -1,45 +1,65 @@
-import React, {useState} from 'react';
-import {useEffect,useContext} from "react";
+import React, {useState,useContext} from 'react';
+import {useEffect} from "react";
+import { DishContext } from './shoppingCart/sc-context';
 import './canteen.css';
-// import menu from './menu';
+// import NAmenu from './NAmenu';
 // import Select from 'react-select';
 import Axios from "axios"; 
 import { Card,CardMedia,CardContent } from '@mui/material';
 import { Box } from '@mui/system';
 import { Typography } from '@mui/material';
 import Select from 'react-select';
-import { MenuItem } from '@mui/material';
 import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
-import { Stack } from '@mui/material';
-import { Chip } from '@mui/material';
-import { DishContext } from './shoppingCart/sc-context';
+import { Chip,Stack } from '@mui/material';
 
 
-function NewShawCanteen() {
-    const [listOfMenu, setListOfMenu] = useState([]);
+let canteenInfo=[];
+let listOfMenu=[];
+
+const menu=["NaMenu","ShawMenu","UcMenu"]
+
+function Canteen(props) {
+    console.log(listOfMenu)
+    const [loadFinish,setLoadFinish]=useState(false);
     // make api call 
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbMenu/getMenu/ShawMenu").then((response) => {
-            setListOfMenu(response.data)
-        });
-    }, []);
-    return(
+        if(loadFinish==false){
+            fetch("http://localhost:7000/dbcanteenInfo/getCanteenInfo")
+            .then(res=>res.json())
+            .then(db=>canteenInfo=db)
+            .then(
+                fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
+                .then(res=>res.json())
+                .then(db=>listOfMenu=db)
+                .then(()=>setLoadFinish(true)) 
+                
+            )   
+        }
+    });
+    console.log(canteenInfo)
+    if(loadFinish==false) return <>please wait</>
+    else return(
         <>
-         <section class="Shawheader">
+        <section style={{
+            minHeight: "60vh",
+            width: "100%",
+            backgroundImage: `linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url(${canteenInfo[props.value].canteen_image})`,  
+            backgroundColor: "#5d4e99",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            position: "relative",
+        }}>
             <div class="text-box">
-                    <h1>Shaw Canteen</h1>
-                    <p>SeeYou@Shaw是一個結合良朋好友和優質餐飲，並使你足以自豪的理想社群。
-
-                        SeeYou@Shaw也是一個建基於友情的品牌。
-
-                        2016年初，我們獲得投標經營逸夫書院學生飯堂的機會，而這次投標剛好出現於各人事業生涯中的合適時機，因緣際會之下，成就了SeeYou@Shaw的誕生。 </p>
-                    <a href="https://www.shaw.cuhk.edu.hk/zh/content/shaw-college-seeyoushaw-resuming-lunch-dine-services" class="hero-btn">Visit Us To Know More</a>
+                <h1>{canteenInfo[props.value].canteen_name}</h1>
+                <p>{canteenInfo[props.value].canteen_description}</p>
+                <a href={canteenInfo[props.value].website} class="hero-btn">Visit Us To Know More</a>
             </div>
         </section>
-           {/* <!-- ----- restaurant ------ --> */}
-           <div>
+
+        {/* <!-- ----- restaurant ------ --> */}
+        <div>
             <Container maxWidth="md">
                 {listOfMenu.map( (menu) =>{
                     return(
@@ -54,10 +74,7 @@ function NewShawCanteen() {
     )
 }
 
-
-
-
-function NewShowDishes({menu}) {
+function NewShowDishes({menu}){
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const {addToCart} = useContext(DishContext);
@@ -150,8 +167,9 @@ function NewShowDishes({menu}) {
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
                         onClick={()=>{
-                            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
+                           addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
                         }}
+                        hidden={localStorage.getItem("type")=="admin"}
                     >
                         ADD TO CART
                     </Button>
@@ -166,5 +184,4 @@ function NewShowDishes({menu}) {
 
 
 }
-
-export default NewShawCanteen;
+export default Canteen;
