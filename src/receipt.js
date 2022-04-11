@@ -297,7 +297,8 @@ function Records() {
                 <div style={{display: records == null? 'none':'block'}}>
                     {records.map((receipt, index)=>(
                         <>
-                        <Card sx={{p:2, m:3, boxShadow: 2}}>
+                        
+                        <Card sx={{p:2, m:3, boxShadow: 2}} onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}>
                             <h5 style={{color: '#5D4E99'}}>Receipt {index+1}</h5>
                             <div key={receipt.rid}>{receipt.rid}</div>
                         </Card>

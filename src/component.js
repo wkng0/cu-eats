@@ -40,8 +40,6 @@ import { useContext } from 'react';
 
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
 const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
-const settings = ['Profile', 'Account', 'Dashboard'];
-const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
 
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
@@ -91,25 +89,35 @@ function NavBar() {
       window.location.assign("/");
     }
 
+    const openProfile = () =>{
+      setAnchorElUser(null);
+      userMenuStatus = -1;
+      window.location.assign("/profile");
+    }
+
+    // const openAccount = () =>{
+    //   setAnchorElUser(null);
+    //   userMenuStatus = -1;
+    //   window.location.assign("/profile/account")
+    // }
+
+
     React.useEffect(()=>{
-      if(fetchFinish== false){
-      if(type== null){
-        setUser(localStorage.getItem('user'));
-        setType(localStorage.getItem('type'));
-        console.log("set!",user);
-        console.log("type!",type);
-      }
-      if(fetchFinish== false){
-        fetch('http://localhost:7000/dbAccount/getByUID/'+user)
-        .then(res=>res.json())
-        .then(data=>{
-            setPic(data[0].pic);
-            setFetch(true);
-        })
-        .catch(err=>{
-          console.log(err);
-          setFetch(false);
-        })}
+      if(fetchFinish== false||(pic!=""&&type=="user")){
+        if(type== null){
+          setUser(localStorage.getItem('user'));
+          setType(localStorage.getItem('type'));
+          fetch('http://localhost:7000/dbAccount/getByUID/'+localStorage.getItem('user'))
+          .then(res=>res.json())
+          .then(data=>{
+              setPic(data[0].pic);
+              setFetch(true);
+          })
+          .catch(err=>{
+            console.log(err);
+            setFetch(false);
+          })
+        }
       }
     })
 
@@ -203,11 +211,19 @@ function NavBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
+                          {/* const settings = ['Profile', 'Account', 'Dashboard'];
+                          const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
                         {settings.map((setting, index) => (
                             <MenuItem key={setting} onClick={handleCloseUserMenu}>
                                 <a href={settingsRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{setting}</a>
                             </MenuItem>
-                        ))}
+                        ))} */}
+                        <MenuItem onClick={openProfile}>
+                        <a style={{color: '#5D4E99', textDecoration: 'none' }}> Profile </a>
+                        </MenuItem>
+                        {/* <MenuItem onClick={openAccount}>
+                        <a style={{color: '#5D4E99', textDecoration: 'none' }}> Account </a>
+                        </MenuItem> */}
                         <MenuItem onClick={logout}>
                         <a style={{color: '#5D4E99', textDecoration: 'none' }}> Logout </a>
                         </MenuItem>
@@ -354,7 +370,7 @@ const data = [
                   '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
                 }}
               >
-                 <ListItemIcon sx={{color:"white"}}>
+                <ListItemIcon sx={{color:"white"}}>
               <AccountCircleIcon/>
                 </ListItemIcon>
                 <ListItemText
@@ -440,8 +456,8 @@ const data = [
           >
             <ListItemIcon>
               <LogoutIcon sx={{color:"white"}}/>
-              <ListItemText primary="Logout" sx={{color:"white"}}/>
-            </ListItemIcon>
+              </ListItemIcon>
+              <ListItemText primary="Logout"/>
           </ListItem>
       </List>
   
