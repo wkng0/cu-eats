@@ -252,3 +252,15 @@ h3{
   margin-bottom: 15px;
   text-align: left;
 }
+
+.location-col-inmenu {
+  flex-basis: 31%;
+  border-radius: 10px;
+  margin-bottom: 5%;
+  text-align: center;
+}
+
+.location-col-inmenu img{
+  width: 50%;
+  border-radius: 10px;
+}
