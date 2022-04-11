@@ -40,6 +40,8 @@ import {
     RadioGroup,
     FormControlLabel,
     Radio,
+    Grid,
+    Skeleton
 
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -55,7 +57,7 @@ import FlagIcon from '@mui/icons-material/Flag';
 import { Link,Navigate,useLocation } from 'react-router-dom';
 
 
-let data = [];
+let data =[];
 let users=[];
 
 
@@ -68,7 +70,9 @@ function TabContent(props){
     const [helperText,setHelperText]=useState("");
     const [loading,setLoading]=useState(true);
     const [storage,setStorage]=useState(users);
-
+    console.log(data)
+    console.log(users)
+   
     const handleShare=()=>{
         navigator.clipboard.writeText("http://localhost:3000/comment/"+props.canteen+"/"+data[props.i]._id);
     }
@@ -130,7 +134,6 @@ function TabContent(props){
     ]
     let i=props.i;
     let postTime=data[i].datetime.substring(0,10)+" "+data[i].datetime.substring(11,16);
-
     return(
         <Card sx={{borderRadius:3}}>
             <CardHeader
@@ -233,7 +236,7 @@ function ResponsiveDrawer(props) {
     useEffect(()=>{
         setTimeout(function() {
             setLoading(false)
-        }, 500);
+        }, 1000);
     })
     const toggleDrawer = (open) => (event) => {
         if (
@@ -301,7 +304,17 @@ function ResponsiveDrawer(props) {
     console.log(data);
     console.log(users);
     if(loading==true){
-        return <>please wait</>
+        return (
+            <Grid container spacing={2}>
+                <Grid item xs={4}>    
+                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />
+                </Grid>
+                <Grid item xs={8}>          
+                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />    
+                </Grid>
+            </Grid>
+            
+        )
     }else return ( 
         <Container >
         <Box sx={{ display: 'flex' }}>        
@@ -674,14 +687,31 @@ function UserComment(){
                     canteenID[i]=canteenInfo[i]["value"];
                 }          
             })
-            .then(()=>setLoadFinish(true));
+            .then(()=>{
+                setTimeout(()=>{
+                    setLoadFinish(true)
+                },2000)
+                
+            });
         })
         
     })
     console.log(users);
     console.log(data);
     if(loadFinish==false){
-        return<>please wait</>
+        return(
+            <Grid container spacing={2}>
+                <Grid item xs={4}>
+                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />
+                </Grid>
+                <Grid item xs={8}>
+                    <Box sx={{my:5}}>
+                        <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"20vh"} />
+                    </Box>
+
+                </Grid>
+            </Grid>
+        )
     }
     return(
         <>
@@ -939,34 +969,45 @@ function CommentList(props){
 
 
 function ContentPreview(){
-    const [target,setTarget]=useState();
+    const [target, setTarget]=useState(-1)
+    const [loadFinish, setLoadFinish]=useState(false)
     let param=useParams();
     useEffect(()=>{
-        fetch('http://localhost:7000/dbComment/get/'+param.canteen)
+        fetch("http://localhost:7000/dbAccount/getAll/")
         .then(res=>res.json())
         .then(db=>{
-            data=db;
-            let target;
-            for (let x in data){
-                if(data[x]._id==param.id){
-                    setTarget(x);
-                    break;
+            users=db;
+            console.log(users);
+        }).then(
+            fetch('http://localhost:7000/dbComment/get/'+param.canteen)
+            .then(res=>res.json())
+            .then(db=>{
+                data=db;
+                for (let x in data){
+                    if(data[x]._id==param.id){      
+                        setTarget(x);
+                        console.log(target)
+                        break;
+                    }
                 }
-            }
-            console.log(target);
-            
-        })
+                setTimeout(()=>{
+                    setLoadFinish(true);
+                },2000)            
+            })
+        )
+        
     })
-    if(target==undefined){
+    if(loadFinish==false){
         return<>please wait</>
     }
-    
-
-    return(
+    console.log(data)
+    console.log(users);
+    if(target!=-1)return(
         <Container maxWidth="sm" >
-            <TabContent key={target} i={target} canteen={param.canteen}/>
+            <TabContent i={target} canteen={param.canteen} userIndex={users.findIndex(user=>user.uid==data[target].userid)}/>
         </Container> 
-    );
+    )
+    else return(<>not found</>)
 
 }
 
@@ -988,7 +1029,10 @@ function AdminComment(){
                     canteenList[i]=canteenInfo[i]["canteen_name"];
                     canteenID[i]=canteenInfo[i]["value"];
                 }
-                setLoadFinish(true);
+            }).then(()=>{
+                setTimeout(()=>{
+                    setLoadFinish(true);
+                },2000)
             })
         })
     })

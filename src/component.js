@@ -40,6 +40,8 @@ import { useContext } from 'react';
 
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
 const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
+const settings = ['Profile', 'Account', 'Dashboard'];
+const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
 
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
@@ -89,21 +91,9 @@ function NavBar() {
       window.location.assign("/");
     }
 
-    const openProfile = () =>{
-      setAnchorElUser(null);
-      userMenuStatus = -1;
-      window.location.assign("/profile");
-    }
-
-    // const openAccount = () =>{
-    //   setAnchorElUser(null);
-    //   userMenuStatus = -1;
-    //   window.location.assign("/profile/account")
-    // }
-
-
     React.useEffect(()=>{
       if(fetchFinish== false){
+<<<<<<< HEAD
         if(type== null){
           setUser(localStorage.getItem('user'));
           setType(localStorage.getItem('type'));
@@ -118,6 +108,25 @@ function NavBar() {
             setFetch(false);
           })
         }
+=======
+      if(type== null){
+        setUser(localStorage.getItem('user'));
+        setType(localStorage.getItem('type'));
+        console.log("set!",user);
+        console.log("type!",type);
+      }
+      if(fetchFinish== false){
+        fetch('http://localhost:7000/dbAccount/getByUID/'+user)
+        .then(res=>res.json())
+        .then(data=>{
+            setPic(data[0].pic);
+            setFetch(true);
+        })
+        .catch(err=>{
+          console.log(err);
+          setFetch(false);
+        })}
+>>>>>>> af82f29cf8044b53721a9c0a5cd60f6179b9749b
       }
     })
 
@@ -211,19 +220,11 @@ function NavBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                          {/* const settings = ['Profile', 'Account', 'Dashboard'];
-                          const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
                         {settings.map((setting, index) => (
                             <MenuItem key={setting} onClick={handleCloseUserMenu}>
                                 <a href={settingsRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{setting}</a>
                             </MenuItem>
-                        ))} */}
-                        <MenuItem onClick={openProfile}>
-                        <a style={{color: '#5D4E99', textDecoration: 'none' }}> Profile </a>
-                        </MenuItem>
-                        {/* <MenuItem onClick={openAccount}>
-                        <a style={{color: '#5D4E99', textDecoration: 'none' }}> Account </a>
-                        </MenuItem> */}
+                        ))}
                         <MenuItem onClick={logout}>
                         <a style={{color: '#5D4E99', textDecoration: 'none' }}> Logout </a>
                         </MenuItem>
@@ -298,28 +299,24 @@ function NavBar() {
                           
                         <Tooltip title="Shopping Cart">
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
-                            <Button 
-                              variant="outlined"
-                              color="inherit" 
-                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
-                              
-                            >
-                                <ShoppingCartIcon />
-                            </Button>
+
+                            <IconButton aria-label="cart">
+                              <Badge badgeContent={cart.length} color="secondary">
+                                <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
+                              </Badge>
+                            </IconButton>
                         </Link>
                         </Tooltip>
                     </Box>
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Login">
                         <Link to='/login' style={{color:"#F4CB86"}}>
-                            <Button 
-                              variant="outlined"
-                              color="inherit" 
-                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
+                            <IconButton aria-label="cart">
                               
-                            >
-                                <LoginIcon/>
-                            </Button>
+                                <LoginIcon sx={{color: '#F4CB86'}}/>
+                      
+                            </IconButton>
+                                
                         </Link>
                         </Tooltip>
                     </Box>
@@ -370,7 +367,7 @@ const data = [
                   '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
                 }}
               >
-                <ListItemIcon sx={{color:"white"}}>
+                 <ListItemIcon sx={{color:"white"}}>
               <AccountCircleIcon/>
                 </ListItemIcon>
                 <ListItemText
@@ -456,8 +453,8 @@ const data = [
           >
             <ListItemIcon>
               <LogoutIcon sx={{color:"white"}}/>
-              </ListItemIcon>
-              <ListItemText primary="Logout"/>
+              <ListItemText primary="Logout" sx={{color:"white"}}/>
+            </ListItemIcon>
           </ListItem>
       </List>
   
