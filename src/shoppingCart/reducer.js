@@ -3,6 +3,7 @@ const reducer = (state, action) => {
     
     if (action.type === 'ADD_TO_CART'){
         //may not be this
+        state.canteen=action.payload.canteen;
         const item = state.cart.find((prod)=>prod.id===action.payload.id);
         const inCart = state.cart.find((item)=>
           item.id===action.payload.id?(item.variant==action.payload.variant.name?true:false):false
@@ -20,8 +21,7 @@ const reducer = (state, action) => {
                 variant: action.payload.variant.name,
                 price: action.payload.variant.price,
                 img:action.payload.image, 
-                amount:action.payload.quantity, 
-                
+                amount:action.payload.quantity,                 
             }]
         };
     }

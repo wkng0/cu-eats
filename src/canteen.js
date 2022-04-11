@@ -81,7 +81,7 @@ function Canteen(props) {
                 {listOfMenu.map( (menu) =>{
                     return(
                         <div>
-                            <NewShowDishes menu={menu}/>
+                            <NewShowDishes menu={menu} canteen={canteenInfo[props.value].canteen_name}/>
                         </div>
                     );
                 })}
@@ -91,12 +91,13 @@ function Canteen(props) {
     )
 }
 
-function NewShowDishes({menu}){
+function NewShowDishes(props){
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const {addToCart} = useContext(DishContext);
     const [price,setPrice]=useState(0);
     let variantList=[];
+    let menu=props.menu
     const tag=menu.tag;
     
     useEffect(()=>{
@@ -184,7 +185,7 @@ function NewShowDishes({menu}){
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
                         onClick={()=>{
-                           addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
+                           addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name, canteen:props.canteen})
                         }}
                         hidden={localStorage.getItem("type")=="admin"}
                     >

@@ -8,13 +8,14 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
 const CartItem = ({ id,img ,title, variant,price,amount }) => {
     
-    const {cart ,remove, increase, decrease} = useContext(DishContext);
+    const {cart,canteen,remove, increase, decrease} = useContext(DishContext);
     localStorage.setItem("cart",JSON.stringify(cart))
     return (
       <article className='sc-cart-item'>
           <img src={img} alt={title} width='100' display='block' className='sc-cart-photo'/>
         
         <div>
+          <h6>{canteen}</h6>
           <h5 letter-spacing='0.25' line-height='1.25' margin-bottom='0.75' font-size='0.875'>{title}</h5>
           <h6 className='sc-item-price'>{variant}</h6>
           <h6 className='sc-item-price'>$&nbsp;{price}</h6>
