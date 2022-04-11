@@ -6,9 +6,8 @@ import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './prof
 import Checkout from './checkout'
 import { HomePage }  from './HomePage';
 import { Receipt, Records } from './receipt';
-import UCCanteen from './UCcanteen';
-import NACanteen from './NAcanteen';
-import ShawCanteen from './ShawCanteen';
+
+import ShowCanteen from './Menu';
 
 import NewNACanteen from './newNaCanteen';
 import NewUcCanteen from './newUcCanteen';
@@ -80,9 +79,9 @@ function App() {
             <Route path="/profile/address" element={<Address/>} />
             
             <Route path="/ShoppingCart" element={<CartContainer/>} />
-            <Route path="/UCcanteen" element={<UCCanteen/>} />
-            <Route path="/NAcanteen" element={<NACanteen/>} />
-            <Route path="/Shawcanteen" element={<ShawCanteen/>} />
+            
+            <Route path="/menu" element={<ShowCanteen/>} />
+              
             <Route path="/newNAcanteen" element={<NewNACanteen/>} />
             <Route path="/newShawcanteen" element={<NewShawCanteen/>} />
             <Route path="/newUccanteen" element={<NewUcCanteen/>} />
