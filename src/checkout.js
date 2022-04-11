@@ -257,6 +257,7 @@ function Checkout() {
                     </Grid>
                 </Grid>
                 <br/>
+                {/*
                 <TextField fullWidth required
                     label="Email"
                     id="fullWidth"
@@ -264,6 +265,7 @@ function Checkout() {
                     value={email}
                     onChange={handleChangeEmail}
                 />
+                */}
             </Box>
             <br/><Divider /><br/>
             <Box>
