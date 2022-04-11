@@ -136,7 +136,7 @@ async function fetchRecord(res){
     console.log('Connected successfully to server Receipt');
     const db = client.db(dbName);
     const collection = db.collection("Receipt");
-    let result = await collection.find({"uid":uid}).toArray();
+    let result = await collection.find({"uid":uid}).sort({timestamp: -1}).toArray();
     res.send(result);
     return result;
 };
