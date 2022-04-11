@@ -210,7 +210,7 @@ function NavBar() {
                             </MenuItem>
                         ))}
                         <MenuItem onClick={logout}>
-                          Logout
+                        <a style={{color: '#5D4E99', textDecoration: 'none' }}> Logout </a>
                         </MenuItem>
                         
                         </Menu>
@@ -219,6 +219,12 @@ function NavBar() {
         </Container>
     </AppBar>
   );}
+  if(type=="admin"){
+    return(
+      <AdminDrawer></AdminDrawer>
+    );
+  }
+  else{
   return (
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
         <Container maxWidth="xl">
@@ -305,12 +311,7 @@ function NavBar() {
                 </Toolbar>
         </Container>
     </AppBar>
-  )
-  if(type=="admin"){
-    return(
-      <AdminDrawer></AdminDrawer>
-    );
-  }
+  );}
 
 };
 

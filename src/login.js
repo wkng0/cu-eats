@@ -245,10 +245,10 @@ function LoginWithPassword(props){
                 console.log("password is true");
                 // console.log(user);
                 // if(data[0].type == "user"){
-                    console.log("Checked user!!!!!!!!!!!!!!!");
-                    console.log("UID: ",data[0].uid);
-                    localStorage.setItem('user',data[0].uid);
-                    localStorage.setItem('type',data[0].type);                 
+                console.log("Checked user!!!!!!!!!!!!!!!");
+                console.log("UID: ",data[0].uid);
+                localStorage.setItem('user',data[0].uid);
+                localStorage.setItem('type',data[0].type);                 
                 // }
                 window.location.assign("/");
             }
