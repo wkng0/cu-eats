@@ -90,6 +90,7 @@ function NavBar() {
     const logout = () =>{
       localStorage.setItem('user',undefined);
       localStorage.setItem('type',"guest");
+      window.location.assign("/");
     }
 
     React.useEffect(()=>{
@@ -113,7 +114,8 @@ function NavBar() {
     })
 
 
-    return (
+    if(type=="user" && user!="")
+    {return (
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
         <Container maxWidth="xl">
                 <Toolbar disableGutters>
@@ -216,8 +218,7 @@ function NavBar() {
                 </Toolbar>
         </Container>
     </AppBar>
-  );
-  if(type=="guest"){
+  );}
   return (
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
         <Container maxWidth="xl">
@@ -304,7 +305,7 @@ function NavBar() {
                 </Toolbar>
         </Container>
     </AppBar>
-  );}
+  )
   if(type=="admin"){
     return(
       <AdminDrawer></AdminDrawer>
