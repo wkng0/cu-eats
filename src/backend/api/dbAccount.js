@@ -133,6 +133,61 @@ router.post("/delete",function(req,res){
     .finally(() => client.close());
 })
 
+router.post("/reqChangePW",function(req,res){
+    reqChangePW(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
+router.post("/changePW",function(req,res){
+    changePW(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
+async function changePW(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    const updateResult = await collection.updateOne({ email: req.body["email"] }, { $set: { password: req.body["password"] } });
+    console.log(updateResult)
+}
+
+
+async function reqChangePW(req,res){
+    let token=Math.random().toString(36).substr(2);
+    await client.connect();
+    console.log('Connected successfully to server');
+    console.log(req.body["email"])
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    const updateResult = await collection.updateOne({ email: req.body["email"] }, { $set: { pwToken: token } });
+    console.log(updateResult)
+    let emailSender={
+        name: "CUEats",
+        address: "csci3100.group.d2@gmail.com"
+    }
+    let mailOptions={
+        from: emailSender,
+        to: req.body['email'],
+        
+        subject:"Change PW",
+        text:`Click this link to change your password http://localhost:3000/changePassword/${token}`
+    }
+    transporter.sendMail(mailOptions,function(error,info){
+        if(error){
+            console.log(error);
+        }else{
+            console.log("Email sent: "+ info.response);
+        }
+        res.send("Email sent: "+ info.response);
+    });
+    return updateResult
+}
+
 async function deleteUser(req,res){
     await client.connect();
     console.log('Connected successfully to server');

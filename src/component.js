@@ -32,7 +32,7 @@ import BackupTableIcon from '@mui/icons-material/BackupTable';
 import PasswordIcon from '@mui/icons-material/Password';
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import { useParams, useNavigate } from "react-router-dom";
+import Paper from '@mui/material/Paper';
 import Badge from '@mui/material/Badge';
 import { DishContext } from './shoppingCart/sc-context';
 import { useContext } from 'react';
@@ -95,12 +95,29 @@ function NavBar() {
       window.location.assign("/profile");
     }
 
-    // const openAccount = () =>{
-    //   setAnchorElUser(null);
-    //   userMenuStatus = -1;
-    //   window.location.assign("/profile/account")
-    // }
+   const addDish = () =>{
+    setAnchorElUser(null);
+    userMenuStatus = -1;
+    if(user==0){
+      window.location.assign("/AddNaDishes");
+    }else if(user==1){
+      window.location.assign("/AddShawDishes");
+    }else if(user==2){
+      window.location.assign("/AddUcDishes");
+    }
+   }
 
+   const delDish = () =>{
+    setAnchorElUser(null);
+    userMenuStatus = -1;
+    if(user==0){
+      window.location.assign("/deleteNaDishes");
+    }else if(user==1){
+      window.location.assign("/deleteShawDishes");
+    }else if(user==2){
+      window.location.assign("/deleteUcDishes");
+    }
+   }
 
     React.useEffect(()=>{
       if(fetchFinish== false||(pic!=""&&type=="user")){
@@ -111,6 +128,7 @@ function NavBar() {
           fetch('http://localhost:7000/dbAccount/getByUID/'+localStorage.getItem('user'))
           .then(res=>res.json())
           .then(data=>{
+
               setPic(data[0].pic);
               setFetch(true);
           })
@@ -212,13 +230,6 @@ function NavBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                          {/* const settings = ['Profile', 'Account', 'Dashboard'];
-                          const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
-                        {settings.map((setting, index) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                <a href={settingsRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{setting}</a>
-                            </MenuItem>
-                        ))} */}
                         <MenuItem onClick={openProfile}>
                         <a style={{color: '#5D4E99', textDecoration: 'none' }}> Profile </a>
                         </MenuItem>
@@ -231,6 +242,96 @@ function NavBar() {
                         
                         </Menu>
                     </Box>
+                </Toolbar>
+        </Container>
+    </AppBar>
+  );}
+  if(type=="restaurant")
+    {return (
+    <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em' ,overflow: 'visible'}} >
+        <Container maxWidth="xl">
+                <Toolbar disableGutters>
+                    <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
+                        <img src={logo_yellow} width="auto" height="30" alt=""></img> CU EATS
+                    </Typography>
+
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        <IconButton 
+                            size="small" 
+                            aria-label="account of current user" 
+                            aria-controls="menu-appbar" 
+                            aria-haspopup="true" 
+                            onClick={handleOpenNavMenu} 
+                            color="inherit"
+                            
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        {/* <Menu 
+                            id="menu-appbar" 
+                            anchorEl={anchorElNav} 
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left',}}
+                            keepMounted
+                            transformOrigin={{ vertical: 'top', horizontal: 'left',}}
+                            open={Boolean(anchorElNav)}
+                            onClose={handleCloseNavMenu}
+                            sx={{mt: '15px', display: { xs: 'block', md: 'none'}, zIndex: '99999 !important'}}
+                        >
+                            <MenuItem onClick={handleCloseNavMenu} linkButton href='/comment' style={{color: '#5D4E99'}}>
+                                <Link to='/comment' style={{color: '#5D4E99', textDecoration: 'none' }}>Comment</Link>
+                            </MenuItem>
+                            <MenuItem onClick={handleCloseNavMenu} linkButton href='/' style={{color: '#5D4E99'}}>
+                                <Link to='/' style={{color: '#5D4E99', textDecoration: 'none' }}>Dashboard</Link>
+                            </MenuItem>
+                        </Menu> */}
+                    </Box>
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        <img src={logo_yellow} width="auto" height="30" alt=""></img> CU EATS
+                    </Typography>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        <Link to='/comment' style={{textDecoration: 'none'}}>
+                        <Button
+                            onClick={handleCloseNavMenu}
+                            sx={{ my: 2, color: '#F4CB86', display: 'block', ':hover': {color: 'white'}}}
+                        
+                        >
+                            Comment
+                        </Button>
+                        </Link>
+                        <Link to='/' style={{textDecoration: 'none'}}>
+                        <Button
+                            onClick={handleCloseNavMenu}
+                            sx={{ my: 2, color: '#F4CB86', display: 'block', ':hover': {color: 'white'}}}
+                        
+                        >
+                            Dashboard
+                        </Button>
+                        </Link>
+                        <Button onClick={handleOpenUserMenu} sx={{ p: 2 ,color: '#F4CB86'}}>
+                           Edit Menu
+                        </Button>
+                        <Menu
+                            sx={{mt: '45px', zIndex: '99999 !important'}}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'left',}}
+                            keepMounted
+                            transformOrigin={{ vertical: 'top', horizontal: 'left',}}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                        <MenuItem onClick={addDish}>
+                          <a style={{color: '#5D4E99', textDecoration: 'none' }}> Add Dishes </a>
+                        </MenuItem>
+                        <MenuItem onClick={delDish}>
+                          <a style={{color: '#5D4E99', textDecoration: 'none' }}> Hide or Delete Dishes </a>
+                        </MenuItem>                      
+                        </Menu>
+                    </Box>
+                           <Avatar src={pic}/>
+                          <IconButton onClick={logout}>
+                          <LogoutIcon sx={{color:'#F4CB86'}}/>
+                           </IconButton>
                 </Toolbar>
         </Container>
     </AppBar>
