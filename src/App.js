@@ -7,7 +7,7 @@ import Checkout from './checkout'
 import { HomePage }  from './HomePage';
 import { Receipt, Records } from './receipt';
 
-import ShowCanteen from './Menu';
+
 
 import NewNACanteen from './newNaCanteen';
 import NewUcCanteen from './newUcCanteen';
@@ -80,7 +80,7 @@ function App() {
             
             <Route path="/ShoppingCart" element={<CartContainer/>} />
             
-            <Route path="/menu" element={<ShowCanteen/>} />
+            
               
             <Route path="/newNAcanteen" element={<NewNACanteen/>} />
             <Route path="/newShawcanteen" element={<NewShawCanteen/>} />
