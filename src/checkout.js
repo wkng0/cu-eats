@@ -1,4 +1,8 @@
-import Cart from "./cart.json";
+import Cart from './cart.json'
+import React,{useContext, useEffect} from 'react'
+import { DishContext } from './shoppingCart/sc-context';
+// import {CartItem} from './shoppingCart/sc-CartContainer'
+
 import { AddNewAddress } from "./profile";
 import {UserContext} from './UserContext';
 import DiningIcon from '@mui/icons-material/LocalDining';
@@ -6,7 +10,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CloseIcon from '@mui/icons-material/Close';
 
-import * as React from 'react';
 import { v4 as uuid } from 'uuid';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
@@ -52,8 +55,47 @@ function RadioIcon(props) {
       <Radio size="small"  sx={{color: '#5D4E99', '&.Mui-checked': {color:'#5D4E99'}}} {...props}/>
 );}
 
+const CartItem = ({ id,img ,title, variant,price,amount }) => {
+    
+    const {cart ,remove, increase, decrease} = useContext(DishContext);
+    localStorage.setItem("cart",JSON.stringify(cart))
+    return (
+      <article className='sc-cart-item'>
+          <img src={img} alt={title} width='100' display='block' className='sc-cart-photo'/>
+        
+        <div>
+          <h5 letter-spacing='0.25' line-height='1.25' margin-bottom='0.75' font-size='0.875'>{title}</h5>
+          <h6 className='sc-item-price'>{variant}</h6>
+          <h6 className='sc-item-price'>$&nbsp;{price}</h6>
+          {/* remove button */}
+          <button className='sc-remove-btn' onClick={() => remove({id:id,variant:variant})}
+          >
+            remove
+          </button>
+        </div>
+        <div>
+          {/* increase amount */}
+          <button className='sc-amount-btn' onClick={() => increase({id:id,variant:variant}) }>
+            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
+              <path d='M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z' />
+            </svg>
+          </button>
+          {/* amount */}
+          <p className='sc-amount'>{amount}</p>
+          {/* decrease amount */}
+          <button className='sc-amount-btn' onClick={() => decrease({id:id,variant:variant}) }>
+            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
+              <path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z' />
+            </svg>
+          </button>
+        </div>
+      </article>
+    )
+  }
+
 function Checkout() {
     const {user, setUser} = React.useContext(UserContext);
+    const { cart, total, clearCart } = React.useContext(DishContext);
     const [name, setName] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -92,7 +134,7 @@ function Checkout() {
                 "phone": phone,
                 "address": address==null? savedAddress[0]:address,
                 "cutlery": cutlery,
-                "items": JSON.stringify(Cart.cartItems),
+                "items": localStorage.getItem('cart'),
                 "subtotal": total,
                 "discount": discount,
                 "total": total-discount,
@@ -106,6 +148,7 @@ function Checkout() {
             },
         })
         .then(response => {console.log(response);
+            localStorage.setItem('cart',"");
             window.location.href = '/receipt/' + receiptID})
         //.then(clearCart)
         .catch((error) => {console.error('Error:', error);});
@@ -167,7 +210,7 @@ function Checkout() {
     })
       
     let rid = "Joyful Inn";
-    let total = 0;
+    // let total = 0;
     //var receiptID = '';
 
     return (
@@ -187,7 +230,7 @@ function Checkout() {
         <h3 style={{color: '#5D4E99'}}>Your Order</h3>
         <br/>
         <Table style={{width:'80%', margin:'auto', maxWidth:650}} aria-label="spanning table" padding='normal'>
-            {Cart.cartItems.map((item) => (
+            {/* {CartItem.map((item) => (
                 total += item.amount * item.price,
                 <>
                 <Grid container sx ={{color: '#707070'}}>
@@ -201,7 +244,10 @@ function Checkout() {
                     <Grid item xs={11}><pre>{item.description && '   - '}{item.description}</pre></Grid>
                 </Grid>
                 </>
-            ))}
+            ))} */}
+            {cart.map((item) => {
+                return <CartItem key={item.id} {...item} />
+                })}
             <br/><Divider /><br/>
             <Box>
 
