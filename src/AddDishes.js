@@ -16,13 +16,8 @@ import {
 } from "@mui/material";
 import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
-let canteenInfo=[];
-let listOfMenu=[];
 
-const menu=["NaMenu","ShawMenu","UcMenu"];
-
-// fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
-export default function AddDishes(props) {
+export default function AddDishes() {
 
     const [name, setName] = useState("");
     const [variant, setVariant] = useState('');
@@ -43,7 +38,7 @@ export default function AddDishes(props) {
             if(name=="") setNameError(true);
             if(variantList.length==0) setVariantError(true);
         }else{
-            Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/${menu[props.value]}`, {
+            Axios.post('http://localhost:7000/dbNewMenu/AddMenu/NaMenu', {
                 name: name, 
                 variants: variantList,
                 category: category,
@@ -308,6 +303,72 @@ export default function AddDishes(props) {
                     <Button 
                         variant="contained"
                         onClick={AddDishes}>Add Dish</Button>
+
+
+                    {/* <input 
+                        className="form-control"
+                        type="text" 
+                        placeholder="name"
+                        value={name}
+                        onChange={(event)=> {
+                            setName(event.target.value)
+                        }}
+                    />
+                    
+                    <input 
+                        className="form-control"
+                        type="text" 
+                        placeholder="Variant"
+                        value={variant}
+                        onChange={(event)=> {
+                            setVariant(event.target.value)
+                        }}
+                    /> */}
+                    {/* <Button variant="contained" onClick={saveVariant}>+</Button> */}
+                     {/* <Button variant="contained" onClick={savePrices}>+</Button> */}
+
+                    {/* <div id="variantList">
+
+                    </div>
+
+                    <input 
+                        className="form-control"
+                        type="number" 
+                        placeholder="Prices"
+                        value={price}
+                        onChange={(event)=> {
+                            setPrice(event.target.value)
+                        }}
+                    /> 
+                   
+                    <div id="pricesList">
+
+                    </div>
+
+                    <input 
+                        className="form-control"
+                        type="text" 
+                        placeholder="category"
+                        value={category}
+                        onChange={(event)=> {
+                            setCategory(event.target.value)
+                        }}
+                    />
+
+                    <input 
+                        className="form-control"
+                        type="text" 
+                        placeholder="image url"
+                        value={image}
+                        onChange={(event)=> {
+                            setImage(event.target.value)
+                        }}
+                    />
+
+
+                    <button 
+                        className="btn mt-3"
+                        onClick={AddDishes}>Add Dish</button> */}
 
                 </form>
             </div>
