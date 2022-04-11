@@ -15,6 +15,7 @@ import { Fab } from '@mui/material';
 import './login.css';
 import logo_yellow from './image/logo_yellow.png'
 import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -45,8 +46,8 @@ import { useParams, useNavigate } from "react-router-dom";
 
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
 const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const settingsRoute = ['/profile', '/profile/account', '/dashboard', '/logout'];
+const settings = ['Profile', 'Account', 'Dashboard'];
+const settingsRoute = ['/profile', '/profile/account', '/dashboard'];
 
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
@@ -54,7 +55,8 @@ var NavMenuStatus = -1;
 function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    
+    const [type, setType] = React.useState(null);
+    const [user, setUser] = React.useState(null);
 
     const handleOpenNavMenu = (event) => {
         if (NavMenuStatus == -1)
@@ -82,8 +84,21 @@ function NavBar() {
         setAnchorElUser(null);
         userMenuStatus = -1;
     };
-    return (
 
+    const logout = () =>{
+      localStorage.setItem('user',undefined);
+      localStorage.setItem('type',"guest");
+    }
+
+    React.useEffect(()=>{
+        setUser(localStorage.getItem('user'));
+        setType(localStorage.getItem('type'));
+        console.log("set!",user);
+        console.log("type!",type);
+    })
+
+    if(user !="" && type == "user"){
+    return (
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
         <Container maxWidth="xl">
                 <Toolbar disableGutters>
@@ -177,6 +192,9 @@ function NavBar() {
                                 <a href={settingsRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{setting}</a>
                             </MenuItem>
                         ))}
+                        <MenuItem onClick={logout}>
+                          Logout
+                        </MenuItem>
                         
                         </Menu>
                     </Box>
@@ -184,6 +202,105 @@ function NavBar() {
         </Container>
     </AppBar>
   );
+} 
+  if(type=="guest"){
+  return (
+    <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
+        <Container maxWidth="xl">
+                <Toolbar disableGutters>
+                    <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
+                        <img src={logo_yellow} width="auto" height="30" alt=""></img> CU EATS
+                    </Typography>
+
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        <IconButton 
+                            size="small" 
+                            aria-label="account of current user" 
+                            aria-controls="menu-appbar" 
+                            aria-haspopup="true" 
+                            onClick={handleOpenNavMenu} 
+                            color="inherit"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Menu 
+                            id="menu-appbar" 
+                            anchorEl={anchorElNav} 
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left',}}
+                            keepMounted
+                            transformOrigin={{ vertical: 'top', horizontal: 'left',}}
+                            open={Boolean(anchorElNav)}
+                            onClose={handleCloseNavMenu}
+                            sx={{mt: '15px', display: { xs: 'block', md: 'none'}, zIndex: '99999 !important'}}
+                        >
+                        {pages.map((page, index) => (
+                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={pagesRoute[index]} style={{color: '#5D4E99'}}>
+                                <Link to={pagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
+                            </MenuItem>
+                        ))}
+                        </Menu>
+                    </Box>
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        <img src={logo_yellow} width="auto" height="30" alt=""></img> CU EATS
+                    </Typography>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        {pages.map((page, index) => (
+                        <Link to={pagesRoute[index]} style={{textDecoration: 'none'}}>
+                        <Button
+                            key={page}
+                            onClick={handleCloseNavMenu}
+                            sx={{ my: 2, color: '#F4CB86', display: 'block', ':hover': {color: 'white'}}}
+                        
+                        >
+                            {page}
+                        </Button>
+                        </Link>
+                        ))}
+                    </Box>
+
+                    <Box sx={{ flexGrow: 0 }}>
+                          
+                        <Tooltip title="Shopping Cart">
+                        <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
+                            <Button 
+                              variant="outlined"
+                              color="inherit" 
+                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
+                              
+                            >
+                                <ShoppingCartIcon />
+                            </Button>
+                        </Link>
+                        </Tooltip>
+                    </Box>
+                    <Box sx={{ flexGrow: 0, pl:3}}>
+                        <Tooltip title="Login">
+                        <Link to='/login' style={{color:"#F4CB86"}}>
+                            <Button 
+                              variant="outlined"
+                              color="inherit" 
+                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
+                              
+                            >
+                                <LoginIcon/>
+                            </Button>
+                        </Link>
+                        </Tooltip>
+                    </Box>
+                </Toolbar>
+        </Container>
+    </AppBar>
+  );}
+  if(type=="admin"){
+    return(
+      <AdminDrawer></AdminDrawer>
+    );
+  }
+  return(
+    <>
+    </>
+  );
+
 };
 
 function AdminDrawer(props){
@@ -210,20 +327,6 @@ const data = [
     <div>
      
       <List>
-          {/* <ListItem 
-            button 
-            key="Profile"
-            sx={{
-              color:"white"
-            }}
-            
-            onClick={()=>{
-              window.location.href='/admin/profile'
-            }}
-          >
-            <ListItemIcon>
-              <AccountCircleIcon sx={{color:"white"}}/>
-            </ListItemIcon> */}
             <Box
               sx={{
                 // bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
@@ -297,8 +400,6 @@ const data = [
                 ))}
             </Box>
             <Divider/>
-            {/* <ListItemText primary="Profile" /> */}
-          {/* </ListItem> */}
           <ListItem 
             button 
             key="Comment" 
@@ -314,8 +415,23 @@ const data = [
             </ListItemIcon>
             <ListItemText primary="Comment" />
           </ListItem>
-          
-   
+          <Divider/>
+          <ListItem
+            button 
+            key="Logout" 
+            sx={{
+              color:"white"
+            }}
+            onClick={()=>{
+              localStorage.setItem('type',"guest");
+              window.location.href = "/"
+          }}
+          >
+            <ListItemIcon>
+              <LogoutIcon sx={{color:"white"}}/>
+              <ListItemText primary="Logout" sx={{color:"white"}}/>
+            </ListItemIcon>
+          </ListItem>
       </List>
   
     </div>

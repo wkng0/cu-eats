@@ -72,7 +72,6 @@ function App() {
         </DishProvider>
         </UserContext.Provider>
     </BrowserRouter>
-    <AdminDrawer/>
       
     </div>
   );

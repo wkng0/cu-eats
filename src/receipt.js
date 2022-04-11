@@ -263,6 +263,10 @@ function Records() {
     const navigate = useNavigate();
 
     React.useEffect(()=>{
+        if(localStorage.getItem('user') != ""){
+            setUser(localStorage.getItem('user'));
+            console.log("set!",user);
+        }
         fetch('http://localhost:7000/dbReceipt/getRecords/'+user)
         .then(res=>res.json())
         .then(data=>{
