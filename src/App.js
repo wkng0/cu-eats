@@ -90,7 +90,10 @@ function App() {
               
             <Route path="/receipt/:id" element={<Receipt/>} />
               
-            <Route path="/deleteDishes" element={<DeleteDish/>} />
+            <Route path="/deleteNaDishes" element={<DeleteDish value={0}/>} />
+            <Route path="/deleteShawDishes" element={<DeleteDish value={1}/>} />
+            <Route path="/deleteUcDishes" element={<DeleteDish value={2}/>} />
+
             <Route path="/AddNaDishes" element={<AddDishes value={0}/>} />
             <Route path="/AddShawDishes" element={<AddDishes value={1}/>} />
             <Route path="/AddUcDishes" element={<AddDishes value={2}/>} />
