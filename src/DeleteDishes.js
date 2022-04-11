@@ -140,7 +140,8 @@ function NewShowDishes({menu} , value){
         // Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
         Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
         .then(()=>{
-            alert(window.number + "deleted! please refresh" ); 
+            alert("deleted! please refresh" ); 
+            window.location.reload();
             // setListOfMenu(listOfMenu.filter((NAmenu) => {
             //     return NAmenu.dishesID != dishesID;
             // }))
