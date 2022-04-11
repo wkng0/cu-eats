@@ -64,9 +64,10 @@ function App() {
     <div className="App" style={{zIndex:9999 ,position:"relative"}}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <NavBar/>
+          
           <UserContext.Provider value={{user, setUser}}>
           <DishProvider>
+          <NavBar/>
           <Routes>
             <Route path="/" element={<HomePage/>}/>
             <Route path="/login" element={<LoginPage/>} />

@@ -34,8 +34,9 @@ import PasswordIcon from '@mui/icons-material/Password';
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { useParams, useNavigate } from "react-router-dom";
-
-
+import Badge from '@mui/material/Badge';
+import { DishContext } from './shoppingCart/sc-context';
+import { useContext } from 'react';
 
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
 const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
@@ -54,8 +55,7 @@ function NavBar() {
     const [user, setUser] = React.useState(null);
     const [pic, setPic] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
-
-    //popper element
+    const { cart, total, clearCart } = useContext(DishContext);
     
 
     const handleOpenNavMenu = (event) => {
@@ -172,14 +172,12 @@ function NavBar() {
                           
                         <Tooltip title="Shopping Cart">
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
-                            <Button 
-                              variant="outlined"
-                              color="inherit" 
-                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
-                            >
-                                <ShoppingCartIcon />
-                            </Button>
-                            
+
+                            <IconButton aria-label="cart">
+                              <Badge badgeContent={cart.length} color="secondary">
+                                <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
+                              </Badge>
+                            </IconButton>
                         </Link>
                         
                         </Tooltip>
