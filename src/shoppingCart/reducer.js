@@ -20,8 +20,7 @@ const reducer = (state, action) => {
                 variant: action.payload.variant.name,
                 price: action.payload.variant.price,
                 img:action.payload.image, 
-                amount:action.payload.quantity, 
-                
+                amount:action.payload.quantity,                 
             }]
         };
     }

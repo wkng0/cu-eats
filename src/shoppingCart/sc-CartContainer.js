@@ -8,7 +8,8 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
 const CartItem = ({ id,img ,title, variant,price,amount }) => {
     
-    const {cart ,remove, increase, decrease} = useContext(DishContext);
+    const {cart,remove, increase, decrease} = useContext(DishContext);
+
     localStorage.setItem("cart",JSON.stringify(cart))
     return (
       <article className='sc-cart-item'>
@@ -26,7 +27,7 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
         </div>
         <div>
           {/* increase amount */}
-          <button className='sc-amount-btn' onClick={() => increase({id:id,variant:variant}) }>
+          <button className='sc-amount-btn' disabled={amount===2} onClick={() => increase({id:id,variant:variant}) }>
             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
               <path d='M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z' />
             </svg>
@@ -34,7 +35,7 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
           {/* amount */}
           <p className='sc-amount'>{amount}</p>
           {/* decrease amount */}
-          <button className='sc-amount-btn' onClick={() => decrease({id:id,variant:variant}) }>
+          <button className='sc-amount-btn'  onClick={() => decrease({id:id,variant:variant}) }>
             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
               <path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z' />
             </svg>
@@ -45,9 +46,9 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
   }
 
 const CartContainer = () => {
-  
-  const { cart, total, clearCart } = useContext(DishContext);
-  console.log(cart)
+
+  const { canteen, cart, total, clearCart } = useContext(DishContext);
+
   if (cart.length === 0) {
     localStorage.setItem("cart","[]")
     localStorage.setItem("cart","[]")
@@ -67,6 +68,7 @@ const CartContainer = () => {
       {/* cart header */}
       <header>
         <h3>Your Shopping Cart</h3>
+        <h6>{localStorage.getItem("cartCanteen")}</h6>
       </header>
       {/* cart items */}
       <div>

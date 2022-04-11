@@ -297,28 +297,22 @@ function NavBar() {
                           
                         <Tooltip title="Shopping Cart">
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
-                            <Button 
-                              variant="outlined"
-                              color="inherit" 
-                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
-                              
-                            >
-                                <ShoppingCartIcon />
-                            </Button>
+                            <IconButton aria-label="cart">
+                              <Badge badgeContent={cart.length} color="secondary">
+                                <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
+                              </Badge>
+                            </IconButton>
                         </Link>
                         </Tooltip>
                     </Box>
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Login">
                         <Link to='/login' style={{color:"#F4CB86"}}>
-                            <Button 
-                              variant="outlined"
-                              color="inherit" 
-                              sx={{':hover': {bgcolor: '#F4CB86', color: '#5D4E99'}}}
-                              
-                            >
-                                <LoginIcon/>
-                            </Button>
+                            <IconButton aria-label="cart">
+                             
+                                <LoginIcon sx={{color: '#F4CB86'}}/>
+                         
+                            </IconButton>
                         </Link>
                         </Tooltip>
                     </Box>

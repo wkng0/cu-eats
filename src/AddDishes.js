@@ -16,13 +16,9 @@ import {
 } from "@mui/material";
 import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
-let canteenInfo=[];
-let listOfMenu=[];
-
 const menu=["NaMenu","ShawMenu","UcMenu"];
 
-// fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
-export default function AddDishes(props) {
+function AddDishes(props) {
 
     const [name, setName] = useState("");
     const [variant, setVariant] = useState('');
@@ -314,3 +310,6 @@ export default function AddDishes(props) {
         </Container>
     );
 }
+
+
+export default AddDishes;
