@@ -1,6 +1,6 @@
 import React , { useState, useMemo }from 'react';
 
-import { LoginPage } from './login';
+import { LoginPage,ChangePassword } from './login';
 import { UserComment, ContentPreview, AdminComment} from './comment';
 import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
 import Checkout from './checkout'
@@ -96,7 +96,7 @@ function App() {
             <Route path="/AddNaDishes" element={<AddDishes value={0}/>} />
             <Route path="/AddShawDishes" element={<AddDishes value={1}/>} />
             <Route path="/AddUcDishes" element={<AddDishes value={2}/>} />
-
+            <Route path="/changePassword/:pwToken" element={<ChangePassword/>} />
             <Route path="/admin/comment/" element={<AdminComment/>}/>
             <Route path="/admin/profile" element={<AdminUser/>}/>
             <Route path="/admin/change" element={<ManagePw/>}/>
