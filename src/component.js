@@ -112,7 +112,7 @@ function NavBar() {
         })}
     })
 
-    if(user !="" && type == "user"){
+
     return (
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
         <Container maxWidth="xl">
@@ -217,7 +217,6 @@ function NavBar() {
         </Container>
     </AppBar>
   );
-} 
   if(type=="guest"){
   return (
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em'}}>
@@ -311,10 +310,6 @@ function NavBar() {
       <AdminDrawer></AdminDrawer>
     );
   }
-  return(
-    <>
-    </>
-  );
 
 };
 
