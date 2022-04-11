@@ -245,6 +245,10 @@ function LoginWithPassword(props){
 
     }
 
+    // const reset = ()=>{
+
+    // }
+
     React.useEffect(()=>{
         if(fetchFinish==false){
         fetch('http://localhost:7000/dbAccount/get/'+email)
@@ -286,7 +290,7 @@ function LoginWithPassword(props){
                     <br/>
                 
                     <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick={login} >Log in</button>
-                    <small className="float-end"><a style={{color: "#F4CB86"}} href="reset.html">Forgot your password?</a></small>
+                    <small className="float-end"><a style={{color: "#F4CB86"}}>Forgot your password?</a></small>
             
                 </form>
             </section>
