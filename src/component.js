@@ -93,6 +93,22 @@ function NavBar() {
 
     React.useEffect(()=>{
       if(fetchFinish== false){
+<<<<<<< HEAD
+        if(type== null){
+          setUser(localStorage.getItem('user'));
+          setType(localStorage.getItem('type'));
+          fetch('http://localhost:7000/dbAccount/getByUID/'+localStorage.getItem('user'))
+          .then(res=>res.json())
+          .then(data=>{
+              setPic(data[0].pic);
+              setFetch(true);
+          })
+          .catch(err=>{
+            console.log(err);
+            setFetch(false);
+          })
+        }
+=======
       if(type== null){
         setUser(localStorage.getItem('user'));
         setType(localStorage.getItem('type'));
@@ -110,6 +126,7 @@ function NavBar() {
           console.log(err);
           setFetch(false);
         })}
+>>>>>>> af82f29cf8044b53721a9c0a5cd60f6179b9749b
       }
     })
 
@@ -190,7 +207,7 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar alt="Hemy Sharp" src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+                            <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
                         </IconButton>
                         </Tooltip>
                         <Menu
