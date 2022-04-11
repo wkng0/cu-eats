@@ -57,6 +57,8 @@ function NavBar() {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [type, setType] = React.useState(null);
     const [user, setUser] = React.useState(null);
+    const [pic, setPic] = React.useState(null);
+    const [fetchFinish, setFetch] = React.useState(false);
 
     const handleOpenNavMenu = (event) => {
         if (NavMenuStatus == -1)
@@ -91,10 +93,23 @@ function NavBar() {
     }
 
     React.useEffect(()=>{
+      if(type== null){
         setUser(localStorage.getItem('user'));
         setType(localStorage.getItem('type'));
         console.log("set!",user);
         console.log("type!",type);
+      }
+      if(fetchFinish== false){
+        fetch('http://localhost:7000/dbAccount/getByUID/'+user)
+        .then(res=>res.json())
+        .then(data=>{
+            setPic(data[0].pic);
+            setFetch(true);
+        })
+        .catch(err=>{
+          console.log(err);
+          setFetch(false);
+        })}
     })
 
     if(user !="" && type == "user"){
@@ -174,7 +189,7 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar alt="Hemy Sharp" src="/static/images/avatar/2.jpg" />
+                            <Avatar alt="Hemy Sharp" src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
                         </IconButton>
                         </Tooltip>
                         <Menu
