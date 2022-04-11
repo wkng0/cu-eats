@@ -45,7 +45,9 @@ function AddDishes(props) {
                 category: category,
                 image: image,
                 tag: tagList,
-            })
+            });
+            alert("Menu added! Please refresh" ); 
+            window.location.reload();
         }
         
     };
