@@ -26,6 +26,35 @@ import CartContainer from './shoppingCart/sc-CartContainer';
 
 import { DishProvider } from './shoppingCart/sc-context';
 
+import { createTheme, ThemeProvider } from '@mui/material';
+const theme = createTheme({
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        // Name of the slot
+        root: {
+          // Some CSS
+          zIndex:9999,
+        },
+        popper:{
+          zIndex:9999,
+        },
+        tooltip:{
+          zIndex:9999,
+        }
+      },
+    },
+    MuiPopper: {
+      styleOverrides: {
+        // Name of the slot
+        root: {
+          // Some CSS
+          zIndex:9999,
+        },
+      },
+    },
+  },
+});
 
 function App() {
   const [user, setUser] = useState(null);
@@ -33,45 +62,45 @@ function App() {
 
   return (
     <div className="App" style={{zIndex:9999 ,position:"relative"}}>
-      
-      
-      <BrowserRouter>
-        <NavBar/>
-        <UserContext.Provider value={{user, setUser}}>
-        <DishProvider>
-        <Routes>
-          <Route path="/" element={<HomePage/>}/>
-          <Route path="/login" element={<LoginPage/>} />
-          <Route path="/comment" element={<UserComment />} />
-          <Route path="/comment/:canteen/:id" element={<ContentPreview />} />
-          <Route path="/profile" element={<Profile/>} />
-          <Route path="/record" element={<Records/>} />
-          <Route path="/checkout" element={<Checkout/>} />
-          <Route path="/profile/account" element={<Account/>} />
-          <Route path="/profile/address" element={<Address/>} />
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <NavBar/>
+          <UserContext.Provider value={{user, setUser}}>
+          <DishProvider>
+          <Routes>
+            <Route path="/" element={<HomePage/>}/>
+            <Route path="/login" element={<LoginPage/>} />
+            <Route path="/comment" element={<UserComment />} />
+            <Route path="/comment/:canteen/:id" element={<ContentPreview />} />
+            <Route path="/profile" element={<Profile/>} />
+            <Route path="/record" element={<Records/>} />
+            <Route path="/checkout" element={<Checkout/>} />
+            <Route path="/profile/account" element={<Account/>} />
+            <Route path="/profile/address" element={<Address/>} />
+            
+            <Route path="/ShoppingCart" element={<CartContainer/>} />
+            <Route path="/UCcanteen" element={<UCCanteen/>} />
+            <Route path="/NAcanteen" element={<NACanteen/>} />
+            <Route path="/Shawcanteen" element={<ShawCanteen/>} />
+            <Route path="/newNAcanteen" element={<NewNACanteen/>} />
+            <Route path="/newShawcanteen" element={<NewShawCanteen/>} />
+            <Route path="/newUccanteen" element={<NewUcCanteen/>} />
           
-          <Route path="/ShoppingCart" element={<CartContainer/>} />
-          <Route path="/UCcanteen" element={<UCCanteen/>} />
-          <Route path="/NAcanteen" element={<NACanteen/>} />
-          <Route path="/Shawcanteen" element={<ShawCanteen/>} />
-          <Route path="/newNAcanteen" element={<NewNACanteen/>} />
-          <Route path="/newShawcanteen" element={<NewShawCanteen/>} />
-          <Route path="/newUccanteen" element={<NewUcCanteen/>} />
-        
-            
-          <Route path="/receipt/:id" element={<Receipt/>} />
-            
-          <Route path="/deleteDishes" element={<DeleteDish/>} />
-          <Route path="/AddDishes" element={<AddDishes/>} />
-          <Route path="/admin/comment/" element={<AdminComment/>}/>
-          <Route path="/admin/profile" element={<AdminUser/>}/>
-          <Route path="/admin/change" element={<ManagePw/>}/>
-          <Route path="/admin/delete" element={<DeleteAcc/>}/>
-          <Route path="*" element={<NoMatch/>} />
-        </Routes>
-        </DishProvider>
-        </UserContext.Provider>
-    </BrowserRouter>
+              
+            <Route path="/receipt/:id" element={<Receipt/>} />
+              
+            <Route path="/deleteDishes" element={<DeleteDish/>} />
+            <Route path="/AddDishes" element={<AddDishes/>} />
+            <Route path="/admin/comment/" element={<AdminComment/>}/>
+            <Route path="/admin/profile" element={<AdminUser/>}/>
+            <Route path="/admin/change" element={<ManagePw/>}/>
+            <Route path="/admin/delete" element={<DeleteAcc/>}/>
+            <Route path="*" element={<NoMatch/>} />
+          </Routes>
+          </DishProvider>
+          </UserContext.Provider>
+      </BrowserRouter>
+    </ThemeProvider>
       
     </div>
   );
