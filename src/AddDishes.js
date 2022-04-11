@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
-const menu=["NaMenu","ShawMenu","UcMenu"];
+const menu=["NaMenu","ShawMenu","UcMenu"]
 
 function AddDishes(props) {
 
