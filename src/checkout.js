@@ -67,27 +67,9 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
           <h5 letter-spacing='0.25' line-height='1.25' margin-bottom='0.75' font-size='0.875'>{title}</h5>
           <h6 className='sc-item-price'>{variant}</h6>
           <h6 className='sc-item-price'>$&nbsp;{price}</h6>
-          {/* remove button */}
-          <button className='sc-remove-btn' onClick={() => remove({id:id,variant:variant})}
-          >
-            remove
-          </button>
         </div>
         <div>
-          {/* increase amount */}
-          <button className='sc-amount-btn' onClick={() => increase({id:id,variant:variant}) }>
-            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
-              <path d='M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z' />
-            </svg>
-          </button>
-          {/* amount */}
-          <p className='sc-amount'>{amount}</p>
-          {/* decrease amount */}
-          <button className='sc-amount-btn' onClick={() => decrease({id:id,variant:variant}) }>
-            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
-              <path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z' />
-            </svg>
-          </button>
+          <p className='sc-amount'>x {amount}</p>
         </div>
       </article>
     )
