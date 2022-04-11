@@ -134,14 +134,13 @@ function Checkout() {
         
     }
 
-    const fetchAddress = (event) => {
+    const fetchAddress = () => {
         console.log("start fetch")
         fetch('http://localhost:7000/dbAccount/getAddress/' + user)
             .then(res=>res.json())
             .then(res=>setdbAddress(res))
             .then(()=>setFetch(true))
             .catch(err=>{console.log(err); setFetch(false);})
-        
     }
     const showAddress = (event) => { 
         if (fetchFinish == false) return(<p>loading address...</p>)
@@ -251,6 +250,7 @@ function Checkout() {
                     </Grid>
                 </Grid>
                 <br/>
+                {/*
                 <TextField fullWidth required
                     label="Email"
                     id="fullWidth"
@@ -258,6 +258,7 @@ function Checkout() {
                     value={email}
                     onChange={handleChangeEmail}
                 />
+            */}
             </Box>
             <br/><Divider /><br/>
             <Box>
