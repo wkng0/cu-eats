@@ -132,7 +132,7 @@ function Checkout() {
         .then(response => {console.log(response);
             localStorage.setItem('cart',"");
             window.location.href = '/receipt/' + receiptID})
-        //.then(clearCart)
+        .then(clearCart)
         .catch((error) => {console.error('Error:', error);});
         
     }
