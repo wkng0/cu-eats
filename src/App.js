@@ -26,6 +26,7 @@ import CartContainer from './shoppingCart/sc-CartContainer';
 import { DishProvider } from './shoppingCart/sc-context';
 
 import { createTheme, ThemeProvider } from '@mui/material';
+import Error from "./error";
 const theme = createTheme({
   components: {
     MuiTooltip: {
@@ -95,7 +96,7 @@ function App() {
             <Route path="/admin/profile" element={<AdminUser/>}/>
             <Route path="/admin/change" element={<ManagePw/>}/>
             <Route path="/admin/delete" element={<DeleteAcc/>}/>
-            <Route path="*" element={<NoMatch/>} />
+            <Route path="*" element={<Error/>} />
           </Routes>
           </DishProvider>
           </UserContext.Provider>
