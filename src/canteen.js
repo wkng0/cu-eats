@@ -13,6 +13,7 @@ import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from '@mui/material';
 import { Chip,Stack } from '@mui/material';
+import {Skeleton} from '@mui/material';
 
 
 let canteenInfo=[];
@@ -33,13 +34,29 @@ function Canteen(props) {
                 fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
                 .then(res=>res.json())
                 .then(db=>listOfMenu=db)
-                .then(()=>setLoadFinish(true)) 
-                
-            )   
+                .then(()=>{
+                    setTimeout(()=>{
+                        setLoadFinish(true)
+                    },1000) 
+                })
+            )
         }
     });
     console.log(canteenInfo)
-    if(loadFinish==false) return <>please wait</>
+    if(loadFinish==false) {
+        return (
+            <>
+                <Box sx={{mb:8}}>
+                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"60vh"} />
+                </Box>
+                <Box sx={{mx:10}}>
+                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={300} />
+                </Box>
+   
+                
+            </>
+        )
+    }
     else return(
         <>
         <section style={{
