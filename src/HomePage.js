@@ -46,7 +46,7 @@ function HomePage() {
             <div className="text-box">
                 <h1>CUHK's Food Delivery System</h1>
                 <p>We are delicate to provide to best food delivery system you, espiecally in this diffcult time</p>
-                <Link to="" className ="hero-btn" style={{textDecoration: 'none'}}>Visit Us To Know More</Link>
+                {/* <Link to="" className ="hero-btn" style={{textDecoration: 'none'}}>Visit Us To Know More</Link> */}
             </div>
 
         </section>
