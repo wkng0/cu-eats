@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
-const menu=["NaMenu","ShawMenu","UcMenu"];
+const menu=["NaMenu","ShawMenu","UcMenu"]
 
 function AddDishes(props) {
 
@@ -34,6 +34,7 @@ function AddDishes(props) {
     const [color, setColor]=useState("default")
     const [variantError, setVariantError]=useState(false)
     const [nameError, setNameError]=useState(false);
+    const [hide] = useState(false);
     const AddDishes = () => {
         if(name==""||variantList.length==0){
             if(name=="") setNameError(true);
@@ -45,7 +46,10 @@ function AddDishes(props) {
                 category: category,
                 image: image,
                 tag: tagList,
-            })
+                hide: hide
+            });
+            alert("Menu added! Please refresh" ); 
+            window.location.reload();
         }
         
     };

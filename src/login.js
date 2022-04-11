@@ -208,6 +208,7 @@ function LoginWithPassword(props){
     const [iconA, setIconA]=React.useState("none");
     const [iconB, setIconB]=React.useState("block");
     const [uid, setUID] = React.useState(null);
+    const [name, setName] = React.useState(null);
     const [type, setType] = React.useState(null);
     const [target,setTarget] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
@@ -239,7 +240,8 @@ function LoginWithPassword(props){
     const login=()=>{
         if(password===target){
             localStorage.setItem('user',uid);
-            localStorage.setItem('type',type);                 
+            localStorage.setItem('type',type);
+            localStorage.setItem('name', name);                 
             window.location.assign("/");
         }
         return;
@@ -261,6 +263,7 @@ function LoginWithPassword(props){
                 setTarget(data[0].password);
                 setUID(data[0].uid);
                 setType(data[0].type);
+                setName(data[0].user_name);
             }
             setFetch(true);
         })

@@ -14,6 +14,7 @@ const dbName="Account";
 let receiptID="";
 let rid="";
 let uid="";
+let name="";
 
 router.use(bodyParser.urlencoded({extended: false}));
 
@@ -32,6 +33,15 @@ router.get("/get/:rid",function(req,res){
 router.get("/getRecords/:uid",function(req,res){
     uid=req.params.uid;
     fetchRecord(res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
+
+router.get("/getDashboard/:name",function(req,res){
+    name=req.params.name;
+    console.log("Restaurant name:", name);
+    fetchDashboard(res)
     .then(console.log)
     .catch(console.error)
     .finally(() => client.close());
@@ -74,9 +84,8 @@ async function submitOrder(req,res,receiptID){
         id: receiptID,
         rid: req.body['irid'],
         uid: req.body['uid'],
-        rName: req.body['rid'],
+        rName: req.body['res'],
         name: req.body['name'],
-        email: req.body['email'],
         phone: req.body['phone'],
         address: req.body['address'],
         cutlery: req.body['cutlery'],
@@ -117,7 +126,7 @@ async function updateStatus(){
         {"rid":rid},
         {
             $set: { status: true },
-            $unset: {name:"", email:"", phone:"", address:""}
+            $unset: {name:"", phone:"", address:""}
         }
     );
 }
@@ -137,7 +146,17 @@ async function fetchRecord(res){
     console.log('Connected successfully to server Receipt');
     const db = client.db(dbName);
     const collection = db.collection("Receipt");
-    let result = await collection.find({"uid":uid}).toArray();
+    let result = await collection.find({"uid":uid}).sort({timestamp: -1}).toArray();
+    res.send(result);
+    return result;
+};
+
+async function fetchDashboard(res){
+    await client.connect();
+    console.log('Connected successfully to server Receipt');
+    const db = client.db(dbName);
+    const collection = db.collection("Receipt");
+    let result = await collection.find({"rName":name}).sort({timestamp: -1}).toArray();
     res.send(result);
     return result;
 };

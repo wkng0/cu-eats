@@ -231,7 +231,6 @@ async function addUser(req,res){
         token:token,
         verify:0,
         uid: req.body['uid'],
-        type: "user",
     });
     let emailSender={
         name: "CUEats",
@@ -252,6 +251,7 @@ async function addUser(req,res){
         }
         res.send("Email sent: "+ info.response);
     });
+    
 
 };
 

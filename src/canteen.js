@@ -130,7 +130,11 @@ function NewShowDishes(props){
         
     }
 
+
     return(
+        <>
+        { !menu.hide ?
+        <>
         <Card sx={{display:"flex", alignItems: 'center', my:5}}>
             <CardMedia
                 component="img"
@@ -185,8 +189,10 @@ function NewShowDishes(props){
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
                         onClick={()=>{
-                            localStorage.setItem("cartCanteen",props.canteen);
-                            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
+                            if(quantity!=0){
+                                localStorage.setItem("cartCanteen",props.canteen);
+                                addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
+                            }
                         }}
                         hidden={localStorage.getItem("type")=="admin"}
                     >
@@ -197,6 +203,10 @@ function NewShowDishes(props){
             </Box>
         
         </Card>
+         </> :
+        <></>
+        }
+        </>
 
             
     );

@@ -50,6 +50,7 @@ function NavBar() {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [type, setType] = React.useState(null);
     const [user, setUser] = React.useState(null);
+    const [name, setName] = React.useState(null);
     const [pic, setPic] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
     const { cart, total, clearCart } = useContext(DishContext);
@@ -123,6 +124,7 @@ function NavBar() {
         if(type== null){
           setUser(localStorage.getItem('user'));
           setType(localStorage.getItem('type'));
+          setName(localStorage.getItem('name'));
           fetch('http://localhost:7000/dbAccount/getByUID/'+localStorage.getItem('user'))
           .then(res=>res.json())
           .then(data=>{
@@ -215,7 +217,11 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+<<<<<<< HEAD
                            <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+=======
+                            <Avatar alt={name} src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+>>>>>>> 3809dd82b223c50962c919c1bec2b6d9ea8ae9de
                         </IconButton>
                         </Tooltip>
                         <Menu
