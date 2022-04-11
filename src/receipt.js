@@ -124,7 +124,7 @@ function Receipt() {
                 </Grid>
                 <Grid container sx ={{color: '#707070'}}>
                     <Grid item xs={1} />
-                    <Grid item xs={11}><pre>{item.description && '   - '}{item.description}</pre></Grid>
+                    <Grid item xs={11}><pre>   - {item.variant}</pre></Grid>
                 </Grid>
                 </>
             ))}
@@ -243,6 +243,7 @@ function Receipt() {
                     <Grid item xs={10}> <b>Total</b></Grid>
                     <Grid item xs={2} sx={{textAlign:'right'}}> <b>${(total).toFixed(1)}</b></Grid>
                 </Grid><br/><br/>
+                {/*
                 <Button fullWidth
                     size="large" 
                     href='/ShoppingCart'
@@ -251,6 +252,7 @@ function Receipt() {
                 >
                     Reorder items
                 </Button>
+                */}
                 <br/><br/>
             </Table>
             </>

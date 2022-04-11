@@ -1,7 +1,6 @@
 import Cart from './cart.json'
 import React,{useContext, useEffect} from 'react'
 import { DishContext } from './shoppingCart/sc-context';
-// import {CartItem} from './shoppingCart/sc-CartContainer'
 
 import { AddNewAddress } from "./profile";
 import {UserContext} from './UserContext';
@@ -91,6 +90,8 @@ function Checkout() {
     const [savedAddress,setdbAddress] = React.useState([]);
     const [userEmail,setUserEmail] = React.useState('0.0@link.cuhk.edu.hk');
     const [anchorElNew, setAnchorElNew] = React.useState(null);
+    const [phoneText, setText] = React.useState('');
+    const [pointText, setpText] = React.useState('Get $0.0 off');
     const handleChangeName = (event) => {setName(event.target.value);};
     const handleChangePhone = (event) => {setPhone(event.target.value);};
     const handleChangePoint = (event) => {setPointUse(event.target.value);};
@@ -162,8 +163,26 @@ function Checkout() {
                     </RadioGroup>
         )}}
     }
-
-    React.useEffect(()=>{setDiscount(pointUse/10);},[pointUse])
+    React.useEffect(()=>{
+        setDiscount(pointUse/10);
+        if (pointUse < 0) 
+            setpText('Point must be non-negative!');
+        else if (pointUse > point)
+            setpText('Not enough valid points!');
+        else if (pointUse > 0) 
+            setpText('Get $'+ discount.toFixed(1)+ ' off');
+        else if (pointUse === "") 
+            setpText('Entry cannot be empty!');
+        else setpText('Get $'+ discount.toFixed(1)+ ' off');
+    },[pointUse])
+    React.useEffect(()=>{
+        if (phone === "") 
+            setText('Entry cannot be empty!');
+        else if (phone < 20000000 || (phone>=70000000 && phone<90000000) || phone>99999999) 
+            setText('Invalid entry!');
+        else setText('');
+    },[phone])
+    
     React.useEffect(()=>{fetchAddress()},([refresh]))
     React.useEffect(()=>{
         if(localStorage.getItem('user') != ""){
@@ -236,6 +255,8 @@ function Checkout() {
                             color="secondary"
                             value={name}
                             onChange={handleChangeName}
+                            error={name===''}
+                            helperText={name===''? 'Entry cannot be empty!':''}
                         />
                     </Grid>
                     <Grid item xs={1}/>
@@ -246,10 +267,11 @@ function Checkout() {
                             color="secondary"
                             value={phone}
                             onChange={handleChangePhone}
+                            error={phone==='' || phone < 20000000 || (phone>=70000000 && phone<90000000) || phone>99999999}
+                            helperText={phoneText}
                         />
                     </Grid>
                 </Grid>
-                <br/>
                 {/*
                 <TextField fullWidth required
                     label="Email"
@@ -324,17 +346,18 @@ function Checkout() {
                 <Grid item xs={6} style ={{textAlign:'right', color: '#707070'}}><small>{point} valid point(s)</small></Grid>
             </Grid>
             <TextField fullWidth 
-                    label="Use Points"
-                    autoComplete="off"
-                    id="fullWidth"
-                    variant="standard"
-                    value={pointUse}
-                    sx={{mt:1}}
-                    color="secondary"
-                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                    onChange={handleChangePoint}
+                label="Use Points"
+                autoComplete="off"
+                id="fullWidth"
+                variant="standard"
+                value={pointUse}
+                sx={{mt:1}}
+                color="secondary"
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                onChange={handleChangePoint}
+                error={pointUse<0 || pointUse>point}
+                helperText={pointText}
             />
-            <b style={{fontSize: 12, color:'#5D4E99'}}>Get ${discount.toFixed(1)} off</b>
             <br/><br/>
             <Grid container sx ={{color:'#5D4E99'}}>
                 <Grid item xs={10}> <b>Total</b></Grid>
