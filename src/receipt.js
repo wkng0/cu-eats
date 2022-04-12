@@ -18,7 +18,7 @@ function Receipt() {
     const [phone, setPhone] = React.useState('');
     const [receiptID, setReceiptID] = React.useState('');
     const [res, setRestaurant] = React.useState('');
-    const [orderItem, setItem] = React.useState(null);
+    const [orderItem, setOrderItem] = React.useState(null);
     const [point, setPoint] = React.useState(0);
     const [discount, setDiscount] = React.useState(0);
     const [subtotal, setSubtotal] = React.useState(0);
@@ -51,8 +51,9 @@ function Receipt() {
         window.location.reload();
     };
 
+    
     const handleReorder = () => {
-        localStorage.setIem('cart', orderItem);
+        localStorage.setItem('cart', JSON.stringify(orderItem));
         window.location.href = '/ShoppingCart/';
     }
 
@@ -79,7 +80,7 @@ function Receipt() {
             setPhone(data[0].phone);
             setAddress(data[0].address);
             setCutlery(data[0].cutlery)
-            setItem(JSON.parse(data[0].item));
+            setOrderItem(JSON.parse(data[0].item));
             setSubtotal(data[0].subtotal);
             setDiscount(data[0].discount);
             setPoint(data[0].point);

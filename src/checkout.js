@@ -185,12 +185,11 @@ function Checkout() {
     },[discount])
     React.useEffect(()=>{ fetchAddress();},[refresh])
     React.useEffect(()=>{
-        if(localStorage.getItem('user') != ""){
+        if (localStorage.getItem('user') != ""){
             setUser(localStorage.getItem('user'));
-            setName(localStorage.getItem('name'));
             console.log("set!",user);
         }
-        else if(fetchFinish== false){
+        if (fetchFinish== false){
         fetch('http://localhost:7000/dbAccount/getByUID/'+user)
         .then(res=>res.json())
         .then(data=>{
