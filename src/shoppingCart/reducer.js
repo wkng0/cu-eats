@@ -9,6 +9,7 @@ const reducer = (state, action) => {
         );
         return{
           ...state,
+          canteen: localStorage.getItem("cartCanteen"),
           cart: inCart? state.cart.map(item=>
             item.id === action.payload.id
             ? {...item,amount: item.amount+action.payload.quantity}
@@ -25,7 +26,8 @@ const reducer = (state, action) => {
         };
     }
     if (action.type === 'CLEAR_CART') {
-        return { ...state, cart: [] }
+        localStorage.setItem("cartCanteen","")
+        return { ...state, cart: [], canteen: ""}
     }
 
     if (action.type === 'REMOVE') {
