@@ -21,7 +21,14 @@ router.get("/", function(req, res) {
     }else res.send("hello");
 });
 
-router.get("/:code", function(req, res) {
+router.get("/verifyAccount/:code", function(req, res) {
+    verifyAccount(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
+
+router.get("/changePassword/:code", function(req, res) {
     findAccount(req,res)
     .then(console.log)
     .catch(console.error)
@@ -42,11 +49,14 @@ async function verifyAccount(req,res){
     console.log('Connected successfully to server');        
     const db = client.db(dbName);
     const collection = db.collection("Info");
-    const filteredDocs = await collection.find({ token: req.query['token'] }).toArray();
+    const filteredDocs = await collection.find({ token: req.params.code }).toArray();
     if(filteredDocs.length!=0){
-        const updateResult = await collection.updateOne({ token: req.query['token'] }, { $set: { verify: 1 } });
+        const updateResult = await collection.updateOne({ token: req.params.code }, { $set: { verify: 1} });
     }
-    res.send("Hi "+filteredDocs[0]["user_name"]+", you have verified the account!")
+    
+    res.send(filteredDocs);
+    
+    
 }
 
 

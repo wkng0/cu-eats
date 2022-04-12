@@ -2,11 +2,10 @@ import React, {useContext, useEffect} from 'react';
 import { UserContext } from "./UserContext";
 import './login.css';
 import  ReactDOM from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
 import { useParams } from 'react-router-dom';
 import{
-    Link,
     Box,
     Button,
     Container,
@@ -23,7 +22,7 @@ import{
     Snackbar,
     Alert
   } from '@mui/material';
-import { PanoramaSharp } from '@mui/icons-material';
+import { PanoramaSharp, WindowSharp } from '@mui/icons-material';
 import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
 
@@ -124,6 +123,49 @@ function CheckEmail(){
     
 }
 
+function EmailVerification(){
+    let info=[];
+    const [loadFinish, setLoadFinish]=React.useState(false)
+    let param=useParams();
+    useEffect(()=>{
+        fetch('http://localhost:7000/verify/verifyAccount/'+param.token)
+        .then((res)=>res.json())
+        .then(db=>{
+            info=db;
+            console.log(info)
+        })
+        .then(()=>{
+            if(info.length==0){
+                window.location.assign("/NotFound")
+            }else{
+                localStorage.setItem('user',info[0].uid);
+                localStorage.setItem('type',info[0].type);
+                localStorage.setItem('name', info[0].user_name); 
+                setLoadFinish(true);
+                setTimeout(()=>{
+                    window.location.assign("/")
+                },5000);
+            }
+        })
+    })
+    if(loadFinish==false)return<>please wait</>
+    else return(
+        <div id="login-password" className="login-container" >
+            <section id="passwordChanger" className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
+                <h2>Email Verification</h2>
+                <br/>
+                <h4>Welcome back, {localStorage.getItem("name")}</h4>
+                <h5>You was verified and will be redirected to homepage within 5 seconds</h5>
+                <Link to="/">Click here if no response after 5 seconds</Link>
+            </section>
+        </div>
+    )
+        
+            
+}
+    
+
+
 function ChangePassword(props){
     const [password1, setPassword1]=React.useState("");
     const [password2, setPassword2]=React.useState("");
@@ -136,7 +178,7 @@ function ChangePassword(props){
     let email;
     let param=useParams();
     useEffect(()=>{
-        fetch('http://localhost:7000/verify/'+param.pwToken)
+        fetch('http://localhost:7000/verify/changePassword/'+param.pwToken)
         .then((res)=>res.json())
         .then(db=>email=db.email)
         .then(()=>{
@@ -199,7 +241,23 @@ function ChangePassword(props){
                 "email":email,
                 "password":password1
             })  
-        }).then(()=>window.location.assign("/"))
+        }).then(()=>{
+            let para=document.createElement('h4');
+            let node= document.createTextNode('You have successfully changed the password')
+            para.appendChild(node);
+            document.getElementById("passwordChangerContent").remove()
+            document.getElementById("passwordChanger").appendChild(para);
+            para=document.createElement('h4');
+            node= document.createTextNode('You will be redirected to the login page within 5 seconds')
+            para.appendChild(node);
+            document.getElementById("passwordChanger").appendChild(para);
+            
+            setTimeout(()=>{
+                
+                window.location.assign("/login")
+
+            },5000)
+        })
     }
 
     // const reset = ()=>{
@@ -209,11 +267,11 @@ function ChangePassword(props){
     else return(
         <>
         <div id="login-password" className="login-container" >
-            <section className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
+            <section id="passwordChanger" className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
                 <h2>Change New Password</h2>
                 <br/>
-                <form className="text-secondary">
-                    <div className="mb-3">
+                <form className="text-secondary" id="passwordChangerContent">
+                    <div className="mb-3" >
                         <label for="new-comment" className="form-label">Enter your new password</label>
                         <div className="input-group">
                             <input type="password" className="form-control" value={password1} onChange={handleChange1} id="user-pw" placeholder="password" required></input>
@@ -1214,4 +1272,4 @@ class Register extends React.Component{
         );
     }
 }*/
-export {LoginPage,ChangePassword };
+export {LoginPage,ChangePassword,EmailVerification };

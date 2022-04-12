@@ -1,6 +1,6 @@
 import React , { useState, useMemo }from 'react';
 
-import { LoginPage,ChangePassword } from './login';
+import { LoginPage,ChangePassword,EmailVerification } from './login';
 import { UserComment, ContentPreview, AdminComment} from './comment';
 import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
 import Checkout from './checkout'
@@ -98,10 +98,12 @@ function App() {
             <Route path="/AddShawDishes" element={<AddDishes value={1}/>} />
             <Route path="/AddUcDishes" element={<AddDishes value={2}/>} />
             <Route path="/changePassword/:pwToken" element={<ChangePassword/>} />
+            <Route path="/emailVerify/:token" element={<EmailVerification/>}/>
             <Route path="/admin/comment/" element={<AdminComment/>}/>
             <Route path="/admin/profile" element={<AdminUser/>}/>
             <Route path="/admin/change" element={<ManagePw/>}/>
             <Route path="/admin/delete" element={<DeleteAcc/>}/>
+            <Route path="/NotFound" element={<Error/>} />
             <Route path="*" element={<Error/>} />
           </Routes>
           </DishProvider>

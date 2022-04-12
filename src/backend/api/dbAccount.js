@@ -106,7 +106,7 @@ router.post("/photo/post",upload.single("file"),function(req,res){
 });
 
 router.get("/photo/get/:id",function(req,res){
-    console.log(__dirname)
+    //console.log(__dirname)
     res.sendFile(__dirname+"/profile/photo/"+req.params.id)
 });
 
@@ -154,6 +154,7 @@ async function changePW(req,res){
     const collection = db.collection("Info");
     const updateResult = await collection.updateOne({ email: req.body["email"] }, { $set: { password: req.body["password"] } });
     console.log(updateResult)
+    res.send("ok");
 }
 
 
@@ -286,6 +287,7 @@ async function addUser(req,res){
         token:token,
         verify:0,
         uid: req.body['uid'],
+        type: "user"
     });
     let emailSender={
         name: "CUEats",
@@ -296,7 +298,7 @@ async function addUser(req,res){
         to: req.body['email'],
         
         subject:"Code Confirmation",
-        text:`Click this link to verify your account http://localhost:7000/verify?token=${token}`
+        text:`Click this link to verify your account http://localhost:3000/emailVerify/${token}`
     }
     transporter.sendMail(mailOptions,function(error,info){
         if(error){
