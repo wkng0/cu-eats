@@ -116,8 +116,6 @@ changeIcon(event){
   render(){
       return(
         <div>
-        { this.props.uid?
-        (
           <div>
               <div class="container fluid">
                   <div class="card">
@@ -190,15 +188,147 @@ changeIcon(event){
               </div>
               {/* <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} onClick={()=>this.setState({login: false})}>Sign out</Button> */}
           </div>
-          )
-          :(<div class="container fluid">
-            Login to see more? 
-            <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} href="./login">Login</Button>
-          </div>)
-        }
         </div>
       )
   }
+}
+
+let picture;
+
+function RestaurantProfile(){
+  const [edit,setEdit] = useState(true);
+  const [change,setChange] = useState(false);
+  const [email, setEmail] = useState();
+  const {user, setUser} = useContext(UserContext);
+  const [fetchFinish, setFetch] = useState(false);
+  const [pic,setPic] = useState();
+
+  const updateIcon =()=>{
+    console.log(pic);
+      fetch('http://localhost:7000/dbAccount/changePic/'+user, {
+        method: 'POST', 
+        body: new URLSearchParams({
+            "pic": picture,
+        })  
+      })
+      .then(data=>console.log(data))
+      .then(()=>{
+        setEdit(true);
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
+        window.location.reload();
+        return;
+  }
+  
+  const changeIcon= (event)=>{
+      var formData = new FormData();
+      formData.append('file', event.target.files[0]);
+      setEdit(false);
+      fetch('http://localhost:7000/dbAccount/photo/post', {
+          method: 'POST', 
+          body: formData
+      })
+      .then(response =>  response.json())
+      .then(data => {
+        console.log(data.filename);
+         setPic(data.filename);
+         return;
+      })
+      .catch((error) => {
+          console.log(error);
+      });
+  
+  }
+
+
+  useEffect(()=>{
+    if(localStorage.getItem('type')=="restaurant"){
+      setUser(localStorage.getItem('user'));
+    }
+    if(fetchFinish==false){
+    fetch('http://localhost:7000/dbAccount/getByUID/'+user)
+    .then(res=>res.json())
+    .then(data=>{
+        console.log(data[0]);
+        setEmail(data[0].email);
+        picture = data[0].pic;
+        // setPic(data[0].pic);
+        console.log(data[0].pic);
+        setFetch(true);
+    })
+    .catch(err=>{
+      console.log(err);
+      setFetch(false);
+    })
+  }
+})
+
+  if(fetchFinish==false){
+    return(
+      <h1>loading</h1>
+    );
+  }else{
+    return(
+    <Grid
+  container
+  spacing={0}
+  direction="column"
+  alignItems="center"
+  justify="center"
+ >
+   <Card sx={{width:800}}>
+   <div class="mt-5 text-center">
+    {edit&&!change? 
+      <>
+      <label htmlFor="icon-button-file" >
+      <Avatar 
+      src={'http://localhost:7000/dbAccount/photo/get/'+picture}
+      style={{
+        margin: "2px",
+        width: "200px",
+        height: "200px",
+      }} 
+    />
+         <Input accept="image/*" id="icon-button-file" name="photo" type="file" sx={{display:"none"}} onChange={changeIcon}/>
+         <IconButton color="primary" aria-label="upload picture" component="span">
+        <EditIcon/>
+        </IconButton>
+        </label></>
+        :<>
+        <label for="button">
+            <Avatar 
+          src={'http://localhost:7000/dbAccount/photo/get/'+picture}
+          style={{
+            margin: "2px",
+            width: "200px",
+            height: "200px",
+            justifyContent: "center", 
+            display: "flex" 
+          }} 
+        />
+        <IconButton style={{color: '#5D4E99'}} onClick={updateIcon}>
+          <CheckIcon/>
+          </IconButton>
+          </label>
+          </>}
+          </div>
+          <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justify="center"
+            >
+          <CardActions>
+            <FormDialog email={email}/>
+          </CardActions>
+          </Grid>
+      </Card>
+      </Grid>
+  )
+        }
 }
 
 function Address(){
@@ -1823,4 +1953,4 @@ function DeleteAcc(){
 }
 
 
-export { Profile, Account, Address, AdminUser, AddNewAddress, ManagePw, DeleteAcc};
+export { Profile, Account, Address, AdminUser, AddNewAddress, ManagePw, DeleteAcc, RestaurantProfile};

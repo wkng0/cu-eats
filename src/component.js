@@ -37,11 +37,9 @@ import Badge from '@mui/material/Badge';
 import { DishContext } from './shoppingCart/sc-context';
 import { useContext } from 'react';
 
-const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
-const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
+const pages = ['Home', 'Menu', 'Comment'];
+const pagesRoute = ['/', '/menu', '/comment'];
 
-const Gpages = ['Home', 'Menu', 'Comment'];
-const GpagesRoute = ['/', '/menu', '/comment'];
 
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
@@ -124,7 +122,7 @@ function NavBar() {
    }
 
     React.useEffect(()=>{
-      if(fetchFinish== false||(pic!=""&&type=="user")){
+      if(fetchFinish== false||(pic!=""&&type!="admin")){
         if(type== null){
           setUser(localStorage.getItem('user'));
           setType(localStorage.getItem('type'));
@@ -332,7 +330,9 @@ function NavBar() {
                         </MenuItem>                      
                         </Menu>
                     </Box>
-                           <Avatar src={pic}/>
+                    <IconButton href="/restaurant/profile">
+                    <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+                    </IconButton>
                           <IconButton onClick={logout}>
                           <LogoutIcon sx={{color:'#F4CB86'}}/>
                            </IconButton>
@@ -375,9 +375,9 @@ function NavBar() {
                             onClose={handleCloseNavMenu}
                             sx={{mt: '15px', display: { xs: 'block', md: 'none'}, zIndex: '99999 !important'}}
                         >
-                        {Gpages.map((page, index) => (
-                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={GpagesRoute[index]} style={{color: '#5D4E99'}}>
-                                <Link to={GpagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
+                        {pages.map((page, index) => (
+                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={pagesRoute[index]} style={{color: '#5D4E99'}}>
+                                <Link to={pagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
                             </MenuItem>
                         ))}
                         </Menu>
@@ -386,8 +386,8 @@ function NavBar() {
                         <img src={logo_yellow} width="auto" height="30" alt=""></img> CU EATS
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {Gpages.map((page, index) => (
-                        <Link to={GpagesRoute[index]} style={{textDecoration: 'none'}}>
+                        {pages.map((page, index) => (
+                        <Link to={pagesRoute[index]} style={{textDecoration: 'none'}}>
                         <Button
                             key={page}
                             onClick={handleCloseNavMenu}

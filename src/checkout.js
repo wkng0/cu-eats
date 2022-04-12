@@ -151,6 +151,7 @@ function Checkout() {
                         name="radio-buttons-group"
                         color="secondary"
                         onChange={handleAddress}
+                        value={address}
                     >
                         {savedAddress.map((address)=>(
                             <FormControlLabel value={address} control={<RadioIcon/>} label={address} />
