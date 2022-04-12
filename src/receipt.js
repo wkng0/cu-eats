@@ -45,7 +45,6 @@ function Receipt() {
                 "rid": irid,
             })  
         })
-        //.then(data=>console.log(data))
         .then(()=>{setStatus(2);})
         .catch((error)=>{console.log(error);})
         window.location.reload();
@@ -58,7 +57,6 @@ function Receipt() {
                 "rid": irid,
             })  
         })
-        //.then(data=>console.log(data))
         .then(()=>{setStatus(1);})
         .catch((error)=>{console.log(error);})
         window.location.reload();
@@ -66,6 +64,16 @@ function Receipt() {
 
     
     const handleReorder = () => {
+        {/*
+        if(canteen!=props.canteen && canteen!=""){
+            handleClickOtherCanteen();
+        }else if(quantity!=0){
+            localStorage.setItem("cartCanteen",props.canteen);
+            handleClickOk();
+            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
+        }else{
+            handleClick();
+        }*/}
         localStorage.setItem('cart', JSON.stringify(orderItem));
         window.location.href = '/ShoppingCart/';
     }
@@ -225,15 +233,6 @@ function Receipt() {
                 <Grid item xs={2} sx={{textAlign:'right'}}> <b>${(total).toFixed(1)}</b></Grid>
             </Grid><br/><br/>
             {showButton()}
-            {/*  
-            <Button fullWidth
-                size="large" 
-                onDoubleClick={handleTaken}
-                sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
-            >
-                Double click to confirm order delivered
-            </Button>
-            */}
             <></>
             <br/><br/>
         </Table>
@@ -364,7 +363,11 @@ function Records() {
             </div>
             <div style={{width:'60%', margin:'auto'}}>
                 <h3 style={{color: '#5D4E99'}}>Shopping Records</h3>
-                <div style={{display: records == null? 'none':'block'}}>
+                {console.log(records)}
+                <div style={{display: records.length? 'none':'block'}}>
+                    <br/><br/><h4 style={{textAlign:'center', color: '#707070'}}>No records found</h4>
+                </div>
+                <div style={{display: records.length? 'block':'none'}}>
                     {records.map((receipt)=>(
                         <>
                         <Card
@@ -461,7 +464,6 @@ function Dashboard() {
                     </Table>
                     </TableContainer><br/><br/>
                 </div>
-
             </div>
             </>
     )}
