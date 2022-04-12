@@ -53,6 +53,13 @@ router.post("/user",async function(req,res){
     await updatePoint(req);
 })
 
+router.post("/updateDeliver/:rid",function(req,res){
+    updateDeliver()
+    //.then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
 router.post("/updateStatus/:rid",function(req,res){
     updateStatus()
     //.then(console.log)
@@ -96,7 +103,7 @@ async function submitOrder(req,res,receiptID){
         point: parseInt(req.body['point']),
         pointEarn: parseInt(req.body['pointEarn']),
         pointRemain: parseInt(req.body['pointRemain']),
-        status: false,
+        status: 0,
         timestamp: parseInt(req.body['timestamp'])
     });
     res.send("Order submitted");
@@ -117,6 +124,14 @@ async function updatePoint(req){
     return insertResult;
 }
 
+async function updateDeliver(){
+    await client.connect();
+    console.log('Connected successfully to server Receipt');
+    const db = client.db(dbName);
+    const collection = db.collection("Receipt");
+    await collection.updateOne( {"rid":rid}, { $set: { status: 1 }} );
+}
+
 async function updateStatus(){
     await client.connect();
     console.log('Connected successfully to server Receipt');
@@ -125,7 +140,7 @@ async function updateStatus(){
     await collection.updateOne(
         {"rid":rid},
         {
-            $set: { status: true },
+            $set: { status: 2 },
             $unset: {name:"", phone:"", address:""}
         }
     );
