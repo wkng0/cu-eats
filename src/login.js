@@ -1,11 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { UserContext } from "./UserContext";
 import './login.css';
 import  ReactDOM from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
+import { useParams } from 'react-router-dom';
 import{
-    Link,
     Box,
     Button,
     Container,
@@ -18,8 +18,11 @@ import{
     FormHelperText,
     NativeSelect,
     MenuItem,
-    IconButton
+    IconButton,
+    Snackbar,
+    Alert
   } from '@mui/material';
+import { PanoramaSharp, WindowSharp } from '@mui/icons-material';
 import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
 
@@ -119,6 +122,182 @@ function CheckEmail(){
     );
     
 }
+
+function EmailVerification(){
+    let info=[];
+    const [loadFinish, setLoadFinish]=React.useState(false)
+    let param=useParams();
+    useEffect(()=>{
+        fetch('http://localhost:7000/verify/verifyAccount/'+param.token)
+        .then((res)=>res.json())
+        .then(db=>{
+            info=db;
+            console.log(info)
+        })
+        .then(()=>{
+            if(info.length==0){
+                window.location.assign("/NotFound")
+            }else{
+                localStorage.setItem('user',info[0].uid);
+                localStorage.setItem('type',info[0].type);
+                localStorage.setItem('name', info[0].user_name); 
+                setLoadFinish(true);
+                setTimeout(()=>{
+                    window.location.assign("/")
+                },5000);
+            }
+        })
+    })
+    if(loadFinish==false)return<>please wait</>
+    else return(
+        <div id="login-password" className="login-container" >
+            <section id="passwordChanger" className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
+                <h2>Email Verification</h2>
+                <br/>
+                <h4>Welcome back, {localStorage.getItem("name")}</h4>
+                <h5>You was verified and will be redirected to homepage within 5 seconds</h5>
+                <Link to="/">Click here if no response after 5 seconds</Link>
+            </section>
+        </div>
+    )
+        
+            
+}
+    
+
+
+function ChangePassword(props){
+    const [password1, setPassword1]=React.useState("");
+    const [password2, setPassword2]=React.useState("");
+    const [iconA, setIconA]=React.useState("none");
+    const [iconB, setIconB]=React.useState("block");
+    const [iconC, setIconC]=React.useState("none");
+    const [iconD, setIconD]=React.useState("block");
+    const [loadFinish, setLoadFinish]=React.useState("false")
+    // const {user, setUser} = useContext(UserContext);
+    let email;
+    let param=useParams();
+    useEffect(()=>{
+        fetch('http://localhost:7000/verify/changePassword/'+param.pwToken)
+        .then((res)=>res.json())
+        .then(db=>email=db.email)
+        .then(()=>{
+            console.log(email);
+            setTimeout(setLoadFinish(true),2000);
+        })
+    })
+    
+
+    const handleChange1=(event)=>{
+        setPassword1(event.target.value);
+    }
+    const handleChange2=(event)=>{
+        setPassword2(event.target.value);
+    }
+    const viewPassword1=(event)=>{
+        let passwordInput = document.getElementById('user-pw');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordInput.setAttribute('aria-label',
+              'Hide password.');
+              console.log("hi");
+              setIconA("block");
+              setIconB("none");
+            
+            
+          } else {
+              passwordInput.type = 'password';
+              passwordInput.setAttribute('aria-label',
+              'Show password as plain text. ' +
+              'Warning: this will display your password on the screen.');
+              setIconA("none");
+              setIconB("block");
+          }
+    }
+    const viewPassword2=(event)=>{
+        let passwordInput = document.getElementById('user-pw');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordInput.setAttribute('aria-label',
+              'Hide password.');
+              console.log("hi");
+              setIconC("block");
+              setIconD("none");
+            
+            
+          } else {
+              passwordInput.type = 'password';
+              passwordInput.setAttribute('aria-label',
+              'Show password as plain text. ' +
+              'Warning: this will display your password on the screen.');
+              setIconC("none");
+              setIconD("block");
+          }
+    }
+    const submit=()=>{
+        fetch('http://localhost:7000/dbAccount/changePW/',{
+            method: 'POST', 
+            body: new URLSearchParams({
+                "email":email,
+                "password":password1
+            })  
+        }).then(()=>{
+            let para=document.createElement('h4');
+            let node= document.createTextNode('You have successfully changed the password')
+            para.appendChild(node);
+            document.getElementById("passwordChangerContent").remove()
+            document.getElementById("passwordChanger").appendChild(para);
+            para=document.createElement('h4');
+            node= document.createTextNode('You will be redirected to the login page within 5 seconds')
+            para.appendChild(node);
+            document.getElementById("passwordChanger").appendChild(para);
+            
+            setTimeout(()=>{
+                
+                window.location.assign("/login")
+
+            },5000)
+        })
+    }
+
+    // const reset = ()=>{
+
+    // }
+    if(loadFinish==false)return <>please wait</>
+    else return(
+        <>
+        <div id="login-password" className="login-container" >
+            <section id="passwordChanger" className="shadow-lg bg-white border border-4 rounded p-2 p-lg-4" style={{borderColor: "#5D4E99 !important"}}> 
+                <h2>Change New Password</h2>
+                <br/>
+                <form className="text-secondary" id="passwordChangerContent">
+                    <div className="mb-3" >
+                        <label for="new-comment" className="form-label">Enter your new password</label>
+                        <div className="input-group">
+                            <input type="password" className="form-control" value={password1} onChange={handleChange1} id="user-pw" placeholder="password" required></input>
+                            <button type="button" className="btn btn-secondary" onClick={viewPassword1}>
+                                <i className="bi bi-eye-slash-fill icon" style={{display: iconB }}></i>
+                                <i className="bi bi-eye-fill icon" style={{display: iconA }}></i>
+                            </button>
+                        </div>
+                        <label for="new-comment" className="form-label">Enter your new password again</label>
+                        <div className="input-group">
+                            <input type="password" className="form-control" value={password2} onChange={handleChange2} id="user-pw" placeholder="password" required></input>
+                            <button type="button" className="btn btn-secondary" onClick={viewPassword2}>
+                                <i className="bi bi-eye-slash-fill icon" style={{display: iconD }}></i>
+                                <i className="bi bi-eye-fill icon" style={{display: iconC }}></i>
+                            </button>
+                        </div>
+                    </div>
+                    <br/>
+                    <button type="button" className="btn text-white" onClick={submit} style={{backgroundColor: "#5D4E99"}} >Submit</button>
+                </form>
+            </section>
+        </div>
+
+        </>
+    );
+}
 /*
 class CheckEmail extends React.Component{
     constructor(){
@@ -212,6 +391,7 @@ function LoginWithPassword(props){
     const [type, setType] = React.useState(null);
     const [target,setTarget] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
+    const [open, setOpen]=React.useState(false);
     // const {user, setUser} = useContext(UserContext);
     const handleChange=(event)=>{
         setPassword(event.target.value);
@@ -241,11 +421,30 @@ function LoginWithPassword(props){
         if(password===target){
             localStorage.setItem('user',uid);
             localStorage.setItem('type',type);
-            localStorage.setItem('name', name);                 
+            localStorage.setItem('name', name);                  
             window.location.assign("/");
         }
         return;
 
+    }
+    const forgetPassword=()=>{
+        fetch('http://localhost:7000/dbAccount/reqChangePW/',{
+            method: 'POST', 
+            body: new URLSearchParams({
+                "email":email,
+            })  
+        }).then(
+            ()=>setOpen(true)
+        )
+        
+    }
+
+    const handleClose=(event, reason)=>{
+        if (reason === 'clickaway') {
+            return;
+          }
+      
+          setOpen(false);
     }
 
     // const reset = ()=>{
@@ -294,8 +493,12 @@ function LoginWithPassword(props){
                     <br/>
                 
                     <button type="button" className="btn text-white" style={{backgroundColor: "#5D4E99"}} onClick={login} >Log in</button>
-                    <small className="float-end"><a style={{color: "#F4CB86"}}>Forgot your password?</a></small>
-            
+                    <small className="float-end"><Button style={{color: "#F4CB86"}} onClick={forgetPassword}>Forgot your password?</Button></small>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+                            An email has been sent to your mailbox
+                        </Alert>
+                    </Snackbar>
                 </form>
             </section>
         </div>
@@ -600,6 +803,13 @@ function Register(props){
             console.log("something empty");
             check = false;
         }
+
+        let pwRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z])))(?=.{4,})");
+        if(pwRegex.test(pw1)===false || pw1===""){
+            alert("Invalid Password\nValid Password: Minimum Password Length: 4, At Least 1 Capital Letter, At Least 1 Small Letter");
+            console.log("Password Problem");
+        }
+        
         if(pw1!=pw2){
             console.log("different password");
             window.alert("Different passwords. Please check again");
@@ -1069,4 +1279,4 @@ class Register extends React.Component{
         );
     }
 }*/
-export {LoginPage };
+export {LoginPage,ChangePassword,EmailVerification };

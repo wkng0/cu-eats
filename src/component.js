@@ -55,7 +55,7 @@ function NavBar() {
     const [name, setName] = React.useState(null);
     const [pic, setPic] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
-    const { cart, total, clearCart } = useContext(DishContext);
+    const { cart, amount} = useContext(DishContext);
     
 
     const handleOpenNavMenu = (event) => {
@@ -206,7 +206,7 @@ function NavBar() {
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
 
                             <IconButton aria-label="cart">
-                              <Badge badgeContent={cart.length} color="secondary">
+                              <Badge badgeContent={amount} color="secondary">
                                 <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
                               </Badge>
                             </IconButton>
@@ -301,7 +301,7 @@ function NavBar() {
                             Comment
                         </Button>
                         </Link>
-                        <Link to='/' style={{textDecoration: 'none'}}>
+                        <Link to='/dashboard' style={{textDecoration: 'none'}}>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{ my: 2, color: '#F4CB86', display: 'block', ':hover': {color: 'white'}}}
@@ -404,7 +404,7 @@ function NavBar() {
                         <Tooltip title="Shopping Cart">
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
                             <IconButton aria-label="cart">
-                              <Badge badgeContent={cart.length} color="secondary">
+                              <Badge badgeContent={amount} color="secondary">
                                 <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
                               </Badge>
                             </IconButton>

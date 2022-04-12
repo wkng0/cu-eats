@@ -65,7 +65,7 @@ async function getReceiptId(req){
     console.log('Connected successfully to server');
     const db = client.db(dbName);
     const collection = db.collection("Receipt");
-    let result = await collection.find({rName: req.body['rid']}).sort({id: -1}).toArray();
+    let result = await collection.find({rName: req.body['res']}).sort({id: -1}).toArray();
     if (result[0] == null) return "#0001"
     else {
         let lastID = result[0].id;
