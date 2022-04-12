@@ -97,6 +97,7 @@ function NewShowDishes(props){
     const {addToCart} = useContext(DishContext);
     const [price,setPrice]=useState(0);
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2]=React.useState(false);
     let variantList=[];
     let menu=props.menu
     const tag=menu.tag;
@@ -137,9 +138,22 @@ function NewShowDishes(props){
     
         setOpen(false);
     };
+    const handleClose2 = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen2(false);
+    };
     const handleClick = () => {
+        setOpen2(false);
         setOpen(true);
     };
+    const handleClickOk = () => {
+        setOpen(false);
+        setOpen2(true);
+    };
+
 
 
     return(
@@ -202,6 +216,7 @@ function NewShowDishes(props){
                         onClick={()=>{
                             if(quantity!=0){
                                 localStorage.setItem("cartCanteen",props.canteen);
+                                handleClickOk();
                                 addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
                             }else{
                                 handleClick();
@@ -214,6 +229,11 @@ function NewShowDishes(props){
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                             Please choose at least one item into the cart!
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={open2} autoHideDuration={6000} onClose={handleClose2}>
+                        <Alert onClose={handleClose2} severity="success" sx={{ width: '100%' }}>
+                            Item added to cart
                         </Alert>
                     </Snackbar>
 
