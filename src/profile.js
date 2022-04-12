@@ -11,7 +11,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
 import{ Divider, Box, Button, Card, CardActionArea,CardActions, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, 
-  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar } from '@mui/material';
+  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar, Typography, CardContent} from '@mui/material';
 
 let userInfo = [];
 
@@ -1529,7 +1529,12 @@ if(!mounted){
     >
     <Grid item xs={6}>
           <Card sx={{width: 500, m:3}}>
-            <h5>Change Point</h5>
+            <CardContent>
+              <Typography variant="h5" component="div">
+                Change Point
+              </Typography>
+            </CardContent>
+            
             <CardActionArea>
               <TextField
                 id="standard-required"
@@ -1556,7 +1561,11 @@ if(!mounted){
         </Grid>
       <Grid item xs={6}>
           <Card sx={{width: 500, m:3, l:10}}>
-            <h5>Check Profile</h5>
+          <CardContent>
+              <Typography variant="h5" component="div">
+                Check Profile
+              </Typography>
+            </CardContent>
             <CardActionArea>
             <TextField
             id="standard-required"
@@ -1642,7 +1651,11 @@ const changePw = ()=>{
   {/* <Grid> */}
   {/* <Box sx={{m: 2, display: 'inline'}}> */}
     <Card sx={{width: 500, m:3}}>
-    <h1>Password Generator</h1>
+    <CardContent>
+      <Typography variant="h5" component="div">
+        Password Generator
+      </Typography>
+    </CardContent>
     <TextField
       id="standard-read-only-input"
       label="Generate password"
@@ -1660,7 +1673,12 @@ const changePw = ()=>{
   {/* </Grid> */}
   {/* <br></br> */}
   <Card sx={{width: 500, m:3}}>
-    <h1>Change Password</h1>
+    <CardContent>
+      <Typography variant="h5" component="div">
+        Change Password
+      </Typography>
+    </CardContent>
+   
     <TextField
       id="standard-required"
       label="email"
@@ -1770,7 +1788,11 @@ function DeleteAcc(){
       return(
         <>
         <Card sx={{width: 500, m:3}}>
-          <h1>Delete Account</h1>
+        <CardContent>
+          <Typography variant="h5" component="div">
+            Delete Account
+          </Typography>
+        </CardContent>
           <TextField
             id="standard-required"
             label="email"

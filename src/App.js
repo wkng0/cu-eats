@@ -29,7 +29,6 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import Error from "./error";
 const theme = createTheme({
   components: {
-
     MuiDataGrid:{
       styleOverrides:{
         menuIconButton:{
@@ -37,7 +36,10 @@ const theme = createTheme({
         },
         menu:{
           zIndex:9999,
-        }
+        },
+        columnHeader:{
+          zIndex:9999,
+        },
       }
     },
     MuiTooltip: {
