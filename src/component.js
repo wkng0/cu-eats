@@ -40,8 +40,6 @@ import { useContext } from 'react';
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
 const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
 
-const guestPages = ['Home', 'Menu', 'Comment'];
-const guestPagesRoute = ['/', '/menu', '/comment'];
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
 
@@ -55,7 +53,7 @@ function NavBar() {
     const [name, setName] = React.useState(null);
     const [pic, setPic] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
-    const { cart, amount} = useContext(DishContext);
+    const { cart, total, clearCart } = useContext(DishContext);
     
 
     const handleOpenNavMenu = (event) => {
@@ -87,7 +85,7 @@ function NavBar() {
 
     const logout = () =>{
       localStorage.setItem('user',"");
-      localStorage.setItem('name',"");
+      localStorage.setItem('name',"")
       localStorage.setItem('type',"guest");
       window.location.assign("/");
     }
@@ -206,7 +204,7 @@ function NavBar() {
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
 
                             <IconButton aria-label="cart">
-                              <Badge badgeContent={amount} color="secondary">
+                              <Badge badgeContent={cart.length} color="secondary">
                                 <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
                               </Badge>
                             </IconButton>
@@ -301,7 +299,7 @@ function NavBar() {
                             Comment
                         </Button>
                         </Link>
-                        <Link to='/dashboard' style={{textDecoration: 'none'}}>
+                        <Link to='/' style={{textDecoration: 'none'}}>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{ my: 2, color: '#F4CB86', display: 'block', ':hover': {color: 'white'}}}
@@ -374,9 +372,9 @@ function NavBar() {
                             onClose={handleCloseNavMenu}
                             sx={{mt: '15px', display: { xs: 'block', md: 'none'}, zIndex: '99999 !important'}}
                         >
-                        {guestPages.map((page, index) => (
-                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={guestPagesRoute[index]} style={{color: '#5D4E99'}}>
-                                <Link to={guestPagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
+                        {pages.map((page, index) => (
+                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={pagesRoute[index]} style={{color: '#5D4E99'}}>
+                                <Link to={pagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
                             </MenuItem>
                         ))}
                         </Menu>
@@ -386,7 +384,7 @@ function NavBar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page, index) => (
-                        <Link to={guestPagesRoute[index]} style={{textDecoration: 'none'}}>
+                        <Link to={pagesRoute[index]} style={{textDecoration: 'none'}}>
                         <Button
                             key={page}
                             onClick={handleCloseNavMenu}
@@ -404,7 +402,7 @@ function NavBar() {
                         <Tooltip title="Shopping Cart">
                         <Link to='/ShoppingCart' style={{color:"#F4CB86"}}>
                             <IconButton aria-label="cart">
-                              <Badge badgeContent={amount} color="secondary">
+                              <Badge badgeContent={cart.length} color="secondary">
                                 <ShoppingCartIcon sx={{color: '#F4CB86'}}/>
                               </Badge>
                             </IconButton>
