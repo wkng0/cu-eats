@@ -291,9 +291,11 @@ function Records() {
     const navigate = useNavigate();
 
     React.useEffect(()=>{
-        if(localStorage.getItem('user') != ""){
+        if(localStorage.getItem('type') =="user"){
             setUser(localStorage.getItem('user'));
             console.log("set!",user);
+        }else if(localStorage.getItem('type')=="admin"){
+            setUser(localStorage.getItem('check'))
         }
         fetch('http://localhost:7000/dbReceipt/getRecords/'+user)
         .then(res=>res.json())

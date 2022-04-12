@@ -147,6 +147,23 @@ router.post("/changePW",function(req,res){
     .finally(() => client.close());
 })
 
+router.post("/editPoint",function(req,res){
+    editPoint(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+})
+
+async function editPoint(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    const updateResult = await collection.updateOne({ uid: req.body["uid"] }, { $set: { point: req.body["newpoint"] } });
+    console.log(updateResult)
+    res.send("ok");
+}
+
 async function changePW(req,res){
     await client.connect();
     console.log('Connected successfully to server');

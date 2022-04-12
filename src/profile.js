@@ -10,7 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
-import{ Divider, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
+import{ Divider, Box, Button, Card, CardActionArea,CardActions, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, 
   InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar } from '@mui/material';
 
 let userInfo = [];
@@ -24,9 +24,11 @@ function Profile(){
   const[fetchFinish, setFetch] = useState(false);
 
   useEffect(()=>{
-    if(localStorage.getItem('user') != ""){
+    if(localStorage.getItem('type') == "user"){
       setUser(localStorage.getItem('user'));
       console.log("set!",user);
+  }else if(localStorage.getItem('type')=="admin"){
+      setUser(localStorage.getItem('check'));
   }
     if(fetchFinish== false){
     fetch('http://localhost:7000/dbAccount/getByUID/'+user)
@@ -220,9 +222,11 @@ function Address(){
   }
 
   useEffect(()=>{
-    if(localStorage.getItem('user') != undefined){
+    if(localStorage.getItem('type') == "user"){
       setUser(localStorage.getItem('user'));
       console.log("set!",user);
+  }else if(localStorage.getItem('type')=="admin"){
+      setUser(localStorage.getItem('check'));
   }
     if(fetchFinish == false){
     fetch('http://localhost:7000/dbAccount/getAddress/'+user)
@@ -1447,42 +1451,41 @@ const columns = [
     sortable: true
   },
 ];
-// update pw
-const deleteUser = ()=>{
-
-fetch('http://localhost:7000/dbAccount/delete',{ 
-      method: 'POST', 
-      body: new URLSearchParams({
-          "email": email
-      })
-    })
-    .then(console.log("change"))
-    .catch(err=>console.log(err))
-    window.location.reload();
-  }
-
-const changePw = ()=>{
-    fetch('http://localhost:7000/dbAccount/updatePw/'+ email, { 
-      method: 'POST', 
-      body: new URLSearchParams({
-          "password": pw
-      })
-    })
-    .then(console.log("delete"))
-    .catch(err=>console.log(err))  
-    window.location.reload();
-    return;
-  }
 
 const [userinfo,setInfo] = useState();
 const [mounted, setMounted] = useState(false);
-const [email, setEmail] = useState('');
-const [pw, setPw] = useState('');
-const handleChangeEmail = (event)=>{
-  setEmail(event.target.value);
+const [uid, setuid] = useState('');
+const [point, setPoint] = useState('');
+const [check, setCheck] = useState(false);
+const handleChangeuid = (event)=>{
+  setuid(event.target.value);
 }
-const handleChangePassword = (event)=>{
-  setPw(event.target.value);
+const handleChangePoint = (event)=>{
+  setPoint(event.target.value);
+}
+
+const editPoint = ()=>{
+  fetch('http://localhost:7000/dbAccount/editPoint', { 
+    method: 'POST', 
+    body: new URLSearchParams({
+        "uid": uid,
+        "newpoint": point,
+    })
+  })
+  .then(console.log("point update"))
+  .catch(err=>console.log(err))  
+  window.location.reload();
+  return;
+}
+
+const checkProfile = () =>{
+  localStorage.setItem('check',uid);
+  setCheck(true);
+}
+const uncheckProfile = () =>{
+  localStorage.setItem('check',"");
+  setuid("");
+  setCheck(false);
 }
 if(!mounted){
   
@@ -1523,22 +1526,56 @@ if(!mounted){
         }}}
       />
     </div>
-    <Box sx={{m: 2, display: 'inline'}}>
-    <TextField
-      id="standard-required"
-      label="email"
-      variant="standard"
-      onChange={handleChangeEmail}
-    />
-    <TextField
-      id="standard-required"
-      label="password"
-      variant="standard"
-      onChange={handleChangePassword}
-    />
-    </Box>
-    <Button onClick={deleteUser}>delete</Button>
-    <Button onClick={changePw}>update</Button>
+    <Grid
+      container
+      spacing={2}
+    >
+    <Grid item xs={6}>
+          <Card sx={{width: 500, m:3}}>
+            <h5>Change Point</h5>
+            <CardActionArea>
+              <TextField
+                id="standard-required"
+                label="UID"
+                sx ={{m:3, x:5}}
+                variant="standard"
+                onChange={handleChangeuid}
+              />
+              <TextField
+                id="standard-required"
+                label="Update Point"
+                value={point}
+                sx ={{m:3, x:5}}
+                variant="standard"
+                onChange={handleChangePoint}
+              />
+          </CardActionArea>
+          <CardActions>
+            <Button onClick={editPoint} sx={{float: 'right'}}>
+              Edit Point
+            </Button>
+          </CardActions>
+          </Card>
+        </Grid>
+      <Grid item xs={6}>
+          <Card sx={{width: 500, m:3, l:10}}>
+            <h5>Check Profile</h5>
+            <CardActionArea>
+            <TextField
+            id="standard-required"
+            label="UID"
+            sx ={{m:3, x:5}}
+            variant="standard"
+            onChange={handleChangeuid}
+          />
+          </CardActionArea>
+          <CardActions>
+            {check==true?<Button onClick={uncheckProfile} sx={{float: 'right'}}>Close</Button>:<Button onClick={checkProfile}>Open</Button>}
+            </CardActions>
+          </Card>
+        </Grid>
+      </Grid>
+      {check?<Profile/>:<></>}
     </>
   );
 }

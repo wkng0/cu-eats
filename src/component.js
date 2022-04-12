@@ -302,7 +302,7 @@ function NavBar() {
                             Comment
                         </Button>
                         </Link>
-                        <Link to='/' style={{textDecoration: 'none'}}>
+                        <Link to='/dashboard' style={{textDecoration: 'none'}}>
                         <Button
                             onClick={handleCloseNavMenu}
                             sx={{ my: 2, color: '#F4CB86', display: 'block', ':hover': {color: 'white'}}}
@@ -460,6 +460,10 @@ const data = [
                 pb: open ? 2 : 0,
               }}
             >
+              <ListItem>
+              <ListItemIcon sx={{color:"white"}}>
+              <AccountCircleIcon/>
+            </ListItemIcon>
               <ListItemButton
                 alignItems="flex-start"
                 onClick={() => setOpen(!open)}
@@ -470,9 +474,6 @@ const data = [
                   '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
                 }}
               >
-                <ListItemIcon sx={{color:"white"}}>
-              <AccountCircleIcon/>
-                </ListItemIcon>
                 <ListItemText
                   primary="Profile"
                   primaryTypographyProps={{
@@ -500,6 +501,7 @@ const data = [
                   }}
                 />
               </ListItemButton>
+              </ListItem>
               {open &&
                 data.map((item) => (
                   <ListItemButton
