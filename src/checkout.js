@@ -1,4 +1,3 @@
-import Cart from './cart.json'
 import React,{useContext, useEffect} from 'react'
 import { DishContext } from './shoppingCart/sc-context';
 
@@ -10,21 +9,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { v4 as uuid } from 'uuid';
-import { styled } from '@mui/material/styles';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import Grid from '@mui/material/Grid';
-import Table from '@mui/material/Table';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
+import { styled, FormGroup, FormControlLabel, Switch, Grid, Table, Divider, Box, Radio, RadioGroup, 
+        FormControl, TextField, Button, IconButton, Menu } from '@mui/material/';
 import { Link } from "react-router-dom";
 
 const CutlerySwitch = styled(Switch)(({ theme }) => ({
@@ -88,7 +74,6 @@ function Checkout() {
     const [fetchFinish, setFetch] = React.useState(false);
     const [refresh, setRefresh] = React.useState(false);
     const [savedAddress,setdbAddress] = React.useState([]);
-    const [userEmail,setUserEmail] = React.useState('0.0@link.cuhk.edu.hk');
     const [anchorElNew, setAnchorElNew] = React.useState(null);
     const [phoneText, setText] = React.useState('');
     const [pointText, setpText] = React.useState('Get $0.0 off');
@@ -147,7 +132,6 @@ function Checkout() {
         else {
             if (savedAddress[0] == null) return (<p>No address record has been inserted.</p>);
             else {
-                //setAddress(savedAddress[0]);
                 return(
                     <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
@@ -223,21 +207,6 @@ function Checkout() {
         <h3 style={{color: '#5D4E99'}}>Your Order</h3>
         <br/>
         <Table style={{width:'80%', margin:'auto', maxWidth:650}} aria-label="spanning table" padding='normal'>
-            {/* {CartItem.map((item) => (
-                total += item.amount * item.price,
-                <>
-                <Grid container sx ={{color: '#707070'}}>
-                    <Grid item xs={1} sx={{color: '#5D4E99'}}><b>{item.amount}</b></Grid>
-                    <Grid item xs={9}>x &nbsp;{item.title}</Grid>
-                    <Grid item xs={1} sx={{textAlign:'right'}}>$</Grid>
-                    <Grid item xs={1} sx={{textAlign:'right'}}>{(item.amount * item.price).toFixed(1)}</Grid>
-                </Grid>
-                <Grid container sx ={{color: '#707070'}}>
-                    <Grid item xs={1} />
-                    <Grid item xs={11}><pre>{item.description && '   - '}{item.description}</pre></Grid>
-                </Grid>
-                </>
-            ))} */}
             {cart.map((item) => {
                 return <CartItem key={item.id} {...item} />
                 })}
@@ -271,15 +240,6 @@ function Checkout() {
                         />
                     </Grid>
                 </Grid>
-                {/*
-                <TextField fullWidth required
-                    label="Email"
-                    id="fullWidth"
-                    color="secondary"
-                    value={email}
-                    onChange={handleChangeEmail}
-                />
-                */}
             </Box><br/>
             <br/><Divider /><br/>
             <Box>
@@ -320,8 +280,8 @@ function Checkout() {
                     >
                         <CloseIcon/>
                     </IconButton>
-                    <div  style={{width:'90%', margin:'auto'}}>
-                        <AddNewAddress email={userEmail}/><br/><br/>
+                    <div style={{width:'90%', margin:'auto'}}>
+                        <AddNewAddress email={user}/><br/><br/>
                     </div>
                 </Menu>
                 <FormControl>
