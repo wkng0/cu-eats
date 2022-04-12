@@ -160,7 +160,7 @@ function NewShowDishes(props){
         if (reason === 'clickaway') {
           return;
         }
-        setOpen3(false);
+        setOpen4(false);
     };
 
     const handleClick = () => {
