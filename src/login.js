@@ -807,6 +807,7 @@ function Register(props){
         let pwRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z])))(?=.{4,})");
         if(pwRegex.test(pw1)===false || pw1===""){
             alert("Invalid Password\nValid Password: Minimum Password Length: 4, At Least 1 Capital Letter, At Least 1 Small Letter");
+            check = false;
             console.log("Password Problem");
         }
         
