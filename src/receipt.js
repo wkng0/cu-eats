@@ -2,11 +2,10 @@ import * as React from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './UserContext';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Grid, Table, Divider, Button, Card } from '@mui/material';
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Divider, Button, Card } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { DataGrid } from '@mui/x-data-grid';
 
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
 
 const formatDate = (dateString) => {
     const options = { year: 'numeric', month: '2-digit',day: '2-digit' ,hour: '2-digit', minute: '2-digit'}
@@ -19,7 +18,7 @@ function Receipt() {
     const [phone, setPhone] = React.useState('');
     const [receiptID, setReceiptID] = React.useState('');
     const [res, setRestaurant] = React.useState('');
-    const [orderItem, setItem] = React.useState(null);
+    const [orderItem, setOrderItem] = React.useState(null);
     const [point, setPoint] = React.useState(0);
     const [discount, setDiscount] = React.useState(0);
     const [subtotal, setSubtotal] = React.useState(0);
@@ -38,6 +37,7 @@ function Receipt() {
         const options = { hour: '2-digit', minute: '2-digit'}
         return new Intl.DateTimeFormat('en-US', options).format(dateString);
     }
+
     const handleTaken = () => {
         fetch('http://localhost:7000/dbReceipt/updateStatus/'+irid, {
             method: 'POST', 
@@ -50,6 +50,12 @@ function Receipt() {
         .catch((error)=>{console.log(error);})
         window.location.reload();
     };
+
+    
+    const handleReorder = () => {
+        localStorage.setItem('cart', JSON.stringify(orderItem));
+        window.location.href = '/ShoppingCart/';
+    }
 
     const handleCutlery = () => {
         if (cutlery === 'true') {
@@ -74,7 +80,7 @@ function Receipt() {
             setPhone(data[0].phone);
             setAddress(data[0].address);
             setCutlery(data[0].cutlery)
-            setItem(JSON.parse(data[0].item));
+            setOrderItem(JSON.parse(data[0].item));
             setSubtotal(data[0].subtotal);
             setDiscount(data[0].discount);
             setPoint(data[0].point);
@@ -95,7 +101,7 @@ function Receipt() {
     if (status == false) {
     return (
         <>
-        <div style={{width:'80%', margin:'auto'}}>
+        <div style={{width:'80%', margin:'auto', display: type=='user'? 'block':'none'}}>
             <Button 
               size="small" 
               href="/menu"
@@ -104,6 +110,15 @@ function Receipt() {
             <ArrowBackIosIcon/>Continue Shopping
             </Button>
         </div>
+        <div style={{width:'80%', margin:'auto', display: type=='user'? 'none':'block'}}>
+                <Button 
+                    size="small" 
+                    onClick={()=>navigate(-1)}
+                    sx={{bgcolor: "transparent", color: '#5D4E99', ':hover': {bgcolor:'transparent', color: '#5D4E99'}}}
+                >
+                <ArrowBackIosIcon/>
+                </Button>
+            </div>
         <br/>
         <h3 style={{color: '#5D4E99'}}>Receipt <span style={{color: '#FFC107'}}>{receiptID}</span></h3><br/>
         <div style={{textAlign: 'center'}}>
@@ -209,7 +224,7 @@ function Receipt() {
                     </Grid>
                     <Grid container sx ={{color: '#707070'}}>
                         <Grid item xs={1} />
-                        <Grid item xs={11}><pre>{item.description && '   - '}{item.description}</pre></Grid>
+                        <Grid item xs={11}><pre>   - {item.variant}</pre></Grid>
                     </Grid>
                     </>
                 ))}
@@ -252,16 +267,16 @@ function Receipt() {
                     <Grid item xs={10}> <b>Total</b></Grid>
                     <Grid item xs={2} sx={{textAlign:'right'}}> <b>${(total).toFixed(1)}</b></Grid>
                 </Grid><br/><br/>
-                {/*
-                <Button fullWidth
-                    size="large" 
-                    href='/ShoppingCart'
-                    //onClick={handleReorder}
-                    sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
-                >
-                    Reorder items
-                </Button>
-                */}
+                <div style={{display: type=='user'? 'block':'none'}}>    
+                    <Button fullWidth
+                        size="large" 
+                        //href='/ShoppingCart'
+                        onClick={handleReorder}
+                        sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+                    >
+                        Reorder items
+                    </Button>
+                </div>
                 <br/><br/>
             </Table>
             </>
@@ -341,6 +356,30 @@ function Dashboard() {
     const [records, setRecord] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
+    /*
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 90 },
+        {
+            field: 'date',
+            headerName: 'Order Time',
+            width: 150,
+            editable: true,
+          },
+        {
+          field: 'total',
+          headerName: 'Total',
+          width: 100,
+          editable: true,
+        },
+        {
+          field: 'status',
+          headerName: 'Status',
+          type: 'number',
+          width: 110,
+          editable: false,
+        },
+      ];
+      */
 
     React.useEffect(()=>{
         if(localStorage.getItem('user') != ""){
@@ -376,42 +415,33 @@ function Dashboard() {
             <div style={{width:'60%', margin:'auto'}}>
                 <h3 style={{color: '#5D4E99'}}>Dashboard</h3>
                 <div style={{display: records == null? 'none':'block'}}>
+                    <TableContainer component={Paper}>
+                    <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Receipt ID</TableCell>
+                            <TableCell>Order Time</TableCell>
+                            <TableCell>Total&nbsp;($)</TableCell>
+                            <TableCell>Status</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {records.map((receipt)=>(
-                        <>
-                        <Card
-                            sx={{p:5, m:3, boxShadow: 2, cursor:"pointer"}} 
+                        <TableRow
+                            key={receipt.rid}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor:"pointer" }}
                             onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
-                        >                            
-                            <Grid container >
-                                    <Grid item xs={6}>
-                                        <h5 style={{color: '#5D4E99'}}><b>{receipt.rName}</b></h5>
-                                    </Grid>
-                                    <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>
-                                        <small style={{color: '#707070'}}>More detail <span style={{color: '#5D4E99'}}><ArrowForwardIosIcon/></span></small>
-                                    </Grid>
-                            </Grid><br/>
-                            <Grid container >
-                                    <Grid item xs={6} sx={{color: '#707070'}}>{formatDate(receipt.timestamp)}</Grid>
-                                    <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>$ {receipt.total.toFixed(1)}</Grid>
-                            </Grid>
-                        </Card>
-                        </>
+                        >
+                            <TableCell component="th" scope="row">{receipt.id}</TableCell>
+                            <TableCell>{formatDate(receipt.timestamp)}</TableCell>
+                            <TableCell>{receipt.total.toFixed(1)}</TableCell>
+                            <TableCell style={{color: receipt.status? 'black':'red'}}>{receipt.status? 'complete':'not complete'}</TableCell>
+                        </TableRow>
                     ))}
+                    </TableBody>
+                    </Table>
+                    </TableContainer>
                 </div>
-                {/*const { data } = useDemoData({
-    dataSet: 'Employee',
-    visibleFields: VISIBLE_FIELDS,
-    rowLength: 100,
-  });
-
-  return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid {...data} components={{ Toolbar: GridToolbar }} />
-    </div>
-  );
-}
-                );
-                */}
 
             </div>
             </>
