@@ -11,9 +11,11 @@ import { Typography } from '@mui/material';
 import Select from 'react-select';
 import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import CloseIcon from '@mui/icons-material/Close';
 import { Button } from '@mui/material';
 import { Chip,Stack } from '@mui/material';
 import {Skeleton, Snackbar, Alert} from '@mui/material';
+import { IconButton } from '@mui/material';
 
 
 let canteenInfo=[];
@@ -94,10 +96,12 @@ function Canteen(props) {
 function NewShowDishes(props){
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
-    const {addToCart} = useContext(DishContext);
+    const {addToCart, canteen, clearCart } = useContext(DishContext);
     const [price,setPrice]=useState(0);
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2]=React.useState(false);
+    const [open3, setOpen3]=React.useState(false);
+    const [open4, setOpen4]=React.useState(false);
     let variantList=[];
     let menu=props.menu
     const tag=menu.tag;
@@ -145,14 +149,37 @@ function NewShowDishes(props){
     
         setOpen2(false);
     };
+    const handleClose3 = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen3(false);
+    };
+    const handleClose4 = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        clearCart();
+        setOpen4(false);
+    };
+
     const handleClick = () => {
         setOpen2(false);
         setOpen(true);
+        setOpen3(false);
     };
     const handleClickOk = () => {
         setOpen(false);
         setOpen2(true);
+        setOpen3(false);
     };
+    const handleClickOtherCanteen=()=>{
+        setOpen(false);
+        setOpen2(false);
+        setOpen3(true);
+    }
+    console.log(canteen);
 
 
 
@@ -214,7 +241,9 @@ function NewShowDishes(props){
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
                         onClick={()=>{
-                            if(quantity!=0){
+                            if(canteen!=props.canteen && canteen!=""){
+                                handleClickOtherCanteen();
+                            }else if(quantity!=0){
                                 localStorage.setItem("cartCanteen",props.canteen);
                                 handleClickOk();
                                 addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
@@ -236,6 +265,26 @@ function NewShowDishes(props){
                             Item added to cart
                         </Alert>
                     </Snackbar>
+                    <Snackbar
+                        open={open3}
+                        autoHideDuration={6000}
+                        onClose={handleClose3}
+                        message="You have to clear your cart before adding other canteen's dishes!"
+                        action={<React.Fragment>
+                                    <Button color="secondary" size="small" onClick={handleClose4}>
+                                        CLEAR CART
+                                    </Button>
+                                    <IconButton
+                                        size="small"
+                                        aria-label="close"
+                                        color="inherit"
+                                        onClick={handleClose3}
+                                    >
+                                    <CloseIcon fontSize="small" />
+                                    </IconButton>
+                                </React.Fragment>
+                                }
+                    />
 
                 </CardContent>
             </Box>
