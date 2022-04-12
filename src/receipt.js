@@ -37,6 +37,7 @@ function Receipt() {
         const options = { hour: '2-digit', minute: '2-digit'}
         return new Intl.DateTimeFormat('en-US', options).format(dateString);
     }
+
     const handleTaken = () => {
         fetch('http://localhost:7000/dbReceipt/updateStatus/'+irid, {
             method: 'POST', 
@@ -49,6 +50,11 @@ function Receipt() {
         .catch((error)=>{console.log(error);})
         window.location.reload();
     };
+
+    const handleReorder = () => {
+        localStorage.setIem('cart', orderItem);
+        window.location.href = '/ShoppingCart/';
+    }
 
     const handleCutlery = () => {
         if (cutlery === 'true') {
@@ -260,14 +266,16 @@ function Receipt() {
                     <Grid item xs={10}> <b>Total</b></Grid>
                     <Grid item xs={2} sx={{textAlign:'right'}}> <b>${(total).toFixed(1)}</b></Grid>
                 </Grid><br/><br/>
-                <Button fullWidth
-                    size="large" 
-                    href='/ShoppingCart'
-                    onClick={()=>{localStorage.setItem('cart', orderItem)}}
-                    sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
-                >
-                    Reorder items
-                </Button>
+                <div style={{display: type=='user'? 'block':'none'}}>    
+                    <Button fullWidth
+                        size="large" 
+                        //href='/ShoppingCart'
+                        onClick={handleReorder}
+                        sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+                    >
+                        Reorder items
+                    </Button>
+                </div>
                 <br/><br/>
             </Table>
             </>

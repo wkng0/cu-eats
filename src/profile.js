@@ -993,12 +993,10 @@ const handleChangeLname = (event)=>{
 }
 const handleChangeUsername = (event)=>{
   setNewUsername(event.target.value);
-  localStorage.setItem('name', event.target.value);
 }
 
 const handleChangePhone = (event)=>{
   setPhone(event.target.value)
-  localStorage.setItem('phone', event.target.value);
 }
 
   useEffect(()=>{

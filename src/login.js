@@ -330,8 +330,6 @@ function LoginWithPassword(props){
     const [iconB, setIconB]=React.useState("block");
     const [uid, setUID] = React.useState(null);
     const [name, setName] = React.useState(null);
-    const [phone, setPhone] = React.useState(null);
-    const [point, setPoint] = React.useState(null);
     const [type, setType] = React.useState(null);
     const [target,setTarget] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
@@ -365,9 +363,7 @@ function LoginWithPassword(props){
         if(password===target){
             localStorage.setItem('user',uid);
             localStorage.setItem('type',type);
-            localStorage.setItem('name', name);
-            localStorage.setItem('phone', phone);
-            localStorage.setItem('point', point);                      
+            localStorage.setItem('name', name);                  
             window.location.assign("/");
         }
         return;
@@ -409,8 +405,6 @@ function LoginWithPassword(props){
                 setUID(data[0].uid);
                 setType(data[0].type);
                 setName(data[0].user_name);
-                setPhone(data[0].phone);
-                setPoint(data[0].point);
             }
             setFetch(true);
         })
