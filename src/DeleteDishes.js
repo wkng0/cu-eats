@@ -11,6 +11,10 @@ import { Typography } from '@mui/material';
 import Select from 'react-select';
 import {Container} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { Button } from '@mui/material';
 import { Chip,Stack } from '@mui/material';
 import {Skeleton} from '@mui/material';
@@ -228,7 +232,7 @@ function NewShowDishes({menu} , value){
                     
                     <Button 
                         variant="contained" 
-                        endIcon={<AddShoppingCartIcon />}
+                        endIcon={<CurrencyExchangeIcon />}
                         onClick={()=>{
                             EditPrice(menu._id, menu.variants[variant].name);
                         }}
@@ -240,7 +244,7 @@ function NewShowDishes({menu} , value){
                     {"   "}
                     <Button 
                         variant="contained" 
-                        endIcon={<AddShoppingCartIcon />}
+                        endIcon={<DeleteIcon />}
                         onClick={()=>{
                             deleteDish(menu._id);
                         }}
@@ -253,7 +257,7 @@ function NewShowDishes({menu} , value){
                     <>
                     <Button 
                         variant="contained" 
-                        endIcon={<AddShoppingCartIcon />}
+                        endIcon={<VisibilityOffIcon />}
                         onClick={()=>{
                             hideDish(menu._id);
                         }}
@@ -265,7 +269,7 @@ function NewShowDishes({menu} , value){
                     : 
                     <Button 
                         variant="contained" 
-                        endIcon={<AddShoppingCartIcon />}
+                        endIcon={<VisibilityIcon />}
                         onClick={()=>{
                             unhideDish(menu._id);
                         }}
