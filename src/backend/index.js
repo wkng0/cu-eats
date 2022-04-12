@@ -1,8 +1,16 @@
 import app from "./server.js";
 import mongodb from "mongodb";
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config()
 const MongoClient = mongodb.MongoClient
+
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
 
 const port = process.env.PORT || 8000
 
