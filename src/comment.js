@@ -74,7 +74,6 @@ function TabContent(props){
     const [storage,setStorage]=useState(users);
     console.log(data)
     console.log(users)
-   
     const handleShare=()=>{
         navigator.clipboard.writeText("http://localhost:3000/comment/"+props.canteen+"/"+data[props.i]._id);
     }
@@ -157,9 +156,8 @@ function TabContent(props){
             <CardHeader
                 avatar={users[props.userIndex]==null||users[props.userIndex]["pic"]==null?
                     <Avatar />
-                       
                 :
-                    <Avatar src={"http://localhost:7000/dbAccount/photo/get/"+users[props.userIndex]["pic"]}/>
+                    <Avatar src={users[props.userIndex]["pic"].indexOf("http")==-1?"http://localhost:7000/dbAccount/photo/get/"+users[props.userIndex]["pic"]:users[props.userIndex]["pic"]}/>
                 }
                 action={<>
                 <Tooltip title="Report">
@@ -260,14 +258,21 @@ const drawerWidth=240;
 function ResponsiveDrawer(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [canteen, setCanteen]=React.useState("SC")
+    const [canteen, setCanteen]=React.useState("NA")
     const [state, setState] = React.useState(false);
     const [value,setValue]=React.useState(-1);
     const [loading,setLoading]=React.useState(true)
     useEffect(()=>{
-        setTimeout(function() {
-            setLoading(false)
-        }, 1500);
+        fetch("http://localhost:7000/dbAccount/getAll/")
+        .then(res=>res.json())
+        .then(db=>{
+            users=db;
+            console.log(users);
+        }).then(()=>{
+            setTimeout(        
+                setLoading(false)
+            , 1500);
+        })
     })
     const toggleDrawer = (open) => (event) => {
         if (
@@ -696,7 +701,7 @@ function AddComment(){
 function UserComment(){
     const [loadFinish, setLoadFinish]=useState();
     useEffect(()=>{
-        fetch('http://localhost:7000/dbComment/get/'+"SC")
+        fetch('http://localhost:7000/dbComment/get/'+"NA")
         .then(res=>res.json())
         .then(db=>{
             data=db;
@@ -718,32 +723,9 @@ function UserComment(){
                     canteenID[i]=canteenInfo[i]["value"];
                 }          
             })
-            .then(()=>{
-                setTimeout(()=>{
-                    setLoadFinish(true)
-                },2000)
-                
-            });
-        })
-        
+            .then(()=>{setLoadFinish(true)});
+        }) 
     })
-    console.log(users);
-    console.log(data);
-    if(loadFinish==false){
-        return(
-            <Grid container spacing={2}>
-                <Grid item xs={4}>
-                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />
-                </Grid>
-                <Grid item xs={8}>
-                    <Box sx={{my:5}}>
-                        <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"20vh"} />
-                    </Box>
-
-                </Grid>
-            </Grid>
-        )
-    }
     return(
         <>
             <ResponsiveDrawer />
