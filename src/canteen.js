@@ -160,24 +160,33 @@ function NewShowDishes(props){
         if (reason === 'clickaway') {
           return;
         }
-        clearCart();
-        setOpen4(false);
+        setOpen3(false);
     };
 
     const handleClick = () => {
         setOpen2(false);
         setOpen(true);
         setOpen3(false);
+        setOpen4(false);
     };
     const handleClickOk = () => {
         setOpen(false);
         setOpen2(true);
         setOpen3(false);
+        setOpen4(false);
     };
     const handleClickOtherCanteen=()=>{
         setOpen(false);
         setOpen2(false);
         setOpen3(true);
+        setOpen4(false);
+    }
+    const handleClickCleared=()=>{
+        clearCart();
+        setOpen(false);
+        setOpen2(false);
+        setOpen3(false);
+        setOpen4(true);
     }
     console.log(canteen);
 
@@ -271,7 +280,7 @@ function NewShowDishes(props){
                         onClose={handleClose3}
                         message="You have to clear your cart before adding other canteen's dishes!"
                         action={<React.Fragment>
-                                    <Button color="secondary" size="small" onClick={handleClose4}>
+                                    <Button color="secondary" size="small" onClick={handleClickCleared}>
                                         CLEAR CART
                                     </Button>
                                     <IconButton
@@ -285,6 +294,11 @@ function NewShowDishes(props){
                                 </React.Fragment>
                                 }
                     />
+                    <Snackbar open={open4} autoHideDuration={6000} onClose={handleClose4}>
+                        <Alert onClose={handleClose4} severity="success" sx={{ width: '100%' }}>
+                            You have cleared your shopping cart
+                        </Alert>
+                    </Snackbar>
 
                 </CardContent>
             </Box>
