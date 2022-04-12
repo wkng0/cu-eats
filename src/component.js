@@ -124,7 +124,7 @@ function NavBar() {
    }
 
     React.useEffect(()=>{
-      if(fetchFinish== false||(pic!=""&&type=="user")){
+      if(fetchFinish== false||(pic!=""&&type!="admin")){
         if(type== null){
           setUser(localStorage.getItem('user'));
           setType(localStorage.getItem('type'));
@@ -332,7 +332,9 @@ function NavBar() {
                         </MenuItem>                      
                         </Menu>
                     </Box>
-                           {/* <Avatar src={pic}/> */}
+                    <IconButton href="/restaurant/profile">
+                    <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+                    </IconButton>
                           <IconButton onClick={logout}>
                           <LogoutIcon sx={{color:'#F4CB86'}}/>
                            </IconButton>

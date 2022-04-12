@@ -200,7 +200,7 @@ function RestaurantProfile(){
   const [change,setChange] = useState(false);
   const [email, setEmail] = useState();
   const {user, setUser} = useContext(UserContext);
-  const [fetchFinish, setFetch] = useState();
+  const [fetchFinish, setFetch] = useState(false);
   const [pic,setPic] = useState();
 
   const updateIcon =()=>{
@@ -242,6 +242,7 @@ function RestaurantProfile(){
   
   }
 
+
   useEffect(()=>{
     if(localStorage.getItem('type')=="restaurant"){
       setUser(localStorage.getItem('user'));
@@ -250,9 +251,8 @@ function RestaurantProfile(){
     fetch('http://localhost:7000/dbAccount/getByUID/'+user)
     .then(res=>res.json())
     .then(data=>{
-        console.log("aaaaaaaaaaaaaaaaaa");
         console.log(data[0]);
-        // setEmail(data[0].email);
+        setEmail(data[0].email);
         picture = data[0].pic;
         // setPic(data[0].pic);
         console.log(data[0].pic);
@@ -277,7 +277,6 @@ function RestaurantProfile(){
   direction="column"
   alignItems="center"
   justify="center"
-  style={{ minHeight: '100vh' }}
  >
    <Card sx={{width:800}}>
    <div class="mt-5 text-center">
@@ -321,10 +320,9 @@ function RestaurantProfile(){
               direction="column"
               alignItems="center"
               justify="center"
-              style={{ minHeight: '100vh' }}
             >
           <CardActions>
-            <Button>Change Password</Button>
+            <FormDialog email={email}/>
           </CardActions>
           </Grid>
       </Card>
