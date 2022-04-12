@@ -137,7 +137,7 @@ function TabContent(props){
     return(
         <Card sx={{borderRadius:3}}>
             <CardHeader
-                avatar={users[props.userIndex]["pic"]==null?
+                avatar={users[props.userIndex]==null||users[props.userIndex]["pic"]==null?
                     <Avatar />
                        
                 :
@@ -180,7 +180,7 @@ function TabContent(props){
                     </Paper>
                 </Dialog> </>
                 }
-                title={users[props.userIndex]["user_name"]}
+                title={users[props.userIndex]==null?"Deleted User":users[props.userIndex]["user_name"]}
                 subheader={postTime}
                 
             />
