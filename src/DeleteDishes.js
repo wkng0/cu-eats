@@ -137,7 +137,6 @@ function NewShowDishes({menu} , value){
     }
 
     const deleteDish = (id) => {
-        // Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
         Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
         .then(()=>{
             alert("deleted! please refresh" ); 
@@ -147,7 +146,6 @@ function NewShowDishes({menu} , value){
     }
 
     const hideDish = (id) => {
-        // Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
         Axios.put(`http://localhost:7000/dbNewMenu/hideDishes/${canteen[window.number]}/${id}`)
         .then(()=>{
             alert("Hide Menu!"); 
@@ -156,10 +154,22 @@ function NewShowDishes({menu} , value){
     }
 
     const unhideDish = (id) => {
-        // Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/NaMenu/${id}`)
         Axios.put(`http://localhost:7000/dbNewMenu/unhideDishes/${canteen[window.number]}/${id}`)
         .then(()=>{
             alert("Un-Hide Menu!"); 
+            window.location.reload();
+        });
+    }
+    
+    // const [newprice] = useState(0);
+    const EditPrice = (id, variantitem) => {
+        const newPrice = prompt("Enter new price: ");
+        const StringPrice = String(newPrice);
+        
+        alert("/"+variantitem+"/"); 
+        Axios.put(`http://localhost:7000/dbNewMenu/updatePrices/${canteen[window.number]}/${id}/${variantitem}/${StringPrice}`)
+        .then(()=>{
+            alert("Price Updated"); 
             window.location.reload();
         });
     }
@@ -200,22 +210,34 @@ function NewShowDishes({menu} , value){
                         menuPortalTarget={document.body} 
                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                     />
-                    {/* <Typography variant="subtitle1" color="text.secondary" component="div">
-                        Quantity
-                    </Typography> */}
-                    {/* <Select 
-                        options={quantityList} 
-                        sx={{zIndex:99999}}
-                        onChange={handleQuantity}
-                        //ref
-                        menuPortalTarget={document.body} 
-                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                    /> */}
+                        {/* <Typography variant="subtitle1" color="text.secondary" component="div">
+                            Quantity
+                        </Typography> */}
+                            {/* <Select 
+                                options={quantityList} 
+                                sx={{zIndex:99999}}
+                                onChange={handleQuantity}
+                                //ref
+                                menuPortalTarget={document.body} 
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                            /> */}
                     
                     <Typography variant="h6" component="div" >
-                        Price: ${menu.variants[0].price}
+                        Price: ${menu.variants[variant].price}
                     </Typography>
+                    
+                    <Button 
+                        variant="contained" 
+                        endIcon={<AddShoppingCartIcon />}
+                        onClick={()=>{
+                            EditPrice(menu._id, menu.variants[variant].name);
+                        }}
+                        hidden={localStorage.getItem("type")=="admin"}
+                    >
+                        Edit Price
+                    </Button>
 
+                    {"   "}
                     <Button 
                         variant="contained" 
                         endIcon={<AddShoppingCartIcon />}
