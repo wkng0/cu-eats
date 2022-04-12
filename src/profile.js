@@ -1521,9 +1521,6 @@ if(!mounted){
         pageSize={10}
         rowsPerPageOptions={[10]}
         disableColumnFilter
-        sx={{"& .MuiDataGrid-menuIconButton":{
-          display:"none"
-        }}}
       />
     </div>
     <Grid
