@@ -40,6 +40,8 @@ import { useContext } from 'react';
 const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
 const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
 
+const guestPages = ['Home', 'Menu', 'Comment'];
+const guestPagesRoute = ['/', '/menu', '/comment'];
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
 
@@ -84,7 +86,8 @@ function NavBar() {
     };
 
     const logout = () =>{
-      localStorage.setItem('user',undefined);
+      localStorage.setItem('user',"");
+      localStorage.setItem('name',"");
       localStorage.setItem('type',"guest");
       window.location.assign("/");
     }
@@ -217,11 +220,7 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-<<<<<<< HEAD
                            <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
-=======
-                            <Avatar alt={name} src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
->>>>>>> 3809dd82b223c50962c919c1bec2b6d9ea8ae9de
                         </IconButton>
                         </Tooltip>
                         <Menu
@@ -375,9 +374,9 @@ function NavBar() {
                             onClose={handleCloseNavMenu}
                             sx={{mt: '15px', display: { xs: 'block', md: 'none'}, zIndex: '99999 !important'}}
                         >
-                        {pages.map((page, index) => (
-                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={pagesRoute[index]} style={{color: '#5D4E99'}}>
-                                <Link to={pagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
+                        {guestPages.map((page, index) => (
+                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={guestPagesRoute[index]} style={{color: '#5D4E99'}}>
+                                <Link to={guestPagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
                             </MenuItem>
                         ))}
                         </Menu>
@@ -387,7 +386,7 @@ function NavBar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page, index) => (
-                        <Link to={pagesRoute[index]} style={{textDecoration: 'none'}}>
+                        <Link to={guestPagesRoute[index]} style={{textDecoration: 'none'}}>
                         <Button
                             key={page}
                             onClick={handleCloseNavMenu}
