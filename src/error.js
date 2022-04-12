@@ -1,6 +1,7 @@
 import React from 'react';
 import './error.css';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 function Error() {
     return(
@@ -10,7 +11,9 @@ function Error() {
                 <span className="error-emoji"> 🤷🏻 </span>
                 <span>ERROR</span>
                 <p>Page Not Found</p>
-                <Button sx={{color: '#5D4E99'}}>Go Back to Homepage</Button>
+                <Link to='/' style={{textDecoration: 'none'}}>
+                    <Button sx={{color: '#5D4E99'}}>Back to Homepage 🏠</Button>
+                </Link>
             </div>
         </div>
 

@@ -48,6 +48,13 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
 const CartContainer = () => {
 
   const { canteen, cart, total, clearCart } = useContext(DishContext);
+  const checkout = ()=>{
+    if(localStorage.getItem('type')=="guest"){
+      window.location.assign("/login");
+    }else if(localStorage.getItem('type')=="user"){
+      window.location.assign("/checkout");
+    }
+  }
 
   if (cart.length === 0) {
     localStorage.setItem("cart","[]")
@@ -94,7 +101,7 @@ const CartContainer = () => {
             </Button>
           <Button 
                 size="small" 
-                href="/checkout"
+                onClick={checkout}
                 sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
           >
             <ShoppingCartCheckoutIcon fontSize="small"/>
