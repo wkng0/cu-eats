@@ -121,6 +121,29 @@ function NavBar() {
     }
    }
 
+   const menuDelDish = () =>{
+    setAnchorElNav(null);
+    NavMenuStatus = -1;
+    if(user==0){
+      window.location.assign("/deleteNaDishes");
+    }else if(user==1){
+      window.location.assign("/deleteShawDishes");
+    }else if(user==2){
+      window.location.assign("/deleteUcDishes");
+    }
+   }
+
+   const menuAddDish = () =>{
+    setAnchorElNav(null);
+    NavMenuStatus = -1;
+    if(user==0){
+      window.location.assign("/AddNaDishes");
+    }else if(user==1){
+      window.location.assign("/AddShawDishes");
+    }else if(user==2){
+      window.location.assign("/AddUcDishes");
+    }
+   }
     React.useEffect(()=>{
       if(fetchFinish== false||(pic!=""&&type!="admin")){
         if(type== null){
@@ -269,7 +292,7 @@ function NavBar() {
                         >
                             <MenuIcon />
                         </IconButton>
-                        {/* <Menu 
+                        <Menu 
                             id="menu-appbar" 
                             anchorEl={anchorElNav} 
                             anchorOrigin={{ vertical: 'bottom', horizontal: 'left',}}
@@ -282,10 +305,18 @@ function NavBar() {
                             <MenuItem onClick={handleCloseNavMenu} linkButton href='/comment' style={{color: '#5D4E99'}}>
                                 <Link to='/comment' style={{color: '#5D4E99', textDecoration: 'none' }}>Comment</Link>
                             </MenuItem>
-                            <MenuItem onClick={handleCloseNavMenu} linkButton href='/' style={{color: '#5D4E99'}}>
+                            <MenuItem onClick={handleCloseNavMenu} linkButton href='/dashboard' style={{color: '#5D4E99'}}>
                                 <Link to='/' style={{color: '#5D4E99', textDecoration: 'none' }}>Dashboard</Link>
                             </MenuItem>
-                        </Menu> */}
+                            <MenuItem onClick={menuAddDish} linkButton href='/dashboard' style={{color: '#5D4E99'}}>
+                                <Link to='/' style={{color: '#5D4E99', textDecoration: 'none' }}>Add Dishes</Link>
+                            </MenuItem>
+                            <MenuItem onClick={menuDelDish} style={{color: '#5D4E99'}}>
+                                {/* <Link to='/' style={{color: '#5D4E99', textDecoration: 'none' }}> */}
+                                  Delete Dishes
+                                  {/* </Link> */}
+                            </MenuItem>
+                        </Menu>
                     </Box>
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <img src={logo_yellow} width="auto" height="30" alt=""></img> CU EATS
