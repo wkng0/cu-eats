@@ -8,8 +8,7 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
 const CartItem = ({ id,img ,title, variant,price,amount }) => {
     
-    const {cart,remove, increase, decrease} = useContext(DishContext);
-
+    const {cart,remove, increase, decrease,clearCart, amount:totalAmount } = useContext(DishContext);
     localStorage.setItem("cart",JSON.stringify(cart))
     return (
       <article className='sc-cart-item'>
@@ -20,7 +19,12 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
           <h6 className='sc-item-price'>{variant}</h6>
           <h6 className='sc-item-price'>$&nbsp;{price}</h6>
           {/* remove button */}
-          <button className='sc-remove-btn' onClick={() => remove({id:id,variant:variant})}
+          <button className='sc-remove-btn' onClick={() =>{
+            remove({id:id,variant:variant})
+            if(cart.length==1){
+              clearCart();
+            }
+          }}
           >
             remove
           </button>
@@ -35,7 +39,16 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
           {/* amount */}
           <p className='sc-amount'>{amount}</p>
           {/* decrease amount */}
-          <button className='sc-amount-btn'  onClick={() => decrease({id:id,variant:variant}) }>
+          <button 
+            className='sc-amount-btn'  
+            onClick={() => {
+              decrease({id:id,variant:variant})
+              if(totalAmount==1){
+                clearCart();
+              }
+              
+            
+            }}>
             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
               <path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z' />
             </svg>
