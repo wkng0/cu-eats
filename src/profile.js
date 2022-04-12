@@ -208,7 +208,7 @@ function RestaurantProfile(){
       fetch('http://localhost:7000/dbAccount/changePic/'+user, {
         method: 'POST', 
         body: new URLSearchParams({
-            "pic": picture,
+            "pic": pic,
         })  
       })
       .then(data=>console.log(data))
@@ -251,11 +251,11 @@ function RestaurantProfile(){
     fetch('http://localhost:7000/dbAccount/getByUID/'+user)
     .then(res=>res.json())
     .then(data=>{
-        console.log(data[0]);
+        // console.log(data[0]);
         setEmail(data[0].email);
         picture = data[0].pic;
-        // setPic(data[0].pic);
-        console.log(data[0].pic);
+        setPic(data[0].pic);
+        // console.log(data[0].pic);
         setFetch(true);
     })
     .catch(err=>{
@@ -284,7 +284,7 @@ function RestaurantProfile(){
       <>
       <label htmlFor="icon-button-file" >
       <Avatar 
-      src={'http://localhost:7000/dbAccount/photo/get/'+picture}
+      src={'http://localhost:7000/dbAccount/photo/get/'+pic}
       style={{
         margin: "2px",
         width: "200px",
@@ -299,7 +299,7 @@ function RestaurantProfile(){
         :<>
         <label for="button">
             <Avatar 
-          src={'http://localhost:7000/dbAccount/photo/get/'+picture}
+          src={'http://localhost:7000/dbAccount/photo/get/'+pic}
           style={{
             margin: "2px",
             width: "200px",
