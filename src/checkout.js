@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { v4 as uuid } from 'uuid';
 import { styled, FormGroup, FormControlLabel, Switch, Grid, Table, Divider, Box, Radio, RadioGroup, 
-        FormControl, TextField, Button, IconButton, Dialog, DialogContent } from '@mui/material/';
+        FormControl, FormHelperText,TextField, Button, IconButton, Dialog, DialogContent, Snackbar, Alert } from '@mui/material/';
 import { Link } from "react-router-dom";
 
 const CutlerySwitch = styled(Switch)(({ theme }) => ({
@@ -77,6 +77,8 @@ function Checkout() {
     const [anchorElNew, setAnchorElNew] = React.useState(null);
     const [phoneText, setText] = React.useState('');
     const [pointText, setpText] = React.useState('Get $0.0 off');
+    const [helperText, setHelperText]=React.useState('Please insert address so we can deliver the food to you');
+    const [open, setOpen]=React.useState(false);
     const handleChangeName = (event) => {setName(event.target.value);};
     const handleChangePhone = (event) => {setPhone(event.target.value);};
     const handleChangePoint = (event) => {setPointUse(event.target.value);};
@@ -88,35 +90,40 @@ function Checkout() {
     const receiptID = uuid();
     const handleReceipt = (event) => {
         //receiptID = uid(Date.now().toString() + uid);
-        console.log('receipt:', receiptID);
-        fetch("http://localhost:7000/dbReceipt/user", {
-            method: 'POST', 
-            body: new URLSearchParams({
-                "irid": receiptID,
-                "uid": uid,
-                "res": localStorage.getItem("cartCanteen"),
-                "name": name,
-                "phone": phone,
-                "address": address==null? savedAddress[0]:address,
-                "cutlery": cutlery,
-                "items": localStorage.getItem('cart'),
-                "subtotal": total,
-                "discount": discount,
-                "total": total-discount,
-                "point": point,
-                "pointEarn": ~~(total/50)*5,
-                "pointRemain": point - discount*10 + ~~(total/50)*5,
-                "timestamp": Date.now()
-            }),
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-            },
-        })
-        .then(response => {console.log(response);
-            localStorage.setItem('cart',"");
-            window.location.href = '/receipt/' + receiptID})
-        .catch((error) => {console.error('Error:', error);});
+        if(name!=''&&phone!=''&&address!=null){
+            console.log('receipt:', receiptID);
+            fetch("http://localhost:7000/dbReceipt/user", {
+                method: 'POST', 
+                body: new URLSearchParams({
+                    "irid": receiptID,
+                    "uid": uid,
+                    "res": localStorage.getItem("cartCanteen"),
+                    "name": name,
+                    "phone": phone,
+                    "address": address==null? savedAddress[0]:address,
+                    "cutlery": cutlery,
+                    "items": localStorage.getItem('cart'),
+                    "subtotal": total,
+                    "discount": discount,
+                    "total": total-discount,
+                    "point": point,
+                    "pointEarn": ~~(total/50)*5,
+                    "pointRemain": point - discount*10 + ~~(total/50)*5,
+                    "timestamp": Date.now()
+                }),
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+                },
+            })
+            .then(response => {console.log(response);
+                localStorage.setItem('cart',"");
+                window.location.href = '/receipt/' + receiptID})
+            .catch((error) => {console.error('Error:', error);});
+        }else{
+            setOpen(true)
+        }
     }
+        
 
     const fetchAddress = () => {
         console.log("start fetch")
@@ -130,7 +137,12 @@ function Checkout() {
     const showAddress = (event) => { 
         if (fetchFinish == false) return(<p>loading address...</p>)
         else {
-            if (savedAddress[0] == null) return (<p>No address record has been inserted.</p>);
+            if (savedAddress[0] == null) return (
+            <>
+                <p>No address record has been inserted.</p>
+                <FormHelperText error={address==null}>{helperText}</FormHelperText>
+            </>
+            );
             else {
                 return(
                     <RadioGroup
@@ -145,6 +157,13 @@ function Checkout() {
                         ))}
                     </RadioGroup>
         )}}
+    }
+    const handleCloseSubmitAlert=(event, reason)=>{
+        if (reason === 'clickaway') {
+            return;
+        }
+    
+        setOpen(false);
     }
 
     React.useEffect(()=>{
@@ -352,6 +371,11 @@ function Checkout() {
         </div>
         <br/>
         </Table>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSubmitAlert}>
+            <Alert onClose={handleCloseSubmitAlert} severity="error" sx={{ width: '100%' }}>
+                Please filled in the required information
+            </Alert>
+        </Snackbar>
         </>
     );
 }
