@@ -130,7 +130,8 @@ async function postComment(req,res){
         description:req.body['description'],
         type: req.body['type'],
         datetime:new Date(),
-        image:req.body['image']
+        image:req.body['image'],
+        priority:+ (canteenDBList.indexOf(req.params.id)==req.body["userid"])
     });
     return "comment posted";
 };
@@ -160,7 +161,7 @@ async function fetchComment(res){
         res.send(data);
     }else{
         const collection = db.collection(canteen);
-        const commentList = await collection.find({}).sort({datetime: -1}).toArray();
+        const commentList = await collection.find({}).sort({priority:-1, datetime: -1}).toArray();
         //console.log('Found documents =>', commentList);
         res.send(commentList);
         return "comments fetched";

@@ -55,6 +55,8 @@ import {useParams} from 'react-router-dom'
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import FlagIcon from '@mui/icons-material/Flag';
 import { Link,Navigate,useLocation } from 'react-router-dom';
+import ClearIcon from '@mui/icons-material/Clear';
+import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 
 
 let data =[];
@@ -120,6 +122,22 @@ function TabContent(props){
         setOpen(true)
     }
     
+    const handleDeletePost=()=>{
+        
+        fetch('http://localhost:7000/dbComment/delete/comment', {
+            body: JSON.stringify({id:[data[i]._id]}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method:"DELETE"
+        })
+        .then(response => console.log(response))
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        window.location.reload();
+        
+    }
 
 
     const options = [
@@ -135,7 +153,7 @@ function TabContent(props){
     let i=props.i;
     let postTime=data[i].datetime.substring(0,10)+" "+data[i].datetime.substring(11,16);
     return(
-        <Card sx={{borderRadius:3}}>
+        <Card sx={{borderRadius:3, bgcolor:data[i].priority>0?"#fffde7":"#ffffff"}}>
             <CardHeader
                 avatar={users[props.userIndex]==null||users[props.userIndex]["pic"]==null?
                     <Avatar />
@@ -145,10 +163,17 @@ function TabContent(props){
                 }
                 action={<>
                 <Tooltip title="Report">
-                <IconButton aria-label="settings" onClick={handleOpenForm} hidden={localStorage.getItem('type') == "guest"}>
-                    <FlagIcon />
-                </IconButton>
+                    <IconButton aria-label="settings" onClick={handleOpenForm} hidden={localStorage.getItem('type') == "guest"||localStorage.getItem('user')==data[i].userid}>
+                        <FlagIcon />
+                    </IconButton>
+                
                 </Tooltip>
+                <Tooltip title="Delete">
+                    <IconButton aria-label="settings" onClick={handleDeletePost} hidden={localStorage.getItem('type') == "guest"||localStorage.getItem('user')!=data[i].userid}>
+                        <ClearIcon />
+                    </IconButton>
+                </Tooltip>
+                
                 <Dialog component={"div"} width="md"height="md" open={open} onClose={handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>
                     <Paper>
                         <DialogTitle >
@@ -180,7 +205,13 @@ function TabContent(props){
                     </Paper>
                 </Dialog> </>
                 }
-                title={users[props.userIndex]==null?"Deleted User":users[props.userIndex]["user_name"]}
+                title=
+                {<div>
+                    {users[props.userIndex]==null?"Deleted User":users[props.userIndex]["user_name"]}
+                    <StoreMallDirectoryIcon fontSize="small" color="secondary" sx={{ml:1}} hidden={users[props.userIndex]["type"]!="restaurant"}/>
+                </div>}
+              
+                
                 subheader={postTime}
                 
             />
@@ -236,7 +267,7 @@ function ResponsiveDrawer(props) {
     useEffect(()=>{
         setTimeout(function() {
             setLoading(false)
-        }, 1000);
+        }, 1500);
     })
     const toggleDrawer = (open) => (event) => {
         if (
@@ -558,7 +589,7 @@ function AddComment(){
       
     return(
         <div>
-            <Fab color="secondary" sx={{position: 'fixed', bottom: 32 ,right:32,zIndex:10000}} onClick={handleClick} hidden={localStorage.getItem('type') != "user"}>
+            <Fab color="secondary" sx={{position: 'fixed', bottom: 32 ,right:32,zIndex:10000}} onClick={handleClick} hidden={localStorage.getItem('type') == "admin"}>
                 <AddIcon />
             </Fab>
             <Dialog component={"div"} width="md"height="md" open={open} onClose={handleClose} scroll="paper" style={{zIndex:9999, overflowY:"visible",position:"absolute"}} fullWidth>
