@@ -423,6 +423,8 @@ function LoginWithPassword(props){
             localStorage.setItem('type',type);
             localStorage.setItem('name', name);                  
             window.location.assign("/");
+        }else{
+            window.alert("Wrong Password! Please Enter Again");
         }
         return;
 

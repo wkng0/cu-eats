@@ -37,11 +37,9 @@ import Badge from '@mui/material/Badge';
 import { DishContext } from './shoppingCart/sc-context';
 import { useContext } from 'react';
 
-const pages = ['Home', 'Menu', 'Comment', 'Checkout'];
-const pagesRoute = ['/', '/menu', '/comment', '/checkout'];
+const pages = ['Home', 'Menu', 'Comment'];
+const pagesRoute = ['/', '/menu', '/comment'];
 
-const Gpages = ['Home', 'Menu', 'Comment'];
-const GpagesRoute = ['/', '/menu', '/comment'];
 
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
@@ -123,8 +121,31 @@ function NavBar() {
     }
    }
 
+   const menuDelDish = () =>{
+    setAnchorElNav(null);
+    NavMenuStatus = -1;
+    if(user==0){
+      window.location.assign("/deleteNaDishes");
+    }else if(user==1){
+      window.location.assign("/deleteShawDishes");
+    }else if(user==2){
+      window.location.assign("/deleteUcDishes");
+    }
+   }
+
+   const menuAddDish = () =>{
+    setAnchorElNav(null);
+    NavMenuStatus = -1;
+    if(user==0){
+      window.location.assign("/AddNaDishes");
+    }else if(user==1){
+      window.location.assign("/AddShawDishes");
+    }else if(user==2){
+      window.location.assign("/AddUcDishes");
+    }
+   }
     React.useEffect(()=>{
-      if(fetchFinish== false||(pic!=""&&type=="user")){
+      if(fetchFinish== false||(pic!=""&&type!="admin")){
         if(type== null){
           setUser(localStorage.getItem('user'));
           setType(localStorage.getItem('type'));
@@ -271,7 +292,7 @@ function NavBar() {
                         >
                             <MenuIcon />
                         </IconButton>
-                        {/* <Menu 
+                        <Menu 
                             id="menu-appbar" 
                             anchorEl={anchorElNav} 
                             anchorOrigin={{ vertical: 'bottom', horizontal: 'left',}}
@@ -284,10 +305,18 @@ function NavBar() {
                             <MenuItem onClick={handleCloseNavMenu} linkButton href='/comment' style={{color: '#5D4E99'}}>
                                 <Link to='/comment' style={{color: '#5D4E99', textDecoration: 'none' }}>Comment</Link>
                             </MenuItem>
-                            <MenuItem onClick={handleCloseNavMenu} linkButton href='/' style={{color: '#5D4E99'}}>
+                            <MenuItem onClick={handleCloseNavMenu} linkButton href='/dashboard' style={{color: '#5D4E99'}}>
                                 <Link to='/' style={{color: '#5D4E99', textDecoration: 'none' }}>Dashboard</Link>
                             </MenuItem>
-                        </Menu> */}
+                            <MenuItem onClick={menuAddDish} linkButton href='/dashboard' style={{color: '#5D4E99'}}>
+                                <Link to='/' style={{color: '#5D4E99', textDecoration: 'none' }}>Add Dishes</Link>
+                            </MenuItem>
+                            <MenuItem onClick={menuDelDish} style={{color: '#5D4E99'}}>
+                                {/* <Link to='/' style={{color: '#5D4E99', textDecoration: 'none' }}> */}
+                                  Delete Dishes
+                                  {/* </Link> */}
+                            </MenuItem>
+                        </Menu>
                     </Box>
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <img src={logo_yellow} width="auto" height="30" alt=""></img> CU EATS
@@ -332,7 +361,9 @@ function NavBar() {
                         </MenuItem>                      
                         </Menu>
                     </Box>
-                           <Avatar src={pic}/>
+                    <IconButton href="/restaurant/profile">
+                    <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+                    </IconButton>
                           <IconButton onClick={logout}>
                           <LogoutIcon sx={{color:'#F4CB86'}}/>
                            </IconButton>
@@ -375,9 +406,9 @@ function NavBar() {
                             onClose={handleCloseNavMenu}
                             sx={{mt: '15px', display: { xs: 'block', md: 'none'}, zIndex: '99999 !important'}}
                         >
-                        {Gpages.map((page, index) => (
-                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={GpagesRoute[index]} style={{color: '#5D4E99'}}>
-                                <Link to={GpagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
+                        {pages.map((page, index) => (
+                            <MenuItem key={page} onClick={handleCloseNavMenu} linkButton href={pagesRoute[index]} style={{color: '#5D4E99'}}>
+                                <Link to={pagesRoute[index]} style={{color: '#5D4E99', textDecoration: 'none' }}>{page}</Link>
                             </MenuItem>
                         ))}
                         </Menu>
@@ -386,8 +417,8 @@ function NavBar() {
                         <img src={logo_yellow} width="auto" height="30" alt=""></img> CU EATS
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {Gpages.map((page, index) => (
-                        <Link to={GpagesRoute[index]} style={{textDecoration: 'none'}}>
+                        {pages.map((page, index) => (
+                        <Link to={pagesRoute[index]} style={{textDecoration: 'none'}}>
                         <Button
                             key={page}
                             onClick={handleCloseNavMenu}

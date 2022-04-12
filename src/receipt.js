@@ -45,8 +45,21 @@ function Receipt() {
                 "rid": irid,
             })  
         })
-        .then(data=>console.log(data))
-        .then(()=>{setStatus(true);})
+        //.then(data=>console.log(data))
+        .then(()=>{setStatus(2);})
+        .catch((error)=>{console.log(error);})
+        window.location.reload();
+    };
+
+    const handleDeliver = () => {
+        fetch('http://localhost:7000/dbReceipt/updateDeliver/'+irid, {
+            method: 'POST', 
+            body: new URLSearchParams({
+                "rid": irid,
+            })  
+        })
+        //.then(data=>console.log(data))
+        .then(()=>{setStatus(1);})
         .catch((error)=>{console.log(error);})
         window.location.reload();
     };
@@ -68,6 +81,29 @@ function Receipt() {
                 </Grid>
             )
         }
+    }
+
+    const showButton = () =>{
+        if ((type == 'restaurant' && status == 1) || type == 'user')
+        return(
+            <Button fullWidth
+                size="large" 
+                onDoubleClick={handleTaken}
+                sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+            >
+                Double click to confirm order delivered
+            </Button>
+        )
+        else if (type == 'restaurant' && status == 0)
+        return(
+            <Button fullWidth
+                size="large" 
+                onDoubleClick={handleDeliver}
+                sx={{':hover':{border: 2,bgcolor: '#transparent', color: '#5D4E99'}, borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}
+            >
+                Double click to confirm order prepared
+            </Button>
+        )
     }
 
     React.useEffect(()=>{
@@ -98,7 +134,7 @@ function Receipt() {
 
     let cutleryNo = 0;
     if (fetchFinish) {
-    if (status == false) {
+    if (status != 2) {
     return (
         <>
         <div style={{width:'80%', margin:'auto', display: type=='user'? 'block':'none'}}>
@@ -122,6 +158,7 @@ function Receipt() {
         <br/>
         <h3 style={{color: '#5D4E99'}}>Receipt <span style={{color: '#FFC107'}}>{receiptID}</span></h3><br/>
         <div style={{textAlign: 'center'}}>
+            <h5 style={{color: '#5D4E99', display: type=='user'? 'block':'none'}}><b>{status? "Order delivering...":"Order preparing..."}</b></h5>
             <h5 style={{color: '#5D4E99'}}>Expected arrival time: {formatTime(timestamp+900000)} - {formatTime(timestamp+1800000)}</h5><br/>
             <h5 style={{color: '#5D4E99'}}>Name: {name}&nbsp;&nbsp;&nbsp;Tel: {phone}</h5>
             <h5 style={{color: '#5D4E99'}}>Address: {address}</h5>
@@ -187,6 +224,8 @@ function Receipt() {
                 <Grid item xs={10}> <b>Total</b></Grid>
                 <Grid item xs={2} sx={{textAlign:'right'}}> <b>${(total).toFixed(1)}</b></Grid>
             </Grid><br/><br/>
+            {showButton()}
+            {/*  
             <Button fullWidth
                 size="large" 
                 onDoubleClick={handleTaken}
@@ -194,6 +233,8 @@ function Receipt() {
             >
                 Double click to confirm order delivered
             </Button>
+            */}
+            <></>
             <br/><br/>
         </Table>
         </>
@@ -270,7 +311,6 @@ function Receipt() {
                 <div style={{display: type=='user'? 'block':'none'}}>    
                     <Button fullWidth
                         size="large" 
-                        //href='/ShoppingCart'
                         onClick={handleReorder}
                         sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
                     >
@@ -358,31 +398,8 @@ function Dashboard() {
     const [records, setRecord] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
-    /*
-    const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
-        {
-            field: 'date',
-            headerName: 'Order Time',
-            width: 150,
-            editable: true,
-          },
-        {
-          field: 'total',
-          headerName: 'Total',
-          width: 100,
-          editable: true,
-        },
-        {
-          field: 'status',
-          headerName: 'Status',
-          type: 'number',
-          width: 110,
-          editable: false,
-        },
-      ];
-      */
-
+    const status = ['Preparing', 'Delivering', 'Complete'];
+    const color = ['#f44336', '#43a047', '#707070'];
     React.useEffect(()=>{
         if(localStorage.getItem('user') != ""){
             setUser(localStorage.getItem('user'));
@@ -437,12 +454,12 @@ function Dashboard() {
                             <TableCell component="th" scope="row">{receipt.id}</TableCell>
                             <TableCell>{formatDate(receipt.timestamp)}</TableCell>
                             <TableCell>{receipt.total.toFixed(1)}</TableCell>
-                            <TableCell style={{color: receipt.status? 'black':'red'}}>{receipt.status? 'complete':'not complete'}</TableCell>
+                            <TableCell style={{color: color[receipt.status]}}>{status[receipt.status]}</TableCell>
                         </TableRow>
                     ))}
                     </TableBody>
                     </Table>
-                    </TableContainer>
+                    </TableContainer><br/><br/>
                 </div>
 
             </div>
