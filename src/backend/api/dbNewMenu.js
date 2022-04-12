@@ -19,6 +19,8 @@ const dbName="Menu";
 
 let canteenname = "";
 let id = "";
+let varianttype = "";
+let newprice = "";
 
 router.get("/", function(req, res) {
     res.send("API is working properly");
@@ -143,6 +145,18 @@ async function postMenu(req,res){
 //     // await collection.find
 // }
 
+router.put("/updatePrices/:canteenname/:id/:varianttype/:newprice", function(req, res) {
+    id = req.params.id;
+    canteenname = req.params.canteenname;
+    varianttype = req.params.varianttype;
+    newprice = req.params.newprice;
+    updatePrices(req, res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+    // res.send(dishid);    // will have error
+});
+
 
 async function getDishes(req, res) {
     await client.connect();
@@ -179,6 +193,20 @@ async function unhideDishes(req, res) {
     const db = client.db(dbName);
     const collection = db.collection(canteenname);
     let updatedlist = await collection.updateOne({_id: ObjectId(id)}, {$set: {hide: false}});
+    res.send(updatedlist);
+}
+
+async function updatePrices(req, res) {
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection(canteenname);
+    let updatedlist = await collection.findOneAndUpdate(
+        {_id: ObjectId(id) , "variants.name" : varianttype},
+        {$set: 
+            {"variants.$.price": newprice}
+        }
+    );
     res.send(updatedlist);
 }
 
