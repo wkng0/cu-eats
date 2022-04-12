@@ -5,14 +5,13 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
 import{ Divider, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
-  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar, Select, MenuItem } from '@mui/material';
+  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar } from '@mui/material';
 
 let userInfo = [];
 
@@ -993,11 +992,13 @@ const handleChangeLname = (event)=>{
   setLname(event.target.value)
 }
 const handleChangeUsername = (event)=>{
-  setNewUsername(event.target.value)
+  setNewUsername(event.target.value);
+  localStorage.setItem('name', event.target.value);
 }
 
 const handleChangePhone = (event)=>{
   setPhone(event.target.value)
+  localStorage.setItem('phone', event.target.value);
 }
 
   useEffect(()=>{

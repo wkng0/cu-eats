@@ -129,8 +129,8 @@ function Checkout() {
         })
         .then(response => {console.log(response);
             localStorage.setItem('cart',"");
+            localStorage.setItem('point',point - discount*10 + ~~(total/50)*5);
             window.location.href = '/receipt/' + receiptID})
-        .then(clearCart)
         .catch((error) => {console.error('Error:', error);});
     }
 
@@ -197,9 +197,13 @@ function Checkout() {
     React.useEffect(()=>{
         if(localStorage.getItem('user') != ""){
             setUser(localStorage.getItem('user'));
+            setType(localStorage.getItem('type'));
+            setName(localStorage.getItem('name'));
+            setPhone(localStorage.getItem('phone'));
+            setPoint(localStorage.getItem('point'));
             console.log("set!",user);
-        }
-        if(fetchFinish== false){
+        }/*
+        else if(fetchFinish== false){
         fetch('http://localhost:7000/dbAccount/getByUID/'+user)
         .then(res=>res.json())
         .then(data=>{
@@ -207,12 +211,13 @@ function Checkout() {
             setPoint(data[0].point);
             setPhone(data[0].phone);
             setUID(data[0].uid);
+            setType(data[0].type);
             setFetch(true);
         })
         .catch(err=>{
           console.log(err);
           setFetch(false);
-        })}
+        })}*/
     })
 
     return (
