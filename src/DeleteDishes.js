@@ -143,7 +143,7 @@ function NewShowDishes({menu} , value){
     const deleteDish = (id) => {
         Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
         .then(()=>{
-            alert("deleted! please refresh" ); 
+            alert("deleted!" ); 
             window.location.reload();
          
         });
@@ -169,8 +169,6 @@ function NewShowDishes({menu} , value){
     const EditPrice = (id, variantitem) => {
         const newPrice = prompt("Enter new price: ");
         const StringPrice = String(newPrice);
-        
-        alert("/"+variantitem+"/"); 
         Axios.put(`http://localhost:7000/dbNewMenu/updatePrices/${canteen[window.number]}/${id}/${variantitem}/${StringPrice}`)
         .then(()=>{
             alert("Price Updated"); 
