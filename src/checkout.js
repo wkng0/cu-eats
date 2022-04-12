@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { v4 as uuid } from 'uuid';
 import { styled, FormGroup, FormControlLabel, Switch, Grid, Table, Divider, Box, Radio, RadioGroup, 
-        FormControl, TextField, Button, IconButton, Menu } from '@mui/material/';
+        FormControl, TextField, Button, IconButton, Dialog, DialogContent } from '@mui/material/';
 import { Link } from "react-router-dom";
 
 const CutlerySwitch = styled(Switch)(({ theme }) => ({
@@ -265,25 +265,26 @@ function Checkout() {
                         </Button>
                     </Grid>
                 </Grid>
-                <Menu 
-                    id="menu-appbar" 
-                    anchorEl={anchorElNew} 
-                    anchorOrigin={{ vertical: 'center', horizontal: 'center',}}
-                    keepMounted
-                    transformOrigin={{ vertical: 'center', horizontal: 'center',}}
-                    open={Boolean(anchorElNew)}
-                    style={{zIndex: '10000'}}
+                <Dialog fullWidth
+                component={"div"} 
+                width="md"height="md" 
+                open={anchorElNew} 
+                onClose={handleCloseNew} 
+                scroll="paper" 
+                style={{zIndex:9999, overflowY:"visible"}} 
                 >
-                    <IconButton 
-                        size='small' onClick={handleCloseNew}
-                        sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}  
-                    >
-                        <CloseIcon/>
-                    </IconButton>
-                    <div style={{width:'90%', margin:'auto'}}>
-                        <AddNewAddress email={user}/><br/><br/>
-                    </div>
-                </Menu>
+                    <DialogContent>
+                        <IconButton 
+                            size='small' onClick={handleCloseNew}
+                            sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}  
+                        >
+                            <CloseIcon/>
+                        </IconButton><br/>
+                        <div style={{width:'90%', margin:'auto'}}>
+                            <AddNewAddress email={user}/>
+                        </div><br/>
+                    </DialogContent>
+                </Dialog>
                 <FormControl>
                     {showAddress()}
                 </FormControl>
