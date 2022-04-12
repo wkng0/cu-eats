@@ -332,7 +332,7 @@ function NavBar() {
                         </MenuItem>                      
                         </Menu>
                     </Box>
-                           <Avatar src={pic}/>
+                           {/* <Avatar src={pic}/> */}
                           <IconButton onClick={logout}>
                           <LogoutIcon sx={{color:'#F4CB86'}}/>
                            </IconButton>

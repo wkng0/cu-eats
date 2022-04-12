@@ -2,7 +2,7 @@ import React , { useState, useMemo }from 'react';
 
 import { LoginPage,ChangePassword,EmailVerification } from './login';
 import { UserComment, ContentPreview, AdminComment} from './comment';
-import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
+import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc, RestaurantProfile} from './profile';
 import Checkout from './checkout'
 import { HomePage }  from './HomePage';
 import { Receipt, Records, Dashboard } from './receipt';
@@ -101,7 +101,7 @@ function App() {
 
             
             <Route path="/menu" element={<ShowCanteen/>} />
-              
+            <Route path="/restaurant/profile" element={<RestaurantProfile/>}/>
             <Route path="/receipt/:id" element={<Receipt/>} />
               
             <Route path="/deleteNaDishes" element={<DeleteDish value={0}/>} />
