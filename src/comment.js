@@ -307,7 +307,9 @@ function ResponsiveDrawer(props) {
                 //console.log("send to " +canteenChoice);
                 setCanteen(canteenChoice)
             })
-        ]).then(()=>{setCanteen(canteenChoice)});
+        ]).then(()=>{
+            setCanteen(canteenChoice)
+        });
     }
 
   
@@ -316,21 +318,43 @@ function ResponsiveDrawer(props) {
         <Toolbar />
         <Divider />
         <List>
-        {canteenList.map((data, index) => 
-        (
-            <ListItem key={index}>
-                <ListItemButton onClick={handleClick} value={canteenID[index]} selected={canteen==canteenID[index]}>
-                    <ListItemAvatar>
-                        <Avatar
-                            src={canteenInfo[index]["avater"]}
-                        />
-                    </ListItemAvatar>
-                    <ListItemText>
-                        {canteenList[index]}
-                    </ListItemText>
-                </ListItemButton>
-            </ListItem>
-        ))}
+            
+            {loading==true?
+                <>
+                    <ListItem>
+                        <Skeleton variant="rectangular" width={210} height={50} />
+                    </ListItem>
+                    <ListItem>
+                        <Skeleton variant="rectangular" width={210} height={50} />
+                    </ListItem>
+                    <ListItem>
+                        <Skeleton variant="rectangular" width={210} height={50} />
+                    </ListItem>
+                    <ListItem>
+                        <Skeleton variant="rectangular" width={210} height={50} />
+                    </ListItem>
+                    <ListItem>
+                        <Skeleton variant="rectangular" width={210} height={50} />
+                    </ListItem>
+                    
+                </>:
+                canteenList.map((data, index) => 
+                (
+                    <ListItem key={index}>
+                        <ListItemButton onClick={handleClick} value={canteenID[index]} selected={canteen==canteenID[index]}>
+                            <ListItemAvatar>
+                                <Avatar
+                                    src={canteenInfo[index]["avater"]}
+                                />
+                            </ListItemAvatar>
+                            <ListItemText>
+                                {canteenList[index]}
+                            </ListItemText>
+                        </ListItemButton>
+                    </ListItem>
+                ))
+            }
+            
         </List>
         
      
@@ -339,19 +363,7 @@ function ResponsiveDrawer(props) {
     );
     console.log(data);
     console.log(users);
-    if(loading==true){
-        return (
-            <Grid container spacing={2}>
-                <Grid item xs={4}>    
-                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />
-                </Grid>
-                <Grid item xs={8}>          
-                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />    
-                </Grid>
-            </Grid>
-            
-        )
-    }else return ( 
+    return ( 
         <Container >
         <Box sx={{ display: 'flex' }}>        
             <Box
@@ -416,7 +428,27 @@ function ResponsiveDrawer(props) {
                     </Box>
                     
                    
-                    {data.map((file,i)=>
+                    {loading==true?
+                        
+                        <>
+                            <div role="tabpanel" style={{marginTop:"1rem"}} >
+                                <Skeleton variant="rectangular" width={540} height={300}/>
+                            </div>
+                            <div role="tabpanel" style={{marginTop:"1rem"}} >
+                                <Skeleton variant="rectangular" width={540} height={300}/>
+                            </div>
+                            <div role="tabpanel" style={{marginTop:"1rem"}} >
+                                <Skeleton variant="rectangular" width={540} height={300}/>
+                            </div>
+                            <div role="tabpanel" style={{marginTop:"1rem"}} >
+                                <Skeleton variant="rectangular" width={540} height={300}/>
+                            </div>
+                            <div role="tabpanel" style={{marginTop:"1rem"}} >
+                                <Skeleton variant="rectangular" width={540} height={300}/>
+                            </div>
+                        </>
+   
+                    :data.map((file,i)=>
                         <div role="tabpanel" style={{marginTop:"1rem"}} key={i}>
                             {(value==data[i].type || value=="-1") &&(
                                 <TabContent  i={i} canteen={canteen} userIndex={users.findIndex(user=>user.uid==data[i].userid) }/>
@@ -425,9 +457,7 @@ function ResponsiveDrawer(props) {
                         </div>
                     
                     )}
-                    <Typography variant="h5">
-                        You have scrolled to the bottom :)
-                    </Typography>
+
                 </Container>
                 
         
