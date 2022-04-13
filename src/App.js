@@ -1,5 +1,5 @@
 import React , { useState, useMemo }from 'react';
-
+import 'react-app-polyfill/stable';
 import { LoginPage,ChangePassword,EmailVerification } from './login';
 import { UserComment, ContentPreview, AdminComment} from './comment';
 import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc, RestaurantProfile} from './profile';
