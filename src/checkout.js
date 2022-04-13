@@ -214,7 +214,7 @@ function Checkout() {
           setFetch(false);
         })}
     })
-
+    
     return (
         <>
         <div style={{width:'80%', margin:'auto'}}>
