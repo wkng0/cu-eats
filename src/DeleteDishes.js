@@ -1,5 +1,7 @@
-import React, {useState,useContext} from 'react';
-import {useEffect} from "react";
+// import React, {useState,useContext} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+import { UserContext } from './UserContext';
+// import {useEffect} from "react";
 import { DishContext } from './shoppingCart/sc-context';
 import './canteen.css';
 // import NAmenu from './NAmenu';
@@ -29,6 +31,7 @@ const menu=["NaMenu","ShawMenu","UcMenu"]
 window.number = 0;
 
 function DeleteDish(props) {
+  
     console.log(listOfMenu)
     const [loadFinish,setLoadFinish]=useState(false);
     // const [menunumber] = useState(props.value);
@@ -103,6 +106,8 @@ function DeleteDish(props) {
 const canteen=["NaMenu","ShawMenu","UcMenu"]
 
 function NewShowDishes({menu} , value){
+
+    const {user, setUser} = useContext(UserContext);
     const [variant, setVariant] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const {addToCart} = useContext(DishContext);
@@ -139,41 +144,59 @@ function NewShowDishes({menu} , value){
         setQuantity(option.value)
         
     }
-
-    const deleteDish = (id) => {
-        Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
-        .then(()=>{
-            alert("deleted!" ); 
-            window.location.reload();
-         
-        });
+    const deleteDish = (id)=>{
+        if(localStorage.getItem('type')=="guest"){
+            window.location.assign("/login");
+        }else if(localStorage.getItem('type')=="restaurant"){
+            Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
+            .then(()=>{
+                alert("deleted!" ); 
+                window.location.reload();
+             
+            });
+        }
     }
 
+
     const hideDish = (id) => {
-        Axios.put(`http://localhost:7000/dbNewMenu/hideDishes/${canteen[window.number]}/${id}`)
-        .then(()=>{
-            alert("Hide Menu!"); 
-            window.location.reload();
-        });
+        if(localStorage.getItem('type')=="guest"){
+            window.location.assign("/login");
+        }else if(localStorage.getItem('type')=="restaurant"){
+            Axios.put(`http://localhost:7000/dbNewMenu/hideDishes/${canteen[window.number]}/${id}`)
+            .then(()=>{
+                alert("Hide Menu!"); 
+                window.location.reload();
+            });
+        }
     }
 
     const unhideDish = (id) => {
-        Axios.put(`http://localhost:7000/dbNewMenu/unhideDishes/${canteen[window.number]}/${id}`)
-        .then(()=>{
-            alert("Un-Hide Menu!"); 
-            window.location.reload();
-        });
+        if(localStorage.getItem('type')=="guest"){
+            window.location.assign("/login");
+        }else if(localStorage.getItem('type')=="restaurant"){
+            Axios.put(`http://localhost:7000/dbNewMenu/unhideDishes/${canteen[window.number]}/${id}`)
+            .then(()=>{
+                alert("Un-Hide Menu!"); 
+                window.location.reload();
+            });
+        }
     }
     
     // const [newprice] = useState(0);
     const EditPrice = (id, variantitem) => {
-        const newPrice = prompt("Enter new price: ");
-        const StringPrice = String(newPrice);
-        Axios.put(`http://localhost:7000/dbNewMenu/updatePrices/${canteen[window.number]}/${id}/${variantitem}/${StringPrice}`)
-        .then(()=>{
-            alert("Price Updated"); 
-            window.location.reload();
-        });
+        if(localStorage.getItem('type')=="guest"){
+            window.location.assign("/login");
+        }else if(localStorage.getItem('type')=="restaurant"){
+            const newPrice = prompt("Enter new price: ");
+            if (newPrice != "") {
+                const StringPrice = String(newPrice);
+                Axios.put(`http://localhost:7000/dbNewMenu/updatePrices/${canteen[window.number]}/${id}/${variantitem}/${StringPrice}`)
+                .then(()=>{
+                    alert("Price Updated"); 
+                    window.location.reload();
+                });
+            }
+        }
     }
 
     return(
