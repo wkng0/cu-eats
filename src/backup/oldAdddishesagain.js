@@ -1,326 +1,335 @@
-// import React, {useState,useContext} from 'react';
-import React, {useEffect, useState, useContext} from 'react';
+import { useState, useEffect, useContext } from "react";
+import React from "react";
+import Axios from "axios";
+import { Button } from "@mui/material";
 import { UserContext } from './UserContext';
-// import {useEffect} from "react";
-import { DishContext } from './shoppingCart/sc-context';
-import './canteen.css';
-// import NAmenu from './NAmenu';
-// import Select from 'react-select';
-import Axios from "axios"; 
-import { Card,CardMedia,CardContent } from '@mui/material';
-import { Box } from '@mui/system';
-import { Typography } from '@mui/material';
-import Select from 'react-select';
-import {Container} from '@mui/material';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
-import { Button } from '@mui/material';
-import { Chip,Stack } from '@mui/material';
-import {Skeleton} from '@mui/material';
-
-
-let canteenInfo=[];
-let listOfMenu=[];
+import {
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    FormLabel,
+    TextField,
+    Chip,
+    Container,
+    // Button,
+    ListItem,
+    Stack
+} from "@mui/material";
+import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
 const menu=["NaMenu","ShawMenu","UcMenu"]
 
-
-window.number = 0;
-
-function DeleteDish(props) {
-  
-    console.log(listOfMenu)
-    const [loadFinish,setLoadFinish]=useState(false);
-    // const [menunumber] = useState(props.value);
-    window.number = props.value; 
-    // make api call 
-    useEffect(() => {
-        if(loadFinish==false){
-            fetch("http://localhost:7000/dbcanteenInfo/getCanteenInfo")
-            .then(res=>res.json())
-            .then(db=>canteenInfo=db)
-            .then(
-                fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
-                .then(res=>res.json())
-                .then(db=>listOfMenu=db)
-                .then(()=>{
-                    setTimeout(()=>{
-                        setLoadFinish(true)
-                    },1000) 
-                })
-            )
-        }
-    });
-    console.log(canteenInfo)
-    if(loadFinish==false) {
-        return (
-            <>
-                <Box sx={{mb:8}}>
-                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"60vh"} />
-                </Box>
-                <Box sx={{mx:10}}>
-                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={300} />
-                </Box>
-   
-                
-            </>
-        )
-    }
-    else return(
-        <>
-        <section style={{
-            minHeight: "60vh",
-            width: "100%",
-            backgroundImage: `linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url(${canteenInfo[props.value].canteen_image})`,  
-            backgroundColor: "#5d4e99",
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-            position: "relative",
-        }}>
-            <div class="text-box">
-                <h1>{canteenInfo[props.value].canteen_name}</h1>
-                <p>{canteenInfo[props.value].canteen_description}</p>
-                <a href={canteenInfo[props.value].website} class="hero-btn">Visit Us To Know More</a>
-            </div>
-        </section>
-
-        {/* <!-- ----- restaurant ------ --> */}
-        <div>
-            <Container maxWidth="md">
-                {listOfMenu.map( (menu) =>{
-                    return(
-                        <div>
-                            <NewShowDishes menu={menu}/>
-                        </div>
-                    );
-                })}
-            </Container>
-        </div>
-        </>
-    )
-}
-
-const canteen=["NaMenu","ShawMenu","UcMenu"]
-
-function NewShowDishes({menu} , value){
+function AddDishes(props) {
 
     const {user, setUser} = useContext(UserContext);
-    const [variant, setVariant] = useState(0);
-    const [quantity, setQuantity] = useState(0);
-    const {addToCart} = useContext(DishContext);
-    const [price,setPrice]=useState(0);
-    let variantList=[];
-    const tag=menu.tag;
-    
-    useEffect(()=>{
-        console.log(tag)
-        let data=variantList;
-        for(let i=0;i<menu.variants.length;i++){
-            const obj={
-                value: i,
-                label: menu.variants[i].name
-            }
-            data.push(obj);
-        
-        }
-        //console.log(variantList);
-    })
-    
-    // const quantityList=[
-    //     { value: 0, label: '0' },
-    //     { value: 1, label: '1' },
-    //     { value: 2, label: '2' }
-    // ]
+    const [name, setName] = useState("");
+    const [variant, setVariant] = useState('');
+    const [variantList, setVariantList]=useState([]);
+    const [price , setPrice] = useState(0);
+    const [pricesList, setPricesList] = useState([]);
+    const [category, setCategory] = useState('');
+    const [image, setImage] = useState('');
+    const [tag, setTag]=useState("");
+    const [tagError, setTagError]=useState(false)
+    const [tagList, setTagList]=useState([]);
+    const [chipData, setChipData]=useState([]);
+    const [color, setColor]=useState("default")
+    const [variantError, setVariantError]=useState(false)
+    const [nameError, setNameError]=useState(false);
+    const [hide] = useState(false);
+    window.whichcan = -1;
 
-    const handleVariant=(option)=>{
-        setVariant(option.value)
-        setPrice(menu.variants[variant].price*quantity)
-
-    }
-    const handleQuantity=(option)=>{
-        setQuantity(option.value)
-        
-    }
-    const deleteDish = (id)=>{
+    const AddDishes = () => {
+        if (localStorage.getItem('user') == "0") {
+            window.whichcan = 0;
+        } 
+        if (localStorage.getItem('user') == "1") {
+            window.whichcan = 1;
+        } 
+        if (localStorage.getItem('user') == "2") {
+            window.whichcan = 2;
+        } 
         if(localStorage.getItem('type')=="guest"){
             window.location.assign("/login");
         }else if(localStorage.getItem('type')=="restaurant"){
-            Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
-            .then(()=>{
-                alert("deleted!" ); 
-                window.location.reload();
-             
-            });
-        }
-    }
-
-
-    const hideDish = (id) => {
-        if(localStorage.getItem('type')=="guest"){
-            window.location.assign("/login");
-        }else if(localStorage.getItem('type')=="restaurant"){
-            Axios.put(`http://localhost:7000/dbNewMenu/hideDishes/${canteen[window.number]}/${id}`)
-            .then(()=>{
-                alert("Hide Menu!"); 
-                window.location.reload();
-            });
-        }
-    }
-
-    const unhideDish = (id) => {
-        if(localStorage.getItem('type')=="guest"){
-            window.location.assign("/login");
-        }else if(localStorage.getItem('type')=="restaurant"){
-            Axios.put(`http://localhost:7000/dbNewMenu/unhideDishes/${canteen[window.number]}/${id}`)
-            .then(()=>{
-                alert("Un-Hide Menu!"); 
-                window.location.reload();
-            });
-        }
-    }
-    
-    // const [newprice] = useState(0);
-    const EditPrice = (id, variantitem) => {
-        if(localStorage.getItem('type')=="guest"){
-            window.location.assign("/login");
-        }else if(localStorage.getItem('type')=="restaurant"){
-            const newPrice = prompt("Enter new price: ");
-            if (newPrice != "") {
-                const StringPrice = String(newPrice);
-                Axios.put(`http://localhost:7000/dbNewMenu/updatePrices/${canteen[window.number]}/${id}/${variantitem}/${StringPrice}`)
-                .then(()=>{
-                    alert("Price Updated"); 
-                    window.location.reload();
+            if(name==""||variantList.length==0){
+                if(name=="") setNameError(true);
+                if(variantList.length==0) setVariantError(true);
+            }else{
+                Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/${menu[window.whichcan]}`, {
+                    name: name, 
+                    variants: variantList,
+                    category: category,
+                    image: image,
+                    tag: tagList,
+                    hide: hide
                 });
+                alert(menu[window.whichcan] + " added! Please refresh" ); 
+                window.location.reload();
             }
         }
+    };
+    const handleDelete = (chipToDelete) => () => {
+        let label=chipToDelete.label;
+        if(chipToDelete.type=="variant"){
+            label=label.substring(0,label.indexOf("$")-1);
+            //console.log(label);
+            setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+            for(let i=0;i<variantList.length;i++){
+                if(variantList[i].name.localeCompare(label)==0){
+                    let newVariantList=variantList;
+                    newVariantList.splice(i,1);
+                    setVariantList(newVariantList);
+                    break;
+                }
+            }
+        }else{
+            setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+            for(let i=0;i<tagList.length;i++){
+                if(tagList[i].label.localeCompare(label)==0){
+                    let newTagList=tagList;
+                    newTagList.splice(i,1);
+                
+                    setTagList(newTagList);
+                }
+
+            }
+        }
+    };
+    const handleChangeTag=(event)=>{
+        setTag(event.target.value);
+        setTagError(false);
     }
 
-    return(
-        <Card sx={{display:"flex", alignItems: 'center', my:5}}>
-            <CardMedia
-                component="img"
-                sx={{ width: 300, height:300 }}
-                image={menu.image}
-            />
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <CardContent sx={{ flex: '1 0 auto' }}>
-                    <Typography component="div" variant="h6" fullWidth>
-                        {menu.name}
-                    </Typography>
+    const saveTag=()=>{
+        if(tag!=""){
+            let max;
+            let newChipData=chipData;
+            //console.log(newChipData)
+            if (newChipData.length==0){
+                max=0;
+            }else{
+                max=chipData[chipData.length-1].key+1;
+            }
+            
+            let chipItem={ key: max, label: tag, color: color,type: "tag"}
+            newChipData.push(chipItem)
+            setChipData(newChipData);
+            
+            chipItem={label:tag, color:color}
+            let newTagList=tagList;
+            newTagList.push(chipItem);
+            setTagList(newTagList);
+
+
+            setTag("")
+        }else{
+            setTagError(true);
+        }
+    }
+    const handleChangeColor=(event)=>{
+        setColor(event.target.value)
+    }
+    
+    const saveVariant=()=>{
+        if(variant!="" && price!=""){
+            let newVariantList=variantList;
+            let variantItem={name: variant,price: price}
+            newVariantList.push(variantItem)
+
+            let max;
+            let newChipData=chipData;
+            //console.log(newChipData)
+            if (newChipData.length==0){
+                max=0;
+            }else{
+                max=chipData[chipData.length-1].key+1;
+            }
+            
+            let chipItem={ key: max, label: variant+" $"+price,type: "variant"}
+            newChipData.push(chipItem)
+            setChipData(newChipData);
+        
+
+            setPrice("");
+            setVariant("");
+        }else{
+            setVariantError(true);
+        }
+        
+    }
+
+   
+
+    return (
+        <Container maxWidth="md">
+            <div>
+            {/* <AppBar>
+                <toolbar>
+                <h1>SIGNIN FORM </h1>
+                </toolbar>
+            </AppBar> */}
+                <h1>Add Dish</h1>
+
+                
+                <form>
+                
+
+                    
+                    <TextField
+                        style={{  margin: "5px" }}
+                        type="text"
+                        label="name"
+                        variant="outlined"
+                        onChange={(event)=> {
+                            setName(event.target.value)
+                            setNameError(false);
+                        }}
+                        fullWidth
+                        error={nameError}
+                    />
+                    <br />
+                        
+                    
+                        <TextField
+                            style={{ margin: "5px" }}
+                            type="text"
+                            value={variant}
+                            label="variant"
+                            variant="outlined"
+                            onChange={(event)=> {
+                                setVariant(event.target.value)
+                                setVariantError(false)
+                            }}
+                            fullWidth
+                            error={variantError}
+                        />
+                
+                
+                        <br />
+
+                        <TextField
+                            style={{margin: "5px" }}
+                            value={price}
+                            type="number"
+                            label="Prices"
+                            variant="outlined"
+                            onChange={(event)=> {
+                                setPrice(event.target.value)
+                                setVariantError(false)
+                            }}
+                            fullWidth
+                            error={variantError}
+                        />
+                
+                        
+             
+                    <br />  
+
+                    {/* <p style={{fontsize: "24px"}}>What you have added in pairs</p> */}
+                   
+                    <br />
+                    <Button variant="contained" onClick={saveVariant}>Please Add Variant and Price In pairs</Button> 
+                    <br />
+                    <br />
                     <Stack direction="row" spacing={1}>
 
-                    
-                    {tag.map((file,i) =>{   
-                        return (
-                            <Chip
-                                label={tag[i].label}
-                                color={tag[i].color}
-                            />   
-                        );
-                    })}
-                    </Stack>
-                    <Typography variant="subtitle1" color="text.secondary" component="div">
-                        Variants
-                    </Typography>
-                    <Select 
-                        options={variantList} 
-                        sx={{zIndex:99999}}
-                        onChange={handleVariant}
-            
-                        //ref
-                        menuPortalTarget={document.body} 
-                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                    />
-                        {/* <Typography variant="subtitle1" color="text.secondary" component="div">
-                            Quantity
-                        </Typography> */}
-                            {/* <Select 
-                                options={quantityList} 
-                                sx={{zIndex:99999}}
-                                onChange={handleQuantity}
-                                //ref
-                                menuPortalTarget={document.body} 
-                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                            /> */}
-                    
-                    <Typography variant="h6" component="div" >
-                        Price: ${menu.variants[variant].price}
-                    </Typography>
-                    
-                    <Button 
-                        variant="contained" 
-                        endIcon={<CurrencyExchangeIcon />}
-                        onClick={()=>{
-                            EditPrice(menu._id, menu.variants[variant].name);
-                        }}
-                        hidden={localStorage.getItem("type")=="admin"}
-                    >
-                        Edit Price
-                    </Button>
-
-                    {"   "}
-                    <Button 
-                        variant="contained" 
-                        endIcon={<DeleteIcon />}
-                        onClick={()=>{
-                            deleteDish(menu._id);
-                        }}
-                        hidden={localStorage.getItem("type")=="admin"}
-                    >
-                        Delete
-                    </Button>
-                    {"     "}
-                    { !menu.hide ? 
-                    <>
-                    <Button 
-                        variant="contained" 
-                        endIcon={<VisibilityOffIcon />}
-                        onClick={()=>{
-                            hideDish(menu._id);
-                        }}
-                        hidden={localStorage.getItem("type")=="admin"}
-                    >
-                        Hide
-                    </Button>
-                    </>
-                    : 
-                    <Button 
-                        variant="contained" 
-                        endIcon={<VisibilityIcon />}
-                        onClick={()=>{
-                            unhideDish(menu._id);
-                        }}
-                        hidden={localStorage.getItem("type")=="admin"}
-                    >
-                        Un-Hide
-                    </Button>
-                    }
-                </CardContent>
-            </Box>
-        
-        </Card>
-
-            
-    );
-
-
-}
-export default DeleteDish;
-
-
-
-//     // const updatePrices = (id) => {
-//     //     const newAge = prompt("Enter new age: ");
+                        {chipData.map((data) =>{ 
+                            
+                            return (
     
-//     //     Axios.put('http://localhost:3001/update', {newAge: newAge, id: id}).then(()=>{
-//     //       setListOfFriends(listOfFriends.map((val)=> {
-//     //         return val._id == id 
-//     //           ? {_id: id, name: val.name, age: newAge} 
-//     //           : val;
-//     //       }))
-//     //     });
-//     //   }
+                                <Chip
+                                    label={data.label}
+                                    key={data.key}
+                                    onDelete={handleDelete(data)}
+                                    hidden={data.type=="tag"}
+                                />
+
+                    
+                            );
+                        })}
+                    </Stack>
+                    <br />
+                    <TextField
+                        style={{ margin: "5px" }}
+                        type="text"
+                        label="category"
+                        variant="outlined"
+                        onChange={(event)=> {
+                            setCategory(event.target.value)
+                        }}
+                        fullWidth
+                    />
+                    <br />
+
+                    <TextField
+                        style={{ margin: "5px" }}
+                        type="text"
+                        label="image url"
+                        variant="outlined"
+                        onChange={(event)=> {
+                            setImage(event.target.value)
+                        }}
+                        fullWidth
+                    />
+                    <br />
+                    <TextField
+                        style={{ margin: "5px" }}
+                        type="text"
+                        label="tag"
+                        variant="outlined"
+                        value={tag}
+                        onChange={handleChangeTag}
+                        fullWidth
+                        error={tagError}
+                    />
+                    <br />
+                    <FormLabel id="demo-controlled-radio-buttons-group">Tag Color</FormLabel>
+                    <RadioGroup
+                        row
+                        value={color}
+                        onChange={handleChangeColor}
+                        >
+                        <FormControlLabel value="default" control={<Radio />} label="default (gray)" />
+                        <FormControlLabel value="primary" control={<Radio />} label="light blue" />
+                        <FormControlLabel value="secondary" control={<Radio />} label="purple" />
+                        <FormControlLabel value="error" control={<Radio />} label="red" />
+                        <FormControlLabel value="info" control={<Radio />} label="blue" />
+                        <FormControlLabel value="success" control={<Radio />} label="green" />
+                        <FormControlLabel value="warning" control={<Radio />} label="yellow" />
+                    </RadioGroup>
+                    <Button variant="contained" onClick={saveTag}>Add Tag</Button> 
+                    <br />
+                    <br />
+                    <Stack direction="row" spacing={1}>
+
+                        {chipData.map((data) =>{ 
+                            
+                            return (
+    
+                                <Chip
+                                    label={data.label}
+                                    key={data.key}
+                                    color={data.color}
+                                    hidden={data.type=="variant"}
+                                    onDelete={handleDelete(data)}
+                                />
+
+                    
+                            );
+                        })}
+                    </Stack>
+                    <br />
+
+                    <Button 
+                        variant="contained"
+                        onClick={AddDishes}>Add Dish</Button>
+
+                </form>
+            </div>
+        </Container>
+    );
+}
+
+
+export default AddDishes;
