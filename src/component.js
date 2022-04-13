@@ -360,7 +360,7 @@ function NavBar() {
                           <a style={{color: '#5D4E99', textDecoration: 'none' }}> Add Dishes </a>
                         </MenuItem>
                         <MenuItem onClick={delDish}>
-                          <a style={{color: '#5D4E99', textDecoration: 'none' }}> Hide or Delete Dishes </a>
+                          <a style={{color: '#5D4E99', textDecoration: 'none' }}> Edit Dishes </a>
                         </MenuItem>                      
                         </Menu>
                     </Box>
