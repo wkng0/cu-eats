@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import React from "react";
 import Axios from "axios";
 import { Button } from "@mui/material";
+import { UserContext } from './UserContext';
 import {
     RadioGroup,
     FormControlLabel,
@@ -20,6 +21,7 @@ const menu=["NaMenu","ShawMenu","UcMenu"]
 
 function AddDishes(props) {
 
+    const {user, setUser} = useContext(UserContext);
     const [name, setName] = useState("");
     const [variant, setVariant] = useState('');
     const [variantList, setVariantList]=useState([]);
@@ -35,23 +37,27 @@ function AddDishes(props) {
     const [variantError, setVariantError]=useState(false)
     const [nameError, setNameError]=useState(false);
     const [hide] = useState(false);
+
     const AddDishes = () => {
-        if(name==""||variantList.length==0){
-            if(name=="") setNameError(true);
-            if(variantList.length==0) setVariantError(true);
-        }else{
-            Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/${menu[props.value]}`, {
-                name: name, 
-                variants: variantList,
-                category: category,
-                image: image,
-                tag: tagList,
-                hide: hide
-            });
-            alert("Menu added! Please refresh" ); 
-            window.location.reload();
+        if(localStorage.getItem('type')=="guest"){
+            window.location.assign("/login");
+        }else if(localStorage.getItem('type')=="restaurant"){
+            if(name==""||variantList.length==0){
+                if(name=="") setNameError(true);
+                if(variantList.length==0) setVariantError(true);
+            }else{
+                Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/${menu[props.value]}`, {
+                    name: name, 
+                    variants: variantList,
+                    category: category,
+                    image: image,
+                    tag: tagList,
+                    hide: hide
+                });
+                alert("Menu added! Please refresh" ); 
+                window.location.reload();
+            }
         }
-        
     };
     const handleDelete = (chipToDelete) => () => {
         let label=chipToDelete.label;
