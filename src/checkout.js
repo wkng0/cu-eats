@@ -68,7 +68,6 @@ function Checkout() {
     const [name, setName] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [point, setPoint] = React.useState(0);
-    const [uid, setUID] = React.useState(0);
     const [pointUse, setPointUse] = React.useState(0);
     const [discount, setDiscount] = React.useState(0);
     const [address, setAddress] = React.useState(null);
@@ -91,14 +90,13 @@ function Checkout() {
     const handleRefresh = () => {setRefresh(!refresh);};
     const receiptID = uuid();
     const handleReceipt = (event) => {
-        //receiptID = uid(Date.now().toString() + uid);
         if(name!=''&&phone!=''&&address!=null){
             console.log('receipt:', receiptID);
             fetch("http://localhost:7000/dbReceipt/user", {
                 method: 'POST', 
                 body: new URLSearchParams({
                     "irid": receiptID,
-                    "uid": uid,
+                    "uid": user,
                     "res": localStorage.getItem("cartCanteen"),
                     "name": name,
                     "phone": phone,
@@ -121,7 +119,6 @@ function Checkout() {
                 localStorage.setItem('cart',"");
                 navigate('/receipt/' + receiptID)}
                 )
-                //window.location.href = '/receipt/' + receiptID})
             .then(clearCart)
             .catch((error) => {console.error('Error:', error);});
         }else{
@@ -168,7 +165,6 @@ function Checkout() {
         if (reason === 'clickaway') {
             return;
         }
-    
         setOpen(false);
     }
 
@@ -205,7 +201,6 @@ function Checkout() {
             setName(data[0].user_name);
             setPoint(data[0].point);
             setPhone(data[0].phone);
-            setUID(data[0].uid);
             setFetch(true);
         })
         .then(fetchAddress())
@@ -368,9 +363,7 @@ function Checkout() {
             <Button 
                 size="large" 
                 onClick={handleReceipt}
-                //href={'/receipt/'+receiptID}
                 sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
-                //disabled={!formIsValid()}
             >
               Submit Order
             </Button>

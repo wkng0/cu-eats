@@ -66,6 +66,7 @@ function Receipt() {
     
     const handleReorder = () => {
         localStorage.setItem('cart', JSON.stringify(orderItem));
+        localStorage.setItem('cartCanteen', res);
         window.location.href = '/ShoppingCart/';
     }
 
