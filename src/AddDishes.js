@@ -19,7 +19,7 @@ import { CoPresent, SettingsAccessibility } from "@mui/icons-material";
 
 const menu=["NaMenu","ShawMenu","UcMenu"]
 
-function AddDishes(props) {
+function AddDishes() {
 
     const {user, setUser} = useContext(UserContext);
     const [name, setName] = useState("");
