@@ -30,12 +30,25 @@ const menu=["NaMenu","ShawMenu","UcMenu"]
 
 window.number = 0;
 
-function DeleteDish(props) {
+function DeleteDish() {
   
     console.log(listOfMenu)
     const [loadFinish,setLoadFinish]=useState(false);
     // const [menunumber] = useState(props.value);
-    window.number = props.value; 
+    window.number = -1; 
+
+    if (localStorage.getItem('user') == "0") {
+        window.number = 0;
+        // alert(window.whichcan);
+    } 
+    if (localStorage.getItem('user') == "1") {
+        window.number = 1;
+        // alert(window.number);
+    } 
+    if (localStorage.getItem('user') == "2") {
+        window.number = 2;
+        // alert(window.whichcan);
+    } 
     // make api call 
     useEffect(() => {
         if(loadFinish==false){
@@ -43,7 +56,7 @@ function DeleteDish(props) {
             .then(res=>res.json())
             .then(db=>canteenInfo=db)
             .then(
-                fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
+                fetch("http://localhost:7000/dbMenu/getMenu/"+menu[window.number])
                 .then(res=>res.json())
                 .then(db=>listOfMenu=db)
                 .then(()=>{
@@ -54,7 +67,25 @@ function DeleteDish(props) {
             )
         }
     });
-    console.log(canteenInfo)
+
+    const redirectingtoLogin = () => {
+        setTimeout(function () {
+            window.location.assign("/login");
+        }, 2000);
+    }
+
+    console.log(canteenInfo);
+
+    if (window.number == -1) {
+        return (
+            <>
+                <p>Please Login!</p>
+                <p>redirecting to login page...</p>
+                {redirectingtoLogin()}
+            </>
+        );
+    } 
+    else {
     if(loadFinish==false) {
         return (
             <>
@@ -64,7 +95,6 @@ function DeleteDish(props) {
                 <Box sx={{mx:10}}>
                     <Skeleton animation="wave" variant="rectangular" width={"100%"} height={300} />
                 </Box>
-   
                 
             </>
         )
@@ -74,16 +104,16 @@ function DeleteDish(props) {
         <section style={{
             minHeight: "60vh",
             width: "100%",
-            backgroundImage: `linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url(${canteenInfo[props.value].canteen_image})`,  
+            backgroundImage: `linear-gradient(rgba(182, 187, 205, 0.7), rgba(4,9,30,0.7)), url(${canteenInfo[window.number].canteen_image})`,  
             backgroundColor: "#5d4e99",
             backgroundPosition: "center",
             backgroundSize: "cover",
             position: "relative",
         }}>
             <div class="text-box">
-                <h1>{canteenInfo[props.value].canteen_name}</h1>
-                <p>{canteenInfo[props.value].canteen_description}</p>
-                <a href={canteenInfo[props.value].website} class="hero-btn">Visit Us To Know More</a>
+                <h1>{canteenInfo[window.number].canteen_name}</h1>
+                <p>{canteenInfo[window.number].canteen_description}</p>
+                <a href={canteenInfo[window.number].website} class="hero-btn">Visit Us To Know More</a>
             </div>
         </section>
 
@@ -101,6 +131,7 @@ function DeleteDish(props) {
         </div>
         </>
     )
+            }
 }
 
 const canteen=["NaMenu","ShawMenu","UcMenu"]
@@ -152,8 +183,7 @@ function NewShowDishes({menu} , value){
             .then(()=>{
                 alert("deleted!" ); 
                 window.location.reload();
-             
-            });
+            }).catch("You cannot edit other canteen!");
         }
     }
 
