@@ -1,30 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.9af35fd0.css",
-    "main.js": "/static/js/main.de721199.js",
+    "main.css": "/static/css/main.16021047.css",
+    "main.js": "/static/js/main.127e5132.js",
     "static/js/787.575d8993.chunk.js": "/static/js/787.575d8993.chunk.js",
     "static/media/UCfront.png": "/static/media/UCfront.56cf026b9015d16333e7.png",
-    "static/media/fast_food_1.png": "/static/media/fast_food_1.2e711590993b0da6814f.png",
     "static/media/lemonPie.jpeg": "/static/media/lemonPie.6aef5202807a33dc9e0e.jpeg",
     "static/media/CUHK.jpeg": "/static/media/CUHK.40e5559bd798c90980fd.jpeg",
     "static/media/NAfront.png": "/static/media/NAfront.303d4ea8445b7cc4e757.png",
     "static/media/UCcan.jpg": "/static/media/UCcan.1921c6ced0b03964ade3.jpg",
     "static/media/Toast.jpg": "/static/media/Toast.ea1a995aefcafa5cef9c.jpg",
     "static/media/NAcan.jpg": "/static/media/NAcan.85e665d633bf8672013e.jpg",
-    "static/media/fast_food_2.png": "/static/media/fast_food_2.28fef8e7fd512ad42ffd.png",
     "static/media/Shawcan.jpg": "/static/media/Shawcan.1e14d10a3b8398394982.jpg",
     "static/media/Shawfront.jpg": "/static/media/Shawfront.1e14d10a3b8398394982.jpg",
     "static/media/RedBeanIcyDrink.jpg": "/static/media/RedBeanIcyDrink.60dc3784a8520570af45.jpg",
     "static/media/logo.jpeg": "/static/media/logo.fdacc7f172932e183464.jpeg",
-    "static/media/fast_food_3.png": "/static/media/fast_food_3.845d21b86e0c5fd0b499.png",
     "static/media/logo_yellow.png": "/static/media/logo_yellow.3995dce74b65e9ed1e8f.png",
     "index.html": "/index.html",
-    "main.9af35fd0.css.map": "/static/css/main.9af35fd0.css.map",
-    "main.de721199.js.map": "/static/js/main.de721199.js.map",
+    "main.16021047.css.map": "/static/css/main.16021047.css.map",
+    "main.127e5132.js.map": "/static/js/main.127e5132.js.map",
     "787.575d8993.chunk.js.map": "/static/js/787.575d8993.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9af35fd0.css",
-    "static/js/main.de721199.js"
+    "static/css/main.16021047.css",
+    "static/js/main.127e5132.js"
   ]
 }
