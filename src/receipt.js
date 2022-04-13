@@ -317,7 +317,8 @@ function Receipt() {
 
 function Records() {
     const {user, setUser} = React.useContext(UserContext);
-    const [records, setRecord] = React.useState(null);
+    const [current, setCurrent] = React.useState(null);
+    const [past, setPast] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
     const navigate = useNavigate();
 
@@ -331,7 +332,8 @@ function Records() {
         fetch('http://localhost:7000/dbReceipt/getRecords/'+user)
         .then(res=>res.json())
         .then(data=>{
-            setRecord(data);
+            setCurrent(data[0]);
+            setPast(data[1]);
             setFetch(true);
         })
         .catch(err=>{console.log(err);})
@@ -355,31 +357,55 @@ function Records() {
             </div>
             <div style={{width:'60%', margin:'auto'}}>
                 <h3 style={{color: '#5D4E99'}}>Shopping Records</h3>
-                <div style={{display: records.length? 'none':'block'}}>
+                <div style={{display: (current.length||past.length)? 'none':'block'}}>
                     <br/><br/><h4 style={{textAlign:'center', color: '#707070'}}>No records found</h4>
                 </div>
-                <div style={{display: records.length? 'block':'none'}}>
-                    {records.map((receipt)=>(
-                        <>
-                        <Card
-                            sx={{p:5, m:3, boxShadow: 2, cursor:"pointer"}} 
-                            onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
-                        >                            
-                            <Grid container >
+                <div style={{display: (current.length||past.length)? 'block':'none'}}>
+                    <h4 style={{color: '#707070'}}><b>Current Order</b></h4>
+                    <div style={{display:current.length? 'block':'none'}}>
+                        {current.map((receipt)=>(
+                            <Card
+                                sx={{p:5, m:3, boxShadow: 2, cursor:"pointer"}} 
+                                onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
+                            >                            
+                                <Grid container >
                                     <Grid item xs={6}>
                                         <h5 style={{color: '#5D4E99'}}><b>{receipt.rName}</b></h5>
                                     </Grid>
                                     <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>
                                         <small style={{color: '#707070'}}>More detail <span style={{color: '#5D4E99'}}><ArrowForwardIosIcon/></span></small>
                                     </Grid>
-                            </Grid><br/>
-                            <Grid container >
+                                </Grid><br/>
+                                <Grid container >
                                     <Grid item xs={6} sx={{color: '#707070'}}>{formatDate(receipt.timestamp)}</Grid>
                                     <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>$ {receipt.total.toFixed(1)}</Grid>
+                                </Grid>
+                            </Card>
+                        ))}
+                        <br/>
+                    </div>
+                    <div style={{display:past.length? 'block':'none'}}>
+                        <h4 style={{color: '#707070'}}><b>Completed Order</b></h4>
+                        {past.map((receipt)=>(
+                        <Card
+                            sx={{p:5, m:3, boxShadow: 2, cursor:"pointer"}} 
+                            onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
+                        >                            
+                            <Grid container >
+                                <Grid item xs={6}>
+                                    <h5 style={{color: '#5D4E99'}}><b>{receipt.rName}</b></h5>
+                                </Grid>
+                                <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>
+                                    <small style={{color: '#707070'}}>More detail <span style={{color: '#5D4E99'}}><ArrowForwardIosIcon/></span></small>
+                                </Grid>
+                            </Grid><br/>
+                            <Grid container >
+                                <Grid item xs={6} sx={{color: '#707070'}}>{formatDate(receipt.timestamp)}</Grid>
+                                <Grid item xs={6} sx={{textAlign:'right', color: 'black'}}>$ {receipt.total.toFixed(1)}</Grid>
                             </Grid>
                         </Card>
-                        </>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
             </>

@@ -161,9 +161,10 @@ async function fetchRecord(res){
     console.log('Connected successfully to server Receipt');
     const db = client.db(dbName);
     const collection = db.collection("Receipt");
-    let result = await collection.find({"uid":uid}).sort({timestamp: -1}).toArray();
-    res.send(result);
-    return result;
+    let current = await collection.find({"uid":uid, "status": {$not:{$eq: 2}}}).sort({timestamp: -1}).toArray();
+    let past = await collection.find({"uid":uid, "status":2}).sort({timestamp: -1}).toArray();
+    res.send([current,past]);
+    return [current,past];
 };
 
 async function fetchDashboard(res){
