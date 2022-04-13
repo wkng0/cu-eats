@@ -42,12 +42,15 @@ function AddDishes() {
     const AddDishes = () => {
         if (localStorage.getItem('user') == "0") {
             window.whichcan = 0;
+            // alert(window.whichcan);
         } 
         if (localStorage.getItem('user') == "1") {
             window.whichcan = 1;
+            // alert(window.whichcan);
         } 
         if (localStorage.getItem('user') == "2") {
             window.whichcan = 2;
+            // alert(window.whichcan);
         } 
         if(localStorage.getItem('type')=="guest"){
             window.location.assign("/login");

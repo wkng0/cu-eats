@@ -102,53 +102,49 @@ function NavBar() {
    const addDish = () =>{
     setAnchorElUser(null);
     userMenuStatus = -1;
-    window.location.assign("/AddDishes");
-    // if(user==0){
-    //   window.location.assign("/AddNaDishes");
-    // }else if(user==1){
-    //   window.location.assign("/AddShawDishes");
-    // }else if(user==2){
-    //   window.location.assign("/AddUcDishes");
-    // }
+    if(userData.user==0){
+      window.location.assign("/AddNaDishes");
+    }else if(userData.user==1){
+      window.location.assign("/AddShawDishes");
+    }else if(userData.user==2){
+      window.location.assign("/AddUcDishes");
+    }
    }
 
    const delDish = () =>{
     setAnchorElUser(null);
     userMenuStatus = -1;
-    window.location.assign("/deleteDishes");
-    // if(user==0){
-    //   window.location.assign("/deleteNaDishes");
-    // }else if(user==1){
-    //   window.location.assign("/deleteShawDishes");
-    // }else if(user==2){
-    //   window.location.assign("/deleteUcDishes");
-    // }
+    if(userData.user==0){
+      window.location.assign("/deleteNaDishes");
+    }else if(userData.user==1){
+      window.location.assign("/deleteShawDishes");
+    }else if(userData.user==2){
+      window.location.assign("/deleteUcDishes");
+    }
    }
 
    const menuDelDish = () =>{
     setAnchorElNav(null);
     NavMenuStatus = -1;
-    window.location.assign("/deleteDishes");
-    // if(user==0){
-    //   window.location.assign("/deleteNaDishes");
-    // }else if(user==1){
-    //   window.location.assign("/deleteShawDishes");
-    // }else if(user==2){
-    //   window.location.assign("/deleteUcDishes");
-    // }
+    if(userData.user==0){
+      window.location.assign("/deleteNaDishes");
+    }else if(userData.user==1){
+      window.location.assign("/deleteShawDishes");
+    }else if(userData.user==2){
+      window.location.assign("/deleteUcDishes");
+    }
    }
 
    const menuAddDish = () =>{
     setAnchorElNav(null);
     NavMenuStatus = -1;
-    window.location.assign("/AddDishes");
-    // if(user==0){
-    //   window.location.assign("/AddNaDishes");
-    // }else if(user==1){
-    //   window.location.assign("/AddShawDishes");
-    // }else if(user==2){
-    //   window.location.assign("/AddUcDishes");
-    // }
+    if(userData.user==0){
+      window.location.assign("/AddNaDishes");
+    }else if(userData.user==1){
+      window.location.assign("/AddShawDishes");
+    }else if(userData.user==2){
+      window.location.assign("/AddUcDishes");
+    }
    }
     React.useEffect(()=>{
       if(fetchFinish== false||(userData.pic!=""&&userData.type!="admin")){
@@ -364,7 +360,7 @@ function NavBar() {
                           <a style={{color: '#5D4E99', textDecoration: 'none' }}> Add Dishes </a>
                         </MenuItem>
                         <MenuItem onClick={delDish}>
-                          <a style={{color: '#5D4E99', textDecoration: 'none' }}> Edit Dishes </a>
+                          <a style={{color: '#5D4E99', textDecoration: 'none' }}> Hide or Delete Dishes </a>
                         </MenuItem>                      
                         </Menu>
                     </Box>
