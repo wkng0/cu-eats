@@ -102,49 +102,53 @@ function NavBar() {
    const addDish = () =>{
     setAnchorElUser(null);
     userMenuStatus = -1;
-    if(userData.user==0){
-      window.location.assign("/AddNaDishes");
-    }else if(userData.user==1){
-      window.location.assign("/AddShawDishes");
-    }else if(userData.user==2){
-      window.location.assign("/AddUcDishes");
-    }
+    window.location.assign("/AddDishes");
+    // if(user==0){
+    //   window.location.assign("/AddNaDishes");
+    // }else if(user==1){
+    //   window.location.assign("/AddShawDishes");
+    // }else if(user==2){
+    //   window.location.assign("/AddUcDishes");
+    // }
    }
 
    const delDish = () =>{
     setAnchorElUser(null);
     userMenuStatus = -1;
-    if(userData.user==0){
-      window.location.assign("/deleteNaDishes");
-    }else if(userData.user==1){
-      window.location.assign("/deleteShawDishes");
-    }else if(userData.user==2){
-      window.location.assign("/deleteUcDishes");
-    }
+    window.location.assign("/deleteDishes");
+    // if(user==0){
+    //   window.location.assign("/deleteNaDishes");
+    // }else if(user==1){
+    //   window.location.assign("/deleteShawDishes");
+    // }else if(user==2){
+    //   window.location.assign("/deleteUcDishes");
+    // }
    }
 
    const menuDelDish = () =>{
     setAnchorElNav(null);
     NavMenuStatus = -1;
-    if(userData.user==0){
-      window.location.assign("/deleteNaDishes");
-    }else if(userData.user==1){
-      window.location.assign("/deleteShawDishes");
-    }else if(userData.user==2){
-      window.location.assign("/deleteUcDishes");
-    }
+    window.location.assign("/deleteDishes");
+    // if(user==0){
+    //   window.location.assign("/deleteNaDishes");
+    // }else if(user==1){
+    //   window.location.assign("/deleteShawDishes");
+    // }else if(user==2){
+    //   window.location.assign("/deleteUcDishes");
+    // }
    }
 
    const menuAddDish = () =>{
     setAnchorElNav(null);
     NavMenuStatus = -1;
-    if(userData.user==0){
-      window.location.assign("/AddNaDishes");
-    }else if(userData.user==1){
-      window.location.assign("/AddShawDishes");
-    }else if(userData.user==2){
-      window.location.assign("/AddUcDishes");
-    }
+    window.location.assign("/AddDishes");
+    // if(user==0){
+    //   window.location.assign("/AddNaDishes");
+    // }else if(user==1){
+    //   window.location.assign("/AddShawDishes");
+    // }else if(user==2){
+    //   window.location.assign("/AddUcDishes");
+    // }
    }
     React.useEffect(()=>{
       if(fetchFinish== false||(userData.pic!=""&&userData.type!="admin")){
