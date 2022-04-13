@@ -37,18 +37,8 @@ function AddDishes(props) {
     const [variantError, setVariantError]=useState(false)
     const [nameError, setNameError]=useState(false);
     const [hide] = useState(false);
-    window.whichcan = -1;
 
     const AddDishes = () => {
-        if (localStorage.getItem('user') == "0") {
-            window.whichcan = 0;
-        } 
-        if (localStorage.getItem('user') == "1") {
-            window.whichcan = 1;
-        } 
-        if (localStorage.getItem('user') == "2") {
-            window.whichcan = 2;
-        } 
         if(localStorage.getItem('type')=="guest"){
             window.location.assign("/login");
         }else if(localStorage.getItem('type')=="restaurant"){
@@ -56,7 +46,7 @@ function AddDishes(props) {
                 if(name=="") setNameError(true);
                 if(variantList.length==0) setVariantError(true);
             }else{
-                Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/${menu[window.whichcan]}`, {
+                Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/${menu[props.value]}`, {
                     name: name, 
                     variants: variantList,
                     category: category,
@@ -64,7 +54,7 @@ function AddDishes(props) {
                     tag: tagList,
                     hide: hide
                 });
-                alert(menu[window.whichcan] + " added! Please refresh" ); 
+                alert("Menu added! Please refresh" ); 
                 window.location.reload();
             }
         }
