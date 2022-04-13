@@ -22,7 +22,7 @@ import{
     Snackbar,
     Alert
   } from '@mui/material';
-import { PanoramaSharp, WindowSharp } from '@mui/icons-material';
+import { PanoramaSharp, SettingsInputComponent, WindowSharp } from '@mui/icons-material';
 import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
 
@@ -392,7 +392,7 @@ function LoginWithPassword(props){
     const [target,setTarget] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
     const [open, setOpen]=React.useState(false);
-    // const {user, setUser} = useContext(UserContext);
+    const [wrongPw, setWrong] = React.useState(false);
     const handleChange=(event)=>{
         setPassword(event.target.value);
     }
@@ -424,7 +424,7 @@ function LoginWithPassword(props){
             localStorage.setItem('name', name);                  
             window.location.assign("/");
         }else{
-            window.alert("Wrong Password! Please Enter Again");
+            setWrong(true);
         }
         return;
 
@@ -447,6 +447,9 @@ function LoginWithPassword(props){
           }
       
           setOpen(false);
+          if(wrongPw==true){
+              setWrong(false);
+          }
     }
 
     // const reset = ()=>{
@@ -499,6 +502,11 @@ function LoginWithPassword(props){
                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                         <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
                             An email has been sent to your mailbox
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={wrongPw} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                            Wrong Password
                         </Alert>
                     </Snackbar>
                 </form>
@@ -688,7 +696,11 @@ function Register(props){
     const [iconB,setIconB]=React.useState('none');
     const [iconC,setIconC]=React.useState('block');
     const [iconD,setIconD]=React.useState('none');
-
+    const [miss, setMiss] = React.useState(false);
+    const [test, setTest] = React.useState(false);
+    const [num, setNum] = React.useState(false);
+    const [diff, setDiff] = React.useState(false);
+    const [form, setForm] = React.useState(false);
 
       
     const handleChangeEmail=(event)=>{
@@ -713,6 +725,8 @@ function Register(props){
     }
     const handleChangePhone=(event)=>{
         setPhone(event.target.value);
+        console.log(event.target.value);
+        console.log(typeof(event.target.value));
     }
     const handleChangeGender=(event)=>{
         setGender(event.target.value);
@@ -723,6 +737,7 @@ function Register(props){
     const handleChangeCollege=(event)=>{
         setCollege(event.target.value);
     }
+
     const viewPassword1=(event)=>{
         let passwordInput = document.getElementById('user-pw-1');
         if (passwordInput.type === 'password') {
@@ -772,16 +787,14 @@ function Register(props){
             const data = await res.json();
             console.log("user name?????", data.unique);
             if (data.unique == "false") {
-                setUnique(false);
-                // error = true;
-                window.alert("Username already exists. Please change your username");
+                setUnique(true);
+                return false;
             }
             if (data.unique == "true") {
-                setUnique(true);
+                return true;
             }
             const res_1 = undefined;
             console.log("success to post"); console.log();
-            // window.location.assign("/")
             ;
         } catch (err) {
             console.log(err);
@@ -801,27 +814,41 @@ function Register(props){
             console.log("email problem");
             check = false;
         }
-        if(fname=="" || lname=="" || username=="" ||pw1=="" || pw2==""){
+        if(fname=="" || lname=="" || username=="" ||pw1=="" || pw2=="" || phone==""){
             console.log("something empty");
             check = false;
         }
 
+        if(check==false){
+            setMiss(true);
+        }
+
+        if(phone > 20000000 ||phone<70000000 || phone>=90000000||phone<99999999){
+            check = true;
+        }else{
+            check = false;
+            setNum(true);
+        }
+
         let pwRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z])))(?=.{4,})");
         if(pwRegex.test(pw1)===false || pw1===""){
-            alert("Invalid Password\nValid Password: Minimum Password Length: 4, At Least 1 Capital Letter, At Least 1 Small Letter");
+            // alert("Invalid Password\nValid Password: Minimum Password Length: 4, At Least 1 Capital Letter, At Least 1 Small Letter");
             check = false;
             console.log("Password Problem");
+            setTest(true);
         }
         
         if(pw1!=pw2){
             console.log("different password");
-            window.alert("Different passwords. Please check again");
+            // window.alert("Different passwords. Please check again");
+            setDiff(true);
             check = false;
         }
 
         if(check ==true){
             checkUsename()
-            .then(()=>{
+            .then(res=>{
+                if(res==true){
                     fetch('http://localhost:7000/dbAccount/createAccount', { //saving to database
                         method: 'POST', 
                         body: new URLSearchParams({
@@ -844,6 +871,7 @@ function Register(props){
                     .catch((err)=>{
                         console.log(err);
                     });
+                }
             })
 
          
@@ -852,6 +880,27 @@ function Register(props){
         // console.log(false)
     }
 
+    const handleClose=(event, reason)=>{
+        if (reason === 'clickaway') {
+            return;
+          }
+        if(miss==true){
+            setMiss(false);
+        }
+        if(test==true){
+            setTest(false);
+        }
+        if(num==true){
+            setNum(false);
+        }
+        if(diff==true){
+            setDiff(false);
+        }
+        if(unique==true){
+            setUnique(false);
+        }
+
+    }
 
     return(
         <div id="login-register" className="login-container" >
@@ -945,6 +994,31 @@ function Register(props){
                     <br/><br/>
                     <p><a style={{color: "#F4CB86"}} href="contact.html">*: Required field</a></p>
                     <p><a style={{color: "#F4CB86"}} href="contact.html">Join us as a restaurant? Welcome and contact us!</a></p>
+                    <Snackbar open={miss} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+                            Missing Information, please ensure fill up all required fields
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={unique} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+                        Username already exists. Please change your username
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={num} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+                            Incorrect phone number
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={diff} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+                            Different passwords. Please check again
+                        </Alert>
+                    </Snackbar>
+                    <Snackbar open={test} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+                        Invalid Password, Valid Password: Minimum Password Length: 4, At Least 1 Capital Letter, At Least 1 Small Letter
+                        </Alert>
+                    </Snackbar>
                 </form>
             </section>
         </div>
