@@ -11,7 +11,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
 import{ Divider, Box, Button, Card, CardActionArea,CardActions, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, 
-  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar, Typography, CardContent} from '@mui/material';
+  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar, Skeleton, Typography, CardContent} from '@mui/material';
 
 let userInfo = [];
 
@@ -57,7 +57,21 @@ function Profile(){
 
   if (userData.username===''||fetchFinish == false){
     return(
-      <h1> loading ...</h1>
+      <React.Fragment>
+       <div class="container fluid">
+                  <div class="card">
+                      <div class="user text-center">
+                      </div>
+                      <div class="mt-5 text-center">
+        <Skeleton variant="rectangular"  height={300} animation ="wave" width="100%">
+            <div style={{ paddingTop: '57%' }} />
+          </Skeleton>
+          
+          <Skeleton animation="wave" height={50} width="100%" />
+          </div>
+          </div>
+          </div>
+      </React.Fragment>
     )
   }
   return(
@@ -388,7 +402,20 @@ function Address(){
 
   if(fetchFinish == false){
     return(
-      <h1>loading</h1>
+        <React.Fragment>
+          <div style={{width:'70%', margin:'auto'}}>
+          <Typography component="div" variant="h3">
+            <Skeleton animation="wave"/>
+          </Typography>
+          <Typography component="div" variant="h5">
+            <Skeleton animation="wave" height={250}/>
+          </Typography>
+          <Typography component="div" variant="h5">
+            <Skeleton animation="wave" height={250}/>
+          </Typography>
+          <Skeleton animation="wave" height={50} width="100%"/>
+          </div>
+        </React.Fragment>
     )
   }
   if(fetchFinish == true){
@@ -1035,75 +1062,6 @@ const {user, setUser} = useContext(UserContext);
       </>
     )
   }
-  // }else{
-  //   return(
-  //   <>
-  //   <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
-  //    <Box sx={{m: 2, display: 'inline'}}>
-  //   <TextField
-  //     id="standard-required"
-  //     label="Room"
-  //     variant="standard"
-  //     onChange={handleChangeRoom}
-  //   />
-  //   </Box>
-  //    <Box sx={{m: 2, display: 'inline'}}>
-  // <FormControl sx={{width:500}}>
-  //   <InputLabel variant="standard" htmlFor="uncontrolled-native">
-  //     College 
-  //   </InputLabel>
-  //   <NativeSelect
-  //   onChange={handleChangeCollege}
-  //   >
-  //     {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
-  //   </NativeSelect>
-  // </FormControl>
-  //   </Box>
-  //   <IconButton  sx={{float: 'right',color: '#5D4E99'}} onClick={handleNewAddress}>
-  //     <CheckIcon/>
-  //     save
-  //   </IconButton>
-  //   </>)
-  // }
-    // return(
-    //     <>
-    //     <h5 style={{color: '#5D4E99'}}>Add new address</h5><br/>
-    //      <Box sx={{m: 2, display: 'inline'}}>
-    //     <TextField
-    //       id="standard-required"
-    //       label="Room"
-    //       variant="standard"
-    //       onChange={handleChangeRoom}
-    //     />
-    //     </Box>
-    //     <Box sx={{ m: 5  ,display: 'inline'}}>
-    //   <FormControl >
-    //     <InputLabel variant="standard" htmlFor="uncontrolled-native">
-    //       Building
-    //     </InputLabel>
-    //     <NativeSelect
-    //     onChange={handleChangeBuilding}
-    //     >
-    //       {building.map((blg,index)=>(<option value={blg} key={blg}>{blg}</option>))}
-    //     </NativeSelect>
-    //   </FormControl>
-    //     </Box>
-        
-    //      <Box sx={{m: 2, display: 'inline'}}>
-    //   <FormControl sx={{width:500}}>
-    //     <InputLabel variant="standard" htmlFor="uncontrolled-native">
-    //       College (select if you are inside a college hostel,non college hostel please select Others)
-    //     </InputLabel>
-    //     <NativeSelect
-    //     onChange={handleChangeCollege}
-    //     >
-    //       {college.map((col,index)=>(<option key={col}value={col}>{col}</option>))}
-    //     </NativeSelect>
-    //   </FormControl>
-    //     </Box>
-    //     </>
-
-    // )
     
 }
 
@@ -1261,7 +1219,7 @@ window.location.reload();
   } else {
    return(
      <>
-      <div style={{width:'90%', margin:'auto'}}>
+      <div style={{width:'70%', margin:'auto'}}>
       <Button 
           size="small" 
           onClick={()=>navigate(-1)}
@@ -1269,9 +1227,6 @@ window.location.reload();
         >
           <ArrowBackIosIcon/>
         </Button>
-      </div><br/>
-      <div style={{width:'70%', margin:'auto'}}>
-      
      <IconButton sx={{float: 'right',color: '#5D4E99'}} onClick={updateInfo}><DoneIcon/></IconButton><br/>
      <h3 style={{color: '#5D4E99'}}>Peronal Information</h3><br/>
      <Box component="form"
