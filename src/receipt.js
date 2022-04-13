@@ -2,9 +2,10 @@ import * as React from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserContext } from './UserContext';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Divider, Button, Card } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { IconButton, FormControlLabel, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Divider, Button, Card, Menu, MenuItem, Checkbox } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { DataGrid } from '@mui/x-data-grid';
 
 
 const formatDate = (dateString) => {
@@ -64,16 +65,6 @@ function Receipt() {
 
     
     const handleReorder = () => {
-        {/*
-        if(canteen!=props.canteen && canteen!=""){
-            handleClickOtherCanteen();
-        }else if(quantity!=0){
-            localStorage.setItem("cartCanteen",props.canteen);
-            handleClickOk();
-            addToCart({id:menu._id,quantity:quantity,variant:menu.variants[variant],image: menu.image, title: menu.name})
-        }else{
-            handleClick();
-        }*/}
         localStorage.setItem('cart', JSON.stringify(orderItem));
         window.location.href = '/ShoppingCart/';
     }
@@ -363,7 +354,6 @@ function Records() {
             </div>
             <div style={{width:'60%', margin:'auto'}}>
                 <h3 style={{color: '#5D4E99'}}>Shopping Records</h3>
-                {console.log(records)}
                 <div style={{display: records.length? 'none':'block'}}>
                     <br/><br/><h4 style={{textAlign:'center', color: '#707070'}}>No records found</h4>
                 </div>
@@ -400,15 +390,29 @@ function Dashboard() {
     const [name, setName] = React.useState(null);
     const [records, setRecord] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
+    const [refresh, setRefresh] = React.useState(false);
+    const [anchorElFilter, setAnchorElFilter] = React.useState(false);
+    const [checked, setChecked] = React.useState([true, true, true]);
     const navigate = useNavigate();
     const status = ['Preparing', 'Delivering', 'Complete'];
     const color = ['#f44336', '#43a047', '#707070'];
-    React.useEffect(()=>{
-        if(localStorage.getItem('user') != ""){
-            setUser(localStorage.getItem('user'));
-            setName(localStorage.getItem('name'));
-            console.log("set!",user);
-        }
+    const handlePrepare = (event) => {
+        setChecked([event.target.checked, checked[1], checked[2]]);
+    };
+    const handleDeliver = (event) => {
+        setChecked([checked[0], event.target.checked, checked[2]]);
+    };
+    const handleComplete = (event) => {
+        setChecked([checked[0], checked[1], event.target.checked]);
+    };
+    const handleOpenFilter = (event) => {
+        setAnchorElFilter(event.currentTarget);
+
+    };
+    const handleCloseFilter = () => {
+        setAnchorElFilter(false);
+    };
+    const fetchReceipt = () => {
         fetch('http://localhost:7000/dbReceipt/getDashboard/'+name)
         .then(res=>res.json())
         .then(data=>{
@@ -416,6 +420,15 @@ function Dashboard() {
             setFetch(true);
         })
         .catch(err=>{console.log(err);})
+    }
+    React.useEffect(()=>{fetchReceipt();},[refresh])
+    React.useEffect(()=>{
+        if(localStorage.getItem('user') != ""){
+            setUser(localStorage.getItem('user'));
+            setName(localStorage.getItem('name'));
+            console.log("set!",user);
+        }
+        fetchReceipt();
     },[fetchFinish])
     
       if(!fetchFinish){
@@ -435,30 +448,83 @@ function Dashboard() {
                 </Button>
             </div>
             <div style={{width:'60%', margin:'auto'}}>
-                <h3 style={{color: '#5D4E99'}}>Dashboard</h3>
+                <h3 style={{color: '#5D4E99'}}>
+                    Dashboard
+                    <IconButton 
+                        size='small'
+                        onClick={()=>setRefresh(!refresh)}
+                        sx={{color:'#5D4E99', ':hover':{bgcolor:'transparent',color:'#5D4E99'}}}
+                    >
+                        <RefreshIcon/>
+                    </IconButton>
+                </h3>
                 <div style={{display: records == null? 'none':'block'}}>
                     <TableContainer component={Paper}>
-                    <Table aria-label="simple table">
+                    <Table aria-label="simple table" sx={{boxShadow:3}}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Receipt ID</TableCell>
                             <TableCell>Order Time</TableCell>
                             <TableCell>Total&nbsp;($)</TableCell>
-                            <TableCell>Status</TableCell>
+                            <TableCell>
+                                Status
+                                <IconButton 
+                                    size='small'
+                                    id = "filter-button"
+                                    aria-label="filter" 
+                                    aria-controls={Boolean(anchorElFilter) ? 'filter-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={Boolean(anchorElFilter) ? 'true' : undefined}
+                                    onClick={handleOpenFilter}
+                                    sx={{':hover':{bgcolor:'transparent'}}}
+                                >
+                                    <MoreVertIcon/>
+                                </IconButton>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
+                    <Menu 
+                        id="filter-menu" 
+                        anchorEl={anchorElFilter} 
+                        anchorOrigin={{ vertical: 'top', horizontal: 'left',}}
+                        aria-labelledby="filter-button"
+                        keepMounted
+                        transformOrigin={{ vertical: 'top', horizontal: 'left',}}
+                        open={Boolean(anchorElFilter)}
+                        onClose={handleCloseFilter}
+                        sx={{zIndex: '99999 !important'}}
+                    >
+                        <MenuItem style={{color: '#5D4E99'}}>
+                            <FormControlLabel
+                                label="Preparing"
+                                control={ <Checkbox size="small" color="secondary" checked={checked[0]} onChange={handlePrepare}/>}
+                            />
+                        </MenuItem>
+                        <MenuItem style={{color: '#5D4E99'}}>
+                            <FormControlLabel
+                                label="Delivering"
+                                control={ <Checkbox size="small" color="secondary" checked={checked[1]} onChange={handleDeliver}/>}
+                            />
+                        </MenuItem>
+                        <MenuItem style={{color: '#5D4E99'}}>
+                            <FormControlLabel
+                                label="Complete"
+                                control={ <Checkbox size="small" color="secondary" checked={checked[2]} onChange={handleComplete}/>}
+                            />
+                        </MenuItem>
+                    </Menu>
                     <TableBody>
                     {records.map((receipt)=>(
-                        <TableRow
-                            key={receipt.rid}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor:"pointer" }}
-                            onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
-                        >
-                            <TableCell component="th" scope="row">{receipt.id}</TableCell>
-                            <TableCell>{formatDate(receipt.timestamp)}</TableCell>
-                            <TableCell>{receipt.total.toFixed(1)}</TableCell>
-                            <TableCell style={{color: color[receipt.status]}}>{status[receipt.status]}</TableCell>
-                        </TableRow>
+                            <TableRow
+                                key={receipt.rid}
+                                sx={{'&:last-child td, &:last-child th': { border: 0 }, cursor:"pointer", display: checked[receipt.status]? 'table-row':'none'}}
+                                onClick={()=>{window.location.href = '/receipt/' + receipt.rid}}
+                            >
+                                <TableCell component="th" scope="row">{receipt.id}</TableCell>
+                                <TableCell>{formatDate(receipt.timestamp)}</TableCell>
+                                <TableCell>{receipt.total.toFixed(1)}</TableCell>
+                                <TableCell style={{color: color[receipt.status]}}>{status[receipt.status]}</TableCell>
+                            </TableRow>
                     ))}
                     </TableBody>
                     </Table>
