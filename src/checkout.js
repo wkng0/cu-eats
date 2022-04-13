@@ -7,6 +7,7 @@ import DiningIcon from '@mui/icons-material/LocalDining';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CloseIcon from '@mui/icons-material/Close';
+import {useNavigate} from "react-router-dom"
 
 import { v4 as uuid } from 'uuid';
 import { styled, FormGroup, FormControlLabel, Switch, Grid, Table, Divider, Box, Radio, RadioGroup, 
@@ -61,6 +62,7 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
   }
 
 function Checkout() {
+    const navigate = useNavigate();
     const {user, setUser} = React.useContext(UserContext);
     const { cart, total, clearCart } = React.useContext(DishContext);
     const [name, setName] = React.useState('');
@@ -117,7 +119,9 @@ function Checkout() {
             })
             .then(response => {console.log(response);
                 localStorage.setItem('cart',"");
-                window.location.href = '/receipt/' + receiptID})
+                navigate('/receipt/' + receiptID)}
+                )
+                //window.location.href = '/receipt/' + receiptID})
             .then(clearCart)
             .catch((error) => {console.error('Error:', error);});
         }else{

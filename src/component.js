@@ -49,12 +49,14 @@ var NavMenuStatus = -1;
 function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [type, setType] = React.useState(null);
-    const [user, setUser] = React.useState(null);
-    const [name, setName] = React.useState(null);
-    const [pic, setPic] = React.useState(null);
     const [fetchFinish, setFetch] = React.useState(false);
     const { amount } = useContext(DishContext);
+    const [userData, setUserData]=React.useState({
+      type: null,
+      user: null,
+      name: null,
+      pic: null,
+    })
     
 
     const handleOpenNavMenu = (event) => {
@@ -100,11 +102,11 @@ function NavBar() {
    const addDish = () =>{
     setAnchorElUser(null);
     userMenuStatus = -1;
-    if(user==0){
+    if(userData.user==0){
       window.location.assign("/AddNaDishes");
-    }else if(user==1){
+    }else if(userData.user==1){
       window.location.assign("/AddShawDishes");
-    }else if(user==2){
+    }else if(userData.user==2){
       window.location.assign("/AddUcDishes");
     }
    }
@@ -112,11 +114,11 @@ function NavBar() {
    const delDish = () =>{
     setAnchorElUser(null);
     userMenuStatus = -1;
-    if(user==0){
+    if(userData.user==0){
       window.location.assign("/deleteNaDishes");
-    }else if(user==1){
+    }else if(userData.user==1){
       window.location.assign("/deleteShawDishes");
-    }else if(user==2){
+    }else if(userData.user==2){
       window.location.assign("/deleteUcDishes");
     }
    }
@@ -124,11 +126,11 @@ function NavBar() {
    const menuDelDish = () =>{
     setAnchorElNav(null);
     NavMenuStatus = -1;
-    if(user==0){
+    if(userData.user==0){
       window.location.assign("/deleteNaDishes");
-    }else if(user==1){
+    }else if(userData.user==1){
       window.location.assign("/deleteShawDishes");
-    }else if(user==2){
+    }else if(userData.user==2){
       window.location.assign("/deleteUcDishes");
     }
    }
@@ -136,25 +138,26 @@ function NavBar() {
    const menuAddDish = () =>{
     setAnchorElNav(null);
     NavMenuStatus = -1;
-    if(user==0){
+    if(userData.user==0){
       window.location.assign("/AddNaDishes");
-    }else if(user==1){
+    }else if(userData.user==1){
       window.location.assign("/AddShawDishes");
-    }else if(user==2){
+    }else if(userData.user==2){
       window.location.assign("/AddUcDishes");
     }
    }
     React.useEffect(()=>{
-      if(fetchFinish== false||(pic!=""&&type!="admin")){
-        if(type== null){
-          setUser(localStorage.getItem('user'));
-          setType(localStorage.getItem('type'));
-          setName(localStorage.getItem('name'));
+      if(fetchFinish== false||(userData.pic!=""&&userData.type!="admin")){
+        if(userData.type== null){
           fetch('http://localhost:7000/dbAccount/getByUID/'+localStorage.getItem('user'))
           .then(res=>res.json())
           .then(data=>{
-
-              setPic(data[0].pic);
+              setUserData({
+                user: localStorage.getItem('user'),
+                type: localStorage.getItem('type'),
+                name: localStorage.getItem('name'),
+                pic: data[0].pic
+              })
               setFetch(true);
           })
           .catch(err=>{
@@ -163,10 +166,10 @@ function NavBar() {
           })
         }
       }
-    })
+    }, [])
 
 
-    if(type=="user" && user!="")
+    if(userData.type=="user")
     {return (
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em' ,overflow: 'visible'}} >
         <Container maxWidth="xl">
@@ -242,7 +245,7 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                           <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+                           <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+userData.pic} />
                         </IconButton>
                         </Tooltip>
                         <Menu
@@ -271,7 +274,7 @@ function NavBar() {
         </Container>
     </AppBar>
   );}
-  if(type=="restaurant")
+  else if(userData.type=="restaurant")
     {return (
     <AppBar position="sticky" sx={{ background: '#5D4E99', color: '#F4CB86', mb: '1em' ,overflow: 'visible'}} >
         <Container maxWidth="xl">
@@ -362,7 +365,7 @@ function NavBar() {
                         </Menu>
                     </Box>
                     <IconButton href="/restaurant/profile">
-                    <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+pic} />
+                    <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+userData.pic} />
                     </IconButton>
                           <IconButton onClick={logout}>
                           <LogoutIcon sx={{color:'#F4CB86'}}/>
@@ -371,7 +374,7 @@ function NavBar() {
         </Container>
     </AppBar>
   );}
-  if(type=="admin"){
+  else if(userData.type=="admin"){
     return(
       <AdminDrawer></AdminDrawer>
     );

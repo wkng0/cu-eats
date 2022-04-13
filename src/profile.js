@@ -16,44 +16,52 @@ import{ Divider, Box, Button, Card, CardActionArea,CardActions, Dialog, DialogAc
 let userInfo = [];
 
 function Profile(){
-  const {user, setUser} = useContext(UserContext);
-  const[username,setUsername] = useState('');
-  const[email,setEmail] = useState('');
-  const[point,setPoint] = useState(-1);
-  const[pic, setPic] = useState('');
+ 
   const[fetchFinish, setFetch] = useState(false);
+  const [userData, setUserData]=useState({
+    user: "",
+    email:"",
+    username:"",
+    point:-1,
+    pic:"",
+  })
 
   useEffect(()=>{
+    let tempUser;
     if(localStorage.getItem('type') == "user"){
-      setUser(localStorage.getItem('user'));
-      console.log("set!",user);
-  }else if(localStorage.getItem('type')=="admin"){
-      setUser(localStorage.getItem('check'));
-  }
+      tempUser=localStorage.getItem('user')
+      console.log("set!",tempUser);
+    }else if(localStorage.getItem('type')=="admin"){
+      tempUser=localStorage.getItem('check');
+    }
     if(fetchFinish== false){
-    fetch('http://localhost:7000/dbAccount/getByUID/'+user)
-    .then(res=>res.json())
-    .then(data=>{
-        console.log(data[0]);
-        setEmail(data[0].email);
-        setUsername(data[0].user_name);
-        setPoint(data[0].point);
-        setPic(data[0].pic);
-        setFetch(true);
-    })
-    .catch(err=>{
-      console.log(err);
-      setFetch(false);
+      fetch('http://localhost:7000/dbAccount/getByUID/'+tempUser)
+      .then(res=>res.json())
+      .then(data=>{
+          console.log(data);
+          setUserData({
+            user:tempUser,
+            email:data[0].email,
+            username:data[0].user_name,
+            point: data[0].point,
+            pic:data[0].pic,
+          })
+          console.log(data[0]);
+          setFetch(true);
+      })
+      .catch(err=>{
+        console.log(err);
+        setFetch(false);
     })}
 })
 
-  if (username===''||fetchFinish == false){
+  if (userData.username===''||fetchFinish == false){
     return(
       <h1> loading ...</h1>
     )
   }
   return(
-    <ProfileHeader username={username} point={point} email={email} pic={pic} uid={user}/>
+    <ProfileHeader username={userData.username} point={userData.point} email={userData.email} pic={userData.pic} uid={userData.user}/>
   )
 }
 
@@ -198,17 +206,19 @@ let picture;
 function RestaurantProfile(){
   const [edit,setEdit] = useState(true);
   const [change,setChange] = useState(false);
-  const [email, setEmail] = useState();
-  const {user, setUser} = useContext(UserContext);
   const [fetchFinish, setFetch] = useState(false);
-  const [pic,setPic] = useState();
+  const [userData,setUserData]=useState({
+    user:null,
+    email:null,
+    pic:null,
+  })
 
   const updateIcon =()=>{
-    console.log(pic);
-      fetch('http://localhost:7000/dbAccount/changePic/'+user, {
+    console.log(userData.pic);
+      fetch('http://localhost:7000/dbAccount/changePic/'+userData.user, {
         method: 'POST', 
         body: new URLSearchParams({
-            "pic": pic,
+            "pic": userData.pic,
         })  
       })
       .then(data=>console.log(data))
@@ -233,7 +243,11 @@ function RestaurantProfile(){
       .then(response =>  response.json())
       .then(data => {
         console.log(data.filename);
-         setPic(data.filename);
+         setUserData({
+          user:userData.user,
+          email:userData.email,
+          pic:data.filename,
+         })
          return;
       })
       .catch((error) => {
@@ -244,17 +258,20 @@ function RestaurantProfile(){
 
 
   useEffect(()=>{
+    let tempUser;
     if(localStorage.getItem('type')=="restaurant"){
-      setUser(localStorage.getItem('user'));
+      tempUser=localStorage.getItem('user');
     }
     if(fetchFinish==false){
-    fetch('http://localhost:7000/dbAccount/getByUID/'+user)
+    fetch('http://localhost:7000/dbAccount/getByUID/'+tempUser)
     .then(res=>res.json())
     .then(data=>{
         // console.log(data[0]);
-        setEmail(data[0].email);
-        picture = data[0].pic;
-        setPic(data[0].pic);
+        setUserData({
+          user:tempUser,
+          email:data[0].email,
+          pic:data[0].pic,
+        })
         // console.log(data[0].pic);
         setFetch(true);
     })
@@ -284,7 +301,7 @@ function RestaurantProfile(){
       <>
       <label htmlFor="icon-button-file" >
       <Avatar 
-      src={'http://localhost:7000/dbAccount/photo/get/'+pic}
+      src={'http://localhost:7000/dbAccount/photo/get/'+userData.pic}
       style={{
         margin: "2px",
         width: "200px",
@@ -299,7 +316,7 @@ function RestaurantProfile(){
         :<>
         <label for="button">
             <Avatar 
-          src={'http://localhost:7000/dbAccount/photo/get/'+pic}
+          src={'http://localhost:7000/dbAccount/photo/get/'+userData.pic}
           style={{
             margin: "2px",
             width: "200px",
@@ -322,7 +339,7 @@ function RestaurantProfile(){
               justify="center"
             >
           <CardActions>
-            <FormDialog email={email}/>
+            <FormDialog email={userData.email}/>
           </CardActions>
           </Grid>
       </Card>
@@ -1107,7 +1124,7 @@ function Account(props){
   const colleges =["None","CC","CW","MS","NA","SH","SHAW","UC","WS","WYS","Others"];
   const faculties = ["None","Arts","Business Administration","Education","Engineering","Law","Medicine","Science","Social Science","Others"];
   const genders = ["None","Male","Female","Others"];
-  const {user, setUser} = useContext(UserContext);
+  const [user, setUser] = useState("");
 
   const handleChangeGender = (event)=>{
     setGender(event.target.value)

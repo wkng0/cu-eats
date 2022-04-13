@@ -28,23 +28,21 @@ function Canteen(props) {
     const [loadFinish,setLoadFinish]=useState(false);
     // make api call 
     useEffect(() => {
-        if(loadFinish==false){
+
+        Promise.all([
             fetch("http://localhost:7000/dbcanteenInfo/getCanteenInfo")
             .then(res=>res.json())
-            .then(db=>canteenInfo=db)
-            .then(
-                fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
-                .then(res=>res.json())
-                .then(db=>listOfMenu=db)
-                .then(()=>{
-                    setTimeout(()=>{
-                        setLoadFinish(true)
-                    },1000) 
-                })
-            )
-        }
-    });
-    console.log(canteenInfo)
+            .then(db=>canteenInfo=db),
+            fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
+            .then(res=>res.json())
+            .then(db=>listOfMenu=db)
+            .then(()=>{
+                setTimeout(()=>{
+                    setLoadFinish(true)
+                },1000) 
+            })
+        ]).then(()=>{setLoadFinish(true)});
+    }, [])
     if(loadFinish==false) {
         return (
             <>

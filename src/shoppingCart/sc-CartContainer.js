@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import { Link } from 'react-router-dom';
 
 
 const CartItem = ({ id,img ,title, variant,price,amount }) => {
@@ -61,6 +62,7 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
 const CartContainer = () => {
 
   const { canteen, cart, total, clearCart } = useContext(DishContext);
+  /*
   const checkout = ()=>{
     if(localStorage.getItem('type')=="guest"){
       window.location.assign("/login");
@@ -68,6 +70,7 @@ const CartContainer = () => {
       window.location.assign("/checkout");
     }
   }
+  */
 
   if (cart.length === 0) {
     localStorage.setItem("cart","[]")
@@ -111,15 +114,17 @@ const CartContainer = () => {
                 onClick={clearCart}>
             <DeleteIcon fontSize="small" />
               CLEAR CART
-            </Button>
-          <Button 
-                size="small" 
-                onClick={checkout}
-                sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
-          >
-            <ShoppingCartCheckoutIcon fontSize="small"/>
-              CHECKOUT
           </Button>
+          <Link to={localStorage.getItem('type')=="guest"?"/login":"/checkout"} style={{textDecoration: 'none'}}>
+            <Button 
+                  size="small" 
+                  //onClick={checkout}
+                  sx={{border: 2,bgcolor: '#transparent', color: '#5D4E99', ':hover': {borderColor: '#5D4E99', bgcolor: '#5D4E99', color: '#F4CB86'}}}
+            >
+              <ShoppingCartCheckoutIcon fontSize="small"/>
+                CHECKOUT
+            </Button>
+          </Link>
         </Box>
       </footer>
     </section>

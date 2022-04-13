@@ -51,7 +51,7 @@ import {red}from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import {useParams} from 'react-router-dom'
+import {useParams,useNavigate} from 'react-router-dom'
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import FlagIcon from '@mui/icons-material/Flag';
 import { Link,Navigate,useLocation } from 'react-router-dom';
@@ -66,6 +66,7 @@ let users=[];
 
 
 function TabContent(props){
+    const navigate = useNavigate();
     const [open,setOpen]=useState(false);
     const [option,setOption]=useState("");
     const [optionEmpty,setOptionEmpty]=useState(false);
@@ -134,7 +135,7 @@ function TabContent(props){
         .catch((error) => {
             console.error('Error:', error);
         });
-        window.location.reload();
+        navigate(0);
         
     }
 
@@ -263,17 +264,15 @@ function ResponsiveDrawer(props) {
     const [value,setValue]=React.useState(-1);
     const [loading,setLoading]=React.useState(true)
     useEffect(()=>{
-        fetch("http://localhost:7000/dbAccount/getAll/")
-        .then(res=>res.json())
-        .then(db=>{
-            users=db;
-            console.log(users);
-        }).then(()=>{
-            setTimeout(        
-                setLoading(false)
-            , 1500);
-        })
-    })
+        Promise.all([
+            fetch("http://localhost:7000/dbAccount/getAll/")
+            .then(res=>res.json())
+            .then(db=>{
+                users=db;
+                console.log(users);
+            })
+        ]).then(()=>{setLoading(false)});
+    }, [])
     const toggleDrawer = (open) => (event) => {
         if (
           event &&
@@ -293,21 +292,22 @@ function ResponsiveDrawer(props) {
         let canteenChoice=e.currentTarget.getAttribute('value');
         //console.log(canteenChoice);
         
-
-        fetch("http://localhost:7000/dbAccount/getAll/")
-        .then(res=>res.json())
-        .then(db=>{
-            users=db;
-            console.log(users);
-        })
-        fetch('http://localhost:7000/dbComment/get/'+canteenChoice)
-        .then(res=>res.json())
-        .then(db=>{
-            data=db;
-            console.log(data);
-            //console.log("send to " +canteenChoice);
-            setCanteen(canteenChoice)
-        })
+        Promise.all([
+            fetch("http://localhost:7000/dbAccount/getAll/")
+            .then(res=>res.json())
+            .then(db=>{
+                users=db;
+                console.log(users);
+            }),
+            fetch('http://localhost:7000/dbComment/get/'+canteenChoice)
+            .then(res=>res.json())
+            .then(db=>{
+                data=db;
+                console.log(data);
+                //console.log("send to " +canteenChoice);
+                setCanteen(canteenChoice)
+            })
+        ]).then(()=>{setCanteen(canteenChoice)});
     }
 
   
@@ -439,6 +439,7 @@ function ResponsiveDrawer(props) {
 }
 
 function AddComment(){
+    const navigate=useNavigate();
     const [open, setOpen]=React.useState(false);
     const [title, setTitle]=React.useState("");
     const [description,setDescription]=React.useState("");
@@ -503,7 +504,7 @@ function AddComment(){
             .catch((error) => {
                 console.error('Error:', error);
             });
-            window.location.reload();
+            navigate(0)
             
         }
     }  
@@ -701,18 +702,18 @@ function AddComment(){
 function UserComment(){
     const [loadFinish, setLoadFinish]=useState();
     useEffect(()=>{
-        fetch('http://localhost:7000/dbComment/get/'+"NA")
-        .then(res=>res.json())
-        .then(db=>{
-            data=db;
-            //console.log(data);
-        }).then(()=>{
+        Promise.all([
+            fetch('http://localhost:7000/dbComment/get/'+"NA")
+            .then(res=>res.json())
+            .then(db=>{
+                data=db;
+                //console.log(data);
+            }),
             fetch("http://localhost:7000/dbAccount/getAll/")
             .then(res=>res.json())
             .then(db=>{
                 users=db;
-            })
-        }).then(()=>{
+            }),
             fetch('http://localhost:7000/dbcanteenInfo/getCanteenInfo')
             .then(res=>res.json())
             .then(db=>{
@@ -723,9 +724,11 @@ function UserComment(){
                     canteenID[i]=canteenInfo[i]["value"];
                 }          
             })
-            .then(()=>{setLoadFinish(true)});
-        }) 
-    })
+        ]).then(()=>{setLoadFinish(true)});
+    }, [])
+        
+            
+        
     return(
         <>
             <ResponsiveDrawer />
@@ -736,30 +739,33 @@ function UserComment(){
 
 
 function AdminCommentDrawer() {
+    const navigate=useNavigate();
     const [canteen, setCanteen]=React.useState("Report")
 
     const handleClick=(e)=>{
         if(e.currentTarget.getAttribute('value')=="Report"){
-            window.location.reload();
+            navigate(0)
         }else{
             let canteen=e.currentTarget.getAttribute('value');
             //console.log(canteenChoice);
-            fetch('http://localhost:7000/dbComment/get/'+canteen)
-            .then(res=>res.json())
-            .then(db=>{
-                data=db;
-                console.log(data); 
-                setCanteen(canteen)
-                //console.log(canteenID);
-                //console.log(canteenList);
-            }).then(()=>{
+            Promise.all([
                 fetch("http://localhost:7000/dbAccount/getAll/")
                 .then(res=>res.json())
                 .then(db=>{
                     users=db;
                     console.log(users);
+                }),
+                fetch('http://localhost:7000/dbComment/get/'+canteen)
+                .then(res=>res.json())
+                .then(db=>{
+                    data=db;
+                    console.log(data); 
+                    setCanteen(canteen)
+                    //console.log(canteenID);
+                    //console.log(canteenList);
                 })
-            })
+            ]).then(()=>{setCanteen(canteen)});
+          
         }
         
        
@@ -837,6 +843,7 @@ function AdminCommentDrawer() {
 }
 
 function CommentList(props){
+    const navigate=useNavigate(0)
     const [checked, setChecked] = React.useState([]);
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
@@ -862,7 +869,7 @@ function CommentList(props){
         .catch((error) => {
             console.error('Error:', error);
         });
-        window.location.reload();
+        navigate(0);
     }
     const ignoreReport=()=>{
         fetch('http://localhost:7000/dbComment/delete/report/', {
@@ -876,7 +883,7 @@ function CommentList(props){
         .catch((error) => {
             console.error('Error:', error);
         });
-        window.location.reload();
+        navigate(0);
     }
     const clearSelected=()=>{
         setChecked([]);
@@ -1027,12 +1034,13 @@ function ContentPreview(){
 function AdminComment(){
     const [loadFinish, setLoadFinish]=React.useState(false);
     useEffect(()=>{
-        fetch('http://localhost:7000/dbComment/get/Report')
-        .then(res=>res.json())
-        .then(db=>{
-            data=db;
-            console.log(data);
-        }).then(()=>{
+        Promise.all([
+            fetch('http://localhost:7000/dbComment/get/Report')
+            .then(res=>res.json())
+            .then(db=>{
+                data=db;
+                console.log(data);
+            }),
             fetch('http://localhost:7000/dbcanteenInfo/getCanteenInfo')
             .then(res=>res.json())
             .then(db=>{
@@ -1042,13 +1050,10 @@ function AdminComment(){
                     canteenList[i]=canteenInfo[i]["canteen_name"];
                     canteenID[i]=canteenInfo[i]["value"];
                 }
-            }).then(()=>{
-                setTimeout(()=>{
-                    setLoadFinish(true);
-                },2000)
             })
-        })
-    })
+        ]).then(()=>{setLoadFinish(true)});
+    }, [])
+   
 
     if(loadFinish==false){
         return<>please wait (parent)</>
