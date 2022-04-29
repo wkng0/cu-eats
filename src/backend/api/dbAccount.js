@@ -64,6 +64,13 @@ router.get("/get/:email",function(req,res){
     .catch(console.error)
     .finally(() => client.close());
 });
+router.get("/getAccountAndAddress/:uid",function(req,res){
+    uid=req.params.uid;
+    fetchAccountAndAddress(req,res)
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
+});
 
 router.get("/getByUID/:uid",function(req,res){
     uid=req.params.uid;
@@ -282,6 +289,23 @@ async function fetchAccountUID(res){
     res.send(result);
     return result;
 };
+
+async function fetchAccountAndAddress(req,res){
+    await client.connect();
+    console.log('Connected successfully to server');
+    const db = client.db(dbName);
+    const collection = db.collection("Info");
+    let userInfo = await collection.findOne({"uid":uid},{projection: { user_name: 1,point:1,phone:1}});
+    const collection2 = db.collection("Address");
+    let result = await collection2.find({"uid":uid}).toArray();
+    let address=[];
+    for(let i =0; i< result.length; i++){
+        address[i] = result[i].address;}
+    userInfo["address"]=address;
+    res.send(userInfo);
+    return userInfo;
+};
+
 
 async function addUser(req,res){
     await client.connect();
