@@ -72,7 +72,7 @@ function TabContent(props){
     console.log(data)
     console.log(users)
     const handleShare=()=>{
-        navigator.clipboard.writeText("http://"+ip+":3000/comment/"+props.canteen+"/"+data[props.i]._id);
+        navigator.clipboard.writeText("/comment/"+props.canteen+"/"+data[props.i]._id);
     }
     const handleLike=()=>{
 
