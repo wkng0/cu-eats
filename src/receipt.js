@@ -107,7 +107,7 @@ function Receipt() {
     }
 
     React.useEffect(()=>{
-        fetch("http://localhost:7000/dbReceipt/get/"+irid)
+        fetch("/dbReceipt/get/"+irid)
         .then(res=>res.json())
         .then(data=>{
             setReceiptID(data[0].id);
@@ -329,7 +329,7 @@ function Records() {
         }else if(localStorage.getItem('type')=="admin"){
             setUser(localStorage.getItem('check'))
         }
-        fetch('http://localhost:7000/dbReceipt/getRecords/'+user)
+        fetch('/dbReceipt/getRecords/'+user)
         .then(res=>res.json())
         .then(data=>{
             setCurrent(data[0]);
@@ -440,7 +440,7 @@ function Dashboard() {
         setAnchorElFilter(false);
     };
     const fetchReceipt = () => {
-        fetch('http://localhost:7000/dbReceipt/getDashboard/'+name)
+        fetch('/dbReceipt/getDashboard/'+name)
         .then(res=>res.json())
         .then(data=>{
             setRecord(data);
