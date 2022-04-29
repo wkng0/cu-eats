@@ -17,7 +17,7 @@ const port = process.env.PORT || 7000;
 // Middleware
 app.use(cors());
 app.use(express.json()); 
-app.use(express.static(path.resolve(__dirname, "../../build")));
+app.use(express.static(path.join(__dirname, "../../build")));
 app.use("/api/v1/users", user);
 app.use("/dbAccount",account);
 app.use("/dbComment",comment);
@@ -26,7 +26,9 @@ app.use("/dbNewMenu", newmenu);
 app.use("/dbcanteenInfo", canteenInfo);
 app.use("/dbReceipt",receipt);
 app.use("/verify",verify);
-app.use("*", (req, res) => res.status(404).json({ error: "not found"}));
+app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname, "../../build/index.html"));
+});
 
 app.listen(port, () => {
     console.log('Server is running on the port ' + port);
