@@ -8,6 +8,8 @@ import newmenu from "./api/dbNewMenu.js"
 import canteenInfo from "./api/dbcanteenInfo.js"
 import receipt from "./api/dbReceipt.js"
 import verify from "./api/verify.js"
+import path from "path"
+const __dirname = path.resolve();
 
 const app = express();
 const port = process.env.PORT || 7000;
@@ -15,7 +17,7 @@ const port = process.env.PORT || 7000;
 // Middleware
 app.use(cors());
 app.use(express.json()); 
-
+app.use(express.static(path.resolve(__dirname, "../../build")));
 app.use("/api/v1/users", user);
 app.use("/dbAccount",account);
 app.use("/dbComment",comment);
