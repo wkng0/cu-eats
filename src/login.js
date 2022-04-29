@@ -67,7 +67,7 @@ function CheckEmail(){
         if(regex.test(email)==false || email==""){
             console.log("false email!");
         }else{
-            fetch('http://localhost:7000/dbAccount/exist/'+email)
+            fetch('/dbAccount/exist/'+email)
             .then((res)=>
                 res.json()
             )
@@ -128,7 +128,7 @@ function EmailVerification(){
     const [loadFinish, setLoadFinish]=React.useState(false)
     let param=useParams();
     useEffect(()=>{
-        fetch('http://localhost:7000/verify/verifyAccount/'+param.token)
+        fetch('/verify/verifyAccount/'+param.token)
         .then((res)=>res.json())
         .then(db=>{
             info=db;
@@ -178,7 +178,7 @@ function ChangePassword(props){
     let email;
     let param=useParams();
     useEffect(()=>{
-        fetch('http://localhost:7000/verify/changePassword/'+param.pwToken)
+        fetch('/verify/changePassword/'+param.pwToken)
         .then((res)=>res.json())
         .then(db=>email=db.email)
         .then(()=>{
@@ -235,7 +235,7 @@ function ChangePassword(props){
           }
     }
     const submit=()=>{
-        fetch('http://localhost:7000/dbAccount/changePW/',{
+        fetch('/dbAccount/changePW/',{
             method: 'POST', 
             body: new URLSearchParams({
                 "email":email,
@@ -430,7 +430,7 @@ function LoginWithPassword(props){
 
     }
     const forgetPassword=()=>{
-        fetch('http://localhost:7000/dbAccount/reqChangePW/',{
+        fetch('/dbAccount/reqChangePW/',{
             method: 'POST', 
             body: new URLSearchParams({
                 "email":email,
@@ -458,7 +458,7 @@ function LoginWithPassword(props){
 
     React.useEffect(()=>{
         if(fetchFinish==false){
-        fetch('http://localhost:7000/dbAccount/get/'+email)
+        fetch('/dbAccount/get/'+email)
         .then(res=>res.json())
         .then(data=>{
             if(data[0].verify != 1&& data[0].type=="user"){
@@ -782,7 +782,7 @@ function Register(props){
 
     async function checkUsename() {
         try {
-            const res = await fetch('http://localhost:7000/dbAccount/userName/' + username) //check if the username unique
+            const res = await fetch('/dbAccount/userName/' + username) //check if the username unique
                 ;
             const data = await res.json();
             console.log("user name?????", data.unique);
@@ -849,7 +849,7 @@ function Register(props){
             checkUsename()
             .then(res=>{
                 if(res==true){
-                    fetch('http://localhost:7000/dbAccount/createAccount', { //saving to database
+                    fetch('/dbAccount/createAccount', { //saving to database
                         method: 'POST', 
                         body: new URLSearchParams({
                             "email":email,

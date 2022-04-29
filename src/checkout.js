@@ -92,7 +92,7 @@ function Checkout() {
     const handleReceipt = (event) => {
         if(name!=''&&phone!=''&&address!=null){
             console.log('receipt:', receiptID);
-            fetch("http://localhost:7000/dbReceipt/user", {
+            fetch("/dbReceipt/user", {
                 method: 'POST', 
                 body: new URLSearchParams({
                     "irid": receiptID,
@@ -195,7 +195,7 @@ function Checkout() {
             console.log("set!",user);
         }
         if (fetchFinish== false){
-        fetch('http://localhost:7000/dbAccount/getAccountAndAddress/'+user)
+        fetch('/dbAccount/getAccountAndAddress/'+user)
         .then(res=>res.json())
         .then(data=>{
             setName(data.user_name);

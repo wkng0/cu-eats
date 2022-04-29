@@ -30,10 +30,10 @@ function Canteen(props) {
     useEffect(() => {
 
         Promise.all([
-            fetch("http://localhost:7000/dbcanteenInfo/getCanteenInfo")
+            fetch("/dbcanteenInfo/getCanteenInfo")
             .then(res=>res.json())
             .then(db=>canteenInfo=db),
-            fetch("http://localhost:7000/dbMenu/getMenu/"+menu[props.value])
+            fetch("/dbMenu/getMenu/"+menu[props.value])
             .then(res=>res.json())
             .then(db=>listOfMenu=db)
             .then(()=>{

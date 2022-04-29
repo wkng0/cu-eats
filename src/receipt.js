@@ -40,7 +40,7 @@ function Receipt() {
     }
 
     const handleTaken = () => {
-        fetch('http://localhost:7000/dbReceipt/updateStatus/'+irid, {
+        fetch('/dbReceipt/updateStatus/'+irid, {
             method: 'POST', 
             body: new URLSearchParams({
                 "rid": irid,
@@ -52,7 +52,7 @@ function Receipt() {
     };
 
     const handleDeliver = () => {
-        fetch('http://localhost:7000/dbReceipt/updateDeliver/'+irid, {
+        fetch('/dbReceipt/updateDeliver/'+irid, {
             method: 'POST', 
             body: new URLSearchParams({
                 "rid": irid,

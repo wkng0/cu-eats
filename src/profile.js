@@ -579,7 +579,7 @@ const navigate = useNavigate();
       address += ", "+chooseCol;
     }
     console.log(address);
-    fetch('http://localhost:7000/dbAccount/addAddress/'+user, { 
+    fetch('/dbAccount/addAddress/'+user, { 
       method: 'POST', 
       body: new URLSearchParams({
          "uid": user,

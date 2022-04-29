@@ -52,11 +52,11 @@ function DeleteDish() {
     // make api call 
     useEffect(() => {
         if(loadFinish==false){
-            fetch("http://localhost:7000/dbcanteenInfo/getCanteenInfo")
+            fetch("/dbcanteenInfo/getCanteenInfo")
             .then(res=>res.json())
             .then(db=>canteenInfo=db)
             .then(
-                fetch("http://localhost:7000/dbMenu/getMenu/"+menu[window.number])
+                fetch("/dbMenu/getMenu/"+menu[window.number])
                 .then(res=>res.json())
                 .then(db=>listOfMenu=db)
                 .then(()=>{

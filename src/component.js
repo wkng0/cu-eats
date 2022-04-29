@@ -153,7 +153,7 @@ function NavBar() {
     React.useEffect(()=>{
       if(fetchFinish== false||(userData.pic!=""&&userData.type!="admin")){
         if(userData.type== null){
-          fetch('http://localhost:7000/dbAccount/getByUID/'+localStorage.getItem('user'))
+          fetch('/dbAccount/getByUID/'+localStorage.getItem('user'))
           .then(res=>res.json())
           .then(data=>{
               setUserData({
