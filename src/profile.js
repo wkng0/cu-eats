@@ -35,7 +35,7 @@ function Profile(){
       tempUser=localStorage.getItem('check');
     }
     if(fetchFinish== false){
-      fetch('http://localhost:7000/dbAccount/getByUID/'+tempUser)
+      fetch('/dbAccount/getByUID/'+tempUser)
       .then(res=>res.json())
       .then(data=>{
           console.log(data);
@@ -98,7 +98,7 @@ class ProfileHeader extends React.Component{
 
 updateIcon(){
   console.log("pic",this.state.pic);
-    fetch('http://localhost:7000/dbAccount/changePic/'+this.props.uid, {
+    fetch('/dbAccount/changePic/'+this.props.uid, {
       method: 'POST', 
       body: new URLSearchParams({
           "pic": this.state.pic,
@@ -119,7 +119,7 @@ changeIcon(event){
     var formData = new FormData();
     formData.append('file', event.target.files[0]);
     this.setState({edit: false});
-    fetch('http://localhost:7000/dbAccount/photo/post', {
+    fetch('/dbAccount/photo/post', {
         method: 'POST', 
         body: formData
     })
@@ -149,7 +149,7 @@ changeIcon(event){
                         <>
                         <label htmlFor="icon-button-file" >
                         <Avatar 
-                        src={'http://localhost:7000/dbAccount/photo/get/'+this.props.pic}
+                        src={'/dbAccount/photo/get/'+this.props.pic}
                         style={{
                           margin: "2px",
                           width: "200px",
@@ -164,7 +164,7 @@ changeIcon(event){
                           :<>
                           <label for="button">
                               <Avatar 
-                            src={'http://localhost:7000/dbAccount/photo/get/'+this.state.pic}
+                            src={'/dbAccount/photo/get/'+this.state.pic}
                             style={{
                               margin: "2px",
                               width: "200px",
@@ -229,7 +229,7 @@ function RestaurantProfile(){
 
   const updateIcon =()=>{
     console.log(userData.pic);
-      fetch('http://localhost:7000/dbAccount/changePic/'+userData.user, {
+      fetch('/dbAccount/changePic/'+userData.user, {
         method: 'POST', 
         body: new URLSearchParams({
             "pic": userData.pic,
@@ -250,7 +250,7 @@ function RestaurantProfile(){
       var formData = new FormData();
       formData.append('file', event.target.files[0]);
       setEdit(false);
-      fetch('http://localhost:7000/dbAccount/photo/post', {
+      fetch('/dbAccount/photo/post', {
           method: 'POST', 
           body: formData
       })
@@ -277,7 +277,7 @@ function RestaurantProfile(){
       tempUser=localStorage.getItem('user');
     }
     if(fetchFinish==false){
-    fetch('http://localhost:7000/dbAccount/getByUID/'+tempUser)
+    fetch('/dbAccount/getByUID/'+tempUser)
     .then(res=>res.json())
     .then(data=>{
         // console.log(data[0]);
@@ -315,7 +315,7 @@ function RestaurantProfile(){
       <>
       <label htmlFor="icon-button-file" >
       <Avatar 
-      src={'http://localhost:7000/dbAccount/photo/get/'+userData.pic}
+      src={'/dbAccount/photo/get/'+userData.pic}
       style={{
         margin: "2px",
         width: "200px",
@@ -330,7 +330,7 @@ function RestaurantProfile(){
         :<>
         <label for="button">
             <Avatar 
-          src={'http://localhost:7000/dbAccount/photo/get/'+userData.pic}
+          src={'/dbAccount/photo/get/'+userData.pic}
           style={{
             margin: "2px",
             width: "200px",
@@ -369,7 +369,7 @@ function Address(){
   const {user, setUser} = useContext(UserContext);
   const navigate = useNavigate();
   function deleteAdd(address){
-    fetch('http://localhost:7000/dbAccount/delAddress/'+user, { 
+    fetch('/dbAccount/delAddress/'+user, { 
       method: 'POST', 
       body: new URLSearchParams({
          "uid": user,
@@ -390,7 +390,7 @@ function Address(){
       setUser(localStorage.getItem('check'));
   }
     if(fetchFinish == false){
-    fetch('http://localhost:7000/dbAccount/getAddress/'+user)
+    fetch('/dbAccount/getAddress/'+user)
     .then(res=>res.json())
     .then(res=>{setAddress(res);})
     .then(()=>console.log(savedAddress))
@@ -1113,7 +1113,7 @@ const handleChangePhone = (event)=>{
     setUser(localStorage.getItem('user'));
     console.log("set!",user);
     if(fetchFinish == false){
-   fetch('http://localhost:7000/dbAccount/getByUID/'+user)
+   fetch('/dbAccount/getByUID/'+user)
    .then(res=>res.json())
    .then(data=>{
        setEmail(data[0].email);
@@ -1133,7 +1133,7 @@ const handleChangePhone = (event)=>{
 
 const checkUsername=async ()=>{
   try {
-    const res = await fetch('http://localhost:7000/dbAccount/userName/' + username);
+    const res = await fetch('/dbAccount/userName/' + username);
     const data = await res.json();
     console.log("user name?????", data.unique);
     if (data.unique == "false") {
@@ -1160,7 +1160,7 @@ const updateInfo = ()=>{
   console.log(faculty)
 
     console.log("checkname");
-    fetch('http://localhost:7000/dbAccount/userName/' + newUsername)
+    fetch('/dbAccount/userName/' + newUsername)
     .then(res=>res.json())
     .then((data)=>{
       if(data.unique == "false"){
@@ -1173,7 +1173,7 @@ const updateInfo = ()=>{
     })
     .catch(err=>console.log(err));
     if(newUsername==""){
-  fetch('http://localhost:7000/dbAccount/updateAccount/'+user, { //saving to database
+  fetch('/dbAccount/updateAccount/'+user, { //saving to database
       method: 'POST', 
       body: new URLSearchParams({
           "user_name": username,
@@ -1191,7 +1191,7 @@ const updateInfo = ()=>{
   });
   window.location.reload();
 }else{
-  fetch('http://localhost:7000/dbAccount/updateAccount/'+user, { //saving to database
+  fetch('/dbAccount/updateAccount/'+user, { //saving to database
   method: 'POST', 
   body: new URLSearchParams({
       "user_name": newUsername,
@@ -1381,7 +1381,7 @@ function FormDialog(props) {
       window.alert("wrong password, please enter again.");
       return;
     }else{
-      fetch('http://localhost:7000/dbAccount/updatePw/'+ props.email, { 
+      fetch('/dbAccount/updatePw/'+ props.email, { 
       method: 'POST', 
       body: new URLSearchParams({
           "password": pw2
@@ -1415,7 +1415,7 @@ function FormDialog(props) {
       setSubmit(false);
     }
     if(oldpw==""){
-      fetch('http://localhost:7000/dbAccount/getByUID/'+ user)
+      fetch('/dbAccount/getByUID/'+ user)
         .then(res=>res.json())
         .then(data=>{
           setPw(data[0].password);
@@ -1568,7 +1568,7 @@ const handleChangePoint = (event)=>{
 }
 
 const editPoint = ()=>{
-  fetch('http://localhost:7000/dbAccount/editPoint', { 
+  fetch('/dbAccount/editPoint', { 
     method: 'POST', 
     body: new URLSearchParams({
         "uid": uid,
@@ -1592,7 +1592,7 @@ const uncheckProfile = () =>{
 }
 if(!mounted){
   
-  fetch('http://localhost:7000/dbAccount/getAll')
+  fetch('/dbAccount/getAll')
   .then(res=>res.json())
   .then(data=>{
    setInfo(data);
@@ -1737,7 +1737,7 @@ const handleCopyClick = () => {
 }
 
 const changePw = ()=>{
-  fetch('http://localhost:7000/dbAccount/updatePw/'+ email, { 
+  fetch('/dbAccount/updatePw/'+ email, { 
     method: 'POST', 
     body: new URLSearchParams({
         "password": password
@@ -1857,7 +1857,7 @@ function DeleteAcc(){
   }
   const deleteUser = ()=>{
 
-    fetch('http://localhost:7000/dbAccount/delete',{ 
+    fetch('/dbAccount/delete',{ 
           method: 'POST', 
           body: new URLSearchParams({
               "email": email
@@ -1869,7 +1869,7 @@ function DeleteAcc(){
       }
 
   if(!fetchFinish){
-    fetch('http://localhost:7000/dbAccount/getUnverify')
+    fetch('/dbAccount/getUnverify')
       .then(res=>res.json())
       .then(data=>{
         setAcc(data);

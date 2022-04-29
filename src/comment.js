@@ -61,7 +61,6 @@ import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 
 let data =[];
 let users=[];
-let ip="localhost"
 function TabContent(props){
     const navigate = useNavigate();
     const [open,setOpen]=useState(false);

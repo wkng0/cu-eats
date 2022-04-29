@@ -179,7 +179,7 @@ function NewShowDishes({menu} , value){
         if(localStorage.getItem('type')=="guest"){
             window.location.assign("/login");
         }else if(localStorage.getItem('type')=="restaurant"){
-            Axios.delete(`http://localhost:7000/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
+            Axios.delete(`/dbNewMenu/deleteDishes/${canteen[window.number]}/${id}`)
             .then(()=>{
                 alert("deleted!" ); 
                 window.location.reload();
@@ -192,7 +192,7 @@ function NewShowDishes({menu} , value){
         if(localStorage.getItem('type')=="guest"){
             window.location.assign("/login");
         }else if(localStorage.getItem('type')=="restaurant"){
-            Axios.put(`http://localhost:7000/dbNewMenu/hideDishes/${canteen[window.number]}/${id}`)
+            Axios.put(`/dbNewMenu/hideDishes/${canteen[window.number]}/${id}`)
             .then(()=>{
                 alert("Hide Menu!"); 
                 window.location.reload();
@@ -204,7 +204,7 @@ function NewShowDishes({menu} , value){
         if(localStorage.getItem('type')=="guest"){
             window.location.assign("/login");
         }else if(localStorage.getItem('type')=="restaurant"){
-            Axios.put(`http://localhost:7000/dbNewMenu/unhideDishes/${canteen[window.number]}/${id}`)
+            Axios.put(`/dbNewMenu/unhideDishes/${canteen[window.number]}/${id}`)
             .then(()=>{
                 alert("Un-Hide Menu!"); 
                 window.location.reload();
@@ -220,7 +220,7 @@ function NewShowDishes({menu} , value){
             const newPrice = prompt("Enter new price: ");
             if (newPrice != "") {
                 const StringPrice = String(newPrice);
-                Axios.put(`http://localhost:7000/dbNewMenu/updatePrices/${canteen[window.number]}/${id}/${variantitem}/${StringPrice}`)
+                Axios.put(`/dbNewMenu/updatePrices/${canteen[window.number]}/${id}/${variantitem}/${StringPrice}`)
                 .then(()=>{
                     alert("Price Updated"); 
                     window.location.reload();

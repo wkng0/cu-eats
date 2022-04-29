@@ -59,7 +59,7 @@ function AddDishes() {
                 if(name=="") setNameError(true);
                 if(variantList.length==0) setVariantError(true);
             }else{
-                Axios.post(`http://localhost:7000/dbNewMenu/AddMenu/${menu[window.whichcan]}`, {
+                Axios.post(`/dbNewMenu/AddMenu/${menu[window.whichcan]}`, {
                     name: name, 
                     variants: variantList,
                     category: category,

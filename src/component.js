@@ -249,7 +249,7 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0, pl:3}}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                           <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+userData.pic} />
+                           <Avatar src={'/dbAccount/photo/get/'+userData.pic} />
                         </IconButton>
                         </Tooltip>
                         <Menu
@@ -369,7 +369,7 @@ function NavBar() {
                         </Menu>
                     </Box>
                     <IconButton href="/restaurant/profile">
-                    <Avatar src={'http://localhost:7000/dbAccount/photo/get/'+userData.pic} />
+                    <Avatar src={'/dbAccount/photo/get/'+userData.pic} />
                     </IconButton>
                           <IconButton onClick={logout}>
                           <LogoutIcon sx={{color:'#F4CB86'}}/>
