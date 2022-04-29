@@ -11,6 +11,7 @@ const corsOptions ={
     optionSuccessStatus:200
 }
 app.use(cors(corsOptions));
+app.use(express.static(path.resolve(__dirname, "../../build")));
 
 const port = process.env.PORT || 8000
 
