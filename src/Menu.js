@@ -21,7 +21,7 @@ function ShowCanteen() {
     const [listOfCanteen, setListOfCanteen] = useState([]);
     //
     useEffect(() => {
-        Axios.get("http://localhost:7000/dbcanteeninfo/getCanteenInfo").then((response) => {
+        Axios.get("/dbcanteeninfo/getCanteenInfo").then((response) => {
             setListOfCanteen(response.data)
         });
     }, []);
