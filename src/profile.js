@@ -533,6 +533,7 @@ const [chooseBlg, setBlg] = useState('');
 const [room,setRoom] = useState('');
 const [valid, setValid] = useState(false);
 const {user, setUser} = useContext(UserContext);
+const navigate = useNavigate();
 
   useEffect(()=>{
     if(localStorage.getItem('user') != undefined){
@@ -588,7 +589,7 @@ const {user, setUser} = useContext(UserContext);
     })
     .then(()=>console.log())
     .catch(err=>console.log(err))
-    window.location.reload();
+    navigate(0);
   }
 
   if(chooseCol=="Other Building"||chooseCol == ""|| chooseCol =="None"){
