@@ -126,7 +126,7 @@ function Checkout() {
         }
     }
         
-
+/*
     const fetchAddress = () => {
         console.log("start fetch")
         fetch('http://localhost:7000/dbAccount/getAddress/' + user)
@@ -134,7 +134,7 @@ function Checkout() {
             .then(res=>setdbAddress(res))
             .then(()=>setFetch(true))
             .catch(err=>{console.log(err); setFetch(false);})
-    }
+    }*/
 
     const showAddress = (event) => { 
         if (fetchFinish == false) return(<p>loading address...</p>)
@@ -188,25 +188,26 @@ function Checkout() {
             setpText('Get $'+ discount.toFixed(1)+ ' off');
         else if (pointUse === "") setText('Entry cannot be empty!');
     },[discount])
-    React.useEffect(()=>{ fetchAddress();},[refresh])
+    //React.useEffect(()=>{ fetchAddress();},[refresh])
     React.useEffect(()=>{
         if (localStorage.getItem('user') != ""){
             setUser(localStorage.getItem('user'));
             console.log("set!",user);
         }
         if (fetchFinish== false){
-        fetch('http://localhost:7000/dbAccount/getByUID/'+user)
+        fetch('http://localhost:7000/dbAccount/getAccountAndAddress/'+user)
         .then(res=>res.json())
         .then(data=>{
-            setName(data[0].user_name);
-            setPoint(data[0].point);
-            setPhone(data[0].phone);
+            setName(data.user_name);
+            setPoint(data.point);
+            setPhone(data.phone);
+            setdbAddress(data.address);
             setFetch(true);
         })
-        .then(fetchAddress())
+        //.then(fetchAddress())
         .catch(err=>{
           console.log(err);
-          setFetch(false);
+          //setFetch(false);
         })}
     })
     
