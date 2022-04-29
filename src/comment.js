@@ -61,10 +61,7 @@ import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 
 let data =[];
 let users=[];
-
-
-
-
+let ip="localhost"
 function TabContent(props){
     const navigate = useNavigate();
     const [open,setOpen]=useState(false);
@@ -76,14 +73,14 @@ function TabContent(props){
     console.log(data)
     console.log(users)
     const handleShare=()=>{
-        navigator.clipboard.writeText("http://localhost:3000/comment/"+props.canteen+"/"+data[props.i]._id);
+        navigator.clipboard.writeText("http://"+ip+":3000/comment/"+props.canteen+"/"+data[props.i]._id);
     }
     const handleLike=()=>{
 
     }
     const handleReport=()=>{
         console.log(data[props.i]._id);
-        fetch("http://localhost:7000/dbComment/report", {
+        fetch("http://"+ip+":7000/dbComment/report", {
             method: 'POST', 
             body: new URLSearchParams({
                 "postid":data[props.i]._id,
@@ -124,7 +121,7 @@ function TabContent(props){
     
     const handleDeletePost=()=>{
         
-        fetch('http://localhost:7000/dbComment/delete/comment', {
+        fetch('http://'+ip+':7000/dbComment/delete/comment', {
             body: JSON.stringify({id:[data[i]._id]}),
             headers: {
                 "Content-Type": "application/json",
@@ -158,7 +155,7 @@ function TabContent(props){
                 avatar={users[props.userIndex]==null||users[props.userIndex]["pic"]==null?
                     <Avatar />
                 :
-                    <Avatar src={users[props.userIndex]["pic"].indexOf("http")==-1?"http://localhost:7000/dbAccount/photo/get/"+users[props.userIndex]["pic"]:users[props.userIndex]["pic"]}/>
+                    <Avatar src={users[props.userIndex]["pic"].indexOf("http")==-1?"http://"+ip+":7000/dbAccount/photo/get/"+users[props.userIndex]["pic"]:users[props.userIndex]["pic"]}/>
                 }
                 action={<>
                 <Tooltip title="Report">
@@ -219,7 +216,7 @@ function TabContent(props){
                 <CardMedia
                     component="img"
                     height="auto"
-                    image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
+                    image={data[i].image.indexOf("http")==-1?"http://"+ip+":7000/dbComment/photo/get/"+data[i].image:data[i].image}
                     sx={{mb:2, borderRadius: 2 }}
                     hidden={data[i].image==""}
                 />
@@ -265,7 +262,7 @@ function ResponsiveDrawer(props) {
     const [loading,setLoading]=React.useState(true)
     useEffect(()=>{
         Promise.all([
-            fetch("http://localhost:7000/dbAccount/getAll/")
+            fetch("http://"+ip+":7000/dbAccount/getAll/")
             .then(res=>res.json())
             .then(db=>{
                 users=db;
@@ -293,13 +290,13 @@ function ResponsiveDrawer(props) {
         //console.log(canteenChoice);
         
         Promise.all([
-            fetch("http://localhost:7000/dbAccount/getAll/")
+            fetch("http://"+ip+":7000/dbAccount/getAll/")
             .then(res=>res.json())
             .then(db=>{
                 users=db;
                 console.log(users);
             }),
-            fetch('http://localhost:7000/dbComment/get/'+canteenChoice)
+            fetch("http://"+ip+":7000/dbComment/get/"+canteenChoice)
             .then(res=>res.json())
             .then(db=>{
                 data=db;
@@ -514,7 +511,7 @@ function AddComment(){
             }
 
         }else{
-            fetch('http://localhost:7000/dbComment/post/'+canteen, {
+            fetch("http://"+ip+":7000/dbComment/post/"+canteen, {
                 method: 'POST', 
                 body: new URLSearchParams({
                     "userid":localStorage.getItem('user'),
@@ -590,7 +587,7 @@ function AddComment(){
         setSelectedFile(event.target.files[0]);
         var formData = new FormData();
         formData.append('file', event.target.files[0]);
-        fetch('http://localhost:7000/dbComment/photo/post', {
+        fetch("http://"+ip+":7000/dbComment/photo/post", {
             method: 'POST', 
             body: formData
         })
@@ -704,7 +701,7 @@ function AddComment(){
                         </IconButton>
                     </label>
                     <div hidden={fileEmpty} >
-                        <img className="mx-auto d-block" style={{maxWidth:"100%",maxHeight:"100%"}}src= {"http://localhost:7000/dbComment/photo/get/"+newFileName} />
+                        <img className="mx-auto d-block" style={{maxWidth:"100%",maxHeight:"100%"}}src= {"http://"+ip+"/dbComment/photo/get/"+newFileName} />
                     </div>
                     
 
@@ -733,18 +730,18 @@ function UserComment(){
     const [loadFinish, setLoadFinish]=useState();
     useEffect(()=>{
         Promise.all([
-            fetch('http://localhost:7000/dbComment/get/'+"NA")
+            fetch("http://"+ip+":7000/dbComment/get/"+"NA")
             .then(res=>res.json())
             .then(db=>{
                 data=db;
                 //console.log(data);
             }),
-            fetch("http://localhost:7000/dbAccount/getAll/")
+            fetch("http://"+ip+":7000/dbAccount/getAll/")
             .then(res=>res.json())
             .then(db=>{
                 users=db;
             }),
-            fetch('http://localhost:7000/dbcanteenInfo/getCanteenInfo')
+            fetch("http://"+ip+":7000/dbcanteenInfo/getCanteenInfo")
             .then(res=>res.json())
             .then(db=>{
                 canteenInfo=db;
@@ -779,13 +776,13 @@ function AdminCommentDrawer() {
             let canteen=e.currentTarget.getAttribute('value');
             //console.log(canteenChoice);
             Promise.all([
-                fetch("http://localhost:7000/dbAccount/getAll/")
+                fetch("http://"+ip+":7000/dbAccount/getAll/")
                 .then(res=>res.json())
                 .then(db=>{
                     users=db;
                     console.log(users);
                 }),
-                fetch('http://localhost:7000/dbComment/get/'+canteen)
+                fetch("http://"+ip+":7000/dbComment/get/"+canteen)
                 .then(res=>res.json())
                 .then(db=>{
                     data=db;
@@ -888,7 +885,7 @@ function CommentList(props){
         setChecked(newChecked);
     };
     const removeComment=()=>{
-        fetch('http://localhost:7000/dbComment/delete/comment', {
+        fetch("http://"+ip+":7000/dbComment/delete/comment", {
             body: JSON.stringify({id:checked}),
             headers: {
                 "Content-Type": "application/json",
@@ -902,7 +899,7 @@ function CommentList(props){
         navigate(0);
     }
     const ignoreReport=()=>{
-        fetch('http://localhost:7000/dbComment/delete/report/', {
+        fetch("http://"+ip+":7000/dbComment/delete/report/", {
             body: JSON.stringify({id:checked}),
             headers: {
                 "Content-Type": "application/json",
@@ -981,7 +978,7 @@ function CommentList(props){
                                         m:2,
                                         borderRadius: 2 
                                     }}
-                                    image={data[i].image.indexOf("http")==-1?"http://localhost:7000/dbComment/photo/get/"+data[i].image:data[i].image}
+                                    image={data[i].image.indexOf("http")==-1?"http://"+ip+":7000/dbComment/photo/get/"+data[i].image:data[i].image}
                                     hidden={data[i].image==""}
                                 />
                             </Box>
@@ -1023,13 +1020,13 @@ function ContentPreview(){
     const [loadFinish, setLoadFinish]=useState(false)
     let param=useParams();
     useEffect(()=>{
-        fetch("http://localhost:7000/dbAccount/getAll/")
+        fetch("http://"+ip+":7000/dbAccount/getAll/")
         .then(res=>res.json())
         .then(db=>{
             users=db;
             console.log(users);
         }).then(
-            fetch('http://localhost:7000/dbComment/get/'+param.canteen)
+            fetch("http://"+ip+":7000/dbComment/get/"+param.canteen)
             .then(res=>res.json())
             .then(db=>{
                 data=db;
@@ -1065,13 +1062,13 @@ function AdminComment(){
     const [loadFinish, setLoadFinish]=React.useState(false);
     useEffect(()=>{
         Promise.all([
-            fetch('http://localhost:7000/dbComment/get/Report')
+            fetch("http://"+ip+":7000/dbComment/get/Report")
             .then(res=>res.json())
             .then(db=>{
                 data=db;
                 console.log(data);
             }),
-            fetch('http://localhost:7000/dbcanteenInfo/getCanteenInfo')
+            fetch("http://"+ip+":7000/dbcanteenInfo/getCanteenInfo")
             .then(res=>res.json())
             .then(db=>{
                 canteenInfo=db;
