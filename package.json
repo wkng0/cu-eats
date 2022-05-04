@@ -32,11 +32,16 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "heroku-postbuild": "npm install && npm run build && cd ./src/backend && npm install && npm start",
-    "start": "react-scripts start",
+    "heroku-postbuild": "npm run install-client && npm run install-server",
+    "start": "cd ./src/backend && npm run start",
+    "start2": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "install-client":"npm install && npm run build",
+    "install-server":"cd ./src/backend && npm install && cd ../.."
+    
+
   },
   "eslintConfig": {
     "extends": [
