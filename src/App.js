@@ -6,27 +6,19 @@ import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc, RestaurantPr
 import Checkout from './checkout'
 import { HomePage }  from './HomePage';
 import { Receipt, Records, Dashboard } from './receipt';
-
 import ShowCanteen from './Menu';
-
-
 import Canteen from "./canteen";
-
-
 import DeleteDish from "./DeleteDishes";
 import AddDishes from "./AddDishes";
-
 import { UserContext } from "./UserContext";
-
 import './login.css';
 import {NavBar,AdminDrawer} from './component'
 import { BrowserRouter, Route, Routes, useLocation, useParams} from 'react-router-dom';
 import CartContainer from './shoppingCart/sc-CartContainer';
-
 import { DishProvider } from './shoppingCart/sc-context';
-
 import { createTheme, ThemeProvider } from '@mui/material';
 import Error from "./error";
+
 const theme = createTheme({
   components: {
     MuiDataGrid:{
@@ -69,6 +61,15 @@ const theme = createTheme({
   },
 });
 
+/*
+    PROGRAM App - Program to store the valid webpage route
+    PROGRAMMER: Everyone
+    CALLING SEQUENCE: CALL App()
+    VERSION 1: written 15-3-2022
+    PURPOSE: To handle all the webpage routing and replacing content
+    DATA STRUCTURE: /
+    ALGORITHM: /
+*/
 function App() {
   const [user, setUser] = useState(null);
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
@@ -132,15 +133,5 @@ function App() {
   );
 }
 /* <Route path="/shoppingCart" element={<Cart/>} /> */
-function NoMatch() {
-  let location = useLocation();
-  return (
-      <div>
-          <h3>
-              No match for <code>{location.pathname}</code>
-          </h3>
-      </div>
-  );
-}
 
 export default App;

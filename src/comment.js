@@ -1,82 +1,62 @@
 import React, { useState, useEffect }  from 'react';
 import Select from 'react-select';
 import { 
-    Alert,
-    Box, 
-    Tab, 
-    Tabs, 
-    Container, 
-    Card, 
-    CardMedia, 
-    CardActions, 
-    CardContent,
-    CardHeader,
-    Checkbox,
-    Dialog,
-    DialogTitle,
-    Paper,
-    Fab,
-    Rating,
-    Avatar,
-    Button, 
-    Typography,
-    TextField,
-    Drawer,
-    Toolbar,
-    Divider,
-    FormHelperText,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    ListItemButton,
-    SwipeableDrawer,
-    IconButton,
-    DialogContent,
-    DialogActions, 
-    Tooltip,
-    Input,
-    FormLabel,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    Grid,
-    Skeleton
-
+    Alert, Box, Tab, Tabs, Container, Card, CardMedia, CardActions, CardContent,CardHeader,Checkbox,Dialog,
+    DialogTitle,Paper,Fab,Rating, Avatar,Button, Typography,TextField,Drawer,Toolbar,Divider,FormHelperText,
+    List,ListItem,ListItemAvatar,ListItemText,ListItemButton,SwipeableDrawer,IconButton,DialogContent,
+    DialogActions, Tooltip,Input,FormLabel,RadioGroup,FormControlLabel,Radio,Grid,Skeleton
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ShareIcon from '@mui/icons-material/Share';
-import {red}from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import {useParams,useNavigate} from 'react-router-dom'
+import {useParams,useNavigate, useLocation} from 'react-router-dom'
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import FlagIcon from '@mui/icons-material/Flag';
-import { Link,Navigate,useLocation } from 'react-router-dom';
 import ClearIcon from '@mui/icons-material/Clear';
 import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
 
 
 let data =[];
 let users=[];
+
+/*
+    PROGRAM TabContent - Program to read the value and display the respective content
+    PROGRAMMER: PAU Chun Wai
+    CALLING SEQUENCE:   CALL TabContent(index, canteen, userIndex)
+        Where 'index' is the key for identity the TabContent program, 
+        'canteen' is the canteen where the comment is posted,
+        'userIndex' is the userid of the comment to match the data fetched for displaying userpic, name, etc.
+    VERSION 1: written 15-3-2022
+    REVISION 1.1: 17-3-2022 to complete the frame
+    REVISION 1.2: 19-3-2022 to add interaction button
+    REVISION 1.3: 21-3-2022 to remove unused button
+    PURPOSE: To show the individual comment in a comment box and allow interaction with user 
+    DATA STRUCTURE:
+        Variable index - INTEGER
+        Variable canteen - STRING
+        Variable userIndex - STRING
+        Variable open - BOOLEAN
+        Variable option - STRING
+        Variable optionEmpty - BOOLEAN
+        Variable helperText - STRING
+    ALGORITHM: 
+        Read var index and userIndex to collect the respective user info and comment info and display
+        if report button is clicked, 'open' become true and show dialog
+        if submit button is clicked, and if 'option' is empty, set 'optionEmpty' true and change 'helperText' otherwise, submit
+*/
 function TabContent(props){
     const navigate = useNavigate();
     const [open,setOpen]=useState(false);
     const [option,setOption]=useState("");
     const [optionEmpty,setOptionEmpty]=useState(false);
     const [helperText,setHelperText]=useState("");
-    const [loading,setLoading]=useState(true);
-    const [storage,setStorage]=useState(users);
-    console.log(data)
-    console.log(users)
+
     const handleShare=()=>{
         navigator.clipboard.writeText("/comment/"+props.canteen+"/"+data[props.i]._id);
     }
-    const handleLike=()=>{
 
-    }
     const handleReport=()=>{
         console.log(data[props.i]._id);
         fetch("/dbComment/report", {
@@ -181,7 +161,7 @@ function TabContent(props){
                                 options={options} 
                                 sx={{zIndex:99999}}
                                 onChange={handleOption}
-                                //ref
+                                //ref from mui sample
                                 menuPortalTarget={document.body} 
                                 styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                             />
@@ -252,6 +232,26 @@ const canteenList=[];
 const canteenID=[];
 const drawerWidth=240;
 
+
+/*
+    PROGRAM ResponsiveDrawer - Program to read the option and display it
+    PROGRAMMER: PAU Chun Wai
+    CALLING SEQUENCE:   CALL ResponsiveDrawer()
+    VERSION 1: written 15-3-2022
+    REVISION 1.1: 17-3-2022 to complete the frame
+    REVISION 1.2: 19-3-2022 to improve algorithm
+    PURPOSE: To show the drawer with the canteen option available in database
+    DATA STRUCTURE:
+        Variable canteen - STRING
+        variable state - BOOLEAN
+        Variable value - INTEGER
+        Variable loading - BOOLEAN
+    ALGORITHM: 
+        if 'loading' false, render finish and display the drawer
+        if 'canteen' is changed, fetch comment in other canteen
+        if 'value' is changed, show the comment area section
+        if 'state' is true, the responsive version drawer will be shown
+*/
 function ResponsiveDrawer(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -365,9 +365,7 @@ function ResponsiveDrawer(props) {
             <Box
             component="nav"
             sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },p:0 }}            
-            >
-            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-          
+            >          
             <Fab 
                 color="secondary" 
                 sx={{
@@ -463,7 +461,33 @@ function ResponsiveDrawer(props) {
         </Container>
     );
 }
-
+/*
+    PROGRAM AddComment - Program to send comment data to database
+    PROGRAMMER: PAU Chun Wai
+    CALLING SEQUENCE:   CALL AddComment()
+    VERSION 1: written 15-3-2022
+    REVISION 1.1: 19-3-2022 to complete the frame
+    REVISION 1.2: 21-3-2022 to add api support
+    REVISION 1.3: 23-3-2022 to add new field
+    PURPOSE: To send the filled comment to database
+    DATA STRUCTURE:
+        Variable open - BOOLEAN
+        Variable title - STRING
+        Variable description - STRING
+        Variable type - INTEGER
+        Variable state - BOOLEAN
+        Variable XXXEmpty - BOOLEAN
+        Variable canteen - STRING
+        Variable selectedFile - STRING
+        Variable newFileName - STRING
+        Variable rating - INTEGER
+    ALGORITHM: 
+        if 'open' is true the addComment dialog show up,
+        if file is uploaded, save to 'selectedFile' and send the file name to newFileName
+        if 'title', 'description', 'type', 'canteen', 'rating', 'selectedFile'(optional) is filled,
+        send to database, otherwise show helperTextX.
+        if comment is sent, set 'open' to false for closing the dialog
+*/
 function AddComment(){
     const navigate=useNavigate();
     const [open, setOpen]=React.useState(false);
@@ -486,7 +510,6 @@ function AddComment(){
     const [rating, setRating]=React.useState(null);
     const handleClick=()=>{
         setOpen(true);
-        
     }
     let location = useLocation();
     const handlePublish=(e)=>{
@@ -630,10 +653,6 @@ function AddComment(){
                 Add Comment 
                 </DialogTitle> 
                 <DialogContent>
-
-                    
-
-                   
                     <TextField 
                         fullWidth 
                         id="title" 
@@ -724,7 +743,18 @@ function AddComment(){
 
 
 
-
+/*
+    PROGRAM UserComment - Program to store comment module
+    PROGRAMMER: PAU Chun Wai
+    CALLING SEQUENCE:   CALL UserComment()
+    VERSION 1: written 15-3-2022
+    REVISION 1.1: 19-3-2022 to complete the frame
+    PURPOSE: To set a frame for calling other module
+    DATA STRUCTURE:
+        Variable loadFinish - BOOLEAN     
+    ALGORITHM: 
+        if data fetched, set 'loadFinish' to true and start rendering content
+*/
 function UserComment(){
     const [loadFinish, setLoadFinish]=useState();
     useEffect(()=>{
@@ -763,7 +793,20 @@ function UserComment(){
     )
 }
 
-
+/*
+    PROGRAM UserComment - Program to setup comment frame and fetch info
+    PROGRAMMER: PAU Chun Wai
+    CALLING SEQUENCE:   CALL UserComment()
+    VERSION 1: written 15-3-2022
+    REVISION 1.1: 23-3-2022 to complete the frame
+    REVISION 1.2: 25-3-2022 to add reported issue
+    PURPOSE: To fetch comment
+    DATA STRUCTURE:
+        Variable canteen - STRING   
+    ALGORITHM: 
+        if 'canteen' is changed to other canteen name, fetch other canteen's comment,
+        else if 'canteen' is changed to 'Report', fetch the reported comment
+*/
 function AdminCommentDrawer() {
     const navigate=useNavigate();
     const [canteen, setCanteen]=React.useState("Report")
@@ -867,7 +910,19 @@ function AdminCommentDrawer() {
         </Container>
     );
 }
-
+/*
+    PROGRAM CommentList - Program to show comment box in AdminCommentDrawer
+    PROGRAMMER: PAU Chun Wai
+    CALLING SEQUENCE:   CALL CommentList()
+    VERSION 1: written 15-3-2022
+    REVISION 1.1: 23-3-2022 to complete the frame
+    REVISION 1.2: 25-3-2022 to add reported issue
+    PURPOSE: To show the comment with admin actions
+    DATA STRUCTURE:
+        ARRAY checked - INTEGER
+    ALGORITHM: 
+        if the comment is ticked, push value to 'checked' for deleting, ignoring comment
+*/
 function CommentList(props){
     const navigate=useNavigate(0)
     const [checked, setChecked] = React.useState([]);
@@ -1002,9 +1057,7 @@ function CommentList(props){
                             </Box>
                     
                         </ListItem>  
-                    </Card>    
-                    
-                    
+                    </Card>              
                 </div>
                 )}
             </List>
@@ -1013,7 +1066,19 @@ function CommentList(props){
     );
 }
 
-
+/*
+    PROGRAM ContentPreview - Program to show comment
+    PROGRAMMER: PAU Chun Wai
+    CALLING SEQUENCE:   CALL ContentPreview()
+    VERSION 1: written 15-3-2022
+    PURPOSE: To show the comment from url
+    DATA STRUCTURE:
+        VARIABLE target - INTEGER
+        VARIABLE loadFinsih - BOOLEAN
+    ALGORITHM: 
+        if 'loadFinish' is true, start rendering content
+        if 'target' is -1, comment not found, else comment index is found and display the correspond commend
+*/
 function ContentPreview(){
     const [target, setTarget]=useState(-1)
     const [loadFinish, setLoadFinish]=useState(false)
@@ -1056,7 +1121,17 @@ function ContentPreview(){
     else return(<>not found</>)
 
 }
-
+/*
+    PROGRAM AdminComment - Program to fetch comment info
+    PROGRAMMER: PAU Chun Wai
+    CALLING SEQUENCE:   CALL AdminComment()
+    VERSION 1: written 15-3-2022
+    PURPOSE: To fetch comment info and call other function
+    DATA STRUCTURE:
+        VARIABLE loadFinish - BOOLEAN
+    ALGORITHM: 
+        if 'loadFinish' is true, start rendering content
+*/
 function AdminComment(){
     const [loadFinish, setLoadFinish]=React.useState(false);
     useEffect(()=>{
