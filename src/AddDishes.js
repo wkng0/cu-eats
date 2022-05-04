@@ -1,10 +1,15 @@
 // Component AddDishes - provides functions to let restaurant to add dishes
    
 // Calling Sequence: 
-    // Login in as restaurant -> click Add Dishes in the navigate bar
-    // enter information of dishes -> click button Add dishes
-
-// Written 2022 semester 2
+    // Login in as restaurant -> click Add Dishes in the navigate bar ->called AddDishes Component
+   // enter information of dishes ->
+   // click "Please Add Variant and Price In pairs" -> Called function saveVariant ->
+   // click cross buuton on variant -> called function handleDelete ->
+   // click "Add Tag" -> Called function savetag  ->
+   // click cross buuton on tag -> called function handleChangeColor ->
+   // click button "Add dishes" -> called function AddDishes -> 
+   // call post request
+   // Written 2022 semester 2
 
 // Purpose: it serves as a control platform to add dish information about food dishes. 
     // For the canteen side, the canteen manager can add dishes 
