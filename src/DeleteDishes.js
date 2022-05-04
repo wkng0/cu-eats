@@ -1,3 +1,69 @@
+// Component DeleteDishes - provides functions to let restaurant to edit dishes
+   
+// Calling Sequence: 
+    // Login in as restaurant -> click Edit Dishes in the navigate bar ->
+    // called conponent DeleteDish  -> 
+    // for every dishes container called NewShowDishes conponet -> 
+    // click button "Edit Prices" ->  called function EditPrice -> 
+    // OR
+    // click button "Hide Dish" ->  called function HideDihes -> 
+    // OR
+    // click button "Un-Hide Dish" ->  called function UnhideDihes -> 
+    // OR
+    // click button "Delete Dish" ->  called function DeleteDihes -> 
+
+
+// Written 2022 semester 2
+
+// Purpose: it serves as a control platform to add dish information about food dishes. 
+    // it serves as a control platform to edit the information about food dishes. 
+    // For the customer side, they can see the name, and tags and 
+    // select the variant of the dishes and the corresponding price of the selected variant. 
+    // they can hide or un-hide, or even delete the dishes from 
+    // the menu shown on the customer side. 
+    // Furthermore, they can edit the prices of the selected variants of that dish
+
+// Data Structure: 
+    // Variable loadFinish - boolean
+    // window.number - Number
+    // variant - Number
+    // quantity - Number
+    // variantList - Object Array;
+    // tag - Object Array
+
+// Algorithm for component DeleteDishes:
+    // Part 1) get name of resaurant from the localStorage
+            // if a guest enter URL localhost:3000/deleteDishes,
+            // the user will be redirected to the login page (called function redirectingtoLogin)
+        
+            // if a restaurant user enter URL localhost:3000/addDishes,
+            // the field "user" from localStorage will be checked 
+            // the window.whichcan will be update correspound by the field: "user" 
+                // 0: NaMenu
+                // 1: ShawMenu
+                // 2: UcMenu
+            // so that user can only post data to its own collection in the database
+
+    // Part 2) make get request of the canteen and show the menu list
+        // and call NewShowDishes component
+    
+    // Part 3) When button "Edit Price" is pressed after the 
+        // function EditPrice is called
+        // promt message with inputt price
+        // make put request to database
+    
+    // Part 4) When button "Delete Dishes" is pressed after the 
+        // function DeleteDishes is called
+        // make delete request to database
+    
+    // Part 5) If the dishes is hidden: When button "Hide Dishes" is pressed after the 
+        // function HideDishes is called
+        // make put request to database
+
+    // Part 6) If the dishes is unhidden: When button "Un-Hide Dishes" is pressed after the 
+        // function UnHideDishes is called
+        // make put request to database
+
 // import React, {useState,useContext} from 'react';
 import React, {useEffect, useState, useContext} from 'react';
 import { UserContext } from './UserContext';

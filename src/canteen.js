@@ -1,3 +1,48 @@
+// Component DeleteDishes - provides a view of menu list
+   
+// Calling Sequence: 
+    // Login in as user -> click Edit Dishes in the navigate bar ->
+    // called conponent DeleteDish  -> 
+
+// Written 2022 semester 2
+
+// Purpose: 
+    // This module provides functions related to see the information about food 
+    // items. It serves as a view for customers to see the menu of the canteen. 
+
+
+// Data Structure: 
+    // Variable loadFinish - boolean
+    // variant - Number
+    // quantity - Number
+    // variantList - Object Array;
+    // open, open2, open3, open4 - boolean
+    // menu - object array
+    // tag - object array
+    // price - Number
+    // canteenInfo - object array
+    // listOfMenu - object array
+    
+
+// Algorithm for component DeleteDishes:
+    // Part 1) get name of resaurant from the localStorage
+        // the window.whichcan will be update correspound by the field: "canteen" 
+                // 0: NaMenu
+                // 1: ShawMenu
+                // 2: UcMenu
+            // if a guest enter URL localhost:3000/canteen,
+            // call get requested fetch canteen information 
+            // and call get requested fetch dishes from menu database
+            // and called NewShowDishes component for each dishes
+        
+    // Part 2) show name, photo, tag, variant and price
+        // corrsponding price would be shown according to variant
+    
+    // Part 3) when add to shopping cart 
+     // shopping coponent will be called
+
+
+
 import React, {useState,useContext} from 'react';
 import {useEffect} from "react";
 import { DishContext } from './shoppingCart/sc-context';

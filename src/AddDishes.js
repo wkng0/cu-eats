@@ -1,3 +1,94 @@
+// Component AddDishes - provides functions to let restaurant to add dishes
+   
+// Calling Sequence: 
+    // Login in as restaurant -> click Add Dishes in the navigate bar ->called AddDishes Component
+   // enter information of dishes ->
+   // click "Please Add Variant and Price In pairs" -> Called function saveVariant ->
+   // click cross buuton on variant -> called function handleDelete ->
+   // click "Add Tag" -> Called function savetag  ->
+   // click cross buuton on tag -> called function handleChangeColor ->
+   // click button "Add dishes" -> called function AddDishes -> 
+   // call post request
+   // Written 2022 semester 2
+
+// Purpose: it serves as a control platform to add dish information about food dishes. 
+    // For the canteen side, the canteen manager can add dishes 
+    // by entering the name, image URL, category, tags, and pairs of variants and prices. 
+
+// Data Structure: 
+    // Variable user - String
+    // Variable name - String
+    // Variable variant - String
+    // Variable variantList - String array 
+    // Variable price - Number
+    // Variable pricesList - Number array
+    // Variable category - String
+    // Variable image - String
+    // Variable tag - String
+    // Variable tagError - Boolean
+    // Variable tagList - String array 
+    // Variable tagList - String
+    // Variable chipData - String array 
+    // Variable color - String
+    // Variable variantError - Boolean
+    // Variable nameError - Boolean
+    // Variable hide - StrBooleaning
+    // Variable name - String
+    // Variable window.whichcan - Number
+
+
+// Algorithm of component AddDishes:
+    // Part 1) get name of resaurant from the localStorage
+        // if a guest enter URL localhost:3000/addDishes,
+        // the user will be redirected to the login page
+
+        // if a restaurant user enter URL localhost:3000/addDishes,
+        // the field "user" from localStorage will be checked 
+        // the window.whichcan will be update correspound by the field: "user" 
+            // 0: NaMenu
+            // 1: ShawMenu
+            // 2: UcMenu
+        // so that user can only post data to its own collection in the database
+
+    // Part 2) When button "Please Add Variant and Price In pairs" is pressed
+        // The field "Variant" and "Price" could not empty
+        // or else the function saveVariant will not be called and 
+
+        // then function saveVariant will be called
+        // the variant and price will be pushed to a temporarty array 
+        // and a new variant tag will be show to the pages
+
+        // when tag is clicked on the crossed icon 
+        // the function handleDelete will be called
+        // the array of the corresponding variant will be popped
+    
+    // Part 3) When button "Add Tag"
+        // the name of tag and the color of tag must be selected 
+        // the function "handleChangeTag" will be called
+        // or else the function "saveTag" will not be called
+
+        // when the the function "saveTag" will be called
+        // then handleChangeColor is called
+        // the array of the corresponding tag will be popped
+        // and a tag will be show to the pages
+
+        // when tag is clicked on the crossed icon 
+        // the function handleDelete will be called
+        // the array of the corresponding variant will be popped
+
+    // Part 4) When button "Add Dishes"
+        // the field of the input form will also be checked to
+        // if the inputted field "Name" is empty or 
+        // if the inputted field "Variant List" is empty 
+        // it wont not call post requested and remind user to input back the Name
+        
+        // if there are no problem no input and user is restaurant role
+        // after click button "Add Dishes", a post request will be made to api
+        // and it will update the coorespounding canteen meun database
+        
+        // if the dishes is successfully added in the menu database
+        // a alert message will displayed to user and the page will be reloaded again
+
 import { useState, useEffect, useContext } from "react";
 import React from "react";
 import Axios from "axios";
