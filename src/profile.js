@@ -11,12 +11,25 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid  } from '@mui/x-data-grid';
 import{ Divider, Box, Button, Card, CardActionArea,CardActions, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, 
-  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar, Skeleton, Typography, CardContent} from '@mui/material';
+  InputLabel, Input, FormControl, NativeSelect, IconButton, Avatar, Skeleton, Typography, CardContent, tableSortLabelClasses} from '@mui/material';
 
-let userInfo = [];
+// PROGRAM Profile - program check the user and return their profile page
+// CALLING SEQUENCE: 
+// 1. Login in as customer/restaurant -> click the top right corner profile picture icon -> profile
+// Or
+// 2. Login as Admin -> click the user Info -> check profile
+// RPOGRAMMER: Ng Wing Ki Vickie
+// VERSION 1.0: 22-3-2022
+// REVISION 1.1 : 29-3-2022 To seperate the profile component from this function
+// DATA STRUCTURE:
+//   Variable fetchFinish - BOOLEAN
+//   Variable userData - ARRAY
+// ALGORITHM:
+//   1. check usertype and find the profile user
+//   2. fetch user info from database
+//   3. render ProfileHeader/Restaurant Header
 
 function Profile(){
- 
   const[fetchFinish, setFetch] = useState(false);
   const [userData, setUserData]=useState({
     user: "",
@@ -79,7 +92,25 @@ function Profile(){
   )
 }
 
-
+// PROGRAM ProfileHeader To display user info and guiding to other function
+// CALLING SEQUENCE: Profile->ProfileHeader
+// PROGRAMMER: Ng Wing Ki Vickie
+// VERESION 1.0: 29-3-2022
+// Purpose: show and edit the profile icon, show username and points, link to change address, account info and shopping receipt
+// DATA STRUCTURE
+//   Variable login - BOOLEAN
+//   Variable username - STRING
+//   Variable point - Float
+//   Variable email - STRING
+//   Variable pic - STRING
+//   Variable edit - BOOLEAN
+//   Variable change - BOOLEAN
+// ALGORITHM
+// 1. display the icon and buttons to address, account, shopping receipts
+// 2. If clicked profile icon/ the edit icon, pop up upload photo
+// 3. Preview the new profile icon
+// 4. Click the tick button to confirm and save the updated profile icon
+// 5. Refresh the page
 class ProfileHeader extends React.Component{
   constructor(props){
     super(props);
@@ -196,9 +227,7 @@ changeIcon(event){
                           <div class="stats">
                               <Button  href="/profile/account" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86"}}>
                                 <ManageAccountsIcon fontSize="large" sx={{color:  "#F4CB86"}}/>
-                                {/* <Link to="/profile/account" state={{username: this.props.username, point:this.props.point, email: this.props.email,
-        fname: this.props.fname, lname:this.props.lname, phone:this.props.phone, gender: this.props.gender, faculty:this.props.faculty, college:this.props.college,
-        }}>My Account</Link> */}
+                               
         My Account
         </Button>
                           </div>
@@ -208,15 +237,29 @@ changeIcon(event){
                           </div>
                   </div>
               </div>
-              {/* <Button classes="fixed-buttom" variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8, zIndex: 'tooltip' }} onClick={()=>this.setState({login: false})}>Sign out</Button> */}
           </div>
         </div>
       )
   }
 }
 
-let picture;
-
+// PROGRAM RestaurantProfile Program to display and edit 
+// CALLING SEQUENCE: Profile->RestaurantProfile
+// PROGRAMMER: Ng Wing Ki Vickie
+// VERSION 1.0:
+// PURPOSE: show the profile icon and username for the restaurant account
+// DATA VARIABLES
+//     Variable edit - BOOLEAN
+//     Variable change - BOOLEAN
+//     Variable userData - ARRAY
+// ALGORITHM
+// 1. fetch information from database
+// 2. display profile icon
+// 3. click on the pencil/ photo to edit icon
+// 4. upload new photo
+// 5. preview photo
+// 6. click the tick button to confirm and save new photo
+// 7. refresh the page
 function RestaurantProfile(){
   const [edit,setEdit] = useState(true);
   const [change,setChange] = useState(false);
@@ -362,8 +405,20 @@ function RestaurantProfile(){
         }
 }
 
+// PROGRAM Address Program to display and edit
+// CALLING SEQUENCE Login->Profile->ProfileHeader->Address
+// PROGRAMMER: Ng Wing Ki Vickie
+// VERSION 1.0:
+// Purpose delete saved address, call add address and show address
+// DATA STRUCTURE
+//     Variable fetchFinish - BOOLEAN
+//     Variable savedAddress - ARRAY
+//     Variable user - STRING
+// ALGORITHM
+// 1. fetch addresses from address database
+// 2. render to display addresses and allow add/delete addresses
+// 3. click the bin icon to delete corresponding address and reload page
 function Address(){
-  const [email,setEmail] = useState('0.0@link.cuhk.edu.hk');
   const [fetchFinish, setFetch] = useState(false);
   const [savedAddress,setAddress] = useState([]);
   const {user, setUser} = useContext(UserContext);
@@ -448,6 +503,34 @@ function Address(){
     }
 }
 
+// PROGRAM AddNewAddress to update new address
+// CALLING SEQUENCE: Profile-> ProfileHeader-> Address-> AddNewAddress
+// PROGRAMMER: Ng Wing Ki Vickie
+// VERSION 1.0: 2-4-2022
+// REVISION 1.1: 8-4-2022 fix choices bug
+// Allow user choose the corresponding delivery address in cuhk
+// DATA STRUCTURE
+//   Variable college - ARRAY
+//   Variable building - ARRAY
+//   Variable ccHall - ARRAY
+//   Variable naHall - ARRAY
+//   Variable ucHall - ARRAY
+//   Variable shawHall - ARRAY
+//   Variable msHall - ARRAY
+//   Variable shHall - ARRAY
+//   Variable wsHall - ARRAY
+//   Variable wysHall - ARRAY
+//   Variable otherHall - ARRAY
+//   Variable chooseBlg - STRING
+//   Variable chooseCol - STRING
+//   Variable room - STRING
+//   Variable valid - BOOLEAN
+//   Variable user - STRING
+//   Variable navigate - STRING
+// ALGORITHM
+// 1. choose the college
+// 2. choose the building and fill in the room optionally
+// 3. save and reload
 function AddNewAddress(props){
   const college =["None","CC","CW","MS","NA","SH","SHAW","UC","WS","WYS","Other Hostel","Other Building"];
   const building=["None","AB1 Academic Building No.1","AMEW Art Museum East Wing","ARC Lee Shau Kee Architecture Building","BMS Basic Medical Sciences Building",
@@ -1066,6 +1149,34 @@ const navigate = useNavigate();
     
 }
 
+// PROGRAM Account To display account information and allow user edit
+// CALLING SEQUENCE: Profile->ProfileHeader->Account
+// PROGRAMMER: Ng Wing Ki Vickie
+// Version 1.0 : 31-3-2022
+// PURPOSE: Allow user to check and update the account information and call change password function if needed
+// DATA STRUCTURE
+//   Variable show - Boolean
+//   Variable username - STRING
+//   Variable newUsername - STRING
+//   Variable point - FLOAT
+//   Variable email- STRING
+//   Variable fname - STRING
+//   Variable lname - STRING
+//   Variable phone - STRING
+//   Variable college - STRING
+//   Variable faculty - STRING
+//   Variable gender - STRING
+//   Variable fetchFinish - BOOLEAN
+//   Variable unique - BOOLEAN
+//   Variable colleges - ARRAY
+//   Variable faculties - ARRAY
+//   Variable genders - ARRAY
+//   Variabel user - STRING
+// ALGORITHM:
+// 1. fetch account information
+// 2. fetchFinish then show all account info in corresponding fields
+// 3. if any changes in fields, save to corresponding variables
+// 4. click the tick button to save all information and reload the page
 function Account(props){
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState('');
@@ -1320,16 +1431,33 @@ window.location.reload();
           </NativeSelect>
       </FormControl>
       </Box>
-     {/* <Button variant="outlined" sx={{bgcolor: '#5D4E99',color: "#F4CB86", m: 8 }} onClick={() => setShow(prev => !prev)}>Change Password</Button>
-     {show &&  <FormDialog email={email}/>} */}
      <FormDialog email={email}/>
      </div>
      </>
    );}
 }
 
-
-
+// PROGRAM FormDialog A popup for entering information to change password
+// CALLING SEQUENCE: Login as Customer -> Profile -> ProfileHeader-> Account ->Change Password
+// PROGRAMMER: Ng Wing Ki Vickie
+// VERSION 1.0: 31-3-2022
+// Purpose: For user to change their password
+// DATA STRUCTURE
+//   Variable open - BOOLEAN
+//   Variable anchorEl - BOOLEAN
+//   Variable oldpw - STRING
+//   Variable pw1 -STRING
+//   Variable pw2 - STRING
+//   Variable submitValid - BOOLEAN
+//   Variable veri - BOOLEAN
+//   Variable pw - STRING
+//   Variable user - STRING
+// Algorithm
+// 1. enter current password
+// 2. enter new password
+// 3. re-enter new password
+// 4. if current passoword correct && two new password is identical, changes saved, pop up close
+// 5. else pop up error message
 function FormDialog(props) {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -1363,16 +1491,6 @@ function FormDialog(props) {
   };
 
   const handleUpdate = () => {
-    // fetch('http://localhost:7000/dbAccount/get/'+ props.email)
-    //     .then(res=>res.json())
-    //     .then(data=>{
-    //         console.log(data[0].password);
-    //         if(data[0].password == oldpw){
-    //             console.log("password is true");
-                
-    //         }
-    //     })
-    //     .catch(err=>console.log(err))
     if (pw1!=pw2){
       window.alert("password and confirm password does not match.");
       return;
@@ -1388,8 +1506,6 @@ function FormDialog(props) {
       })  
     })
     .then(()=>{
-              // setOpen(false);
-              // setAnchorEl(null);
               setOld("");
               setPw1("");
               setPw2("");
@@ -1399,7 +1515,6 @@ function FormDialog(props) {
     window.alert("Changes saved");
     setOpen(false);
     setAnchorEl(null);
-    // return;
       }
     
     };
@@ -1485,7 +1600,22 @@ function FormDialog(props) {
     </div>
   );
 }
-
+// PROGRAM AdminUser To display user information
+// CALLING SEQUENCE: Login as admin-> User Info
+// PROGRAMMER: Ng Wing Ki Vickie
+// PURPOSE: show all user information in one table
+// DATA STRUCTURE
+//   ARRAY columns
+//   Variable userinfo - STRING
+//   Variable uid - STRING
+//   Variable mounted - BOOLEAN
+//   Variable check - BOOLEAN
+//   Variable point - FLOAT
+// ALGORITHM
+// 1. Fetch user info from database
+// 2. Show the user list on table
+// 3. Enter email address + point to change point
+// 4. Enter emaill address to check user's profile 
 function AdminUser(){
 const columns = [
   { field: 'uid', headerName: 'ID', width:180 },
@@ -1612,7 +1742,6 @@ if(!mounted){
    );
  }else{
    return(
-    // <AdminTable row={userinfo} col={columns}/>
     <>
     <h1>User List</h1>
     <div style={{ height: 500, width: '100%' }}>
@@ -1690,6 +1819,20 @@ if(!mounted){
 }
 }
 
+// PROGRAM ManagePw To edit password
+// CALLING SEQUENCE: Login as Admin->Change Password
+// PROGRAMMER: Ng Wing Ki Vickie
+// VERISON: 31-3-2022
+// Purpose: Allow admin change password by random password generator and entering target email address
+// DATA STRUCTURE
+//  Variable password - STRING
+//  Variable email - STRING
+//  Variable fetchFinish - BOOLEAN
+//  Variable isCopied - BOOLEAN
+// Algorithm
+// 1. click generate password
+// 2. click copy to copy the password to clipbord
+// 3. paste the password and enter the target account email
 function ManagePw(){
  const[password, setPassword] = useState('');
  const[email, setEmail] = useState('');
@@ -1751,8 +1894,6 @@ const changePw = ()=>{
 
   return(
     <>
-  {/* <Grid> */}
-  {/* <Box sx={{m: 2, display: 'inline'}}> */}
     <Card sx={{width: 500, m:3}}>
     <CardContent>
       <Typography variant="h5" component="div">
@@ -1800,14 +1941,23 @@ const changePw = ()=>{
     <br></br>
     <Button onClick={changePw} sx={{float: 'right'}}>Change</Button>
   </Card>
-  {/* </Box> */}
-    {/* <List>
-      <ListItem>email1</ListItem>
-    </List> */}
     </>
   );
 }
 
+// PROGRAM DeleteAcc To delete account from database
+// CALLING SEQUENCE: Login as Admin->Delete Account
+// PROGRAMMER: NG Wing Ki Vickie
+// VERSION 1.0: 12-4-2022
+// Purpose: allow admin to delete strange/ not verified and abandoned accounts
+// DATA STRUCTURE
+//  Variable email - STRING
+//  Variable fetchFinish - BOOLEAN
+//  Variable acc - STRING
+//  ARRAY columns
+// ALGORITHM
+// 1. enter the email address
+// 2. delete the account
 function DeleteAcc(){
   const[email, setEmail] = useState('');
   const[fetchFinish, setFetch] = useState(false);
