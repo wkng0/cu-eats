@@ -6,8 +6,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { Link } from 'react-router-dom';
 
+// PROGRAM CartItem - Program to display selected food dishes
+// PROGRAMMER: Tam, Lee Yau
+// CALLING SEQUENCE: CALL CartItem(id, img, title, variant, price, amount)
+// VERSION 1: written 2-4-2022
+// REVISION 1.1: 5-4-2022 refined the display items
+// PURPOSE: To show the food dishes, canteen, quantities, and functions allowed for users to operate 
+// DATA STRUCTURES:
+//  Variable id - STRING
+//  Variable img - STRING
+//  Variable title - STRING
+//  Variable variant - STRING
+//  Variable price - INTEGER
+//  Variable amount - INTEGER
+// ALGORITHM: 
+//  if the 'increase' button is clicked, the quantity is increased by 1
+//  if the 'decrease' button is clicked, the quantity is decreased by 1
+//  if the 'remove' button is clicked, the selected food dish is deleted
 
-const CartItem = ({ id,img ,title, variant,price,amount }) => {
+const CartItem = ({ id, img, title, variant, price, amount }) => {
     
     const {cart,remove, increase, decrease,clearCart, amount:totalAmount } = useContext(DishContext);
     localStorage.setItem("cart",JSON.stringify(cart))
@@ -58,6 +75,20 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
       </article>
     )
   }
+
+// PROGRAM CartContainer - Program to display calculated total prices and functions
+// PROGRAMMER: Tam, Lee Yau
+// CALLING SEQUENCE: CALL CartContainer
+// VERSION 1: written 2-4-2022
+// REVISION 1.1: 
+// PURPOSE: To show the calculated total prices and empty cart messages
+// DATA STRUCTURES:
+//  Variable cart - OBJECT ARRAY
+//  Variable total - INTEGER
+// ALGORITHM: 
+//  if the 'INCREASE' / 'DECREASE' / 'REMOVE' is clicked, the total price will be updated
+//  if the 'CLEAR CART' is clicked, the empty shopping cart message is shown
+//  if the 'CHECKOUT' button is clicked, the shopping status would proceed to check out
 
 const CartContainer = () => {
 
