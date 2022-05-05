@@ -1,29 +1,18 @@
-import React, {useContext, useEffect} from 'react';
-import { UserContext } from "./UserContext";
+import React, {useEffect} from 'react';
 import './login.css';
 import  ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
-import { Profile, Account, Address, AdminUser, ManagePw, DeleteAcc} from './profile';
 import { useParams } from 'react-router-dom';
 import{
     Box,
     Button,
-    Container,
     Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText,
-    TextField,
     InputLabel,
     FormControl,
-    Select,
-    Typography,
-    FormHelperText,
     NativeSelect,
-    MenuItem,
-    IconButton,
     Snackbar,
     Alert
   } from '@mui/material';
-import { PanoramaSharp, SettingsInputComponent, WindowSharp } from '@mui/icons-material';
-import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
 // PROGRAM LoginPage
 // CALLING SEQUENCE Click login button on the navigation bar
@@ -398,10 +387,6 @@ function LoginWithPassword(props){
               setWrong(false);
           }
     }
-
-    // const reset = ()=>{
-
-    // }
 
     React.useEffect(()=>{
         if(fetchFinish==false){
