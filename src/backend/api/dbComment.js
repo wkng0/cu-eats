@@ -123,7 +123,7 @@ async function postComment(req,res){
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
-    const collection = db.collection(canteen);
+    const collection = db.collection(req.params.id);
     const insertResult = await collection.insertOne({ 
         userid: req.body['userid'],
         title: req.body['title'],
