@@ -6,7 +6,7 @@ dotenv.config()
 const MongoClient = mongodb.MongoClient
 
 // PROGRAM INDEX - Program to connect MongoDB database
-// PROGRAMMER: Tam Lee Yau, Pau Chun Wai
+// PROGRAMMER: Tam Lee Yau
 // CALLING SEQUENCE: CALL app.use(cors(corsOptions)) 
 //  Where corsOptions is the object to be used in cors() function
 //  then CALL 
