@@ -13,6 +13,40 @@ const formatDate = (dateString) => {
     return new Intl.DateTimeFormat('en-US', options).format(dateString);
 }
 
+
+/*
+    PROGRAM Receipt - Program to display the respective content
+    PROGRAMMER: LAM Yan Yu
+    CALLING SEQUENCE:   CALL Receipt()
+    VERSION 1: written 6-4-2022
+    REVISION 1.1: 8-4-2022 to add fetch function
+    REVISION 1.2: 9-4-2022 to add point system
+    REVISION 1.3: 12-4-2022 to add receipt status
+    PURPOSE: To show the individual receipt and display differently corresponding to user and receipt status 
+    DATA STRUCTURE:
+        Variable name - STRING
+        Variable phone - STRING
+        Variable receiptID - STRING
+        Variable res - STRING
+        Variable orderItem - STRING
+        Variable point - INTEGER
+        Variable discount - FLOAT
+        Variable subtotal - FLOAT
+        Variable timestamp - TIME
+        Variable total - FLOAT
+        Variable pointEarn - INTEGER
+        Variable pointRemain - INTEGER
+        Variable address - STRING
+        Variable cutlery - BOOLEAN
+        Variable status - INTEGER
+        Variable type - STRING
+        Variable fetchFinish - BOOLEAN
+        Variable irid - STRING
+    ALGORITHM: 
+        if 'user' is canteen, hide the details of point system.
+        if 'status' is complete, delete personal information; show reorder button if 'user' is user
+        show different status button according to current status
+    */
 function Receipt() {
     const {user, setUser} = React.useContext(UserContext);
     const [name, setName] = React.useState('');
@@ -315,6 +349,23 @@ function Receipt() {
     else return (<p>Loading receipt...</p>)
 };
 
+/*
+    PROGRAM Records - Program to read the value and display the respective content
+    PROGRAMMER: LAM Yan Yu
+    CALLING SEQUENCE:   CALL Records()
+    VERSION 1: written 9-4-2022
+    REVISION 1.1: 11-4-2022 to complete the interface design
+    REVISION 1.2: 14-4-2022 to seperate current and past records
+    PURPOSE: To show all recipts of specific user and allow clicking in for details 
+    DATA STRUCTURE:
+        Variable user - STRING
+        Variable current - ARRAY 
+        Variable past - ARRAY
+        Variable fetchFinish - BOOLEAN
+    ALGORITHM: 
+        Seperate current and past receipt and display them accordingly
+        Allow user to click in and show details of specific receipt
+    */
 function Records() {
     const {user, setUser} = React.useContext(UserContext);
     const [current, setCurrent] = React.useState(null);
@@ -412,6 +463,30 @@ function Records() {
     )}
 };
 
+
+/*
+    PROGRAM Dashboard - Program to read the value and display the respective content
+    PROGRAMMER: LAM Yan Yu
+    CALLING SEQUENCE:   CALL Dashboard()
+    VERSION 1: written 12-4-2022
+    REVISION 1.1: 13-4-2022 to add filtering function
+    PURPOSE: To show all orders of specific canteen and allow filtering and clicking in for details
+    DATA STRUCTURE:
+        Variable user - STRING
+        Variable name - STRING
+        Variable records - ARRAY
+        Variable fetchFinish - BOOLEAN
+        Variable refresh - BOOLEAN
+        Variable anchorElFilter - BOOLEAN
+        Variable checked - BOOLEAN
+        Variable status - STRING
+        Variable color - STRING
+    ALGORITHM: 
+        Show overall information of all orders in the order of newest to oldest
+        Allow filtering according the receipt status
+        Allow canteen clicking in for showing details of receipt
+        if 'refresh' is true, fetch all receipts again
+    */
 function Dashboard() {
     const {user, setUser} = React.useContext(UserContext);
     const [name, setName] = React.useState(null);
