@@ -1,51 +1,49 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import './login.css';
+import logo_yellow from './image/logo_yellow.png'
+import { DishContext } from './shoppingCart/sc-context';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CommentIcon from '@mui/icons-material/Comment';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import { Fab } from '@mui/material';
-import './login.css';
-import logo_yellow from './image/logo_yellow.png'
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { List,ListItem,ListItemIcon,ListItemText,ListItemButton } from '@mui/material';
-import { SwipeableDrawer } from '@mui/material';
-import { Divider } from '@mui/material';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import PasswordIcon from '@mui/icons-material/Password';
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import Paper from '@mui/material/Paper';
-import Badge from '@mui/material/Badge';
-import { DishContext } from './shoppingCart/sc-context';
-import { useContext } from 'react';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { Fab, AppBar, Box, Toolbar, IconButton, Typography, Menu , Container, Avatar, Button, Tooltip, MenuItem, SwipeableDrawer, Divider, Badge,
+  List, ListItem, ListItemIcon, ListItemText, ListItemButton} from '@mui/material';
 
 const pages = ['Home', 'Menu', 'Comment'];
 const pagesRoute = ['/', '/menu', '/comment'];
 
-
 var userMenuStatus = -1;
 var NavMenuStatus = -1;
 
-
-
+/*
+    PROGRAM NavBar - Program to display the respective content
+    PROGRAMMER: LAM Yan Yu
+    CALLING SEQUENCE:   CALL NavBar()
+    VERSION 1: written 3-3-2022
+    REVISION 1.1: 12-4-2022 to show user icon according to user name 
+    REVISION 1.2: 12-4-2022 to add function for logging in and out
+    REVISION 1.2: 12-4-2022 to add interface for canteen side
+    PURPOSE: To show navbar options according to user type
+    DATA STRUCTURE:
+        Variable anchorElNav - BOOLEAN
+        Variable anchorElUser - BOOLEAN
+        Variable fetchFinish - BOOLEAN
+        Variable amount - INTEGER
+        Variable userData - ARRAY
+    ALGORITHM: 
+        Show different menu option according to user type and login status
+        Allow user to click in options to proceed to respective page
+        Allow user to log in and out
+*/
 function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -103,52 +101,24 @@ function NavBar() {
     setAnchorElUser(null);
     userMenuStatus = -1;
     window.location.assign("/AddDishes");
-    // if(user==0){
-    //   window.location.assign("/AddNaDishes");
-    // }else if(user==1){
-    //   window.location.assign("/AddShawDishes");
-    // }else if(user==2){
-    //   window.location.assign("/AddUcDishes");
-    // }
    }
 
    const delDish = () =>{
     setAnchorElUser(null);
     userMenuStatus = -1;
     window.location.assign("/deleteDishes");
-    // if(user==0){
-    //   window.location.assign("/deleteNaDishes");
-    // }else if(user==1){
-    //   window.location.assign("/deleteShawDishes");
-    // }else if(user==2){
-    //   window.location.assign("/deleteUcDishes");
-    // }
    }
 
    const menuDelDish = () =>{
     setAnchorElNav(null);
     NavMenuStatus = -1;
     window.location.assign("/deleteDishes");
-    // if(user==0){
-    //   window.location.assign("/deleteNaDishes");
-    // }else if(user==1){
-    //   window.location.assign("/deleteShawDishes");
-    // }else if(user==2){
-    //   window.location.assign("/deleteUcDishes");
-    // }
    }
 
    const menuAddDish = () =>{
     setAnchorElNav(null);
     NavMenuStatus = -1;
     window.location.assign("/AddDishes");
-    // if(user==0){
-    //   window.location.assign("/AddNaDishes");
-    // }else if(user==1){
-    //   window.location.assign("/AddShawDishes");
-    // }else if(user==2){
-    //   window.location.assign("/AddUcDishes");
-    // }
    }
     React.useEffect(()=>{
       if(fetchFinish== false||(userData.pic!=""&&userData.type!="admin")){
@@ -265,9 +235,6 @@ function NavBar() {
                         <MenuItem onClick={openProfile}>
                         <a style={{color: '#5D4E99', textDecoration: 'none' }}> Profile </a>
                         </MenuItem>
-                        {/* <MenuItem onClick={openAccount}>
-                        <a style={{color: '#5D4E99', textDecoration: 'none' }}> Account </a>
-                        </MenuItem> */}
                         <MenuItem onClick={logout}>
                         <a style={{color: '#5D4E99', textDecoration: 'none' }}> Logout </a>
                         </MenuItem>
@@ -494,7 +461,6 @@ const data = [
       <List>
             <Box
               sx={{
-                // bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
                 pb: open ? 2 : 0,
               }}
             >
@@ -521,14 +487,6 @@ const data = [
                     mb: '2px',
                     color: "white"
                   }}
-                  // secondary="User Info, Change Password, Delete Account"
-                  // secondaryTypographyProps={{
-                  //   noWrap: true,
-                  //   fontSize: 12,
-                  //   lineHeight: '16px',
-                  //   color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
-                  // }}
-                  // sx={{ my: 0 }}
                 />
                 <KeyboardArrowDown
                   sx={{
@@ -639,114 +597,6 @@ const data = [
       </Box>
   );
 }
-/*
-function NavBar() {
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup>
-      <AppBar position="static"  style={{ background: '#5D4E99', color: '#F4CB86'}}>
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Photos
-          </Typography>
-          {auth && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircleIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )}
-        </Toolbar>
-      </AppBar>
-    </Box>
-  );
-}
-*/
-
-
-
-/*
-class NavBar extends React.Component{
-    render(){
-        return(
-            <header className="navbar navbar-expand-sm nav-bg navbar-dark shadow ps-2 pe-2 sticky-top"style={{zIndex:9999 ,position:"sticky", marginBottom:"2rem"}}>
-                <a className="navbar-brand" href="index.html">
-                    <img src={logo_yellow} width="auto" height="30" alt=""></img><strong className="brand"> CU EATS</strong>
-                </a>
-                <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span className="navbar-toggler-icon"></span> Menu
-                </button>
-                <div className="collapse navbar-collapse" style={{textAlign: 'right'}} id="navbarCollapse">
-                    <ul className="navbar-nav ms-auto" style={{textAlign: 'center'}}>
-                        <li className="nav-item"><a className="nav-link" href="about.html">About Us</a></li>
-                        <li className="nav-item"><a className="nav-link" href="menu.html">Menu</a></li>
-                        <button className="btn btn-outline-warning my-2 my-sm-0" type="submit">
-                            <i className="bi bi-basket-fill icon"></i>
-                            <b className="collapse" id="navbarCollapse">&ensp;Shopping Cart</b>
-                        </button>
-                    </ul>
-                </div>
-            </header>
-        )
-    }
-}
-*/
 
 class Footer extends React.Component{
     render(){
@@ -757,34 +607,6 @@ class Footer extends React.Component{
         )
     }
 }
-
-/*export default function FixedBottomNavigation() {
-     
-    const [value, setValue] = React.useState(0);
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-    return (
-        <div style={{zIndex:9999 ,position:"relative",marginTop:"8rem"}}>
-        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={6}>
-            <BottomNavigation
-                showLabels
-                value={value}
-                onChange={handleChange}
-            >
-                <BottomNavigationAction label="Home" icon={<HomeIcon />} value="/" to="/" />
-                <BottomNavigationAction label="Order" icon={<StoreIcon />} value="/order"/>
-                <BottomNavigationAction label="Comment" icon={<CommentIcon  />} value="/comment" to="/comment" component={Link} />
-                <BottomNavigationAction label="Profile" icon={<AccountCircleIcon />} value="/profile" to="/profile" component={Link} />
-                
-                <BottomNavigationAction label="Login"  value="/login" to="/login" component={Link}/>
-                <BottomNavigationAction label="AboutUs"  value="/about" to="/about" component={Link}/>
-            </BottomNavigation>
-        </Paper>
-        </div>
-    );
-}*/
-
 
   
 export {NavBar, Footer, AdminDrawer};
