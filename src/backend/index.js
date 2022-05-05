@@ -9,9 +9,9 @@ const MongoClient = mongodb.MongoClient
 // PROGRAMMER: Tam Lee Yau
 // CALLING SEQUENCE: CALL app.use(cors(corsOptions)) 
 //  Where corsOptions is the object to be used in cors() function
-//  then CALL 
+//  then CALL MongoClient.connect function to connect database
 // VERSION 1: written 8-3-2022
-// REVISION 1.1: 
+// REVISION 1.1: 10-3-2022 add cors protection
 // PURPOSE: To connect backend server to MongoDB database and catch errors if the connection has problems
 // DATA STRUCTURES:
 //  Variable USERSINFO_DB_URI - STRING

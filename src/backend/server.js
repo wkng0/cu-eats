@@ -9,6 +9,26 @@ import canteenInfo from "./api/dbcanteenInfo.js"
 import receipt from "./api/dbReceipt.js"
 import verify from "./api/verify.js"
 import path from "path"
+
+// PROGRAM SERVER - Program to build up server
+// PROGRAMMER: ******
+// CALLING SEQUENCE: CALL app.use()
+//  Where the arguments are the request object and the response object
+//  then CALL app.listen(port, ()=>{}) 
+//  Where the port is the variable and second argument is a callback function
+// VERSION 1: written 8-3-2022
+// REVISION 1.1: 
+// PURPOSE: To connect backend server to MongoDB database and catch errors if the connection has problems
+// DATA STRUCTURES:
+//  Variable __dirname - CONST STRING
+//  Variable app - CONST 
+//  Variable port - CONST NUMBER
+// ALGORITHM: 
+//  Enable cross-origin resource sharing by app.use(cors());
+//  Parse the incoming JSON request and saved then into req.body by app.use(express.json());
+//  Use the GET method to write api;
+//  If the server is built successfully, the message 'Server is running on the port ' with port number is shown
+
 const __dirname = path.resolve();
 
 const app = express();
