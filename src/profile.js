@@ -496,7 +496,7 @@ function Address(){
           </>
         ))}
         <br/><Divider /><br/>  
-        <AddNewAddress email={email}/>
+        <AddNewAddress/>
       </div>
       </>
     )
