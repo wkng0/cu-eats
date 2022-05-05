@@ -110,7 +110,15 @@ function CheckEmail(){
     );
     
 }
-
+// PROGRAM EmailVerification
+// CALLING SEQUENCE: click the verification link in email(send when register or forget password)
+// Purpose: Verify the account
+// DATA STRUCTURE
+// Variable loadFinish
+// ALGORITHM
+// 1. fetch verify account api
+// 2. if the account exist, change the account status, direct to homepage with login status
+// 3. if not exist, error page
 function EmailVerification(){
     let info=[];
     const [loadFinish, setLoadFinish]=React.useState(false)
@@ -152,7 +160,22 @@ function EmailVerification(){
             
 }
     
-
+// PROGRAM ChangePassword
+// CALLING SEQUENCE: Login->check email->login with password->forget password->click the verification link in email
+// Purpose: Forget password user can reset password by themselves
+// DATA STRUCTURE
+// Variable passowrd1 -STRING
+// Variable passowrd2 -STRING
+// Variable iconA - STRING
+// Variable iconB - STRING
+// Variable iconC - STRING
+// Variable iconD - STRING
+// Variable email - STRING
+// Variable loadFinish -BOOLEAN
+// Algorithm
+// 1. input new password twice
+// 2. if the passwords are identical, update password
+// 3. redirect to home page
 function ChangePassword(props){
     const [password1, setPassword1]=React.useState("");
     const [password2, setPassword2]=React.useState("");
@@ -448,7 +471,33 @@ const genders = ["None","Male","Female","Others"];
 // PROGRAM Register
 // CALLING SEQUENCE: Login->checkEmail(not exist)->Register
 // PURPOSE: Create Account
-// ALGORITHM
+// DATA STRUCTURE
+// Variable email - STRING
+// Variable pw1 - STRING
+// Variable pw2 - STRING
+// Variable fname -STRING
+// Variable lanme - STRING
+// Variable username -STRING
+// Variable unique -BOOLEAN
+// Variable phone -STRING
+// Variable gender - STRING
+// Variable faculty - STRING
+// Variable college - STRING
+// Variable uid - STRING
+// Variable miss - STRING
+// Variable test - BOOLEAN
+// Variable num - BOOLEAN
+// Variable diff - BOOLEAN
+// Variable iconA - STRING
+// Variable iconB - STRING
+// Variable iconC - STRING
+// Variable iconD - STRING
+// Algorithm
+// 1. handle filled in fields
+// 2. verify if valid cuhk email
+// 3. check if fill in all required fields, valid phone number, unique username, two passwords are identical
+// 4. if error, pop up message to remind user
+// 5. create new account and ask for email verification to activate account.
 function Register(props){
     const [email,setEmail]=React.useState(props.email);
     const [pw1,setPw1]=React.useState('');
@@ -470,7 +519,6 @@ function Register(props){
     const [test, setTest] = React.useState(false);
     const [num, setNum] = React.useState(false);
     const [diff, setDiff] = React.useState(false);
-    const [form, setForm] = React.useState(false);
 
       
     const handleChangeEmail=(event)=>{
@@ -602,7 +650,6 @@ function Register(props){
 
         let pwRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z])))(?=.{4,})");
         if(pwRegex.test(pw1)===false || pw1===""){
-            // alert("Invalid Password\nValid Password: Minimum Password Length: 4, At Least 1 Capital Letter, At Least 1 Small Letter");
             check = false;
             console.log("Password Problem");
             setTest(true);
@@ -610,7 +657,6 @@ function Register(props){
         
         if(pw1!=pw2){
             console.log("different password");
-            // window.alert("Different passwords. Please check again");
             setDiff(true);
             check = false;
         }
@@ -795,6 +841,15 @@ function Register(props){
     );
 }
 
+// PROGRAM AskForVerification
+// CALLING PROCEDURE 
+// 1. Login->check email-> login with password (account not verified)
+// 2. Login->check email-> register
+// Purpose: Remind user to verify the email in order to login and use the system.
+// DATA STRUCTURE
+// Variable open - STRING
+// Algorithm
+// 1.Pop up reminder
 function AskForVerification(){
   const [open, setOpen] = React.useState(true);
 
