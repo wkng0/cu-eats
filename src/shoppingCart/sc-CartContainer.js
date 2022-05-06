@@ -80,7 +80,8 @@ const CartItem = ({ id, img, title, variant, price, amount }) => {
 // PROGRAMMER: Tam, Lee Yau
 // CALLING SEQUENCE: CALL CartContainer
 // VERSION 1: written 2-4-2022
-// REVISION 1.1: 
+// REVISION 1.1: 9-4-2022 update on font
+// REVISION 1.2: 13-4-2022 add checkout link
 // PURPOSE: To show the calculated total prices and empty cart messages
 // DATA STRUCTURES:
 //  Variable cart - OBJECT ARRAY
