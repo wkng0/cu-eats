@@ -5,12 +5,11 @@
 // Written 2022 semester 2
 
 // Purpose: it serves the view of the starting page of the applcation
-    // For the canteen side, the canteen manager can add dishes 
 
 // Data Structure: 
 
 
-// Algorithm of component AddDishes:
+// Algorithm of component HomePage:
     // Part 1) set user on localStorage
         // if the user is undefined 
         // then set user field in localstorage 
