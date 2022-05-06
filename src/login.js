@@ -16,6 +16,7 @@ import{
 
 // PROGRAM LoginPage
 // CALLING SEQUENCE Click login button on the navigation bar
+// PROGRAMMER: PAU Chun Wai
 // Purpose: call check email
 // VERSION 1.0: 3-3-2022
 function LoginPage(){
@@ -32,6 +33,7 @@ function LoginPage(){
 // PROGRAM CheckEmail
 // CALLING PROCEDURE: Login->CheckEmail
 // Purpose: User can type in their email to know if they registered or not, then process login with password or registration.
+// PROGRAMMER: LAM Yan Yu, NG Wing Ki Vickie, PAU Chun Wai
 // VERSION 1.0: 8-3-2022
 // REVISION 1.1: 26-3-2022 add api
 // DATA STRUCTURE
@@ -104,6 +106,7 @@ function CheckEmail(){
 // PROGRAM EmailVerification
 // CALLING SEQUENCE: click the verification link in email(send when register or forget password)
 // Purpose: Verify the account
+// PROGRAMMER: PAU Chun Wai
 // VERSION: 12-4-2022
 // DATA STRUCTURE
 // Variable loadFinish
@@ -155,6 +158,7 @@ function EmailVerification(){
 // PROGRAM ChangePassword
 // CALLING SEQUENCE: Login->check email->login with password->forget password->click the verification link in email
 // Purpose: Forget password user can reset password by themselves
+// PROGRAMMER: LAM Yan Yu,PAU Chun Wai
 // VERSION: 12-4-2022
 // DATA STRUCTURE
 // Variable passowrd1 -STRING
@@ -304,6 +308,7 @@ function ChangePassword(props){
 // PROGRAM LoginWithPassword
 // CALLING SEQUENCE Login->check email(account exist)->LoginWithPassword
 // PURPOSE: login with password 
+// PROGRAMMER: LAM Yan Yu, NG Wing Ki Vickie, PAU Chun Wai
 // VERSION 1.0: 3-3-2022
 // REVISION: 23-3-2022 fix the icon bug
 // REVISION: 28-3-2022 add api
@@ -464,6 +469,7 @@ const genders = ["None","Male","Female","Others"];
 // PROGRAM Register
 // CALLING SEQUENCE: Login->checkEmail(not exist)->Register
 // PURPOSE: Create Account
+// PROGRAMMER: LAM Yan Yu, NG Wing Ki Vickie, PAU Chun Wai
 // VERSION 1.0: 3-3-2022
 // VERSION 1.1: 28-3-2022 add api
 // VERSION 1.2: 29-3-2022 fix api
@@ -845,6 +851,7 @@ function Register(props){
 // 1. Login->check email-> login with password (account not verified)
 // 2. Login->check email-> register
 // Purpose: Remind user to verify the email in order to login and use the system.
+// PROGRAMMER: NG Wing Ki Vickie
 // VERSION: 12-4-2022
 // DATA STRUCTURE
 // Variable open - STRING

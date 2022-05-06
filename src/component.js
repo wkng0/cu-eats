@@ -434,7 +434,20 @@ function NavBar() {
   );}
 
 };
-
+/* PROGRAM AdminDrawer - Program to display respective content
+  CALLING SEQUENCE: login as admin - show in left bottom corner
+  PROGRAMMER: NG Wing Ki Vickie, PAU Chun Wai
+  Purpose: For admin find the functions to manage system
+  VERSION 1.0: 7-4-2022
+  REVISION 1.1: 8-4-2022 add profile admin part
+  REVISION 1.2: 12-4-2022 fix bug
+  DATA STRUCTURE:
+    Variable state - BOOLEAN
+    Variable open - BOOLEAN
+    Variable drawerWidtg - INT
+  Algorithm
+    Show different admin menu option, allow admin logout
+*/
 function AdminDrawer(props){
   const [state,setState]=React.useState(false);
   const [open, setOpen] = React.useState(true);
