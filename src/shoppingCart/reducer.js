@@ -1,3 +1,32 @@
+// PROGRAM REDUCER - Program that utilize useReducer react hook
+// PROGRAMMER: Pau Chun Wai, Tam Lee Yau
+// CALLING SEQUENCE: CALL reducer 
+// Where reducer is a call back function
+// VERSION 1: written 29-3-2022
+// REVISION 1.1: 5-4-2022 add variant
+// REVISION 1.2: 7-4-2022 define action object 'ADD_TO_CART'
+// REVISION 1.3: 13-4-2022 refine statements
+// PURPOSE: To provide different functions for shopping cart and canteen
+// DATA STRUCTURES:
+//  Variable action.type - STRING
+//  Variable id - STRING
+//  Variable title - STRING
+//  Variable variant - STRING
+//  Variable price - INTEGER
+//  Variable img - STRING
+//  Variable amount - INTEGER
+//  Variable itemTotal - NUMBER
+//  Variable total - NUMBER
+//  Variable loading - BOOLEAN
+//  Variable cart - ARRAY
+// ALGORITHM: 
+//  if action.type === 'ADD_TO_CART' is true, the food dish selected will be added to cart
+//  if action.type === 'CLEAR_CART' is true, all dishes will be deleted
+//  if action.type === 'REMOVE' is true, a particular dish will be removed
+//  if action.type === 'INCREASE' is true, quantity of selected item will be + 1
+//  if action.type === 'DECREASE' is true, quantity of selected item will be - 1
+//  if action.type === 'GET_TOTALS' is ture, the updated accumulated prices is shown
+//  if action.type === 'DISPLAY_ITEMS' is true, shopping cart will display all selected items
 
 const reducer = (state, action) => {
     
