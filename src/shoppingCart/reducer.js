@@ -3,9 +3,9 @@ const reducer = (state, action) => {
     
     if (action.type === 'ADD_TO_CART'){
         //may not be this
-        const item = state.cart.find((prod)=>prod.id===action.payload.id);
+        //const item = state.cart.find((prod)=>prod.id===action.payload.id);
         const inCart = state.cart.find((item)=>
-          item.id===action.payload.id?(item.variant==action.payload.variant.name?true:false):false
+          item.id===action.payload.id?(item.variant===action.payload.variant.name?true:false):false
         );
         return{
           ...state,
@@ -33,13 +33,13 @@ const reducer = (state, action) => {
     if (action.type === 'REMOVE') {
         return {
         ...state,
-        cart: state.cart.filter((cartItem) => cartItem.id !== action.payload.id ||cartItem.variant!=action.payload.variant),
+        cart: state.cart.filter((cartItem) => cartItem.id !== action.payload.id ||cartItem.variant!==action.payload.variant),
         }
     }
 
     if (action.type === 'INCREASE') {
         let tempCart = state.cart.map((cartItem) => {
-            if (cartItem.id === action.payload.id && cartItem.variant==action.payload.variant) {
+            if (cartItem.id === action.payload.id && cartItem.variant===action.payload.variant) {
                 return { ...cartItem, amount: cartItem.amount + 1 }
             }
             return cartItem
@@ -50,7 +50,7 @@ const reducer = (state, action) => {
     if (action.type === 'DECREASE') {
         let tempCart = state.cart
             .map((cartItem) => {
-            if (cartItem.id === action.payload.id && cartItem.variant==action.payload.variant) {
+            if (cartItem.id === action.payload.id && cartItem.variant===action.payload.variant) {
                 return { ...cartItem, amount: cartItem.amount - 1 }
             }
             return cartItem
