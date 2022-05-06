@@ -54,7 +54,7 @@ function TabContent(props){
     const [helperText,setHelperText]=useState("");
 
     const handleShare=()=>{
-        navigator.clipboard.writeText("/comment/"+props.canteen+"/"+data[props.i]._id);
+        navigator.clipboard.writeText("https://cu-eats.herokuapp.com/comment/"+props.canteen+"/"+data[props.i]._id);
     }
 
     const handleReport=()=>{
