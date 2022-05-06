@@ -1,3 +1,25 @@
+// Component HomePage - provides Homepage fre the customer side
+   
+// Calling Sequence: when login -> call useeffect
+   
+// Written 2022 semester 2
+
+// Purpose: it serves the view of the starting page of the applcation
+    // For the canteen side, the canteen manager can add dishes 
+
+// Data Structure: 
+
+
+// Algorithm of component AddDishes:
+    // Part 1) set user on localStorage
+        // if the user is undefined 
+        // then set user field in localstorage 
+    
+    // Part 2) Show UI of Homepage
+        // Firstly, show the session header
+        // then restaurant 
+        // then dishes which is popular among cuhk
+
 import './HomePage.css';
 import React, {useContext, useEffect} from 'react';
 import { UserContext } from "./UserContext";
