@@ -36,6 +36,7 @@ const CutlerySwitch = styled(Switch)(({ theme }) => ({
     '& .MuiSwitch-thumb': {backgroundColor: '#F4CB86', boxShadow: 'none', width: 16, height: 16, margin: 2,}
 }));
 
+
 function RadioIcon(props) {
     return (
       <Radio size="small"  sx={{color: '#5D4E99', '&.Mui-checked': {color:'#5D4E99'}}} {...props}/>
@@ -61,6 +62,41 @@ const CartItem = ({ id,img ,title, variant,price,amount }) => {
     )
   }
 
+/*
+    PROGRAM Checkout - Program to display the respective content and read the user input
+    PROGRAMMER: LAM Yan Yu
+    CALLING SEQUENCE:   CALL Checkout()
+    VERSION 1: written 6-4-2022
+    REVISION 1.1: 8-4-2022 to add fetch function for showing respective receipt
+    REVISION 1.2: 9-4-2022 to add function for refreshing address
+    REVISION 1.3: 12-4-2022 to add function for adding new address
+    PURPOSE: To show the overview of the order and get user input
+    DATA STRUCTURE:
+        Variable name - STRING
+        Variable phone - STRING
+        Variable point - INTEGER
+        Variable pointUse - INTEGER
+        Variable discount - FLOAT
+        Variable address - STRING
+        Variable cutlery - BOOLEAN
+        Variable fetchFinish - BOOLEAN
+        Variable refresh - BOOLEAN
+        Variable savedAddress - ARRAY OF STRING
+        Variable anchorElNew - BOOLEAN
+        Variable phoneText - STRING
+        Variable pointText - STRING
+        Variable helperText - STRING
+        Variable receiptID - STRING
+    ALGORITHM: 
+        Fetch and show user's personal information and stored address automatically
+        Store user input for perosonal information, address and cutlery option when changed
+        If add new address button is press, call function 'AddNewAddress' form 'Profile'
+        If 'refresh' is true, fetch and show stored address again
+        If required information is not filled in, show alert
+        Calculate subtotal, total and point earn
+        Calculate and show discount according to user's point use option
+        If 'Submit Order' button is pressed, generate receipt ID and proceed to respective receipt
+    */
 function Checkout() {
     const navigate = useNavigate();
     const {user, setUser} = React.useContext(UserContext);
