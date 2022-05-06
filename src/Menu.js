@@ -1,3 +1,21 @@
+// Component Menu - provides page for the cusyomer side to select restaurant
+   
+// Calling Sequence: call get request form database to fetch informatoon of restaurant
+   
+// Written 2022 semester 2
+
+// Purpose: it serves the view of the meun page of the applcation
+
+// Data Structure: 
+    // Variable listOfCanteen - Object Array
+
+// Algorithm of component Menu:
+    // Part 1) call get request form database to fetch informatoon of restaurant
+    
+    // Part 2) for each restaurant 
+        // build a container to show each resatutant
+        // user will be redirect to menu list page if clicked
+
 import React, {useState,useContext} from 'react';
 import {useEffect} from "react";
 import { DishContext } from './shoppingCart/sc-context';
