@@ -16,23 +16,14 @@
         // build a container to show each resatutant
         // user will be redirect to menu list page if clicked
 
-import React, {useState,useContext} from 'react';
+import React, {useState} from 'react';
 import {useEffect} from "react";
-import { DishContext } from './shoppingCart/sc-context';
 import './canteen.css';
 import './HomePage.css';
 // import NAmenu from './NAmenu';
 // import Select from 'react-select';
 import Axios from "axios"; 
-import { Card,CardMedia,CardContent } from '@mui/material';
-import { Box } from '@mui/system';
-import { Typography } from '@mui/material';
-import Select from 'react-select';
-import {Container} from '@mui/material';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { Button } from '@mui/material';
-import { Chip,Stack } from '@mui/material';
-import { BrowserRouter, Route, Routes, useLocation,Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function ShowCanteen() {
