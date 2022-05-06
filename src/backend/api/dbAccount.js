@@ -67,9 +67,7 @@ router.get("/get/:email",function(req,res){
 router.get("/getAccountAndAddress/:uid",function(req,res){
     uid=req.params.uid;
     fetchAccountAndAddress(req,res)
-    .then(console.log)
     .catch(console.error)
-    .finally(() => client.close());
 });
 
 router.get("/getByUID/:uid",function(req,res){
@@ -77,7 +75,6 @@ router.get("/getByUID/:uid",function(req,res){
     fetchAccountUID(res)
     .then(console.log)
     .catch(console.error)
-    .finally(() => client.close());
 });
 
 router.post("/updateAccount/:uid",function(req,res){
