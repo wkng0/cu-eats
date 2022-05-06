@@ -6,7 +6,10 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import './login.css';
 import App from './App';
 
-
+/*
+  React default rendering function
+  don't move
+*/
 ReactDOM.render(
   <StyledEngineProvider injectFirst>
     <React.StrictMode>
